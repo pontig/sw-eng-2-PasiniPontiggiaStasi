@@ -1,0 +1,85 @@
+\chapter{Introduction}
+\section{A Purpose}
+The purpose of this document is to present a detailed description of CodeKataBattle (CKB). It provides functional and non-functional requirements for the development of the
+system, including use cases, features, user interaction and system constraints. This document is addressed to the developers who have to implement the requirements and
+could be used as an agreement between the customer and the contractors.
+
+CodeKataBattle (CKB) is a new platform that helps students improve their software development skills by training with peers on code kata. Educators use the platform to challenge students by creating code 
+kata battles in which teams of students can compete against each other, thus proving (and improving) their skills and soft-skills : in fact working in a team is useful to learn soft-skills such as 
+communication and coordination.
+
+A code kata battle is essentially a programming exercise in a programming language of choice (e.g., 
+Java, Python). The exercise includes a brief textual description and a software project with build 
+automation scripts (e.g., a Gradle project in case of Java sources) that contains a set of test cases that 
+the program must pass, but without the program implementation. Students are asked to complete the 
+project with their code. In particular, groups of students participating in a battle are expected to follow 
+a test-first approach and develop a solution that passes the required tests. Groups deliver their
+solution to the platform (by the end of the battle). At the end of the battle, the platform assigns scores 
+to groups to create a competition rank.
+
+   \subsection{ 1.1.1 Goals}
+        G Allows E to track S knowledge about sw development
+        G Allows E to create code kata tournaments and battles to challenge S
+        G Allows S to partecipate in code kata tournaments to improve their sw development skills 
+        G Allows S to create teams for code kata battles to improves their soft skills
+        G Allows S to learn sw develoment divertendosi e confrontandosi con i compagni in sane competizioni con ranking
+        G At the end of the tournament, the platform shows the final ranks of each team 
+
+\blindtext
+\section{B Scope}
+
+    \subsection{World Phenomena}
+        WP The students fork the GitHub repository of the code kata and set up an automatic workflow
+        WP The students work on the code kata battle
+        WP The students push their work to the GitHub repository
+        WP An educator upload correct test cases and automation scripts
+        WP An educator evaluates the work done by the team at the end of the code kata battle
+
+    \subsection{Shared Phenomena}
+        SP An educator creates a tournament
+        SP An educator grants other colleagues permission to create battles
+        SP An educator creates a battle within a tournament
+        SP The students are notified of a new tournament
+        SP The students are notified of a new upcoming battle within a tournament they are subscribed to
+        SP Students use the platform to form teams
+        SP Student invite other students to join its team respecting the boundaries imposed
+        SP Student join a battle on his own
+        SP Student join a battle towards an invite -> Possono scegliere di essere soli oppure devono per forza 
+        SP The platform sends the link of the GitHub repository to all students who are members of subscribed teams
+        SP Students are asked to fork the GitHub repository and set up an automated workflow
+        SP The forked repository's workflow notifies the platform of a new push
+        SP The platform updates the battle score of a team 
+        SP The educator uses the platform to go through the sources produced by each team
+        SP The educator assigns additional score to the teams after the evaluation
+        SP The platform notifies the teams when the final battle rank becomes available
+        SP The platform updates the personal tournament score of each student
+        SP An educator closes a tournament
+        SP The platform notifies all students involved in the tournament about its end
+        SP All users see the list of  ongoing tournaments as well as the corresponding tournament rank
+        SP An educator defines the gamification badges
+        SP Student visualize gained badges on its profile
+        
+\section{C. Definitions, Acronyms, Abbreviations}
+    \subsection{Abbreviations}
+        \(WP_i\) = i-th World Phenomena
+        SPi = i-th Shared Phenomena
+        Gi = i-th goal 
+    \subsection{Acronyms}
+        E = educator
+        S = students
+\section{D. Revision history}
+\section{E. Reference Documents}
+\section{F. Document Structure}
+
+CONTEGGIO ORE:
+- Condivise:
+    i. W, G, SP, Scenari => 2h30m
+
+- Elia
+    i. 
+
+- Michelangelo:
+    i.
+
+- Tommaso:
+    i.
