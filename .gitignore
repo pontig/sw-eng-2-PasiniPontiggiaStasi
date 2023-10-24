@@ -1,0 +1,7 @@
+# all Latex development files
+*.aux
+*.fls
+*.log
+*.out
+*.fdb_latexmk
+*.synctex.gz
