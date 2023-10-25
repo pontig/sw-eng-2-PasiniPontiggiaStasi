@@ -2,20 +2,30 @@
 % This code provides the backbone of a LaTeX document, including the most commonly used libraries. It includes the document class, font size, page layout, and packages for graphics, math symbols, and hyperlinks. This code can be used as a starting point for creating a new LaTeX document.
 %
 
-\documentclass[12pt]{article}
+\documentclass[a4paper, 11pt, oneside, openright, english]{book}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{booktabs}
 \usepackage{blindtext}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{listings}
+\usepackage{titlesec}
 
-\title{RASD}
-\author{}
-\date{}
+\titleformat{\chapter}[block]
+{\normalfont\huge\bfseries}{\thechapter.}{20pt}{\Huge}
+% \renewcommand{\thesection}{\thechapter.\Alph{section}}
+
+
+\title{CodeKataBattle}
+\author{Tommaso Pasini\\Elia Pontiggia\\Michelangelo Stasi}
+\date{Version alpha}
 
 \begin{document}
+\maketitle
+\tableofcontents
+
 \include{chapters/01_introduction}
 \include{chapters/02_overall_description}
 
