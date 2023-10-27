@@ -1,26 +1,4 @@
-% FILEPATH
-% This code provides the backbone of a LaTeX document, including the most commonly used libraries. It includes the document class, font size, page layout, and packages for graphics, math symbols, and hyperlinks. This code can be used as a starting point for creating a new LaTeX document.
-%
-
-\documentclass[a4paper, 11pt, oneside, openright, english]{book}
-\usepackage[utf8]{inputenc}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{booktabs}
-\usepackage{blindtext}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{listings}
-\usepackage{titlesec}
-
-\titleformat{\chapter}[block]
-{\normalfont\huge\bfseries}{\thechapter.}{20pt}{\Huge}
-% \renewcommand{\thesection}{\thechapter.\Alph{section}}
-
-
-\title{CodeKataBattle}
-\author{Tommaso Pasini\\Elia Pontiggia\\Michelangelo Stasi}
-\date{Version alpha}
+\input{includes}
 
 \begin{document}
 \maketitle
@@ -28,5 +6,6 @@
 
 \include{chapters/01_introduction}
 \include{chapters/02_overall_description}
+\include{chapters/05_effort_spent}
 
 \end{document}
