@@ -43,3 +43,26 @@ Huey wishes to enroll to the class of Advanced Algorithms and Data Structures he
 Pippo, who wants to make sure that Huey is a good student, comes to know that Huey is a very active user of the CKB platform and he decides to check his profile.
 He sees that Huey has a very high score in the "Strings Operations" tournament and that he has a badge for being the most active user of the platform and he also notes that Huey is involved in more than one tournament simultaneously.
 Thanks to the CKB platform, Pippo has now a complete overview of Huey's skills and he can decide whether to accept his application or not.
+
+\subsection{Class Diagram}
+
+\subsection{State Diagrams}
+The following state diagrams describe the life cycle of the main entities of the system.
+Moreover, they also specify the sequence of states that an object goes through during its lifetime in response to stimuli from the environment.
+We want to focus on the events that cause a transition from one state to another and the actions that result from a state change.
+
+\subsubsection*{Tournament}
+After an educator creates a tournament, it is both in the \textit{registration open} and \textit{tournament open} states.\\
+In the \textit{registration open} state, students can join the tournament, while in the \textit{tournament open} state, educators with the right permissions can create battles within the tournament, and that leads the tournament to the \textit{battling} state.\\
+When the deadline for the registration is reached, the tournament moves to the \textit{registration closed} state and no more students can join it.\\
+When the deadline for the registrations is reached, no more students can join the tournament and it moves permanently to the \textit{registration clcsed} state.\\
+During the \textit{battling} state educatos can start multiple parallel battles and, if and only if all battles are ended, the educator can finally close the tournament.\\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{state_diagrams/tournament.jpg}
+    \caption{Tournament state diagram}
+\end{figure}
+
+\subsubsection*{Battle - Educators side}
+
