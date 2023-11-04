@@ -6,6 +6,8 @@
 *.fdb_latexmk
 *.synctex.gz
 *.toc
+*.nav
+*.snm
 
 # Local folder containing pdfs to get inspiration from 
 References
