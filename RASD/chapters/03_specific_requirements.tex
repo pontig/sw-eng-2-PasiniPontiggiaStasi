@@ -1,0 +1,59 @@
+\chapter{Specific Requirements}
+
+\section{External Interface Requirements}
+In the following, the interfaces, both hardware and software, of the system are described.
+
+    {\color{red}\subsection{User Interfaces}}
+
+\subsection{Hardware Interfaces}
+To use the CKB platform, both the Educators and the Students need an electronic device connected to the Internet, like a computer, a tablet or a smartphone.\\
+As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers to access an Integrated Development Environment (IDE). Consequently, the platform's interfaces have been optimized for use on computer screens.\\
+
+\subsection{Software Interfaces}
+Since the platform is web-based, it is compatible with all the major operating systems, as long as they have a modern browser installed.
+
+\subsection{Communication Interfaces}
+The system requires a stable internet connection to work properly. The backend of the system will expose a unified RESTful API to communicate with all clients.\\
+Furthermore, he system relies on various external interfaces accessible via uniform web API. These services are:
+\begin{itemize}
+    \item \textbf{GitHub API:} to create and manage repositories and to retrieve the code of the students and to authenticate users.
+    \item \textbf{Mail API:} to send emails to the users to notify them about events.
+\end{itemize}
+
+{\color{red} \section{Functional Requirements}}
+
+\section{Performance Requirements}
+To guarantee a good user experience, the system must:
+
+\begin{itemize}
+    \item Make sure the backend can grow as needed, respond quickly to changes, and balance the workload effectively.
+    \item Be protected against DDoS attacks to keep the system safe and stable.
+    \item Create a user-friendly, responsive front-end. It should handle well even when the internet isn't great, so users have a smooth experience.
+    \item Send push notifications really quickly, so users don't even notice the delay.
+\end{itemize}
+
+{\color{red}\section{Design Constraints}}
+
+\section{Software System Attributes}
+\subsection{Reliability}
+Since some functionality of the system relies on external APIs, though the system should not completely fail because of failure in one of those.\\
+It's also important to avoid data loss through redundant storage methods.
+
+\subsection{Availability}
+In the event of an unplanned system downtime, all features should be restored as quickly as possible to minimize any inconvenience. To prevent such occurrences, it is crucial for the CKB platform to have a reliable infrastructure, including redundant servers, to ensure continuous operation.
+The aimed availability of the system is 99.5\%, which means that the system can be down for a less than two days per year.\\
+The system should also be able to handle a large number of concurrent users.
+
+\subsection{Security}
+Users of the system have distinct privileges according to their roles (student / educator), determined during the login process.\\
+All data and information transferred and stored within the system are secured through robust encryption methods, such as HTTPS, ensuring data privacy and security.\\
+
+\subsection{Maintainability}
+The source code and associated documentation must include clear comments and should be consistently maintained. During the design and development phases, emphasis should be placed on achieving modularity, minimizing coupling, and ensuring high cohesion between components.
+This is especially crucial for both the front-end and back-end, allowing developers to make updates to the back-end seamlessly without causing any disruptions or noticeable changes for users.\\
+To avoid inconvenience in solving any type of problem (e.g. server downtime), maintenance services are notified to all users with an advance notice of at least 36 hours.
+
+\subsection{Portability}
+Due to the fact that the CKB platform is a distributed system, and it doesn't rely on a specific hardware or software, it can be used / accessed in multiples way.\\
+
+{\color{red}\subsection*{Summary of Non-Functional Requirements}}
