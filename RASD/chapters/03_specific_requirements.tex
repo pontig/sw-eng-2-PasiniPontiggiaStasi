@@ -21,6 +21,28 @@ Furthermore, he system relies on various external interfaces accessible via unif
 \end{itemize}
 
 {\color{red} \section{Functional Requirements}}
+In order to work properly, the software must fulfill the following functional requirements:
+    \begin{requirements}
+        \item \textbf{Ri} \quad The software shall allow the students to create an account
+        \item \textbf{Ri} \quad The software shall allow the educators to create an account 
+        \item \textbf{Ri} \quad The software shall allow the students to login
+        \item \textbf{Ri} \quad The software shall allow the educators to login
+        \item \textbf{Ri} \quad The software shall allow the educators to create new tournaments
+        \item \textbf{Ri} \quad The software shall allow an educator to grant to other colleagues the permission to create battles
+        \item \textbf{Ri} \quad The software shall allow the educators allowed for a specific tournament to create coding kata battles in a that specific tournament by letting them uploading the code kata, setting minimum and maximum number of students per group, setting a registration and a final submission deadlines, setting score configurations
+        \item \textbf{Ri} \quad The software shall allow the students to form teams {\color{red} Penso che dovrei essere più specifico e dire come creare i team ma d'altro canto non dovrei parlare come se conoscessi l'implementazione}
+        \item \textbf{Ri} \quad The software shall send to all students who are members of subscribed teams to a kata battle the link to a GitHub repository containing the code kata {\color{red} Qui non so se dovrei parlare anche dell'interazione con GitHub per la creazioen delle repo}
+        \item \textbf{Ri} \quad The software shall run the tests on executables pushed by a team and it shall also calculate and update the battle score of the corresponding team 
+        \item \textbf{Ri} \quad The software shall allow the educator to manually evaluate the work done by students subscribed to his own kata battle and the software shall show the sources produced by each team
+        \item \textbf{Ri} \quad At the end of the consolidation stage of a specific battle b, the software shall send a notification to all students partecipating to b when the final battle rank becomes available
+        \item \textbf{Ri} \quad The software shall allow to all educators and students subscribed to CKB platform to see the personal tournament score of each student ( which is the sum of all battle scores received in that tournament) and a rank that measures how a student's performance compares to other students in the context of that tournament. They should also see the list of ongoing tournaments as well as the corresponding tournament rank.  
+        \item \textbf{Ri} \quad The software shall allow an educator to close a tournament if and only if he is one of the owner of that tournament
+        \item \textbf{Ri} \quad The software shall notify all students involved in a closed tournament whgen the final tournament rank becomes available
+        \item \textbf{Ri} \quad When the educator creates a tournament, the software shall allow him to define gamification badges concerning that specific tournament 
+        \item \textbf{Ri} \quad The software shall allow the educator to create new badges and define new rules as well as new variables associated with them in his own tournaments
+        \item \textbf{Ri} \quad The software shall allow to all users to visualized the badges : in particular, both students and educators can see collected badges when they visualize the profile of a student
+    
+    \end{requirements}
 
 \section{Performance Requirements}
 To guarantee a good user experience, the system must:
