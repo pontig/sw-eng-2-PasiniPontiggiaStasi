@@ -4,6 +4,7 @@
 Software development is one of the most sought-after skills globally, and its growing importance is setted to persist in during future years. 
 The versatility of this ability allows solving many problems in different fields, including science, art, and entrepreneurship.
 The acquisition of software development skills improves both creativity and innovation, as well as fosters the development of fundamental skills such as problem-solving, logical thinking, and effective communication. 
+
 To understand and master software development, it is essential to have the ability to design, write, and test software programs.
 Dedication and patience are necessary for the gradual process of learning programming.
 Theory is a foundational element, but it is only the start of developing your skills. Consistent practice is necessary to master concepts and programming techniques.
@@ -11,6 +12,7 @@ Theory is a foundational element, but it is only the start of developing your sk
 \subsection{Purpose of the document}
 The aim of this document is to give a comprehensive explanation of the requirements and specifications for the project.
 Functional and non-functional requirements are provided, with a focus on real possible use cases, end user interaction, and system limits and constraints. 
+
 Those who will read this document include end users who are primarily interested in a high-level description of the features 
 and developers who must implement the requirements presented in this document.
 
@@ -40,24 +42,23 @@ The following table provides an aggregate list of the specific goals that must b
 \end{table}
 
 \section{Scope}
+CodeKataBattle (CKB) is a platform that allows students to improve their software development skills by participating in coding challenges.
+Educators create coding battles within specific tournaments, encouraging students to improve their programming proficiency. 
+Students compete in coding battles to solve programming exercises in their chosen language while adhering to the test-first approach.
 
-CodeKataBattle (CKB) is a platform for students to enhance their software development skills through collaborative coding challenges. 
-Educators create code kata battles within specific tournaments, encouraging students to improve their coding proficiency. 
-In a code kata battle, teams of students compete to solve programming exercises in their chosen language, following a test-first approach.
+Educators create a battle by uploading a programming exercise (also known as Code Kata), specifying the group size, registration and submission deadlines, and scoring parameters.
+Once created, students can form teams that can be changed between different battles in the same tournament, register for the battle, and receive access to a GitHub repository containing the code kata. 
+They are required to fork the repository and automate their workflow through GitHub Actions.
 
-To set up a battle, educators upload a code kata, specify the group size, registration and submission deadlines, and scoring parameters. 
-Once created, students form teams, register for the battle, and receive access to a GitHub repository containing the code kata. 
-They are required to automate their workflow through GitHub Actions.
+The battle score ranges from 0 to 100 and is determined by both mandatory automated evaluation (test case pass rate, timeliness, source code quality) and optional manual evaluation (personal scores assigned by educators). 
+The platform updates the battle score as students commit their code, in this way students and educators can keep track of the battle's ranking.
+Following the deadline for submission, educators perform an optional manual evaluation before sharing the final battle rank with participants.
 
-The battle score, ranging from 0 to 100, is determined by both mandatory automated evaluation (test case pass rate, timeliness, source code quality) and optional manual evaluation (personal scores assigned by educators). 
-The platform updates the score as students commit their code.
+All students on the CKB platform have a personal tournament score, which is the sum of their battle scores in that tournament. 
+This score is determined by CKB when educators close a battle, and it is accessible to all platform users.
 
-During the competition, students and educators can track the evolving rank. 
-After the submission deadline, there is a consolidation stage for manual evaluation, and the final battle rank is shared with participants. 
-Gamification badges, defined by educators, reward students based on their performance.
-
-CKB also calculates personal tournament scores, enabling students to compare their performance across various tournaments. 
-When educators close a tournament, the final tournament rank is shared with all participants.
+When educators close a tournament, the final tournament rank remains available to all platform users.
+Gamification badges, which educators can define when creating a tournament, reward students for their performance or achievement.
 
 CodeKataBattle fosters collaborative coding challenges, helping students improve their software development skills while introducing competition and gamification elements to enhance engagement and recognition.
 
