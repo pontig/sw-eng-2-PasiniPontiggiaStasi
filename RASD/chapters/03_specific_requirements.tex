@@ -1,3 +1,5 @@
+\newlist{requirementsenumerate}{enumerate}{1}
+\setlist[requirementsenumerate,1]{label=\textbf{R}\arabic*., ref=R\arabic*}
 \chapter{Specific Requirements}
 
 \section{External Interface Requirements}
@@ -21,28 +23,35 @@ Furthermore, he system relies on various external interfaces accessible via unif
 \end{itemize}
 
 {\color{red} \section{Functional Requirements}}
-In order to work properly, the software must fulfill the following functional requirements:
-    \begin{enumerate}
-        \item \textbf{Ri} \quad The software shall allow the students to create an account
-        \item \textbf{Ri} \quad The software shall allow the educators to create an account 
-        \item \textbf{Ri} \quad The software shall allow the students to login
-        \item \textbf{Ri} \quad The software shall allow the educators to login
-        \item \textbf{Ri} \quad The software shall allow the educators to create new tournaments
-        \item \textbf{Ri} \quad The software shall allow an educator to grant to other colleagues the permission to create battles
-        \item \textbf{Ri} \quad The software shall allow the educators allowed for a specific tournament to create coding kata battles in a that specific tournament by letting them uploading the code kata, setting minimum and maximum number of students per group, setting a registration and a final submission deadlines, setting score configurations
-        \item \textbf{Ri} \quad The software shall allow the students to form teams {\color{red} Penso che dovrei essere più specifico e dire come creare i team ma d'altro canto non dovrei parlare come se conoscessi l'implementazione}
-        \item \textbf{Ri} \quad The software shall send to all students who are members of subscribed teams to a kata battle the link to a GitHub repository containing the code kata {\color{red} Qui non so se dovrei parlare anche dell'interazione con GitHub per la creazioen delle repo}
-        \item \textbf{Ri} \quad The software shall run the tests on executables pushed by a team and it shall also calculate and update the battle score of the corresponding team 
-        \item \textbf{Ri} \quad The software shall allow the educator to manually evaluate the work done by students subscribed to his own kata battle and the software shall show the sources produced by each team
-        \item \textbf{Ri} \quad At the end of the consolidation stage of a specific battle b, the software shall send a notification to all students partecipating to b when the final battle rank becomes available
-        \item \textbf{Ri} \quad The software shall allow to all educators and students subscribed to CKB platform to see the personal tournament score of each student ( which is the sum of all battle scores received in that tournament) and a rank that measures how a student's performance compares to other students in the context of that tournament. They should also see the list of ongoing tournaments as well as the corresponding tournament rank.  
-        \item \textbf{Ri} \quad The software shall allow an educator to close a tournament if and only if he is one of the owner of that tournament
-        \item \textbf{Ri} \quad The software shall notify all students involved in a closed tournament whgen the final tournament rank becomes available
-        \item \textbf{Ri} \quad When the educator creates a tournament, the software shall allow him to define gamification badges concerning that specific tournament 
-        \item \textbf{Ri} \quad The software shall allow the educator to create new badges and define new rules as well as new variables associated with them in his own tournaments
-        \item \textbf{Ri} \quad The software shall allow to all users to visualized the badges : in particular, both students and educators can see collected badges when they visualize the profile of a student
-    
-    \end{enumerate}
+In order to work properly, the software must fulfill the following functional requirements, which are written in hierarchical order, starting from the requirements of EDUs agents and then STDs agents:
+    \begin{requirementsenumerate}
+        \item The software shall allow the unregistered EDUs to create an account 
+        \item The software shall allow the registered EDUs to login
+        \item The software shall allow the authenticated EDUs to create new tournaments
+        \item The software shall allow an authenticated EDU to grant to other authenticated colleagues the permission to create battles in his own tournament
+        \item The software shall allow the authenticated EDUs to create coding kata battles in their own tournaments by letting them uploading the code kata, setting minimum and maximum number of STDs per group, setting a registration and a final submission deadlines, setting score configurations
+        \item The software shall allow the authenticated EDUs to manually evaluate the work done by STDs subscribed to his own kata battle
+        \item The software shall allow the authenticated EDUs to see the sources produced by each team partecipating to their own torunaments
+        \item The software shall allow the authenticated EDUs subscribed to CKB platform to see the personal tournament score of each STD ( which is the sum of all battle scores received in that tournament)
+        \item The software shall allow the authenticated EDUs subscribed to CKB platform to see a rank that measures how a STD's performance compares to other STDs in the context of that tournament. 
+        \item The software shall allow the authenticated EDUs subscribed to CKB platform to see the list of ongoing tournaments as well as the corresponding tournament rank.  
+        \item The software shall allow an authenticated EDU to close a tournament if and only if he is one of the owner of that tournament
+        \item When the authenticated EDU creates a tournament, the software shall allow him to define gamification badges concerning that specific tournament 
+        \item The software shall allow the authenticated EDU to create new badges and define new rules as well as new variables associated with them in his own tournaments
+        \item The software shall allow to all authenticated EDUs to visualize the badges: in particular, EDUs can see collected badges when they visualize the profile of a STD
+        \item The software shall allow the unregistered STDs to create an account
+        \item The software shall allow the registered STDs to login
+        \item The software shall allow the authenticated STDs to form teams {\color{red} Penso che dovrei essere più specifico e dire come creare i team ma d'altro canto non dovrei parlare come se conoscessi l'implementazione}
+        \item The software shall send to all authenticated STDs who are members of subscribed teams to a kata battle the link to a GitHub repository containing the code kata {\color{red} Qui non so se dovrei parlare anche dell'interazione con GitHub per la creazioen delle repo}
+        \item The software shall run the tests on executables pushed by a team and it shall also calculate and update the battle score of the corresponding team 
+        \item At the end of the consolidation stage of a specific battle \textbf{b}, the software shall send a notification to all authenticated STDs partecipating to \textbf{b} when the final battle rank becomes available
+        \item The software shall allow to all STDs subscribed to CKB platform to see the personal tournament score of each STD ( which is the sum of all battle scores received in that tournament) 
+        \item The software shall allow to all STDs subscribed to CKB platform to see a rank that measures how a STD's performance compares to other STDs in the context of that tournament. 
+        \item The software shall allow to all STDs subscribed to CKB platform to see the list of ongoing tournaments as well as the corresponding tournament rank  
+        \item The software shall notify all authenticated STDs involved in a closed tournament whgen the final tournament rank becomes available
+        \item The software shall allow to all authenticated STDs to visualize the badges: in particular, STDs can see collected badges when they visualize the profile of a STD
+\end{requirementsenumerate}
+
 
 \section{Performance Requirements}
 To guarantee a good user experience, the system must:
