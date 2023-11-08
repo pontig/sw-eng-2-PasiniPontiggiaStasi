@@ -92,6 +92,16 @@ Finally, if the educator enabled the manual evaluation, he can assign extra poin
 \section{User characteristics}
 \section{Assumptions, Dependencies and Constraints}
 \subsection{Domain Assumptions}
+\newlist{assumptionsenumerate}{enumerate}{1}
+\setlist[assumptionsenumerate,1]{label=\textbf{D}\arabic*., ref=D\arabic*}
+    \begin{assumptionsenumerate}
+        \item STDs code with the programming language setted for the kata battle to which they are partecipating
+        \item EDUs upload the code kata with the description and software project, including test cases and build automation scripts
+        \item STDs fork the GitHub repository of the code kata and set up an automated workflow through GitHub Actions that informs the CKB platform (through proper API calls) as soon as STDs push a new commit into the main branch of their repository
+        \item EDUs manual evaluation range from 0 to 100
+        \item The information inserted at registration moment of all users are truthful
+        \item GitHub and Gradle works properly
+    \end{assumptionsenumerate}
 \subsection{Dependencies}
 }
 \subsection{Constraints}
