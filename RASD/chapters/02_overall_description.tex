@@ -57,34 +57,38 @@ In the \textit{registration open} state, students can join the tournament, while
 When the deadline for the registration is reached, the tournament moves to the \textit{registration closed} state and no more students can join it.\\
 When the deadline for the registrations is reached, no more students can join the tournament and it moves permanently to the \textit{registration clcsed} state.\\
 During the \textit{battling} state educatos can start multiple parallel battles and, if and only if all battles are ended, the educator can finally close the tournament.\\
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{state_diagrams/tournament.jpg}
-    \caption{Tournament state diagram}
-\end{figure}
+The diagram is shown in figure \ref{fig:tournament-state-diagram}.\\
 
 \subsubsection*{Battle}
 The battle evolves in a linear way, starting from the \textit{registration opem} immediately followed by the \textit{registration closed} state.\\
 After the registration deadline is reached, the github repository of the battle is created and thus the battle moves to the \textit{coding} state, allowing the students to fork the repository and start working on the battle.\\
 When the deadline for the battle is reached, the educators can start evaluating the code of the students, if previously enabled (\textit{consolidation} state). \\
 After the evaluation is completed, the battle can be closed and the final rank is available to all participants.\\
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{state_diagrams/battle.jpg}
-    \caption{Battle state diagram}
-\end{figure}
+The diagram is shown in figure \ref{fig:battle-state-diagram}.\\
 
 \subsubsection*{Score evaluation}
 The score evaluation is a process that is triggered by the end of a battle and it is composed by multiple steps.\\
 First, three aspects can be automatically evaluated: functional aspects (the higher the better, +), timeliness (the lower the better, -) and quality level of the sources, extracted through static analysis tools (+). \\
 Finally, if the educator enabled the manual evaluation, he can assign extra points. \\
+The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.\\
 
-\begin{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{state_diagrams/tournament.jpg}
+    \caption{Tournament state diagram}
+    \label{fig:tournament-state-diagram}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{state_diagrams/battle.jpg}
+    \caption{Battle state diagram}
+    \label{fig:battle-state-diagram}
+\end{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{state_diagrams/score_evaluation.jpg}
     \caption{Score evaluation state diagram}
+    \label{fig:score-evaluation-state-diagram}
 \end{figure}
 
 {\color{red}
