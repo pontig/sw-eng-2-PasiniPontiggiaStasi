@@ -41,8 +41,11 @@ In order to work properly, the software must fulfill the following functional re
         \item The software shall allow to all authenticated EDUs to visualize the badges: in particular, EDUs can see collected badges when they visualize the profile of a STD
         \item The software shall allow the unregistered STDs to create an account
         \item The software shall allow the registered STDs to login
-        \item The software shall allow the authenticated STDs to form teams {\color{red} Penso che dovrei essere più specifico e dire come creare i team ma d'altro canto non dovrei parlare come se conoscessi l'implementazione}
-        \item The software shall send to all authenticated STDs who are members of subscribed teams to a kata battle the link to a GitHub repository containing the code kata {\color{red} Qui non so se dovrei parlare anche dell'interazione con GitHub per la creazioen delle repo}
+        \item The software shall allow the authenticated STDs to form teams by inviting other STDs respecting the minimum and maximum number of STDs per group set for that battle
+        \item The software shall allow the authenticated STDs to subscribe to a tournament until a certain deadline
+        \item The software shall allow the authenticated STDs subscribed to a kata battle to upload their work until the final submission deadline of that kata battle
+        \item When the registration deadline of a kata battle expires, the software shall cretae a GitHub repository containing the code kata
+        \item The software shall send to all authenticated STDs who are members of subscribed teams to a kata battle the link to a GitHub repository containing the code kata
         \item The software shall run the tests on executables pushed by a team and it shall also calculate and update the battle score of the corresponding team 
         \item At the end of the consolidation stage of a specific battle \textbf{b}, the software shall send a notification to all authenticated STDs partecipating to \textbf{b} when the final battle rank becomes available
         \item The software shall allow to all STDs subscribed to CKB platform to see the personal tournament score of each STD ( which is the sum of all battle scores received in that tournament) 
