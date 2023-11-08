@@ -22,7 +22,7 @@ Furthermore, he system relies on various external interfaces accessible via unif
     \item \textbf{Mail API:} to send emails to the users to notify them about events.
 \end{itemize}
 
-{\color{red} \section{Functional Requirements}}
+\section{Functional Requirements}
 In order to work properly, the software must fulfill the following functional requirements, which are written in hierarchical order, starting from the requirements of EDUs agents and then STDs agents:
     \begin{requirementsenumerate}
         \item The software shall allow the unregistered EDUs to create an account 
@@ -66,7 +66,15 @@ To guarantee a good user experience, the system must:
     \item Send push notifications really quickly, so users don't even notice the delay.
 \end{itemize}
 
-{\color{red}\section{Design Constraints}}
+\section{Design Constraints}
+
+\subsection*{Standards Compliance}
+Since there are a lot of interactions betweeen the various components of the system, it is important to follow some communic standards:
+in particular, the system will use the REST architectural style to communicate between the frontend and the backend, and the data will be exchanged in JSON format.\\
+Furthermore, Source code of the application must be commented on and documented adequately.\\
+
+\subsection*{Hardware Limitations}
+The system is designed to be used on any device with a modern browser installed, so the only hardware limitation is the presence of a stable internet connection.\\
 
 \section{Software System Attributes}
 \subsection{Reliability}
