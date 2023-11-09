@@ -8,6 +8,7 @@
 *.toc
 *.nav
 *.snm
+*.synctex(busy)
 
 # Local folder containing pdfs to get inspiration from 
 References
