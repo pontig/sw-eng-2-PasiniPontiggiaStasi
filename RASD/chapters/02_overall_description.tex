@@ -93,7 +93,15 @@ The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.\\
 
 {\color{red}
 \section{Product Functions}
+
 \section{User characteristics}
+Users of the system fall into one of the following categories: student or educator.
+
+\subsection*{Student}
+
+\subsection*{Educator}
+
+
 \section{Assumptions, Dependencies and Constraints}
 \subsection{Domain Assumptions}
 \newlist{assumptionsenumerate}{enumerate}{1}
@@ -116,12 +124,26 @@ The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.\\
 - Uno stuente joina un da solo la battle e poi può unirsi al team se riceve un innovation \\
 - Lo studente che ha invitato gli altri al suo team diventa il capo team che riceve tutte le info \\
 \subsection{Dependencies}
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{l l p{12.5cm}}
+        \hline
+        \textbf{Dep1} &  & The system will require internet connection to interact with CKB and other users\\
+        \textbf{Dep1} &  & The system will integrate an external API in order to compile the code written by students\\
+        \textbf{Dep1} &  & The system will integrate an external API in order create repository for each battle\\
+        \hline
+    \end{tabular}
+    \caption{Dependencies}
+\end{table}
 }
+
 \subsection{Constraints}
 
 \begin{itemize}
     \item The software must follow local laws and rules, especially when it comes to handling user data, like letting users access their data when they want.
     \item The software should only collect the data it really needs, like just the user's email address.
-    \item To keep users' important info safe, like passwords, it must be stored in SHA256 encoding in the database.
+    \item To keep users' important info safe, like passwords and personal data, it must be stored in SHA256 encoding in the database.
     \item When choosing external APIs, especially those that are crucial for it to work properly, we should pick the ones that are the most dependable and always available.
+    \item 
 \end{itemize}
