@@ -57,20 +57,20 @@ In the \textit{registration open} state, students can join the tournament, while
 When the deadline for the registration is reached, the tournament moves to the \textit{registration closed} state and no more students can join it.\\
 When the deadline for the registrations is reached, no more students can join the tournament and it moves permanently to the \textit{registration clcsed} state.\\
 During the \textit{battling} state educatos can start multiple parallel battles and, if and only if all battles are ended, the educator can finally close the tournament.\\
-The diagram is shown in figure \ref{fig:tournament-state-diagram}.\\
+The diagram is shown in figure \ref{fig:tournament-state-diagram}.
 
 \subsubsection*{Battle}
 The battle evolves in a linear way, starting from the \textit{registration opem} immediately followed by the \textit{registration closed} state.\\
 After the registration deadline is reached, the github repository of the battle is created and thus the battle moves to the \textit{coding} state, allowing the students to fork the repository and start working on the battle.\\
 When the deadline for the battle is reached, the educators can start evaluating the code of the students, if previously enabled (\textit{consolidation} state). \\
 After the evaluation is completed, the battle can be closed and the final rank is available to all participants.\\
-The diagram is shown in figure \ref{fig:battle-state-diagram}.\\
+The diagram is shown in figure \ref{fig:battle-state-diagram}.
 
 \subsubsection*{Score evaluation}
-The score evaluation is a process that is triggered by the end of a battle and it is composed by multiple steps.\\
+The score evaluation of a battle is a process that is triggered by the end of a battle and it is composed by multiple steps.\\
 First, three aspects can be automatically evaluated: functional aspects (the higher the better, +), timeliness (the lower the better, -) and quality level of the sources, extracted through static analysis tools (+). \\
 Finally, if the educator enabled the manual evaluation, he can assign extra points. \\
-The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.\\
+The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.
 
 \begin{figure}[H]
     \centering
@@ -91,52 +91,65 @@ The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.\\
     \label{fig:score-evaluation-state-diagram}
 \end{figure}
 
-{\color{red}
+{\color{orange}
 \section{Product Functions}
+\subsection{Registrater function}
+- Studente o educatore
+- Educatore ha un livello di accout maggiore rispetto allo studente -> Crea battaglie o tornei e specifico i dettagli per ogni cosa
+
+\subsection{Creating tournament function}
+- Come si crea il torneo molto in generale
+
+\subsection{Creating battles function}
+- Come si crea la battaglia molto in generale
+
+\subsection{Partecipating in tournament and battles function}
+- Come si iscrive a battaglie e tornei molto in generale
+
+\subsection{Score visualization function}
+- Score, ranking e badges vederli
+
+\subsection{Gamification function}
 
 \section{User characteristics}
 Users of the system fall into one of the following categories: student or educator.
 
 \subsection*{Student}
+Identifies a person who provides instruction or education, such as a teacher.
 
 \subsection*{Educator}
+}
 
 
 \section{Assumptions, Dependencies and Constraints}
+
 \subsection{Domain Assumptions}
 \newlist{assumptionsenumerate}{enumerate}{1}
 \setlist[assumptionsenumerate,1]{label=\textbf{D}\arabic*., ref=D\arabic*}
-    \begin{assumptionsenumerate}
-        \item STDs code with the programming language setted for the kata battle to which they are partecipating
-        \item EDUs upload the code kata with the description and software project, including test cases and build automation scripts
-        \item STDs fork the GitHub repository of the code kata and set up an automated workflow through GitHub Actions that informs the CKB platform (through proper API calls) as soon as STDs push a new commit into the main branch of their repository
-        \item EDUs manual evaluation range from 0 to 100
-        \item The information inserted at registration moment of all users are truthful
-        \item GitHub and Gradle works properly
-    \end{assumptionsenumerate}
+\begin{assumptionsenumerate}
+    \item STUs code with the programming language setted for the battle to which they are partecipating
+    \item EDUs upload the code kata with the description and the correct software project, including test cases and build automation scripts
+    \item STUs fork the GitHub repository of the code kata and set up an automated workflow through GitHub Actions that informs the CKB platform (through proper API calls) as soon as STUs push a new commit into the main branch of their repository
+    \item EDUs manual evaluation range from 0 to 100\footnote{The full evaluation will be given by the average of all the four aspects evaluated by the CKB platform, the three automatic ones and the manual one}
+    \item The information inserted at registration moment of all users are truthful
+    \item GitHub and the tool for static analysis work properly
+    \item A team is formed by at least one person
+    \item All users subscribed to the CKB platform have a GitHub account
+\end{assumptionsenumerate}
 
-- Students write the code in the language defined by the professor \\
-- GitHub and Gradle work correctly \\
-- Gradle is correctly setted on the CKB platform and educator have to adapt it for each battle \\
-- Student can joing a tournament, but it decide if partecipating in each battles or just in few or none \\
-- Student who actively partecipate in battle can decide each time if the work alone or in team \\
-- I team sono solo tra studenti del torneo \\
-- Uno stuente joina un da solo la battle e poi può unirsi al team se riceve un innovation \\
-- Lo studente che ha invitato gli altri al suo team diventa il capo team che riceve tutte le info \\
 \subsection{Dependencies}
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.5}
-    \begin{tabular}{l l p{12.5cm}}
+    \begin{tabular}{l l p{11.5cm}}
         \hline
-        \textbf{Dep1} &  & The system will require internet connection to interact with CKB and other users\\
-        \textbf{Dep1} &  & The system will integrate an external API in order to compile the code written by students\\
-        \textbf{Dep1} &  & The system will integrate an external API in order create repository for each battle\\
+        \textbf{Dep1} &  & The system will require internet connection to interact with CKB and other users           \\
+        \textbf{Dep2} &  & The system will integrate an external API in order to compile the code written by students \\
+        \textbf{Dep3} &  & The system will integrate a GitHub API in order create repository for each battle          \\
         \hline
     \end{tabular}
     \caption{Dependencies}
 \end{table}
-}
 
 \subsection{Constraints}
 
@@ -145,5 +158,4 @@ Users of the system fall into one of the following categories: student or educat
     \item The software should only collect the data it really needs, like just the user's email address.
     \item To keep users' important info safe, like passwords and personal data, it must be stored in SHA256 encoding in the database.
     \item When choosing external APIs, especially those that are crucial for it to work properly, we should pick the ones that are the most dependable and always available.
-    \item 
 \end{itemize}
