@@ -51,8 +51,6 @@ In order to work properly, the software must fulfill the following functional re
 %     \end{tabular}
 % \end{center}
 
-{\color{red} Gli attori devono essere loggati ed essere sulla pagina giusta}
-
 \begin{center}
     \def\arraystretch{1.5}
     \setlist[enumerate]{itemsep=.1pt}
@@ -206,8 +204,8 @@ In order to work properly, the software must fulfill the following functional re
 \end{center}
 \subsection{Use cases Sequence Diagrams}
 
-\section*{List of functional requirements}
-\subsection*{EDU functional requirements}
+\subsection{List of functional requirements}
+\subsubsection*{EDU functional requirements}
 \begin{requirementsenumerate}
     \item The software shall allow the unregistered EDUs to create an account
     \item The software shall allow the registered EDUs to login
@@ -220,14 +218,14 @@ In order to work properly, the software must fulfill the following functional re
     \item The software shall allow the authenticated EDUs to see a rank that measures how a STU's performance compares to other STUs in the context of that tournament
     \item The software shall allow the authenticated EDUs to see the list of ongoing and finished tournaments as well as the corresponding tournament rank
     \item The software shall allow the authenticated EDUs to see the list of ongoing and finished battles as well as the corresponding battle rank
-    \item The software shall allow an authenticated EDU to close a tournament if and only if it is one of the owner of that tournament
+    \item The software shall allow an authenticated EDU to close a tournament if and only if it is one of the owners of that tournament
     \item When the authenticated EDU creates a tournament, the software shall allow it to define gamification badges concerning that specific tournament
     \item The software shall allow the authenticated EDU to create new badges and define new rules as well as new variables associated with them
     \item The software shall allow to all authenticated EDUs to visualize the badges: in particular, EDUs that visualize the profile of a STU can see its collected badges
 \end{requirementsenumerate}
 
 
-\subsection*{STU functional requirements}
+\subsubsection*{STU functional requirements}
 \begin{requirementsenumerate}[resume]
     \item The software shall allow the unregistered STUs to create an account
     \item The software shall allow the registered STUs to login
@@ -246,6 +244,38 @@ In order to work properly, the software must fulfill the following functional re
     \item The software shall notify all authenticated STUs involved in a closed tournament when the final tournament rank becomes available
     \item The software shall allow to all authenticated STUs to visualize the badges: in particular, STUs can see collected badges when they visualize the profile of a STU
 \end{requirementsenumerate}
+
+\subsection{Traeciability matrices}
+
+\subsubsection*{Mapping of functional requirements on use cases}
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{longtable}[H]{|c|l|}
+        \hline
+        \textbf{Use case} & \textbf{Functional requirements} \\ \hline
+        UC1               &                                  \\ \hline
+        UC2               & R2, R17                          \\ \hline
+        UC3               &                                  \\ \hline
+        UC4               &                                  \\ \hline
+        UC5               & R4                               \\ \hline
+        UC6               &                                  \\ \hline
+        UC7               &                                  \\ \hline
+        UC8               &                                  \\ \hline
+        UC9               & R6, R7                           \\ \hline
+        UC10              &                                  \\ \hline
+        UC11              & R12                              \\ \hline
+        UC12              &                                  \\ \hline
+        UC13              & R8, R9, R10, R27, R28, R29       \\ \hline
+        UC14              &                                  \\ \hline
+        UC15              &                                  \\ \hline
+        UC16              & R11, R26                         \\ \hline
+        UC17              &                                  \\ \hline
+        UC18              &                                  \\ \hline
+        UC19              & R21, R23                         \\ \hline
+    \end{longtable}
+\end{center}
+
+{\color{red}\subsubsection*{Mapping of functional requirements and domain assumptions on goals}}
 
 
 \section{Performance Requirements}

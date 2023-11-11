@@ -6,18 +6,23 @@
 Chip, a professor of Algorithm and Data Structures at Mouseton Institute of Technology, prepared to teach the chapter on strings, launching the "Strings Operations" coding tournament on CKB.
 To expand participation, he allowed his colleague Dale to create challenges for his software engineering class.
 Students across classes would compete in string manipulation tasks, ranging from basic concatenation to advanced text analysis, fostering collaboration and learning.
-To make the tournament more interesting, Chip decided to award badges to the best performing students, so he created a badge for the student who participated in the most tournaments, one for the student who won the most battles and one for the student that wrote the most lines of code.
+To make the tournament more interesting, Chip decided to award badges to the best performing students, so he adds th badge for the student who participated in the most tournaments, the one for the student who won the most battles and the one for the student that wrote the most lines of code.
 All students already subscribed to CKB were notified of the new tournament, and they could join it from the tournament page.
 
 \subsubsection{Creating a battle}
-In order to get the students familiar with the CKB platform and its features, Chip created an easy battle for his students to practice on, called "wordcheck", that basically requires the student to implement the game wordle.
+In order to get the students familiar with the CKB platform and its features, Chip created an easy battle for his students to practice on, called "wordcheck", that basically requires the student to implement the game wordle, to be implemented in c language.
 He decides that the battle will last 2 weeks and that the students will be able to work in teams of 2 or 3 people; they will be able to join the battle until the last day of the battle.
 In addiction, he wants to give extra points to the code cleanup, so he will have to revise the code of each team at the end of the battle and assign extra points to the teams that wrote clean code.
 He sets all this information in the battle creation form and then he creates the battle.
 
+\subsection{Creating Game badges}
+Scrooge, a professor of Algorithm and Data Structures at Duckburg University, thinks that, in addiction to the badges that are already present in the CKB platform, it would be nice to have also a badge for the student who reaches the perfect score in a battle and a badge for the student who reaches the perfect score in a tournament.
+Since the CKB platform allows educators to create new badges, he creates the two badges and from now on, all educators will be able to include such badges in their tournaments and battles.
+
 \subsubsection{Joining a battle}
 Huey and Dewey, two students of Chip's class, are notified of a new battle and decide to join it.
 Since the the more the merrier, they decide to invite their friend Louie to join them in the battle.
+Louie receives the invitation mail and decides to join the battle in their team.
 After the registration deadline, they are notified that the battle is about to start and they are given the link to the GitHub repository of the battle to fork and set up the automated workflow in order to be able to link their GitHub account to the CKB platform.
 After the automated workflow is set up, they are ready to start working on the battle.
 
@@ -74,19 +79,19 @@ The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{state_diagrams/tournament.jpg}
+    \includegraphics[width=.8\textwidth]{state_diagrams/tournament.jpg}
     \caption{Tournament state diagram}
     \label{fig:tournament-state-diagram}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{state_diagrams/battle.jpg}
+    \includegraphics[width=1\textwidth]{state_diagrams/battle.jpg}
     \caption{Battle state diagram}
     \label{fig:battle-state-diagram}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{state_diagrams/score_evaluation.jpg}
+    \includegraphics[width=1\textwidth]{state_diagrams/score_evaluation.jpg}
     \caption{Score evaluation state diagram}
     \label{fig:score-evaluation-state-diagram}
 \end{figure}
