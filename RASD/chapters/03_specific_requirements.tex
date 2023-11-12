@@ -56,6 +56,28 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
+        Name                  & Register                                                                                            \\ \hline
+        ID                    & UC1                                                                                                \\ \hline
+        Actors                & EDU or STU                                                                                         \\ \hline
+        Entry \par conditions & The actor is not registered and wants to create an account                                                \\ \hline
+        Event \par flow       & \begin{enumerate}
+                                    \item The actor enters the registration page
+                                    \item The system shows the registration form
+                                    \item The actor decides whether he is an educator or a student
+                                    \item The actor fills the form with truthful informations
+                                    \item The actor confirm the account creation
+                                    \item The system creates an account with respect to the informations inserted by the actor     
+                                \end{enumerate}                                  \\ \hline
+        Exit \par conditions  & The system creates successfully the account                                        \\ \hline
+        Exceptions            & The actor inserts informations (i.e. email) about an account which already exists \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
         Name                  & Log in                                                                                             \\ \hline
         ID                    & UC2                                                                                                \\ \hline
         Actors                & EDU or STU                                                                                         \\ \hline
@@ -67,10 +89,35 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The system checks the credentials and logs the actor in
                                 \end{enumerate}                                  \\ \hline
         Exit \par conditions  & The actor is logged in and it has access to the home page                                          \\ \hline
-        Exceptions            & The actor insert a wrong combination of username - password: a human-readable message is displayed \\ \hline
+        Exceptions            & The actor inserts a wrong combination of username - password: a human-readable message is displayed \\ \hline
     \end{tabular}
 \end{center}
-
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
+        Name                  & Battle creation                                                                                             \\ \hline
+        ID                    & UC4                                                                                                \\ \hline
+        Actors                & EDU                                                                                         \\ \hline
+        Entry \par conditions & The actor is already subscribed to the CKB platform and he is an educator already logged in the platform                                                \\ \hline
+        Event \par flow       & \begin{enumerate}
+                                    \item The actor opens the page correlated to the tournament in which he wants to create a new battle
+                                    \item The system shows the tournament page
+                                    \item If the actor has enough permissions, the system shows the "create a new battle" button
+                                    \item The actor opens the battle creation page
+                                    \item The system shows the battle creation form
+                                    \item The actor fills the form with the details about the battle (i.e. code language, deadlines)
+                                    \item The actor uploads the code kata
+                                    \item The system checks if all fields are correctly filled
+                                    \item The system creates the battle
+                                \end{enumerate}                                  \\ \hline
+        Exit \par conditions  & The system creates successfully the new battle                                      \\ \hline
+        Exceptions            & \begin{enumerate}
+                                    \item The actor has not enough permissions for the selected tournament.
+                                    \item The actor uploads files not allowed                                \end{enumerate} \\ \hline    
+    \end{tabular}
+\end{center}
 \begin{center}
     \def\arraystretch{1.5}
     \setlist[enumerate]{itemsep=.1pt}
