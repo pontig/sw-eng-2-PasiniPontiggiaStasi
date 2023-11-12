@@ -145,6 +145,29 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
+        Name                  & Join a Battle                                                                                   \\ \hline
+        ID                    & UC7                                                                                                  \\ \hline
+        Actors                & STU                                                                                                  \\ \hline
+        Entry \par conditions & The actor is an authenticated STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to the tournament\\ \hline
+        Event \par flow       & \begin{enumerate}
+                                    \item The actor opens the torunament page in which he is subscribed
+                                    \item The system shows the battles of the tournament
+                                    \item The actor opens the kata battle page 
+                                    \item If the subscribing deadline is not expired yet, the system shows the kata battle page with the function "join and create a team"
+                                    \item The actor clicks on "join and create a team"
+                                    \item The system subscribes the actor to the battle 
+                                \end{enumerate}                        \\ \hline
+        Exit \par conditions  & The actor can now invite other STUs to his team or he can wait the start of the battle and partecipating alone                                \\ \hline
+        Exceptions            & \textit{None}                                                                                        \\ \hline
+        Note                  & The system provides a function to send via mail the link in other to let other STUs join the team created by the actor             \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
         Name                  & Manual evaluation                                                                                                                                                                                                        \\ \hline
         ID                    & UC9                                                                                                                                                                                                                      \\ \hline
         Actors                & EDU                                                                                                                                                                                                                      \\ \hline
