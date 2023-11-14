@@ -293,6 +293,51 @@ In order to work properly, the software must fulfill the following functional re
         Notes                 & The tournament page shows both the rank and the list of battles within it, ongoing or ended \\ \hline
     \end{tabular}
 \end{center}
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
+        Name                  & Visualizing tournaments                                                         \\ \hline
+        ID                    & UCNON SO.1                                                                                       \\ \hline
+        Actors                & EDU                                                                                  \\ \hline
+        Entry \par conditions & The actor is logged \textbf{and} he is an EDU \textbf{and} he is in his dashboard                                     \\ \hline
+        Event \par flow       & \begin{enumerate}
+                                    \item The actor clicks on the "My Tournaments" button
+                                    \item The system shows the list of all the tournaments the actor has created
+                                    \item The actor selects a tournament, either ongoing or closed
+                                    \item The system shows the tournament page
+                                \end{enumerate}                               \\ \hline
+        Exit \par conditions  & The actor can see the tournament page                         \\ \hline
+        Exceptions            & \textit{None}                                                                               \\ \hline
+    \end{tabular}
+\end{center}
+
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
+        Name                  & Visualizing tournaments                                                         \\ \hline
+        ID                    & UCNON SO.2                                                                                        \\ \hline
+        Actors                & STU                                                                                  \\ \hline
+        Entry \par conditions & The actor is logged \textbf{and} he is an STU \textbf{and} he is in his dashboard                                     \\ \hline
+        Event \par flow       & \begin{enumerate}
+                                    \item The actor clicks on the "My Tournaments" button
+                                    \item The system shows the list of all the tournaments to which the actor has subscribed
+                                    \item The actor selects a tournament, either ongoing or closed
+                                    \item The system shows the tournament page
+                                    \item The actor returns to his dashboard
+                                    \item The actor clicks the search bar and insert the name of a tournament he is looking for
+                                    \item The system shows the tournament page corresponding to the search
+                                \end{enumerate}                               \\ \hline
+        Exit \par conditions  & The actor can see the tournament he has selected                             \\ \hline
+        Exceptions            & If the tournament does not exists, the system suggests other tournaments showing their names and the subscribing deadlines \\ \hline
+        Notes                 & In the dashboard are shwon both the suggested torunaments and the torunaments to which the actor is subscribed \\ \hline
+    \end{tabular}
+\end{center}
+
 
 \begin{center}
     \def\arraystretch{1.5}
@@ -312,6 +357,28 @@ In order to work properly, the software must fulfill the following functional re
         Exit \par conditions  & The actor can see the list of all battles within the tournament                             \\ \hline
         Exceptions            & \textit{None}                                                                               \\ \hline
         Notes                 & The tournament page shows both the rank and the list of battles within it, ongoing or ended \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
+        Name                  & Push commit and score updating                                                                                              \\ \hline
+        ID                    & UC18                                                                                                             \\ \hline
+        Actors                & CKB platform, GitHub, STU                                                                                        \\ \hline
+        Entry \par conditions & The registration deadline for a battle has expired \textbf{and} STU is subscribed to the battle \textbf{and} the battle is not ended yet                \\ \hline
+        Event \par flow       & \begin{enumerate}
+                                \item STU pushes his changes to the GitHub repository to Github
+                                \item GitHub actions use the CKB platform 's API to inform of the new changes
+                                \item CKB platform pulls the latest sources and analyzes them
+                                \item CKB platform runs the tests on the corresponding executables 
+                                \item CKB platform calculate and update the battle score of the team corresponding to STU
+                                \end{enumerate} \\ \hline
+        Exit \par conditions  & The STU's team can see the updated score                                                       \\ \hline
+        Exceptions            & \textit{None}                                                                                                    \\ \hline
+        Notes                 & We have assumed that the STU setted properly the Github repository and the GitHub actions in the domain assumptions, so, by the side of the platform, nothing could go wrong                     \\ \hline
     \end{tabular}
 \end{center}
 
