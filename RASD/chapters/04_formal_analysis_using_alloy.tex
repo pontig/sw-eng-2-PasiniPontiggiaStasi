@@ -1,1 +1,64 @@
-{\color{red}\chapter{Formal Analysis Using Alloy}}
+\chapter{Formal Analysis Using Alloy}
+\lstdefinelanguage{Alloy}
+{
+    morekeywords={abstract,all,and,as,assert,assertion,but,check,disj,else,enum,exactly,expect,extends,for,fun,iden,iff,implies,in,let,lone,module,no,none,not,one,open,or,pred,set,sig,some,sum,univ},
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]",
+    morestring=[b]'
+}
+\lstset{
+    basicstyle=\fontfamily{Roboto}\selectfont\ttfamily\small, % Use Roboto font
+    keywordstyle=\color{blue}\textbf,   % Keywords in blue
+    commentstyle=\color{gray},   % Comments in gray
+    stringstyle=\color{green},   % Strings in green
+    showstringspaces=false,
+    tabsize=2,
+    breaklines=true
+}
+\begin{lstlisting}[language=Alloy,  label={lst:alloycode}, basicstyle=\fontfamily{Roboto}\selectfont\ttfamily]
+        // Obviously, this is a mockup of the Alloy code that Michelangelo will write
+        sig Person {
+            name: one String,
+            age: one Int,
+            address: one Address
+        }
+
+        sig Address {
+            street: one String,
+            city: one String,
+            state: one String,
+            zip: one Int
+        }
+
+        sig Car {
+            model: one String,
+            owner: lone Person
+        }
+
+        sig Company {
+            name: one String,
+            employees: set Person
+        }
+
+        sig Department {
+            name: one String,
+            company: one Company,
+            employees: set Person
+        }
+
+        fact {
+            all c: Car | c.owner.age > 18
+            all p: Person | p.age > 0 and p.age < 120
+            all a: Address | a.zip > 0 and a.zip < 100000
+            all c: Company | #c.employees > 0
+            all d: Department | #d.employees > 0
+        }
+
+        run {
+            some p: Person | #p.age > 30
+            some c: Company | #c.employees > 100
+        } for 5
+            
+        \end{lstlisting}
