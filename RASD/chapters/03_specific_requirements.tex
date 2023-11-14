@@ -5,7 +5,70 @@
 \section{External Interface Requirements}
 In the following, the interfaces, both hardware and software, of the system are described.
 
-    {\color{red}\subsection{User Interfaces}}
+\subsection{User Interfaces}
+
+% ATTENTION: loadning images when building the document with latex is quite slow,
+% so it is better to comment the images you are not working on to speed up the process
+
+In the following it is shown the mockup of the main pages of the system.\\
+
+\captionsetup[figure]{skip=0pt}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/log_in.png}
+    \caption{Log in page}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/sign_up.png}
+    \caption{Sign up page}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/profile.png}
+    \caption{Page that shows badges acquired by a STU}
+\end{figure}
+
+\subsubsection*{EDU's views}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/educator_dashboard.png}
+    \caption{Dashboard}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/educator_tournament_view.png}
+    \caption{View of a tournament}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/manual_evaluation.png}
+    \caption{Manual evaluation page}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/new_badge.png}
+    \caption{Page to create a new badge}
+\end{figure}
+
+\subsubsection*{STU's views}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/student_dashboard.png}
+    \caption{Dashboard}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/student_tournament_view.png}
+    \caption{View of a tournament}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/student_battle_view.png}
+    \caption{View of a battle}
+\end{figure}
+
+
 
 \subsection{Hardware Interfaces}
 To use the CKB platform, both the Educators and the Students need an electronic device connected to the Internet, like a computer, a tablet or a smartphone.\\
@@ -56,20 +119,20 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Register                                                                                            \\ \hline
-        ID                    & UC1                                                                                                \\ \hline
-        Actors                & EDU or STU                                                                                         \\ \hline
-        Entry \par conditions & The actor is not registered and wants to create an account                                                \\ \hline
+        Name                  & Register                                                                                  \\ \hline
+        ID                    & UC1                                                                                       \\ \hline
+        Actors                & EDU or STU                                                                                \\ \hline
+        Entry \par conditions & The actor is not registered and wants to create an account                                \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor enters the registration page
                                     \item The system shows the registration form
                                     \item The actor decides whether he is an educator or a student
                                     \item The actor fills the form with truthful informations
                                     \item The actor confirm the account creation
-                                    \item The system creates an account with respect to the informations inserted by the actor     
-                                \end{enumerate}                                  \\ \hline
-        Exit \par conditions  & The system creates successfully the account                                        \\ \hline
-        Exceptions            & The actor inserts informations (i.e. email) about an account which already exists \\ \hline
+                                    \item The system creates an account with respect to the informations inserted by the actor
+                                \end{enumerate} \\ \hline
+        Exit \par conditions  & The system creates successfully the account                                               \\ \hline
+        Exceptions            & The actor inserts informations (i.e. email) about an account which already exists         \\ \hline
     \end{tabular}
 \end{center}
 
@@ -78,17 +141,17 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Log in                                                                                             \\ \hline
-        ID                    & UC2                                                                                                \\ \hline
-        Actors                & EDU or STU                                                                                         \\ \hline
-        Entry \par conditions & The actor is already subscribed to the CKB platform                                                \\ \hline
+        Name                  & Log in                                                                                              \\ \hline
+        ID                    & UC2                                                                                                 \\ \hline
+        Actors                & EDU or STU                                                                                          \\ \hline
+        Entry \par conditions & The actor is already subscribed to the CKB platform                                                 \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor enters the login page
                                     \item The system shows the login form
                                     \item The actor fills the form with its credentials and submits it
                                     \item The system checks the credentials and logs the actor in
-                                \end{enumerate}                                  \\ \hline
-        Exit \par conditions  & The actor is logged in and it has access to the home page                                          \\ \hline
+                                \end{enumerate}                                   \\ \hline
+        Exit \par conditions  & The actor is logged in and it has access to the home page                                           \\ \hline
         Exceptions            & The actor inserts a wrong combination of username - password: a human-readable message is displayed \\ \hline
     \end{tabular}
 \end{center}
@@ -97,10 +160,10 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Battle creation                                                                                             \\ \hline
-        ID                    & UC4                                                                                                \\ \hline
-        Actors                & EDU                                                                                         \\ \hline
-        Entry \par conditions & The actor is already subscribed to the CKB platform and he is an educator already logged in the platform                                                \\ \hline
+        Name                  & Battle creation                                                                                          \\ \hline
+        ID                    & UC4                                                                                                      \\ \hline
+        Actors                & EDU                                                                                                      \\ \hline
+        Entry \par conditions & The actor is already subscribed to the CKB platform and he is an educator already logged in the platform \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor opens the page correlated to the tournament in which he wants to create a new battle
                                     \item The system shows the tournament page
@@ -111,11 +174,11 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The actor uploads the code kata
                                     \item The system checks if all fields are correctly filled
                                     \item The system creates the battle
-                                \end{enumerate}                                  \\ \hline
-        Exit \par conditions  & The system creates successfully the new battle                                      \\ \hline
+                                \end{enumerate}      \\ \hline
+        Exit \par conditions  & The system creates successfully the new battle                                                           \\ \hline
         Exceptions            & \begin{enumerate}
                                     \item The actor has not enough permissions for the selected tournament.
-                                    \item The actor uploads files not allowed                                \end{enumerate} \\ \hline    
+                                    \item The actor uploads files not allowed                                \end{enumerate}                 \\ \hline
     \end{tabular}
 \end{center}
 \begin{center}
@@ -145,21 +208,21 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a Battle                                                                                   \\ \hline
-        ID                    & UC7                                                                                                  \\ \hline
-        Actors                & STU                                                                                                  \\ \hline
-        Entry \par conditions & The actor is an authenticated STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to the tournament\\ \hline
+        Name                  & Join a Battle                                                                                                                         \\ \hline
+        ID                    & UC7                                                                                                                                   \\ \hline
+        Actors                & STU                                                                                                                                   \\ \hline
+        Entry \par conditions & The actor is an authenticated STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to the tournament       \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor opens the torunament page in which he is subscribed
                                     \item The system shows the battles of the tournament
-                                    \item The actor opens the kata battle page 
+                                    \item The actor opens the kata battle page
                                     \item If the subscribing deadline is not expired yet, the system shows the kata battle page with the function "join and create a team"
                                     \item The actor clicks on "join and create a team"
-                                    \item The system subscribes the actor to the battle 
-                                \end{enumerate}                        \\ \hline
-        Exit \par conditions  & The actor can now invite other STUs to his team or he can wait the start of the battle and partecipating alone                                \\ \hline
-        Exceptions            & \textit{None}                                                                                        \\ \hline
-        Note                  & The system provides a function to send via mail the link in other to let other STUs join the team created by the actor             \\ \hline
+                                    \item The system subscribes the actor to the battle
+                                \end{enumerate} \\ \hline
+        Exit \par conditions  & The actor can now invite other STUs to his team or he can wait the start of the battle and partecipating alone                        \\ \hline
+        Exceptions            & \textit{None}                                                                                                                         \\ \hline
+        Note                  & The system provides a function to send via mail the link in other to let other STUs join the team created by the actor                \\ \hline
     \end{tabular}
 \end{center}
 
@@ -352,16 +415,16 @@ In order to work properly, the software must fulfill the following functional re
     \begin{longtable}{p{0.5\textwidth}p{0.5\textwidth}}
         \specialrule{0.6mm}{1pt}{1pt}
         \multicolumn{2}{p{\textwidth}}{G1: Educators can create tournaments that involve coding battles to challenge students. }                                                                                           \\ % \specialrule{0.1mm}{1pt}{1pt}
-        D2, D5, D6         & R1, R2, R3, R4, R5, R6, R12, R13, R16, R17, R20, R21, R22, R23                                                                                                                                                                                   \\ \specialrule{0.6mm}{1pt}{1pt}
+        D2, D5, D6                    & R1, R2, R3, R4, R5, R6, R12, R13, R16, R17, R20, R21, R22, R23                                                                                                                     \\ \specialrule{0.6mm}{1pt}{1pt}
 
         \multicolumn{2}{p{\textwidth}}{G2: Provides educators with the ability to track student software development knowledge.}                                                                                           \\ % \specialrule{0.1mm}{1pt}{1pt}
-        D2, D3, D4, D5, D6, D8    & R1, R2, R6, R7, R8, R9, R10, R11, R13, R14, R15, R16, R17, R20, R21, R23, R24                                                                                                             \\ \specialrule{0.6mm}{1pt}{1pt}
+        D2, D3, D4, D5, D6, D8        & R1, R2, R6, R7, R8, R9, R10, R11, R13, R14, R15, R16, R17, R20, R21, R23, R24                                                                                                      \\ \specialrule{0.6mm}{1pt}{1pt}
 
         \multicolumn{2}{p{\textwidth}}{G3: Students can improve software development skills by taking part in coding tournaments and battles where they must write programs.}                                              \\ % \specialrule{0.1mm}{1pt}{1pt}
-        D1, D2, D3, D4,D5, D6, D7, D8 & R1, R2, R3, R4, R5, R6, R7, R13, R14, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31                                                            \\ \specialrule{0.6mm}{1pt}{1pt}
+        D1, D2, D3, D4,D5, D6, D7, D8 & R1, R2, R3, R4, R5, R6, R7, R13, R14, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31                                                               \\ \specialrule{0.6mm}{1pt}{1pt}
 
         \multicolumn{2}{p{\textwidth}}{G4: Coding battles enable students to enhance their soft skills, such as communication, collaboration, and time management, by creating a team and collaborating with the members.} \\ % \specialrule{0.1mm}{1pt}{1pt}
-        D3, D5, D7, D8             & R5, R16, R17, R18, R19                                                                                                                                                                \\ \specialrule{0.6mm}{1pt}{1pt}
+        D3, D5, D7, D8                & R5, R16, R17, R18, R19                                                                                                                                                             \\ \specialrule{0.6mm}{1pt}{1pt}
     \end{longtable}
 \end{center}
 
@@ -406,5 +469,3 @@ To avoid inconvenience in solving any type of problem (e.g. server downtime), ma
 
 \subsection{Portability}
 Due to the fact that the CKB platform is a distributed system, and it doesn't rely on a specific hardware or software, it can be used / accessed in multiples way.
-
-    {\color{red}\subsection*{Summary of Non-Functional Requirements}}
