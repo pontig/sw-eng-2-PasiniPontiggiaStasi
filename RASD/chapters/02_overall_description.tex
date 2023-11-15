@@ -110,29 +110,55 @@ The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.
     \label{fig:score-evaluation-state-diagram}
 \end{figure}
 
-{\color{orange}
 \section{Product Functions}
 \subsection{Registrater function}
-- Studente o educatore
-- Educatore ha un livello di accout maggiore rispetto allo studente -> Crea battaglie o tornei e specifico i dettagli per ogni cosa
+A user approaching CKB for the first time can register on the platform.
+The information necessary for the system to keep track of users is personal data such as Name, Surname, Email, School they belong to, and what role they hold in the school environment.
+This last information is very important as it guarantees two types of accounts with different rights and duties.
+
+By expressing that you are an EDU, therefore an educator, all rights relating to the creation of tournaments, battles, and badges will be guaranteed.
+By choosing the STU student account, you will be able to actively participate in tournaments and battles by earning badges.
 
 \subsection{Creating tournament function}
-- Come si crea il torneo molto in generale
+To create a tournament, an educator registered on the CKB platform must define all the information necessary for its generation.
+The tournament requires:
+\begin{itemize}
+    \item a name
+    \item a list of EDUs that will be able to create battles in the tournament and finish it
+    \item a time window aimed at welcoming student registrations
+    \item a list of badges that students can obtain during battles.
+\end{itemize}
 
 \subsection{Creating battles function}
-- Come si crea la battaglia molto in generale
+In the context of an active tournament, any authorized EDU can decide to create a battle.
+New battles require:
+\begin{itemize}
+    \item The programming language required to solve the problem
+    \item The test cases that must be passed at the end of the battle by each team's code
+    \item The specification of the problem to be solved including the example for following a test-first approach
+    \item The deadline for the battle registration period
+    \item The deadline for the conclusion of the battle
+    \item The choice of the evaluation method, in particular, if it wants to add manual evaluation in addition to the automatic one performed by the platform
+    \item Constraints for the maximum and minimum number of players required for each team
+\end{itemize}
 
 \subsection{Partecipating in tournament and battles function}
-- Come si iscrive a battaglie e tornei molto in generale
+Students registered on the platform receive notification every time a new tournament is created and can decide whether to participate.
+Likewise, they are informed of new battles in the context of a tournament in which they applied.
+Registration for a battle can be done in various ways as long as it is before the end of the registration window:
 
-\subsection{Score visualization function}
-- Score, ranking e badges vederli
+{\color{orange}
+Mi iscrivo al torneo da solo / in team / se c'è un minimo sono obbligato a fare un team.
+Se decido di formare un team posso invitare altri studenti iscritti al torneo ad unirsi al mio team.
+Ricevo un invito posso accettarlo, evitarlo o rifiutarlo:
+    - Se sono giocatore singolo iscritto alla battaglia
+    - Se non sono iscritto alla battaglia e in automatico vengo iscritto
 
 \subsection{Gamification function}
+}
 
 \section{User characteristics}
 Users of the system fall into one of the following categories: student or educator.
-}
 
 \subsection*{Student}
 Student participates actively in code kata tournaments and battles to enhance their software development skills. 
@@ -182,7 +208,6 @@ In summary, the educator acts as a promoter of an engaging and competitive train
 \end{table}
 
 \subsection{Constraints}
-
 \begin{itemize}
     \item The software must follow local laws and rules, especially when it comes to handling user data, like letting users access their data when they want.
     \item The software should only collect the data it really needs, like just the user's email address.
