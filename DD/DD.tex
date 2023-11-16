@@ -1,0 +1,52 @@
+\documentclass[a4paper, 11pt, oneside, openright, english]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{blindtext}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{seqsplit}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage[T1]{fontenc}  % Use T1 font encoding
+\usepackage{beramono}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[LE,RO]{\slshape \rightmark}
+\fancyhead[LO,RE]{\slshape \leftmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+
+\setlength{\headheight}{13.59999pt}
+\addtolength{\topmargin}{-1.59999pt}
+
+\titleformat{\chapter}[block]{\normalfont\huge\bfseries}{\thechapter.}{1em}{\Huge}
+
+\begin{document}
+\input title
+\input revision_history
+\tableofcontents
+
+\include{chapters/01_introduction}
+\include{chapters/02_architectural_design}
+\include{chapters/03_user_interface_design}
+\include{chapters/04_requirements_traceability}
+\include{chapters/05_implementation_integration_and_test_plan}
+\include{chapters/06_effort_spent}
+
+\end{document}
