@@ -1,7 +1,7 @@
 \chapter{Formal Analysis Using Alloy}
 \lstdefinelanguage{Alloy}
 {
-    morekeywords={abstract,all,and,as,assert,assertion,but,check,disj,else,enum,exactly,expect,extends,for,fun,iden,iff,implies,in,let,lone,module,no,none,not,one,open,or,pred,set,sig,some,sum,univ},
+    morekeywords={fact, abstract,all,and,as,assert,assertion,but,check,disj,else,enum,exactly,expect,extends,for,fun,iden,iff,implies,in,let,lone,module,no,none,not,one,open,or,pred,set,sig,some,sum,univ},
     sensitive=true,
     morecomment=[l]{//},
     morecomment=[s]{/*}{*/},
@@ -17,48 +17,130 @@
     tabsize=2,
     breaklines=true
 }
+\section[Signatures]{Signatures}
 \begin{lstlisting}[language=Alloy,  label={lst:alloycode}, basicstyle=\fontfamily{Roboto}\selectfont\ttfamily]
-        // Obviously, this is a mockup of the Alloy code that Michelangelo will write
-        sig Person {
-            name: one String,
-            age: one Int,
-            address: one Address
-        }
+        
+    //DateTime is used to represent a couple <date, time>
+    sig DateTime{
+    }
 
-        sig Address {
-            street: one String,
-            city: one String,
-            state: one String,
-            zip: one Int
-        }
+    abstract sig Bool {}
+    one sig True, False extends Bool {}
 
-        sig Car {
-            model: one String,
-            owner: lone Person
-        }
+    /*TestCase represents what the educator will upload when creating a battle in order to test the code of the students*/
+    sig TestCase{
+        input : set String,
+        output : set String,
+        timeConstraint: one Int,
+        memoryConstraint: one Int,
+    }
 
-        sig Company {
-            name: one String,
-            employees: set Person
-        }
+    /*User is an abstract entity containing all the attributes that each user will have*/ 
+    abstract sig User {
+        name : one String,
+        surname: one String,
+        emailAddress: one String,
+    }
 
-        sig Department {
-            name: one String,
-            company: one Company,
-            employees: set Person
-        }
+    //Student represents the STU of the system
+    sig Student extends User{
+        achievedBadges : set Badge,
+        tournaments : set Tournament,
+        battles : set Battle,
+    }
 
-        fact {
-            all c: Car | c.owner.age > 18
-            all p: Person | p.age > 0 and p.age < 120
-            all a: Address | a.zip > 0 and a.zip < 100000
-            all c: Company | #c.employees > 0
-            all d: Department | #d.employees > 0
-        }
+    //Educator represents the EDU of the system
+    sig Educator extends User{
+        ownedTournaments : set Tournament,
+        closedTournaments : set Tournament,
+    }
+    
+    /*Team represents the team ( composed by at least one student by definition) created by a student when he subscribes to a battle*/
+    sig Team{
+        students: some Student,
+    }
 
-        run {
-            some p: Person | #p.age > 30
-            some c: Company | #c.employees > 100
-        } for 5
-            
+    /*Tournament entity represents the tournament created by an EDU. 
+    In particular, grantedEducators will have all the EDUs who have the same permissions of the creator EDU.
+    ranking attribute will contain a map in which the keys will be the STUs and to each key will be assigned a value which is the sum of scores in the battles concerning that tournament */
+    sig Tournament {
+        subscriptionDeadline : one DateTime,
+        ranking : Student one -> one Int,
+        grantedEducators: some Educator,
+        battles: set Battle,
+        studentsSubscribed : set Student,
+        badges : set Badge,
+    }
+    
+    /*Battle entity represents the battle created by EDUs in tournaments.
+    In particular, the ranking attribute will contain a map in which the keys will be the teams and to each key will be assigned a value which is the score of that team in this battle.
+    We use the subscribedTeams attribute instead of subscribedStudents because each team is composed by at least one person and all the components of the team will be subscribed to the battle. 
+    As a consequence, we can derive all subscribed STUs by looking at the STUs who appear in the subscribedTeams attribute. */
+    sig Battle {
+        ranking : Team -> one Int,
+        manualEvaluation: one Bool,
+        language: one String,
+        description: set String,
+        testCases: some TestCase,
+        minStudents : one Int,
+        maxStudents : one Int,
+        registrationDeadline : one DateTime,
+        finalSubmissionDeadline : one DateTime,
+        subscribedTeams: set Team,
+
+    }{
+        /*maxStudents and minStudents can't have negative values by definition. */
+        maxStudents>0
+        minStudents>0 
+        /*minStudents as a minimum value will be less than or equal to maxStudents by definition */
+        minStudents <= maxStudents
+        /*the registrationDeadline must be earlier than the finalSubmissionDeadline by definition, otherwise it would not be possible to upload code after the registrationDeadline in some cases. */
+        registrationDeadline != finalSubmissionDeadline 
+    }
+
+    /*The entity Badge represents the badges which can be created by EDUs at any moment and can be associated to different tournaments at tournament creation time. */
+    sig Badge {
+        rules : some String,
+        values : some Int,
+        title : set String,
+    }
+
         \end{lstlisting}
+\section[Facts]{Facts}
+    \begin{lstlisting}[language=Alloy,  label={lst:alloycode}, basicstyle=\fontfamily{Roboto}\selectfont\ttfamily]
+        
+        pred isTrue[b: Bool] { b in True }
+
+        pred isFalse[b: Bool] { b in False }
+        
+        pred isInATeam[s : Student, b : Battle]{
+            one t : Team | t in b.subscribedTeams and s in t.students
+        }
+        
+        /*All students subscribed to a battle must be subscribed to the corresponding torunament too. */
+       fact subscribedTeamsAreSubscribedToTournament{
+            all t: Tournament| no s: Student | s in t.battles.subscribedTeams.students and s not in t.studentsSubscribed
+        }
+
+        /*All team subscribed to a battle must satisfy team size constraint of that battle, if the battle is started. */
+       fact teamSizeInBoundaries{
+            all b: Battle | #b.subscribedTeams.students >= b.minStudents and #b.subscribedTeams.students <= b.maxStudents
+        }
+
+        /*A STU can not partecipate to the same battle with two different teams.*/
+       fact noStudentInTwoTeams{
+            all b: Battle, t1 : Team, t2 : Team | no s: Student | t1 in b.subscribedTeams and t2 in b.subscribedTeams and (s in t1.students and s in t2.students) and t1 != t2
+        }
+        
+        /*An Educator has the same privileges of the owner of a tournament if and only if it is a granted EDU for that tournament*/
+        fact ownerIsGranted{
+            all t: Tournament, e : Educator | t in e.ownedTournaments and e in t.grantedEducators
+        }
+
+        /*A STU is partecipating to a battle if and only if it is in a subscribed team of that battle*/
+        fact inBattleIfInTeam{
+            all s : Student, b : Battle | b in s.battles and isInATeam[s, b]
+        }
+
+        run {}
+    \end{lstlisting}
