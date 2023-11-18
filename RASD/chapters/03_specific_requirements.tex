@@ -282,6 +282,26 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
+        Name                  & Visualizing battle ranking                                                                                                                                  \\ \hline
+        ID                    & UC12                                                                                                                                                  \\ \hline
+        Actors                & EDU and STU                                                                                                                                                   \\ \hline
+        Entry \par conditions & The actor is in the page of the tournament it is looking for \\ \hline
+        Event \par flow       & \begin{enumerate}
+                                    \item The actor searches the battle 
+                                    \item The actor clicks on the button of the battle
+                                    \item The system shows the battle page
+                                \end{enumerate}                                                                        \\ \hline
+        Exit \par conditions  & The actor is able to see the ranking of the battle it was looking for                                \\ \hline
+        Exceptions            & None                                        \\ \hline
+        Note                  & If the battle is not started yet, the system will show the battle page and the score will be zero. \\ \hline
+        \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \setlist[enumerate]{itemsep=.1pt}
+    \begin{tabular}{| m{2cm} | m{10cm}|}
+        \hline
         Name                  & Visualizing tournament ranking                                                              \\ \hline
         ID                    & UC13                                                                                        \\ \hline
         Actors                & EDU or STU                                                                                  \\ \hline
@@ -461,24 +481,24 @@ In order to work properly, the software must fulfill the following functional re
     \begin{longtable}[H]{|c|l|}
         \hline
         \textbf{Use case} & \textbf{Functional requirements} \\ \hline
-        UC1               &                                  \\ \hline
+        UC1               & R1, R16                          \\ \hline
         UC2               & R2, R17                          \\ \hline
         UC3               &                                  \\ \hline
-        UC4               &                                  \\ \hline
+        UC4               & R5                               \\ \hline
         UC5               & R4                               \\ \hline
         UC6               &                                  \\ \hline
-        UC7               &                                  \\ \hline
+        UC7               & R18, R19                         \\ \hline
         UC8               &                                  \\ \hline
         UC9               & R6, R7                           \\ \hline
         UC10              &                                  \\ \hline
         UC11              & R12                              \\ \hline
-        UC12              &                                  \\ \hline
+        UC12              & R11, R26                         \\ \hline
         UC13              & R8, R9, R10, R27, R28, R29       \\ \hline
-        UC14              &                                  \\ \hline
+        UC14              & R10, R29                         \\ \hline
         UC15              &                                  \\ \hline
         UC16              & R11, R26                         \\ \hline
         UC17              &                                  \\ \hline
-        UC18              &                                  \\ \hline
+        UC18              & R7, R21, R24                     \\ \hline
         UC19              & R21, R23                         \\ \hline
     \end{longtable}
 \end{center}
