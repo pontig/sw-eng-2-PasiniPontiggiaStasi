@@ -112,22 +112,21 @@ The diagram is shown in figure \ref{fig:score-evaluation-state-diagram}.
 \end{figure}
 
 \section{Product Functions}
-\subsection{Registrater function}
+\subsection{Register function}
 A user approaching CKB for the first time can register on the platform.
-The information necessary for the system to keep track of users is personal data such as Name, Surname, Email, School they belong to, and what role they hold in the school environment.
+The information necessary for the system to keep track of users are personal data such as Name, Surname, Email, School they belong to, and what role they hold in the school environment.
 This last information is very important as it guarantees two types of accounts with different rights and duties.
 
-By expressing that you are an EDU, therefore an educator, all rights relating to the creation of tournaments, battles, and badges will be guaranteed.
-By choosing the STU student account, you will be able to actively participate in tournaments and battles by earning badges.
+By expressing that it is an EDU, all rights related to the creation of tournaments, battles, and badges will be guaranteed.
+By choosing a STU account, you will be able to actively participate in tournaments and battles by earning badges.
 
-\subsection{Creating tournament function}
-To create a tournament, an educator registered on the CKB platform must define all the information necessary for its generation.
+\subsection{Create tournament function}
+To create a tournament, an educator registered in CKB platform must define all the information necessary for its generation.
 The tournament requires:
 \begin{itemize}
     \item a name
-    \item a list of EDUs that will be able to create battles in the tournament and finish it
     \item a time window aimed at welcoming student registrations
-    \item a list of badges that students can obtain during battles.
+    \item a list of badges that students can obtain during the whole tournament duration
 \end{itemize}
 
 \subsection{Creating battles function}
@@ -136,27 +135,24 @@ New battles require:
 \begin{itemize}
     \item The programming language required to solve the problem
     \item The test cases that must be passed at the end of the battle by each team's code
-    \item The specification of the problem to be solved including the example for following a test-first approach
+    \item The build automation scripts correctly set
+    \item The specification of the problem to be solved including at least one example in order to achieve test-first approach
     \item The deadline for the battle registration period
     \item The deadline for the conclusion of the battle
-    \item The choice of the evaluation method, in particular, if it wants to add manual evaluation in addition to the automatic one performed by the platform
+    \item The choice of the evaluation method, in particular, if it can choose manual evaluation in addition to the automatic one performed by the platform
     \item Constraints for the maximum and minimum number of players required for each team
 \end{itemize}
 
-\subsection{Partecipating in tournament and battles function}
+\subsection{Join tournament and battles function}
 Students registered on the platform receive notification every time a new tournament is created and can decide whether to participate.
-Likewise, they are informed of new battles in the context of a tournament in which they applied.
-Registration for a battle can be done in various ways as long as it is before the end of the registration window:
-
-{\color{orange}
-Mi iscrivo al torneo da solo / in team / se c'è un minimo sono obbligato a fare un team.
-Se decido di formare un team posso invitare altri studenti iscritti al torneo ad unirsi al mio team.
-Ricevo un invito posso accettarlo, evitarlo o rifiutarlo:
-    - Se sono giocatore singolo iscritto alla battaglia
-    - Se non sono iscritto alla battaglia e in automatico vengo iscritto
+Likewise, in the context of a tournament in which they applied, they are informed of new battles.
+Registration for a battle can be done in various ways as long as it is before the end of the registration window.
 
 \subsection{Gamification function}
-}
+Educators, at any time, can create a new badge by defining a title and a rule. 
+Once a badge is created, it will be available on the CKB platform for every educator who wishes to use it in a new tournament. 
+When creating a tournament, the educator specifies the list of included badges from those available. 
+At the end of the tournament in which they are enrolled, students receive all the badges for which the specified rule has been satisfied.
 
 \section{User characteristics}
 Users of the system fall into one of the following categories: student or educator.
@@ -184,13 +180,13 @@ In summary, the educator acts as a promoter of an engaging and competitive train
 \newlist{assumptionsenumerate}{enumerate}{1}
 \setlist[assumptionsenumerate,1]{label=\textbf{D}\arabic*., ref=D\arabic*}
 \begin{assumptionsenumerate}
-    \item STUs code with the programming language setted for the battle to which they are partecipating
-    \item EDUs upload the code kata with the description and the correct software project, including test cases and build automation scripts
+    \item STUs code with the programming language set for the battle to which they are partecipating
+    \item EDUs upload the code kata with the description and the correct software project, including test cases and build automation scripts relate to it
     \item STUs fork the GitHub repository of the code kata and set up an automated workflow through GitHub Actions that informs the CKB platform (through proper API calls) as soon as STUs push a new commit into the main branch of their repository
     \item EDUs manual evaluation range from 0 to 100\footnote{The full evaluation will be given by the average of all the four aspects evaluated by the CKB platform, the three automatic ones and the manual one}
     \item The information inserted at registration moment of all users are truthful
     \item GitHub and the tool for static analysis work properly
-    \item A team is formed by at least one person
+    \item A team is formed by at least one person up to the maximum number defined by EDUs.
     \item All users subscribed to the CKB platform have a GitHub account
 \end{assumptionsenumerate}
 
