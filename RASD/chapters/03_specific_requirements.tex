@@ -90,6 +90,22 @@ In order to work properly, the software must fulfill the following functional re
 
 \subsection{Use cases Diagrams}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/sequence_diagrams/use_case_diagrams_registration.png}
+    \caption{Registration Use Case Diagram}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sequence_diagrams/use_case_diagrams_EDU.png}
+    \caption{EDU Use Case Diagram}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/sequence_diagrams/use_case_diagrams_STU.png}
+    \caption{STU Use Case Diagram}
+\end{figure}
+
 \subsection{Use cases Description}
 
 %% LAYOUT FOR THE TABLES:
@@ -120,7 +136,7 @@ In order to work properly, the software must fulfill the following functional re
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
         Name                  & Register                                                                                                                      \\ \hline
-        ID                    & UC1 (Figure \ref{fig:uc1})                                                                                                                        \\ \hline
+        ID                    & UC1 (Figure \ref{fig:uc1})                                                                                                    \\ \hline
         Actors                & EDU or STU                                                                                                                    \\ \hline
         Entry \par conditions & The actor is not registered and wants to create an account                                                                    \\ \hline
         Event \par flow       & \begin{enumerate}
@@ -164,18 +180,18 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Tournament creation  (Figure \ref{fig:uc3})                                                                                                               \\ \hline
-        ID                    & UC3                                                                                                                             \\ \hline
-        Actors                & EDU                                                                                                                             \\ \hline
-        Entry \par conditions & ... \\ \hline
+        Name                  & Tournament creation  (Figure \ref{fig:uc3}) \\ \hline
+        ID                    & UC3                                         \\ \hline
+        Actors                & EDU                                         \\ \hline
+        Entry \par conditions & ...                                         \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item 
-                                    \item 
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & ... \\ \hline
+                                    \item
+                                    \item
+                                \end{enumerate}                            \\ \hline
+        Exit \par conditions  & ...                                         \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item 
-                                \end{itemize} \\ \hline
+                                    \item
+                                \end{itemize}                              \\ \hline
     \end{tabular}
 \end{center}
 
@@ -184,7 +200,7 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Battle creation  (Figure \ref{fig:uc4})                                                                                                               \\ \hline
+        Name                  & Battle creation  (Figure \ref{fig:uc4})                                                                                         \\ \hline
         ID                    & UC4                                                                                                                             \\ \hline
         Actors                & EDU                                                                                                                             \\ \hline
         Entry \par conditions & The actor is already subscribed to the CKB platform and he is an educator already logged in the platform                        \\ \hline
@@ -233,18 +249,18 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a tournament  (Figure \ref{fig:uc6})                                                                                                               \\ \hline
-        ID                    & UC6                                                                                                                             \\ \hline
-        Actors                & ... \\ \hline
-        Entry \par conditions & ... \\ \hline
+        Name                  & Join a tournament  (Figure \ref{fig:uc6}) \\ \hline
+        ID                    & UC6                                       \\ \hline
+        Actors                & ...                                       \\ \hline
+        Entry \par conditions & ...                                       \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item 
-                                    \item 
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & ... \\ \hline
+                                    \item
+                                    \item
+                                \end{enumerate}                          \\ \hline
+        Exit \par conditions  & ...                                       \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item 
-                                \end{itemize} \\ \hline
+                                    \item
+                                \end{itemize}                            \\ \hline
     \end{tabular}
 \end{center}
 
@@ -253,10 +269,10 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a Battle (Figure \ref{fig:uc7})                                                                                                                             \\ \hline
-        ID                    & UC7                                                                                                                                         \\ \hline
-        Actors                & STU, Mail Provider                                                                                                                          \\ \hline
-        Entry \par conditions & The actor is an authenticated STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to the tournament             \\ \hline
+        Name                  & Join a Battle (Figure \ref{fig:uc7})                                                                                                             \\ \hline
+        ID                    & UC7                                                                                                                                              \\ \hline
+        Actors                & STU, Mail Provider                                                                                                                               \\ \hline
+        Entry \par conditions & The actor is an authenticated STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to the tournament                  \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor opens the tournament page in which he is subscribed
                                     \item The system shows the battles of the tournament
@@ -267,11 +283,11 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The actor inserts emails of his mates
                                     \item If the invited members are subscribed to that tournament, the system sends an email to each invited member
                                     \item The system subscribes the actor to the battle
-                                \end{enumerate}       \\ \hline
-        Exit \par conditions  & The actor can now invite other STUs to his team or he can wait the start of the battle and partecipating alone                              \\ \hline
-        Exceptions            & \begin{itemize} 
-                                    \item The deadline expires and the team does not satisfy the constraint for the minimum team participants: the team is not enrolled to the battle 
-                                    \item The emails inserted are not subscribed to the tournament : the system displays an human-readable error message    
+                                \end{enumerate}            \\ \hline
+        Exit \par conditions  & The actor can now invite other STUs to his team or he can wait the start of the battle and partecipating alone                                   \\ \hline
+        Exceptions            & \begin{itemize}
+                                    \item The deadline expires and the team does not satisfy the constraint for the minimum team participants: the team is not enrolled to the battle
+                                    \item The emails inserted are not subscribed to the tournament : the system displays an human-readable error message
                                 \end{itemize} \\ \hline
         Note                  & The system offers always the possibility to invite new members and sends via email the link to let other STUs join the team created by the actor \\ \hline
     \end{tabular}
@@ -282,18 +298,18 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a battle  (Figure \ref{fig:uc8})                                                                                                               \\ \hline
-        ID                    & UC8                                                                                                                             \\ \hline
-        Actors                & ... \\ \hline
-        Entry \par conditions & ... \\ \hline
+        Name                  & Join a battle  (Figure \ref{fig:uc8}) \\ \hline
+        ID                    & UC8                                   \\ \hline
+        Actors                & ...                                   \\ \hline
+        Entry \par conditions & ...                                   \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item 
-                                    \item 
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & ... \\ \hline
+                                    \item
+                                    \item
+                                \end{enumerate}                      \\ \hline
+        Exit \par conditions  & ...                                   \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item 
-                                \end{itemize} \\ \hline
+                                    \item
+                                \end{itemize}                        \\ \hline
     \end{tabular}
 \end{center}
 
@@ -329,18 +345,18 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Create a new badge  (Figure \ref{fig:uc11})                                                                                                               \\ \hline
-        ID                    & UC11                                                                                                                            \\ \hline
-        Actors                & ... \\ \hline
-        Entry \par conditions & ... \\ \hline
+        Name                  & Create a new badge  (Figure \ref{fig:uc11}) \\ \hline
+        ID                    & UC11                                        \\ \hline
+        Actors                & ...                                         \\ \hline
+        Entry \par conditions & ...                                         \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item 
-                                    \item 
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & ... \\ \hline
+                                    \item
+                                    \item
+                                \end{enumerate}                            \\ \hline
+        Exit \par conditions  & ...                                         \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item 
-                                \end{itemize} \\ \hline
+                                    \item
+                                \end{itemize}                              \\ \hline
     \end{tabular}
 \end{center}
 
@@ -369,19 +385,19 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualizing battle ranking (Figure \ref{fig:uc12})                                                                                                                                \\ \hline
-        ID                    & UC12                                                                                                                                                  \\ \hline
-        Actors                & EDU and STU                                                                                                                                                   \\ \hline
-        Entry \par conditions & The actor is in the page of the tournament it is looking for \\ \hline
+        Name                  & Visualizing battle ranking (Figure \ref{fig:uc12})                                                 \\ \hline
+        ID                    & UC12                                                                                               \\ \hline
+        Actors                & EDU and STU                                                                                        \\ \hline
+        Entry \par conditions & The actor is in the page of the tournament it is looking for                                       \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item The actor searches the battle 
+                                    \item The actor searches the battle
                                     \item The actor clicks on the button of the battle
                                     \item The system shows the battle page
-                                \end{enumerate}                                                                        \\ \hline
-        Exit \par conditions  & The actor is able to see the ranking of the battle it was looking for                                \\ \hline
-        Exceptions            & None                                        \\ \hline
+                                \end{enumerate}                                                  \\ \hline
+        Exit \par conditions  & The actor is able to see the ranking of the battle it was looking for                              \\ \hline
+        Exceptions            & None                                                                                               \\ \hline
         Note                  & If the battle is not started yet, the system will show the battle page and the score will be zero. \\ \hline
-        \end{tabular}
+    \end{tabular}
 \end{center}
 
 \begin{center}
@@ -409,18 +425,18 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualize user profile  (Figure \ref{fig:uc14})                                                                                                               \\ \hline
-        ID                    & UC14                                                                                                                            \\ \hline
-        Actors                & ... \\ \hline
-        Entry \par conditions & ... \\ \hline
+        Name                  & Visualize user profile  (Figure \ref{fig:uc14}) \\ \hline
+        ID                    & UC14                                            \\ \hline
+        Actors                & ...                                             \\ \hline
+        Entry \par conditions & ...                                             \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item 
-                                    \item 
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & ... \\ \hline
+                                    \item
+                                    \item
+                                \end{enumerate}                                \\ \hline
+        Exit \par conditions  & ...                                             \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item 
-                                \end{itemize} \\ \hline
+                                    \item
+                                \end{itemize}                                  \\ \hline
     \end{tabular}
 \end{center}
 
@@ -429,7 +445,7 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualizing tournaments (Figure \ref{fig:uc15.2})                                                    \\ \hline
+        Name                  & Visualizing tournaments (Figure \ref{fig:uc15.2})                           \\ \hline
         ID                    & 15.1                                                                        \\ \hline
         Actors                & EDU                                                                         \\ \hline
         Entry \par conditions & The actor is logged \textbf{and} he is in his dashboard                     \\ \hline
@@ -455,7 +471,7 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualizing tournaments (Figure \ref{fig:uc15.2})                                                                                                 \\ \hline
+        Name                  & Visualizing tournaments (Figure \ref{fig:uc15.2})                                                                          \\ \hline
         ID                    & 15.2                                                                                                                       \\ \hline
         Actors                & STU                                                                                                                        \\ \hline
         Entry \par conditions & The actor is logged \textbf{and} he is in his dashboard                                                                    \\ \hline
@@ -501,7 +517,7 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Push commit and score updating (Figure \ref{fig:uc18})                                                                                                                                              \\ \hline
+        Name                  & Push commit and score updating (Figure \ref{fig:uc18})                                                                                                                       \\ \hline
         ID                    & UC18                                                                                                                                                                         \\ \hline
         Actors                & CKB platform, GitHub, STU                                                                                                                                                    \\ \hline
         Entry \par conditions & The registration deadline for a battle has expired \textbf{and} STU is subscribed to the battle \textbf{and} the battle is not ended yet                                     \\ \hline
@@ -539,48 +555,48 @@ In order to work properly, the software must fulfill the following functional re
     \end{tabular}
 \end{center}
 \subsection{Use cases Sequence Diagrams}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC1 -SequenceDiagram.png}
-        \caption{Register Use Case}
-        \label{fig:uc1}
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC4- SequenceDiagram.png}
-        \caption{Battle creation Use Case}
-        \label{fig:uc4}
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC7-SequenceDiagram.png}
-        \caption{Join a Battle Use Case}
-        \label{fig:uc7}
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC12-SequenceDiagram.png}
-        \caption{Visualizing battle ranking Use Case}
-        \label{fig:uc12}
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC15.1-SequenceDiagram.png}
-        \caption{Visualizing tournaments Use Case}
-        \label{fig:uc15.1}
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC15.2-SequenceDiagram.png}
-        \caption{Visualizing tournaments Use Case}
-        \label{fig:uc15.2}
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC18-SequenceDiagram.png}
-        \caption{Push commit and score updating Use Case}
-        \label{fig:uc18}
-    \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC1 -SequenceDiagram.png}
+    \caption{Register Use Case}
+    \label{fig:uc1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC4- SequenceDiagram.png}
+    \caption{Battle creation Use Case}
+    \label{fig:uc4}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC7-SequenceDiagram.png}
+    \caption{Join a Battle Use Case}
+    \label{fig:uc7}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC12-SequenceDiagram.png}
+    \caption{Visualizing battle ranking Use Case}
+    \label{fig:uc12}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC15.1-SequenceDiagram.png}
+    \caption{Visualizing tournaments Use Case}
+    \label{fig:uc15.1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC15.2-SequenceDiagram.png}
+    \caption{Visualizing tournaments Use Case}
+    \label{fig:uc15.2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC18-SequenceDiagram.png}
+    \caption{Push commit and score updating Use Case}
+    \label{fig:uc18}
+\end{figure}
 
 \subsection{List of functional requirements}
 \subsubsection*{EDU functional requirements}
