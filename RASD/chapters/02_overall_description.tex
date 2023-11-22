@@ -50,11 +50,12 @@ He sees that Huey has a very high score in the "Strings Operations" tournament a
 Thanks to the CKB platform, Pippo has now a complete overview of Huey's skills and he can decide whether to accept his application or not.
 
 \subsection{Class Diagram}
+{\color{red}{AGGIUNGERE classe testcase. TOGLIERE TeamScore, è uguale a ranking in battle. Togliere creates battle da educator, ridondante}}
 In figure \ref{fig:software-class-diagram} is represented the class diagram of the software. In particular, the most important details are :
 \begin{itemize}
     \item There are only two possible types of users : the Student type and the Educator type;
     \item The Educator can create tournaments and battles, he can grants other educators to his own tournament;
-    \item The Student can invite other students, he can achieves some badges, he can subscribes to a tournament and he will use GitHub. But the most important detail is the one about subscribing to a battle : in fact, a student can subscribe to a battle by creating is own team (a team is composed by at least one person) or by joining an existing team. In this way we don't use a "Team" class because a team doesn't exist without a battle;
+    \item The Student can invite other students, he can achieves some badges, he can subscribes to a tournament and he will use GitHub. But the most important detail is the one about subscribing to a battle : in fact, a student can subscribe to a battle by creating is own team (a team is composed by at least one person) or by joining an existing team. The team subscribes to a battle, BUT, if the battle does not exist, the team class does not exist. In other words, a team exists only in the battle scope;
     \item The Tournament and Battle classes use the MailAPI to notify students about events.
 
 \end{itemize}
