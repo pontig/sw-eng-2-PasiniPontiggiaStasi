@@ -10,6 +10,8 @@ Its software application architecture is organized into three logical tiers: the
     \caption{High level components diagram}
 \end{figure}
 
+{\color{red} qui i load balancer è un errore metterli? \\ Qualcosa mi fa pensare che debba mettere sia web server che application server, ma non sono sicuro}
+
 The service will be accessed through a web interface, employing a Single Page Application (SPA). Utilizing an SPA is ideal for this application, as it facilitates extensive interaction without necessitating frequent page reloads.\\
 The system's architecture is structured into distinct layers, with application servers interacting with a database management system and utilizing APIs for data retrieval and storage. {\color{red}Adhering to REST standards, the application servers are intentionally designed to be stateless, -e le sessioni di log in come ce le gestiamo?-} while the system will include more than one firewall to ensure security.\\
 
@@ -24,32 +26,81 @@ The system is composed by the following components:
 
 {\color{red}Qui va bene aver raggruppato le interfacce oppure vanno messe singolarmente, una per ogni endpoint?}
 
-\subsection*{Query manager}
+\subsection{Client components}
+
+The client components are represented by only a single component, a user-friendly WebApp, that will behave differently depending on the level of the user that is using it (whether it is an EDU or a STU).\\
+The WebApp is interfaced with the server components through all the APIs offeded by the server (see later for a detailed description of the APIs).\\
+{\color{red}Vogliamo aggiungere come mai abbiamo scelto di fare una WebApp e non un'applicazione mobile?}
+
+\subsection{Server components}
+
+\subsubsection*{Query manager}
 The query manager is the component that handles the queries made by the other components that need to access the database. It is responsible for the execution of the queries and for the communication with the database.\\
 It is interfaced with all the internal models of the system that need to access the database, i.e. all the other components of the system exept for the notification manager.\\
-It is interfaced with the database through the DBMS API, external to the system.\\
+It is interfaced with the database through the DBMS API, external to the system.
 
-\subsection*{Auth manager}
+\subsubsection*{Auth manager}
 The auth manager is the component that handles the authentication of the users and the authorization of the requests made by the other components that need to access the database with respect to the user that made the request.\\
 It is interfaced with all the internal models of the system that behave differently depending on the level of the user that made the request, i.e. the badges manager, the tournament manager and the battle manager.\\
-It isn't interfaced with any external component.\\
+It isn't interfaced with any external component.
 
-\subsection*{Notification manager}
+\subsubsection*{Notification manager}
 The notification manager is the component that handles the need of the system to notify the users of some events, such as the start of a tournament or the end of a battle.\\
 It is interfaced with all the internal models of the system that need to notify the users, i.e. the tournament manager and the battle manager.\\
-It is interfaced with the Email API, external to the system.\\
+It is interfaced with the Email API, external to the system.
 
-\subsection*{Badges manager}
+\subsubsection*{Badges manager}
 The badges manager is the component that handles the gamification badges.\\
 It allows:
 \begin{itemize}
     \item the creation of new badges;
     \item the assignment of badges to the STUs;
-    \item the visualization of the badges assigned to a user.
+    \item the visualization of the badges assigned to a user (?)
 \end{itemize}
 {\color{red}Qui devo interfacciare anche con battle e user?}
 It is interfaced with the auth manager (since the creation of a badge is admissible only for the EDUs) and with the query manager (since it needs to access the database to store the badges).\\
+It is interfaced with the EDU WebApp through the proprer, external to the system.
 
-\subsection*{Tournament manager}
-The tournament manager is the component that handles the creation and the management of the tournaments.\\
+\subsubsection*{Tournaments manager}
+The tournament manager is the component that handles the management of the tournaments.\\
 It allows:
+\begin{itemize}
+    \item the creation of new tournaments;
+    \item the closure of the torunaments
+    \item the visualization of the tournaments;
+    \item the excange of admin permission between EDUs;
+    \item the subscription of the STUs to the tournaments;
+    \item the visualization of the scores of the EDUs in the tournaments, and so of the ranking
+\end{itemize}
+It is interfaced with the auth manager (to allow and perform different actions depending on the level of the user that made the request), with the query manager (since it needs to access the database) and the notification manager (since it needs to notify the users of the start and the end of a tournament).\\
+It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
+
+\subsubsection*{Battles manager}
+The battles manager is the component that handles the management of the battles.\\
+It allows:
+\begin{itemize}
+    \item the creation of new battles;
+    \item the subscription of the STUs to the battles;
+    \item the visualization of the scores of the teams in the battles, and so of the ranking
+    \item the visualization of the battles;
+    \item the automatic evaluation of the battles;
+    \item the eventual manual evaluation of the battles by the EDUs
+\end{itemize}
+It is interfaced with the auth manager (to allow and perform different actions depending on the level of the user that made the request), with the query manager (since it needs to access the database) and the notification manager (since it needs to notify the users of the opening of subscriptions, the start and the end of a bettle).\\
+It is interfaced with the WebApp, both EDU and STU, through the proper APIs and with GitHub (to perform the manual evaluation), all external to the system.
+
+\subsubsection*{Profile Inspector}
+The profile inspector is the component that handles the visualization of the profiles of the STUs and, consequently, of the badges that a STU has earned during the battles and the tournaments.\\
+It is interfaced with the query manager (since it needs to access the database).
+It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
+
+\subsection{Logical description of the data}
+The data of the system is organized in a relational database, with the following entity-relationship diagram:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/diagrams/er_diagram.png}
+    \caption{Entity-relationship diagram}
+\end{figure}
+
+\section{Deployment view}
