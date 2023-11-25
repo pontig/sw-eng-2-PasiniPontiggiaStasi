@@ -20,7 +20,8 @@
 \section[Signatures]{Signatures}
 \begin{lstlisting}[language=Alloy,  label={lst:alloycode}, basicstyle=\fontfamily{Roboto}\selectfont\ttfamily]
         
-    //DateTime is used to represent a couple <date, time>
+    open util/relation
+//DateTime is used to represent a couple <date, time>
     sig DateTime{
     }
 
@@ -29,17 +30,25 @@
 
     /*TestCase represents what the educator will upload when creating a battle in order to test the code of the students*/
     sig TestCase{
-        input : set String,
-        output : set String,
-        timeConstraint: one Int,
-        memoryConstraint: one Int,
     }
+    sig Name{}
+    sig Surname{}
+    sig Email{}
+    sig Password{}
+    sig Language{}
+    sig Description{}
+    sig Rule{}
+    sig Title{}
+    sig Score{}
+    sig RankingTeam{}
+    sig RankingStudent{}
 
     /*User is an abstract entity containing all the attributes that each user will have*/ 
     abstract sig User {
-        name : one String,
-        surname: one String,
-        emailAddress: one String,
+        name : one Name,
+        surname: one Surname,
+        email: one Email,
+        password : one Password,
     }
 
     //Student represents the STU of the system
@@ -49,46 +58,48 @@
         battles : set Battle,
     }
 
-    //Educator represents the EDU of the system
+ //Educator represents the EDU of the system
     sig Educator extends User{
         ownedTournaments : set Tournament,
         closedTournaments : set Tournament,
     }
-    
-    /*Team represents the team ( composed by at least one student by definition) created by a student when he subscribes to a battle*/
-    sig Team{
-        students: some Student,
-    }
 
-    /*Tournament entity represents the tournament created by an EDU. 
+ /*Tournament entity represents the tournament created by an EDU. 
     In particular, grantedEducators will have all the EDUs who have the same permissions of the creator EDU.
     ranking attribute will contain a map in which the keys will be the STUs and to each key will be assigned a value which is the sum of scores in the battles concerning that tournament */
     sig Tournament {
+	id : one Int,
         subscriptionDeadline : one DateTime,
-        ranking : Student one -> one Int,
+        ranking : set RankingStudent, 
         grantedEducators: some Educator,
         battles: set Battle,
         studentsSubscribed : set Student,
         badges : set Badge,
-    }
+    }{
+	#studentsSubscribed = #ranking
+	}
+   
     
     /*Battle entity represents the battle created by EDUs in tournaments.
     In particular, the ranking attribute will contain a map in which the keys will be the teams and to each key will be assigned a value which is the score of that team in this battle.
     We use the subscribedTeams attribute instead of subscribedStudents because each team is composed by at least one person and all the components of the team will be subscribed to the battle. 
     As a consequence, we can derive all subscribed STUs by looking at the STUs who appear in the subscribedTeams attribute. */
     sig Battle {
-        ranking : Team -> one Int,
+	id : one Int,
+	closed : one Bool,
+        rankingTeams : set RankingTeam,
         manualEvaluation: one Bool,
-        language: one String,
-        description: set String,
+        language: one Language,
+        description: one Description,
         testCases: some TestCase,
         minStudents : one Int,
         maxStudents : one Int,
         registrationDeadline : one DateTime,
         finalSubmissionDeadline : one DateTime,
         subscribedTeams: set Team,
-
+	tournament : one Tournament,
     }{
+	#rankingTeams = #subscribedTeams
         /*maxStudents and minStudents can't have negative values by definition. */
         maxStudents>0
         minStudents>0 
@@ -98,34 +109,83 @@
         registrationDeadline != finalSubmissionDeadline 
     }
 
-    /*The entity Badge represents the badges which can be created by EDUs at any moment and can be associated to different tournaments at tournament creation time. */
-    sig Badge {
-        rules : some String,
-        values : some Int,
-        title : set String,
+
+
+    /*Team represents the team ( composed by at least one student by definition) created by a student when he subscribes to a battle*/
+    sig Team{
+	battle : one Battle,
+        students: some Student,
     }
 
-        \end{lstlisting}
-\section[Facts]{Facts}
-    \begin{lstlisting}[language=Alloy,  label={lst:alloycode}, basicstyle=\fontfamily{Roboto}\selectfont\ttfamily]
-        
-        pred isTrue[b: Bool] { b in True }
+
+    /*The entity Badge represents the badges which can be created by EDUs at any moment and can be associated to different tournaments at tournament creation time. */
+    sig Badge {
+        rules : some Rule,
+        values : some Int,
+        title : one Title,
+    }
+
+	pred isTrue[b: Bool] { b in True }
 
         pred isFalse[b: Bool] { b in False }
         
-        pred isInATeam[s : Student, b : Battle]{
-            one t : Team | t in b.subscribedTeams and s in t.students
-        }
+    
         
+	-- Facts
+	-- User
+	fact emailsAreUnique{no disj u1, u2: User  | u1.email=u2.email}
+	fact nameExistsOnlyWithUser{
+		all un : Name | one u : User | un in u.name
+	}
+	fact surnameExistsOnlyWithUser{
+		all un : Surname | one u : User | un in u.surname
+	}
+	fact passwordExistsOnlyWithUser{
+		all un : Password | one u : User | un in u.password
+	}
+	fact emailExistsOnlyWithUser{
+		all un : Email | one u : User | un in u.email
+	}
+	
+	--TestCase
+	fact TestCaseExistsOnlyWithBattle{
+		all tc: TestCase | one b: Battle | tc in b.testCases
+	}
+	
+	--Battle 
+	fact BattleExistsOnlyWithTournament{
+		all b : Battle | one t : Tournament | b in t.battles
+	}
+	fact allBattlesAreUnique{
+		no disj b1, b2 : Battle | b1.id = b2.id
+	}
+	
+	--Team
+	fact TeamlExistsOnlyWithBattle{
+		all t : Team | all b: Battle | t in b.subscribedTeams <=> b in t.battle
+	}
+	fact allTeamsAreUnique{
+		no disj t1, t2 : Team | t1.battle = t2.battle and t1.students = t2.students
+	}
+
+	--Tournament
+	fact allTournamentsAreUnique{
+		no disj t1, t2 : Tournament | t1.id = t2.id
+	}
+	--Battle
+	-- Subscription to a Battle by a Team
         /*All students subscribed to a battle must be subscribed to the corresponding torunament too. */
        fact subscribedTeamsAreSubscribedToTournament{
             all t: Tournament| no s: Student | s in t.battles.subscribedTeams.students and s not in t.studentsSubscribed
         }
+	fact teamIsSubscribed{
+		all t: Team| all b : Battle | t in b.subscribedTeams <=> b = t.battle
+	}
 
         /*All team subscribed to a battle must satisfy team size constraint of that battle, if the battle is started. */
        fact teamSizeInBoundaries{
-            all b: Battle | #b.subscribedTeams.students >= b.minStudents and #b.subscribedTeams.students <= b.maxStudents
-        }
+            all b: Battle| all t : Team | t in b.subscribedTeams => (#t.students >= b.minStudents and #t.students <= b.maxStudents)
+        }    
 
         /*A STU can not partecipate to the same battle with two different teams.*/
        fact noStudentInTwoTeams{
@@ -134,13 +194,22 @@
         
         /*An Educator has the same privileges of the owner of a tournament if and only if it is a granted EDU for that tournament*/
         fact ownerIsGranted{
-            all t: Tournament, e : Educator | t in e.ownedTournaments and e in t.grantedEducators
+            all t: Tournament, e : Educator | t in e.ownedTournaments <=> e in t.grantedEducators
         }
-
+	/*A tournament is closed if and only if all its battles are ended*/
+	fact closedTournamentclosedBattles{
+		all t :Tournament | all b : Battle | t in Educator.closedTournaments <=> (b in t.battles and b.closed = True)
+	}
         /*A STU is partecipating to a battle if and only if it is in a subscribed team of that battle*/
         fact inBattleIfInTeam{
-            all s : Student, b : Battle | b in s.battles and isInATeam[s, b]
+            all s : Student | all b : Battle | all t: Team| b in s.battles <=> ( s in t.students and t in b.subscribedTeams)
         }
+	
+	pred show{
+		#Battle = 2
+		one b : Battle |  b.minStudents = 2 and b.maxStudents = 4
+		one t1 : Team | #t1.students >= 2
+	}
+        run show
 
-        run {}
     \end{lstlisting}
