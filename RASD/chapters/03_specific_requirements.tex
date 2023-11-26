@@ -140,7 +140,7 @@ In order to work properly, the software must fulfill the following functional re
         Event \par flow       & \begin{enumerate}
                                     \item The actor enters the registration page
                                     \item The system shows the registration form
-                                    \item The actor specifies whether it is an educator or a student
+                                    \item The actor specifies whether is an educator or a student
                                     \item The actor fills the form with truthful informations
                                     \item The actor confirms the account creation
                                     \item The system creates an account with respect to the informations inserted by the actor
@@ -149,6 +149,7 @@ In order to work properly, the software must fulfill the following functional re
         Exceptions            & \begin{itemize}
                                     \item The actor inserts informations (i.e. email) about an account which already exists: a human-readable message is displayed
                                     \item The actor inserts data in the wrong format: a human-readable message is displayed
+                                    \item The actor does not fill the form but press the confirm button: a human-readable message is displayed
                                 \end{itemize} \\ \hline
     \end{tabular}
 \end{center}
@@ -158,18 +159,23 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Log in                                                                                              \\ \hline
+        Name                  & Log in (Figure \ref{fig:uc2})                                                                                           \\ \hline
         ID                    & UC2                                                                                                 \\ \hline
         Actors                & EDU or STU                                                                                          \\ \hline
-        Entry \par conditions & The actor is already subscribed to the CKB platform                                                 \\ \hline
+        Entry \par conditions & The actor is already subscribed to CKB platform                                                 \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor enters the login page
                                     \item The system shows the login form
                                     \item The actor fills the form with its credentials and submits it
                                     \item The system checks the credentials and logs the actor in
                                 \end{enumerate}                                   \\ \hline
-        Exit \par conditions  & The actor is logged in and it has access to the home page                                           \\ \hline
-        Exceptions            & The actor inserts a wrong combination of username - password: a human-readable message is displayed \\ \hline
+        Exit \par conditions  & The actor is logged in and the home page is displayed                                           \\ \hline
+        Exceptions            & \begin{itemize}
+                                    \item The actor inserts a wrong combination of username - password: a human-readable message is displayed 
+                                    \item The actor inserts data in the wrong format: a human-readable message is displayed
+                                    \item The actor does not fill the form, but press the confirm button: a human-readable message is displayed
+                                \end{itemize}\\ \hline
+
     \end{tabular}
 \end{center}
 
@@ -184,16 +190,17 @@ In order to work properly, the software must fulfill the following functional re
         Entry \par conditions & The user is an authenticated EDU in "Dashboard" page                                          \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item User clicks on "Create new" button
-                                    \item The system show "Create tournament" tab with a form to be compiled
+                                    \item The system show "Create tournament" page with a form to be compiled
                                     \item User fills the form with the required information as Tournament name, registration window for STUs, and the optional list of badges
                                     \item User clicks on "Create" button
-                                    \item The systems processes the information, if everything is correct it create the new tournament
+                                    \item The system notify all the registered STU about the creation of a new tournament, by sending an email
                                     \item User is redirected to the "Dashboard" page showing the new tournament created
                                 \end{enumerate}                            \\ \hline
-        Exit \par conditions  & The system notify all the registered STU about the creation of a new tournament, by sending an email                                          \\ \hline
+        Exit \par conditions  & The systems has created the new tournament\\ \hline
         Exceptions            & \begin{itemize}
-                                    \item At least one of the inserted data is not valid: the system display an error based on the invalid data inserted 
-                                    \item A crash happens while creating the tournament: the system must ensure execution atomicity
+                                    \item The actor inserts at least one of the data in the wrong format: a human-readable message is displayed
+                                    \item The actor does not fill the form, but press the confirm button: a human-readable message is displayed
+                                    \item A crash happens while creating the tournament: the system must ensure operation execution atomicity
                                 \end{itemize}                              \\ \hline
     \end{tabular}
 \end{center}
@@ -206,7 +213,7 @@ In order to work properly, the software must fulfill the following functional re
         Name                  & Battle creation  (Figure \ref{fig:uc4})                                                                                         \\ \hline
         ID                    & UC4                                                                                                                             \\ \hline
         Actors                & EDU                                                                                                                             \\ \hline
-        Entry \par conditions & The actor is already subscribed to the CKB platform and he is an educator already logged in the platform                        \\ \hline
+        Entry \par conditions & The actor is already subscribed to CKB platform and is an educator already logged in the platform                        \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor opens the page correlated to the tournament in which he wants to create a new battle
                                     \item The system shows the tournament page
@@ -231,7 +238,7 @@ In order to work properly, the software must fulfill the following functional re
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Sharing permission                                                                                   \\ \hline
+        Name                  & Sharing permission (Figure \ref{fig:uc5})                                                                                   \\ \hline
         ID                    & UC5                                                                                                  \\ \hline
         Actors                & EDU                                                                                                  \\ \hline
         Entry \par conditions & A tournament is in progress \textbf{and} the actor is logged in \textbf{and} it is on the home page \\ \hline
@@ -256,18 +263,18 @@ In order to work properly, the software must fulfill the following functional re
         Name                  & Join a tournament  (Figure \ref{fig:uc6}) \\ \hline
         ID                    & UC6                                       \\ \hline
         Actors                & STU                                       \\ \hline
-        Entry \par conditions & STU is registered in the system \textbf(and) has received the e-mail from the system about the new tournament created                                       \\ \hline
+        Entry \par conditions & The user is registered in the system \textbf{and} has received the e-mail from the system about a new tournament created                                       \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item User open the e-mail and clicks on the link attached to be redirect to the tournament
                                     \item {\color{red} Should we talk about the log-in here?}
                                     \item The system show the "Tournament view" page
                                     \item User clicks on "Join tournament" button
-                                    \item The system process the request 
+                                    \item The system process the request and confirm the enrollment 
                                 \end{enumerate}                          \\ \hline
-        Exit \par conditions  & STU is now enrolled to that tournament   \\ \hline
+        Exit \par conditions  & STU is now part of that tournament   \\ \hline
         Exceptions            & \begin{itemize}
                                     \item The tournament registration window is expired: the "Join tournament" button is disabled
-                                    \item The STU is already part of the tournament: the system display an error 
+                                    \item The STU is already part of the tournament: a human-readable message is displayed 
                                 \end{itemize}                            \\ \hline
     \end{tabular}
 \end{center}
@@ -301,51 +308,42 @@ In order to work properly, the software must fulfill the following functional re
     \end{tabular}
 \end{center}
 
-Join battle da mail di CKB: 
-   - Da solo -> Team a 1
-   - Invitando altri giocatori -> Team in base a quanti accettano
-
-Join a team:
-   - Iscritto già alla battaglia -> Accetto e mi unisco al team
-                                    Declino o ignoro resto team unico 
-   - Non inscritto alla battaglia -> Accetto mi iscrivo alla battaglia e unisco al team                                 
-                                     Declino o ignoro non mi iscrivo nè al team nè alla battaglia
-
-
 \begin{center}
     \def\arraystretch{1.5}
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a team when already in the battle (Figure \ref{fig:uc8}) \\ \hline
+        Name                  & Join a team - when already in the battle (Figure \ref{fig:uc8.1}) \\ \hline
         ID                    & UC8.1                                   \\ \hline
         Actors                & STU                                   \\ \hline
-        Entry \par conditions & STU is registered in the system 
-                                    \textbf(and) is enrolled in a tournament 
-                                    \textbf(and) has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament                                     \\ \hline
+        Entry \par conditions & STU is registered in CKB platform 
+                                    \textbf{and} is enrolled in a tournament 
+                                    \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament 
+                                    \textbf{and} it has already joined that battle alone.                                    \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item User open the e-mail and clicks on the link attached to be redirect to the system
                                     \item {\color{red} Should we talk about the log-in here?}
                                     \item The system show the "Dashboard" page with the invitation, if the join windows for the battle is still open
-                                    \item User decide to Accept, Decline or Ignore the invite 
+                                    \item User decide to Accept or Decline the invite 
                                         \begin{itemize}
                                             \item User click "Accept" button
                                         \end{itemize} 
                                             \begin{enumerate}
-                                                \item The system process the request, enroll the STU to the battle and to the team
-                                                \item User now is part of the team in t
-                                                he battle
+                                                \item The system add the STU to the team
+                                                \item User now is part of that team in that battle
                                             \end{enumerate}
                                         \begin{itemize}
                                             \item User click "Decline" button
                                         \end{itemize} 
                                             \begin{enumerate}
-                                                \item The system process the request, and allow the STU that sent the invite to invite a new STU
+                                                \item The system delete the notification from its "Dashboard" page
+                                                \item The system notify the STU that sent the invite of the decision and allows it to invite a new STU
                                             \end{enumerate}
                                 \end{enumerate}                      \\ \hline
-        Exit \par conditions  & ...                                   \\ \hline
+        Exit \par conditions  & STU partecipates to the battle, depending on its choice, alone or in a team of more then one STU.                                  \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item
+                                    \item STU ignore the invite received: STU partecipates alone and at the end of the registration window, for that specific battle, all the invites related are cancelled from the "Dashboard" page
+                                    \item STU received multiple invitation for the same battle, but from different teams: after one invite is accepted all the other are cancelled in its "Dashboard" page
                                 \end{itemize}                        \\ \hline
     \end{tabular}
 \end{center}
@@ -355,21 +353,36 @@ Join a team:
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a team when not in a battle (Figure \ref{fig:uc8}) \\ \hline
+        Name                  & Join a team - when not in the battle yet (Figure \ref{fig:uc8.2}) \\ \hline
         ID                    & UC8.2                                   \\ \hline
         Actors                & STU                                   \\ \hline
-        Entry \par conditions & STU is registered in the system 
-                                    \textbf(and) is enrolled in a tournament 
-                                    \textbf(and) has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament                                     \\ \hline
+        Entry \par conditions & STU is registered in CKB platform 
+                                    \textbf{and} is enrolled in a tournament 
+                                    \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item User open the e-mail and clicks on the link attached to be redirect to the system
                                     \item {\color{red} Should we talk about the log-in here?}
-                                    \item 
-                                    \item
+                                    \item The system show the "Dashboard" page with the invitation, if the join windows for the battle is still open
+                                    \item User decide to Accept or Decline the invite 
+                                        \begin{itemize}
+                                            \item User click "Accept" button
+                                        \end{itemize} 
+                                            \begin{enumerate}
+                                                \item The system enrolls the STU to the battle and then adds it to the team that sent the invite
+                                                \item User now is part of the battle and it competes in it with a team
+                                            \end{enumerate}
+                                        \begin{itemize}
+                                            \item User click "Decline" button
+                                        \end{itemize} 
+                                            \begin{enumerate}
+                                                \item The system delete the notification from its "Dashboard" page
+                                                \item The system notify the STU that sent the invite of the decision and allows it to invite a new STU
+                                            \end{enumerate}
                                 \end{enumerate}                      \\ \hline
-        Exit \par conditions  & ...                                   \\ \hline
+        Exit \par conditions  &  STU is part of the battle and the team if it accepts the invite, else is not part of none of that                                          \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item
+                                    \item STU ignore the invite received: STU is not part of the battle nor the team and at the end of the registration window, for that specific battle, all the invites related are cancelled from the "Dashboard" page
+                                    \item STU received multiple invitation for the same battle, but from different teams: after one invite is accepted all the other are cancelled in its "Dashboard" page
                                 \end{itemize}                        \\ \hline
     \end{tabular}
 \end{center}
@@ -379,7 +392,7 @@ Join a team:
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Manual evaluation                                                                                                                                                                                                        \\ \hline
+        Name                  & Manual evaluation (Figure \ref{fig:uc8.2})                                                                                                                                                                                                       \\ \hline
         ID                    & UC9                                                                                                                                                                                                                      \\ \hline
         Actors                & EDU                                                                                                                                                                                                                      \\ \hline
         Entry \par conditions & The deadline for submission a certain battle has expired \textbf{and} the battle has the "manual evaluation" enabled \textbf{and} the EDU is logged in \textbf{and} it is on the tournament page referred to that battle \\ \hline
@@ -406,17 +419,22 @@ Join a team:
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Create a new badge  (Figure \ref{fig:uc11}) \\ \hline
-        ID                    & UC11                                        \\ \hline
-        Actors                & ...                                         \\ \hline
-        Entry \par conditions & ...                                         \\ \hline
+        Name                  & Create a new badge  (Figure \ref{fig:uc10}) \\ \hline
+        ID                    & UC10                                         \\ \hline
+        Actors                & EDU                          \\ \hline
+        Entry \par conditions & The user is an authenticated EDU in "Dashboard" page                                          \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item
-                                    \item
+                                    \item User clicks on "Badges" button
+                                    \item The system show "Create badges" page with a form to be compiled
+                                    \item User fills the form with the required information as a title and rule that STU must fulfill to obtain that specific badge
+                                    \item User clicks on "Create" button
+                                    \item User is redirected to the "Dashboard" page showing the new tournament created
                                 \end{enumerate}                            \\ \hline
-        Exit \par conditions  & ...                                         \\ \hline
+        Exit \par conditions  & The systems has created the new badge and now is available whenever EDUs create tournaments\\ \hline
         Exceptions            & \begin{itemize}
-                                    \item
+                                    \item The actor inserts at least one of the data in the wrong format: a human-readable message is displayed
+                                    \item The actor does not fill the form, but press the confirm button: a human-readable message is displayed
+                                    \item {\color{red}A crash happens while creating the badge: the system must ensure operation execution atomicity}
                                 \end{itemize}                              \\ \hline
     \end{tabular}
 \end{center}
@@ -426,7 +444,7 @@ Join a team:
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Closing a tournament                                                                                                                                  \\ \hline
+        Name                  & Closing a tournament (Figure \ref{fig:uc11})                                                                                                                                 \\ \hline
         ID                    & UC11                                                                                                                                                  \\ \hline
         Actors                & EDU                                                                                                                                                   \\ \hline
         Entry \par conditions & The actor has the authorization to create battles within the tournament \textbf{and} it is on the tournament page \textbf{and} the actor is logged in \\ \hline
@@ -488,16 +506,14 @@ Join a team:
         \hline
         Name                  & Visualize user profile  (Figure \ref{fig:uc14}) \\ \hline
         ID                    & UC14                                            \\ \hline
-        Actors                & ...                                             \\ \hline
-        Entry \par conditions & ...                                             \\ \hline
+        Actors                & EDU and STU                                             \\ \hline
+        Entry \par conditions & The user is an authenticated in CKB platform                                             \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item
-                                    \item
+                                    \item The user clicks on a STU username
+                                    \item The system redirect the user to the "Profile" page of the STU with that username
                                 \end{enumerate}                                \\ \hline
-        Exit \par conditions  & ...                                             \\ \hline
-        Exceptions            & \begin{itemize}
-                                    \item
-                                \end{itemize}                                  \\ \hline
+        Exit \par conditions  & The user see the profile of the STU, it can visualize gained badges and the list of tournament is enrolled in                                             \\ \hline
+        Exceptions            & \textit{None}                                  \\ \hline
     \end{tabular}
 \end{center}
 
