@@ -105,6 +105,7 @@ In order to work properly, the software must fulfill the following functional re
 \end{figure}
 
 \subsection{Use cases Description}
+{\color{red} Non empty field, wrong format and transaction atomicity da mettere da qualche parte come assunzione}
 
 %% LAYOUT FOR THE TABLES:
 % \begin{center}
@@ -198,9 +199,11 @@ In order to work properly, the software must fulfill the following functional re
                                 \end{enumerate}                            \\ \hline
         Exit \par conditions  & The systems has created the new tournament\\ \hline
         Exceptions            & \begin{itemize}
+                                    \item The actor define a name for the tournament already used
                                     \item The actor inserts at least one of the data in the wrong format: a human-readable message is displayed
+                                    \item The actor specify a deadline in the past: a human-readable message is displayed
                                     \item The actor does not fill the form, but press the confirm button: a human-readable message is displayed
-                                    \item A crash happens while creating the tournament: the system must ensure operation execution atomicity
+                                    \item {\color{red} A crash happens while creating the tournament: the system must ensure operation execution atomicity}
                                 \end{itemize}                              \\ \hline
     \end{tabular}
 \end{center}
