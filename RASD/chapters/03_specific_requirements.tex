@@ -251,9 +251,13 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The EDU clicks on the "Share permission" button
                                     \item The system shows the list of all the EDUs subscribed to the CKB platform
                                     \item The EDU searches the EDU(s) to which it wants to share the permission
+                                    \item The user add an EDU to the tournament by clicking the "Add" button
                                 \end{enumerate}                        \\ \hline
         Exit \par conditions  & The other EDU(s) can now start battles within the selected tournament                                \\ \hline
-        Exceptions            & \textit{None}                                                                                        \\ \hline
+        Exceptions            & \begin{itemize}
+                                    \item The user search for an EDU that does not exist in the system: a human-readable message is displayed 
+                                    \item The user search for an EDU already part of the tournament: a human-readable message is displayed 
+                                \end{itemize}                                                                                         \\ \hline
         Note                  & In order to make the research of a specific EDU easier, the system provides a search bar             \\ \hline
     \end{tabular}
 \end{center}
@@ -406,6 +410,7 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The EDU evaluates the code and assigns a score to the team (in the range [0, 100])
                                     \item The EDU clicks on the "Submit" button
                                     \item The system updates the battle score of the team
+                                    \item When all the teams are evaluated the battle is closed
                                 \end{enumerate}                                                                                                                   \\ \hline
         Exit \par conditions  & For every team the final score is available, the battle has a final rank and all the participants to the battle get notified                                                                                             \\ \hline
         Exceptions            & \begin{itemize}
@@ -431,7 +436,6 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The system show "Create badges" page with a form to be compiled
                                     \item User fills the form with the required information as a title and rule that STU must fulfill to obtain that specific badge
                                     \item User clicks on "Create" button
-                                    \item User is redirected to the "Dashboard" page showing the new tournament created
                                 \end{enumerate}                            \\ \hline
         Exit \par conditions  & The systems has created the new badge and now is available whenever EDUs create tournaments\\ \hline
         Exceptions            & \begin{itemize}
@@ -458,7 +462,10 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The system closes the tournament and elaborates the final tournament rank
                                 \end{enumerate}                                                                        \\ \hline
         Exit \par conditions  & All the STUs enrolled to the tournament gets notified and can access to the tournament final ranking                                                  \\ \hline
-        Exceptions            & The EDU clicks on the "Cancel" button: the system closes the message and shows normally the tournament page                                           \\ \hline
+        Exceptions            & \begin{itemize}
+                                    \item The EDU clicks on the "Cancel" button: the system closes the message and shows normally the tournament page     
+                                    \item The tournament is already closed: a human-readable message is displayed
+                                \end{itemize}                                        \\ \hline
     \end{tabular}
 \end{center}
 
