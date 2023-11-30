@@ -10,10 +10,9 @@ Its software application architecture is organized into three logical tiers: the
     \caption{High level components diagram}
 \end{figure}
 
-{\color{red} qui i load balancer è un errore metterli? \\ Qualcosa mi fa pensare che debba mettere sia web server che application server, ma non sono sicuro}
-
 The service will be accessed through a web interface, employing a Single Page Application (SPA). Utilizing an SPA is ideal for this application, as it facilitates extensive interaction without necessitating frequent page reloads.\\
-The system's architecture is structured into distinct layers, with application servers interacting with a database management system and utilizing APIs for data retrieval and storage. {\color{red}Adhering to REST standards, the application servers are intentionally designed to be stateless, -e le sessioni di log in come ce le gestiamo?-} while the system will include more than one firewall to ensure security.\\
+The system's architecture is structured into distinct layers, with application servers interacting with a database management system and utilizing APIs for data retrieval and storage. Adhering to REST standards, the application servers are intentionally designed to be stateless, handling the login sessions for user thanks to the caching, following the best practices for web applications.\\
+The system will include more than one firewall to ensure security.\\
 
 \section{Component view}
 The system is composed by the following components:
@@ -24,13 +23,12 @@ The system is composed by the following components:
     \caption{Component diagram}
 \end{figure}
 
-{\color{red}Qui va bene aver raggruppato le interfacce oppure vanno messe singolarmente, una per ogni endpoint?}
+In order to maintain the readability of the diagram, the interfaces have been grouped with respect to their functionality; the complete set of endpoints is available later in the document.\\
 
 \subsection{Client components}
 
-The client components are represented by only a single component, a user-friendly WebApp, that will behave differently depending on the level of the user that is using it (whether it is an EDU or a STU).\\
+The client components are represented by only a single component, a user-friendly WebApp, that will behave differently depending on the type of the user that is using it (whether it is an EDU or a STU).\\
 The WebApp is interfaced with the server components through all the APIs offeded by the server (see later for a detailed description of the APIs).\\
-{\color{red}Vogliamo aggiungere come mai abbiamo scelto di fare una WebApp e non un'applicazione mobile?}
 
 \subsection{Server components}
 
@@ -104,6 +102,7 @@ The data of the system is organized in a relational database, with the following
 \end{figure}
 
 \section{Deployment view}
+The diagram \ref{fig:deployment_diagram} shows the deployment view of the system.\\\\
 Our system comprises two essential components: a static web server and an application server. The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality. To optimize performance, we have opted for distinct solutions for these components.\\
 The static web server will be hosted on a CDN (Content Delivery Network) on cloud, exploiting its edge location caches and reverse proxies to ensure rapid response times. On the other hand, the application server, containing both a business logic layer and a data tier, will find its home on a cloud provider. This decision offers numerous advantages over traditional in-house hosting, including:
 \begin{itemize}
@@ -112,3 +111,43 @@ The static web server will be hosted on a CDN (Content Delivery Network) on clou
     \item \textbf{Cost-efficiency}: The cloud provider's pay-as-you-go model ensures cost efficiency by charging only for the utilized resources. This approach helps in reducing overall costs, making it a financially prudent choice.
 \end{itemize}
 These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications. The selected cloud provider must respect all these features to effectively meet our system requirements.\\
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/diagrams/deployment_view.png}
+    \caption{Deployment diagram}
+    \label{fig:deployment_diagram}
+\end{figure}
+
+The components of the system are explaineed in the following:
+\begin{itemize}
+    \item \textbf{PC}: Personal computer of the user, it suffices to have a wordking O.S. and a browser installed that supports JavaScript and HTML5 in order to use the system.
+    \item \textbf{CDN}: As said before, the CDN is used to host the static web server, that serves as the entry point for clients to access the SPA. It will allow it to be downloaded without affecting the performance of the main application server. The SPA is static and all of its code is run on the client's machine, so there is no need for any logic to be implemented on the CDN side.
+    \item \textbf{Cloud provider}: The cloud provider is used to host the application server. It will allow the system to be scalable and flexible, to be secure and to be cost-efficient.\\
+          It is composed by:
+          \begin{itemize}
+              \item \textbf{Load balancer}: The load balancer is used to distribute the traffic between the different instances of the application server. It is used to make the system scalable and flexible.
+              \item \textbf{Application servers}: The application servers are used to host the application server. They will be in an array of instances, so that the load balancer can distribute the traffic between them. The number of instances can be changed dynamically, so that the system can adapt to the traffic. They are used to make the system scalable and flexible.
+              \item \textbf{DBMS server}: The DBMS server is used to host the database.
+              \item \textbf{Firewalls}: They are used to make the system secure, and are placed between the load balancer and the external world and between the application servers and the DBMS server. They provide an additional layer of security by blocking or allowing traffic based on predetermined rules. This helps to protect the system from unauthorized access or malicious attacks
+          \end{itemize}
+\end{itemize}
+
+
+{\color{red} Da qui in avanti in questo capitolo dobbiamo prima parlarne un secondo su cosa metter (secondo me la sezione \textit{API endpoints}, visto che c'è prevalentemente server-side, dovrebbe scriverlo chi si occuperà del backend )}
+
+\section{Other design decisions}
+\subsection{Web Application}
+As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers, so there is no need to develop a mobile application, which would require a significant amount of additional work.\\
+Instead, the system will be accessible through a web application, that is much easier to develop, maintain and being accessed by the users.
+
+\subsection{Single Page Application}
+The system will be developed as a Single Page Application (SPA), that is a web application that interacts with the user by dynamically rewriting the current web page with new data from the web server, instead of the default method of the browser loading entire new pages.\\
+This approach will allow the system to be more responsive and to be more similar to a desktop application, since the user will not have to wait for the entire page to be reloaded every time he performs an action. Furthermore, it will allow the system to be more efficient, since the server will not have to send the entire page every time the user performs an action, but only the data that has changed, leaving the client to render the page.
+
+\subsection{Relational Database}
+We selected a relational database for our system design because it is effective at storing structured data, granting data integrity, and providing fast query performance. It can also be easily scaled to handle large amounts of data and support many concurrent users. The database allows us to store and retrieve information efficiently, while also ensuring that the data is accurate and consistent
+
+\subsection{RESTful API}
+We have chosen to implement a RESTful API for our system because it is a simple, lightweight, and flexible architecture that is easy to understand and use. It is also scalable and reliable, making it ideal for our application.\\
+
