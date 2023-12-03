@@ -135,6 +135,53 @@ The components of the system are explaineed in the following:
 
 
 {\color{red} Da qui in avanti in questo capitolo dobbiamo prima parlarne un secondo su cosa metter (secondo me la sezione \textit{API endpoints}, visto che c'è prevalentemente server-side, dovrebbe scriverlo chi si occuperà del backend )}
+\section{Runtime View}
+This section describes the most important components interactions of the system.
+
+\subsection{User login}
+At the beginning the end user must log in to use the main functions of the application. The login is done by enetring the email and password. If the credentials are present in the database and correct the process will be successful and it will be able to open its dashboard, otherwise it will have to repeat the procedure. (Figure \ref{fig:RuntimeView_UserLogin})
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/runtimeviews/RuntimeView_UserLogin.png}
+    \caption{Runtime View of User Login Event}
+    \label{fig:RuntimeView_UserLogin}
+\end{figure}
+
+\subsection{Create a tournament}
+The following sequence diagram is used to explain how to create a tournament. The end user from its device can create a tournament entering the correlated details through the related component, which are sent to the database. If the tournament has been created successfully, the correlated page is created.(Figure \ref{fig:RuntimeView_CreateTournament} )
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/runtimeviews/RuntimeView_CreateTournament.png}
+    \caption{Runtime View of Create a Tournament Event}
+    \label{fig:RuntimeView_CreateTournament}
+\end{figure}
+
+\subsection{Create a battle}
+The following sequence diagram is used to explain how to create a battle within a tournament. The end user from its device can create a battle entering the correlated details through the related component. If the user is a granted educator for the current tournament, then the details of the new battle are sent to the database and if the battle has been created successfully, the correlated page is created and all the users subscribed to the correlated tournament are notified. (Figure \ref{fig:RuntimeView_CreateBattle}) 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/runtimeviews/RuntimeView_CreateBattle.png}
+    \caption{Runtime View of Create a Battle Event}
+    \label{fig:RuntimeView_CreateBattle}
+\end{figure}
+
+\subsection{Join a Battle Solo}
+In this sequence diagram is shown how an user can subscribe to a battle. By joining the battle, the system add to the database the email of the user into the subscribed email of that battle. If the user decides to invite other members, the inserted emails are notified. (Figure \ref{fig:RuntimeView_JoinBattleSolo})
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/runtimeviews/RuntimeView_JoinBattleSolo.png}
+    \caption{Runtime View of joining a Battle Solo}
+    \label{fig:RuntimeView_JoinBattleSolo}
+\end{figure}
+
+\subsection{Upload code}
+In this case, the GitHub API notify the system which through the related component computes the new score and update it by sending the new score to the database. Finally, the system updates the battle ranking with the new score. (Figure \ref{fig:RuntimeView_CodeUploaded})
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/runtimeviews/RuntimeView_CodeUploaded.png}
+    \caption{Runtime View of Notification of a new commit of a team}
+    \label{fig:RuntimeView_CodeUploaded}
+\end{figure}
 
 \section{Other design decisions}
 \subsection{Web Application}
