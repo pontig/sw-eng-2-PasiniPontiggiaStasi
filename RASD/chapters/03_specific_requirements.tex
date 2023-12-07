@@ -517,13 +517,13 @@ In order to work properly, the software must fulfill the following functional re
         Name                  & Visualize user profile  (Figure \ref{fig:uc14}) \\ \hline
         ID                    & UC14                                            \\ \hline
         Actors                & EDU and STU                                             \\ \hline
-        Entry \par conditions & The user is an authenticated in CKB platform                                             \\ \hline
+        Entry \par conditions & The user is authenticated in CKB platform                                             \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The user clicks on a STU username
                                     \item The system redirect the user to the "Profile" page of the STU with that username
                                 \end{enumerate}                                \\ \hline
         Exit \par conditions  & The user see the profile of the STU, it can visualize gained badges and the list of tournament is enrolled in                                             \\ \hline
-        Exceptions            & \textit{None}                                  \\ \hline
+        Exceptions            & - There is no STU with that username and email                                 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -636,9 +636,9 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The STU clicks on the link and is redirected to the GitHub repository
                                     \item The STU forks the repository
                                 \end{enumerate} \\ \hline
-        Exit \par conditions  & The STU and its team can start working on the coding battle                                                      \\ \hline
+        Exit \par conditions  & The STU and its team can start working on the coding battle, after setting up an automated workflow                                                      \\ \hline
         Exceptions            & \textit{None}                                                                                                    \\ \hline
-        Notes                 & The correct functioning are assumed, so, by the side of the platform, nothing could go wrong                     \\ \hline
+        Notes                 & Only one students per team receive the github repository  link via mail \n The correct functioning are assumed, so, by the side of the platform, nothing could go wrong                     \\ \hline
     \end{tabular}
 \end{center}
 \subsection{Use cases Sequence Diagrams}
