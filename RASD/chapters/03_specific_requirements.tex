@@ -3,101 +3,134 @@
 \chapter{Specific Requirements}
 
 \section{External Interface Requirements}
-In the following, the interfaces, both hardware and software, of the system are described.
+This section presents all the functional requirements of the CKB platform.
+They outline how the system interacts with other components.
+It follows a description of software and hardware interfaces for the system.
 
 \subsection{User Interfaces}
 
 % ATTENTION: loading images when building the document with latex is quite slow,
 % so it is better to comment the images you are not working on to speed up the process
 
-In the following it is shown the mockup of the main pages of the system.\\
+Here it is shown the mockup of the main web pages of the system.
+ 
+\captionsetup[figure]{skip=0pt}
+\subsubsection*{Common views}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/log_in.png}
+    \caption{Log in page}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/sign_up.png}
+    \caption{Sign up page}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/profile.png}
+    \caption{Page that shows badges acquired by a STU}
+\end{figure}
 
-% \captionsetup[figure]{skip=0pt}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/log_in.png}
-%     \caption{Log in page}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/sign_up.png}
-%     \caption{Sign up page}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/profile.png}
-%     \caption{Page that shows badges acquired by a STU}
-% \end{figure}
+\subsubsection*{EDU's views}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/educator_dashboard.png}
+    \caption{Dashboard}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/educator_tournament_view.png}
+    \caption{View of a tournament}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/manual_evaluation.png}
+    \caption{Manual evaluation page}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/new_badge.png}
+    \caption{Page to create a new badge}
+\end{figure}
 
-% \subsubsection*{EDU's views}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/educator_dashboard.png}
-%     \caption{Dashboard}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/educator_tournament_view.png}
-%     \caption{View of a tournament}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/manual_evaluation.png}
-%     \caption{Manual evaluation page}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/new_badge.png}
-%     \caption{Page to create a new badge}
-% \end{figure}
-
-% \subsubsection*{STU's views}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/student_dashboard.png}
-%     \caption{Dashboard}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/student_tournament_view.png}
-%     \caption{View of a tournament}
-% \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\textwidth]{images/user_interfaces/student_battle_view.png}
-%     \caption{View of a battle}
-% \end{figure}
+\subsubsection*{STU's views}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/student_dashboard.png}
+    \caption{Dashboard}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/student_tournament_view.png}
+    \caption{View of a tournament}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/user_interfaces/student_battle_view.png}
+    \caption{View of a battle}
+\end{figure}
 
 \subsection{Hardware Interfaces}
-To use the CKB platform, both the Educators and the Students need an electronic device connected to the Internet, like a computer, a tablet or a smartphone.\\
-As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers to access an Integrated Development Environment (IDE). Consequently, the platform's interfaces have been optimized for use on computer screens.
+To use the CKB platform, both the Educators and the Students need an electronic device connected to the Internet, like a computer, a tablet, or a smartphone.\\
+As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers to access an Integrated Development Environment (IDE). 
+Consequently, the platform's interfaces have been optimized for use on computer screens.
 
 \subsection{Software Interfaces}
 Since the platform is web-based, it is compatible with all the major operating systems, as long as they have a modern browser installed.
 
 \subsection{Communication Interfaces}
-The system requires a stable internet connection to work properly. The backend of the system will expose a unified RESTful API to communicate with all clients.\\
-Furthermore, he system relies on various external interfaces accessible via uniform web API. These services are:
+The system requires a stable internet connection to work properly. 
+The backend of the system will expose a unified RESTful API to communicate with all clients.\\
+Furthermore, the system relies on various external interfaces accessible via uniform web API. 
+These services are:
 \begin{itemize}
-    \item \textbf{GitHub API:} to create and manage repositories and to retrieve the code of the students and to authenticate users.
+    \item \textbf{GitHub API:} to create and manage repositories and to retrieve students' code.
     \item \textbf{Mail API:} to send emails to the users to notify them about events.
 \end{itemize}
 
 \section{Functional Requirements}
-In order to work properly, the software must fulfill the following functional requirements, which are written in hierarchical order, starting from the requirements of EDUs agents and then STUs agents\dots
+To work properly, the software must fulfill the following functional requirements, which are written in hierarchical order, starting from those about EDUs and then STUs.
 
 \subsection{Use cases Diagrams}
 
+{\color{red} Unregistered EDU and STU da correggere}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/sequence_diagrams/use_case_diagrams_registration.png}
     \caption{Registration Use Case Diagram}
 \end{figure}
+
+{\color{red} 
+        Nome ad actor Notification \\
+        Forse da invertire View info about a battle e View battles in a tournament\\
+        Log in non deve includere solo View tournaments visto che le altre sono derivate da questo?\\
+        Cambiare nomi: \\
+        - View tournament rank \\
+        - Create new badge \\
+        - View battle rank \\
+        - View STU's profile \\
+        - View battle info \\
+        - View battles in tournament \\ 
+}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/sequence_diagrams/use_case_diagrams_EDU.png}
     \caption{EDU Use Case Diagram}
 \end{figure}
+
+
+{\color{red} 
+        Log in modifica simile a sopra?\\
+        Cambiare nomi: \\
+        - View tournament rank \\
+        - Create new badge \\
+        - View battle rank \\
+        - View STU's profile \\
+        - View battle info \\
+        - View battles in tournament \\ 
+        - Push code \\
+}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/sequence_diagrams/use_case_diagrams_STU.png}
@@ -105,7 +138,23 @@ In order to work properly, the software must fulfill the following functional re
 \end{figure}
 
 \subsection{Use cases Description}
-{\color{red} Non empty field, wrong format and transaction atomicity da mettere da qualche parte come assunzione}
+The following use cases, when involving a form submission, do not specify exceptions for empty fields or data formats that are not allowed. 
+In these situations, a readable error message is displayed on the screen.
+
+Additionally, it's important to note that each transaction ensures the atomicity of execution. 
+Therefore, the operation is carried out completely, otherwise, an error message occur.
+
+{\color{red} 
+    NOMI PAGINE:\\
+    - Log-In -> Log in\\
+    - Sign Up -> Creare account\\
+    - Profile View \\
+    - Dashboard => Dove c'è la lista dei tornei -> Badges, Create New, Show All\\ 
+    - Tournament View \\
+    - Battle View -> Create New\\
+    - Creation New Battle -> Create = Cambierei al posto di Badges\\
+    - Manual Evaluation -> Confirm grades and close battle \\
+}
 
 %% LAYOUT FOR THE TABLES:
 % \begin{center}
@@ -517,13 +566,13 @@ In order to work properly, the software must fulfill the following functional re
         Name                  & Visualize user profile  (Figure \ref{fig:uc14}) \\ \hline
         ID                    & UC14                                            \\ \hline
         Actors                & EDU and STU                                             \\ \hline
-        Entry \par conditions & The user is an authenticated in CKB platform                                             \\ \hline
+        Entry \par conditions & The user is authenticated in CKB platform                                             \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The user clicks on a STU username
                                     \item The system redirect the user to the "Profile" page of the STU with that username
                                 \end{enumerate}                                \\ \hline
         Exit \par conditions  & The user see the profile of the STU, it can visualize gained badges and the list of tournament is enrolled in                                             \\ \hline
-        Exceptions            & \textit{None}                                  \\ \hline
+        Exceptions            & - There is no STU with that username and email                                 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -636,12 +685,17 @@ In order to work properly, the software must fulfill the following functional re
                                     \item The STU clicks on the link and is redirected to the GitHub repository
                                     \item The STU forks the repository
                                 \end{enumerate} \\ \hline
-        Exit \par conditions  & The STU and its team can start working on the coding battle                                                      \\ \hline
+        Exit \par conditions  & The STU and its team can start working on the coding battle, after setting up an automated workflow                                                      \\ \hline
         Exceptions            & \textit{None}                                                                                                    \\ \hline
-        Notes                 & The correct functioning are assumed, so, by the side of the platform, nothing could go wrong                     \\ \hline
+        Notes                 & Only one students per team receive the github repository  link via mail, The correct functioning are assumed, so, by the side of the platform, nothing could go wrong                     \\ \hline
     \end{tabular}
 \end{center}
 \subsection{Use cases Sequence Diagrams}
+To enhance the clarity of the sequence diagrams, we opted not to include controls for empty fields and incorrect data formats in forms.
+Moreover we did not show how to handle transaction atomic. 
+
+Anticipating the above, we ensure that in the implementation, all necessary precautions are taken, both on the client and server side.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC1 -SequenceDiagram.png}
@@ -686,47 +740,103 @@ In order to work properly, the software must fulfill the following functional re
 \end{figure}
 
 \subsection{List of functional requirements}
-\subsubsection*{EDU functional requirements}
-\begin{requirementsenumerate}
-    \item The software shall allow the unregistered EDUs to create an account
-    \item The software shall allow the registered EDUs to login
-    \item The software shall allow the authenticated EDUs to create new tournaments
-    \item The software shall allow an authenticated EDU to grant to other authenticated colleagues the permission to create battles in his own tournament
-    \item The software shall allow the authenticated EDUs to create coding kata battles in their own tournaments by letting them uploading the code kata, setting minimum and maximum number of STUs per group, setting a registration and a final submission deadlines, setting score configurations
-    \item The software shall allow the authenticated EDUs to manually evaluate the work done by STUs subscribed to its own kata battle
-    \item The software shall allow the authenticated EDUs to see the sources produced by each team partecipating to their own torunaments
-    \item The software shall allow the authenticated EDUs to see the personal tournament score of each STU (which is the sum of all battle scores received in that tournament)
-    \item The software shall allow the authenticated EDUs to see a rank that measures how a STU's performance compares to other STUs in the context of that tournament
-    \item The software shall allow the authenticated EDUs to see the list of ongoing and finished tournaments as well as the corresponding tournament rank
-    \item The software shall allow the authenticated EDUs to see the list of ongoing and finished battles as well as the corresponding battle rank
-    \item The software shall allow an authenticated EDU to close a tournament if and only if it is one of the owners of that tournament
-    \item When the authenticated EDU creates a tournament, the software shall allow it to define gamification badges concerning that specific tournament
-    \item The software shall allow the authenticated EDU to create new badges and define new rules as well as new variables associated with them
-    \item The software shall allow to all authenticated EDUs to visualize the badges: in particular, EDUs that visualize the profile of a STU can see its collected badges
-\end{requirementsenumerate}
 
+{\color{red} 
+    Più che Shall metterei Must perchè è un cosa che deve fare il software \\
+    Vogliamo mettere una notifica verso EDU per dirgli che deve valutare il codice degli studenti se ha messo l'opzione? 
+} \\
+
+\subsubsection*{EDU functional requirements}
+\renewcommand{\arraystretch}{0.5}
+\begin{longtable}[H]{l l p{12cm}}
+    \hline
+                 &        &                                                                                                                                                                                                                                                                                 \\
+    \textbf{ID}  & \vline & \textbf{Description}                                                                                                                                                                                                                                                            \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\   
+    \textbf{R1}  & \vline & The software shall allow the unregistered EDUs to create an account.                                                                                                                                                                                                            \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R2}  & \vline & The software shall allow the registered EDUs to log in.                                                                                                                                                                                                                         \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R3}  & \vline & The software shall allow the authenticated EDUs to create new tournaments.                                                                                                                                                                                                      \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R4}  & \vline & The software shall allow an authenticated EDU to permit other authenticated colleagues to create battles in its tournament, those become owners of the tournament as much as who added them.                                                                                    \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R5}  & \vline & The software shall allow the authenticated EDUs to create coding battles in their tournaments by letting them upload the Code Kata, setting the minimum and maximum number of STUs per group, registration and final submission deadlines, and the score configurations.        \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R6}  & \vline & The software shall allow the authenticated EDUs to manually evaluate the work done by STUs subscribed to their own Code Kata battle.                                                                                                                                            \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R7}  & \vline & The software shall allow the authenticated EDUs to see the sources produced by each team participating in their tournaments. {\color{red} non battles?}                                                                                                                         \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R8}  & \vline & The software shall allow the authenticated EDUs to see the personal tournament score of each STU (which is the sum of all battle scores received in that tournament). {\color{red} Non stiamo dicendo la stessa del R9 in qualche modo?}                                        \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R9}  & \vline & The software shall allow the authenticated EDUs to see a rank that measures how a STU's performance compares to other STUs in the context of that tournament.                                                                                                                   \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R10} & \vline & The software shall allow the authenticated EDUs to see the list of ongoing and finished tournaments as well as the corresponding tournament rank.                                                                                                                               \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R11} & \vline & The software shall allow the authenticated EDUs to see the list of ongoing and finished battles as well as the corresponding battle rank within a tournament.                                                                                                                   \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R12} & \vline & The software shall allow an authenticated EDU to close a tournament iff it is one of the owners of that tournament.                                                                                                                                                             \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R13} & \vline & When the authenticated EDU creates a tournament, the software shall allow it to define gamification badges concerning that specific tournament.                                                                                                                                 \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R14} & \vline & The software shall allow the authenticated EDU to create new badges and define new rules as well as new variables associated with them.                                                                                                                                         \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R15} & \vline & The software shall allow all authenticated EDUs to visualize the badges created in CKB by other EDUs.                                                                                                                                                                           \\
+                 &        &                                                                                                                                                                                                                                                                                 \\\hline & & \\
+    \textbf{R16} & \vline & {\color{red} The software shall allow all authenticated EDUs to visualize STUs' profile where they can see their collected badges, tournament attended, and personal information.=> Non c'era un R per la visualizzazione del profilo / Era specificato poco in R8 e R15}  \\
+                 &        &                                                                                                                                                                                                                                                                                 \\
+    \hline
+    \caption{EDU's requirements}
+\end{longtable}
 
 \subsubsection*{STU functional requirements}
-\begin{requirementsenumerate}[resume]
-    \item The software shall allow the unregistered STUs to create an account
-    \item The software shall allow the registered STUs to login
-    \item The software shall allow the authenticated STUs to form teams by inviting other STUs respecting the minimum and maximum number of STUs per group set for that battle
-    \item The software shall allow the authenticated STUs to join a team by an invite
-    \item The software shall allow the authenticated STUs to subscribe to a tournament until a certain deadline
-    \item The software shall allow the authenticated STUs subscribed to a kata battle to upload their work until the final submission deadline of that kata battle
-    \item When the registration deadline of a kata battle expires, the software shall create a GitHub repository containing the code kata
-    \item The software shall send to all authenticated STUs who are members of subscribed teams to a kata battle the link to a GitHub repository containing the code kata
-    \item The software shall run the tests on executables pushed by a team and it shall also calculate and update the battle score of the corresponding team
-    \item At the end of the consolidation stage of a specific battle \textit{b}, the software shall send a notification to all authenticated STUs partecipating to \textit{b} when the final battle rank becomes available
-    \item The software shall allow the authenticated STUs to see the list of ongoing and finished battles as well as the corresponding battle rank
-    \item The software shall allow to all authenticated STUs to see the personal tournament score of each STU (which is the sum of all battle scores received in that tournament)
-    \item The software shall allow to all authenticated STUs to see a rank that measures how a STU's performance compares to other STUs in the context of that tournament.
-    \item The software shall allow to all authenticated STUs to see the list of ongoing and finished tournaments as well as the corresponding tournament rank
-    \item The software shall notify all authenticated STUs involved in a closed tournament when the final tournament rank becomes available
-    \item The software shall allow to all authenticated STUs to visualize the badges: in particular, STUs can see collected badges when they visualize the profile of a STU
-\end{requirementsenumerate}
 
-\subsection{Traeciability matrices}
+{\color{red} modificare numeri se aggiungiamo R16 e non rimuoviamo R8 da cui poi anche la mappatura potrebbe richiedere modifiche} \\
+
+\renewcommand{\arraystretch}{0.5}
+\begin{longtable}[H]{l l p{12cm}}
+    \hline
+                 &        &                                                                                                                                                                                                                             \\
+    \textbf{ID}  & \vline & \textbf{Description}                                                                                                                                                                                                        \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R16} & \vline & The software shall allow the unregistered STUs to create an account.                                                                                                                                                        \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R17} & \vline & The software shall allow the registered STUs to log in.                                                                                                                                                                     \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R18} & \vline & The software shall allow the authenticated STUs to form teams by inviting other STUs respecting the minimum and maximum number of STUs per group set for that battle.                                                       \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R19} & \vline & The software shall allow the authenticated STUs to join a team by an invite.                                                                                                                                                \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R20} & \vline & The software shall allow the authenticated STUs to subscribe to a tournament until a certain deadline.                                                                                                                      \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R21} & \vline & The software shall allow the authenticated STUs subscribed to a coding battle to upload their work until the final submission deadline of that Code Kata battle. {\color{red} più che upload, push to GitHub?}              \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R22} & \vline & When the registration deadline of a battle expires, the software shall create a GitHub repository containing the Code Kata.                                                                                                 \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R23} & \vline & The software shall send to all authenticated STUs who are members of subscribed teams to a battle the link to a GitHub repository containing the Code Kata.                                                                 \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R24} & \vline & The software shall run the tests on executables pushed by a team, it shall also calculate and update the battle score of the corresponding team.                                                                            \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R25} & \vline & At the end of the consolidation stage of a specific battle \textit{'b'}, the software shall send a notification to all authenticated STUs participating to \textit{'b'} when the final battle rank becomes available.       \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R26} & \vline & The software shall allow the authenticated STUs to see the list of ongoing and finished battles as well as the corresponding battle rank, iff they are part of the tournament.                                              \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R27} & \vline & The software shall allow all authenticated STUs to see the personal tournament score of each STU (which is the sum of all battle scores received in that tournament). {\color{red} Non stiamo dicendo la stessa del R28 in qualche modo?}\\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R28} & \vline & The software shall allow all authenticated STUs to see a rank that measures how a STU's performance compares to other STUs in the context of that tournament.                                                            \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R29} & \vline & The software shall allow all authenticated STUs to see the list of ongoing and finished tournaments as well as the corresponding tournament rank.                                                                        \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R30} & \vline & The software shall notify all authenticated STUs involved in a closed tournament when the final tournament rank becomes available.                                                                                          \\
+                 &        &                                                                                                                                                                                                                             \\\hline & & \\   
+    \textbf{R31} & \vline & The software shall allow to all authenticated STUs to visualize the badges gained: in particular, they can see collected badges when they visualize their profile or other STU's profile.       
+                            {\color{red} The software shall allow all authenticated STUs to visualize other STUs' profile where they can see their collected badges, tournament attended, and personal information. => Magari modificherei così più generale} \\
+                 &        &                                                                                                                                                                                                                             \\
+    \hline
+    \caption{STU's requirements}
+\end{longtable}
+
+\subsection{Traceability matrices}
 
 \subsubsection*{Mapping of functional requirements on use cases}
 \begin{center}
@@ -777,33 +887,35 @@ In order to work properly, the software must fulfill the following functional re
 \end{center}
 
 \section{Performance Requirements}
-In order to guarantee a good user experience, the system must:
+To guarantee a good user experience, the system must:
 
 \begin{itemize}
     \item Make sure the backend can grow as needed, respond quickly to changes, and balance the workload effectively.
     \item Be protected against DDoS attacks to keep the system safe and stable.
-    \item Create a user-friendly, responsive front-end. It should handle well even when the internet isn't great, so users have a smooth experience.
-    \item Send email notifications really quickly, so users don't even notice the delay.
+    \item Create a user-friendly, responsive front end. 
+          It should handle well even when the internet is not great, so users have a smooth experience.
+    \item Send email notifications quickly, so users do not even notice the delay.
 \end{itemize}
 
 \section{Design Constraints}
 
 \subsection*{Standards Compliance}
-Since there are a lot of interactions betweeen the various components of the system, it is important to follow some communic standards:
-in particular, the system will use the REST architectural style to communicate between the frontend and the backend, and the data will be exchanged in JSON format.\\
-Furthermore, Source code of the application must be commented on and documented adequately.
+Since there are a lot of interactions between the various components of the system, it is important to follow some communication standards:
+in particular, the system uses the REST architectural style to communicate between the frontend and the backend, and the data will be exchanged in JSON format.\\
+Furthermore, the Source code of the application must be commented on and documented adequately.
 
 \subsection*{Hardware Limitations}
 The system is designed to be used on any device with a modern browser installed, so the only hardware limitation is the presence of a stable internet connection.
 
 \section{Software System Attributes}
 \subsection{Reliability}
-Since some functionality of the system relies on external APIs, though the system should not completely fail because of failure in one of those.\\
-It's also important to avoid data loss through redundant storage methods.
+Since some functionality of the system relies on external APIs, the system should not completely fail because of failure in one of those.\\
+It is also important to avoid data loss through redundant storage methods.
 
 \subsection{Availability}
-In the event of an unplanned system downtime, all features should be restored as quickly as possible to minimize any inconvenience. To prevent such occurrences, it is crucial for the CKB platform to have a reliable infrastructure, including redundant servers, to ensure continuous operation.
-The aimed availability of the system is 3-nines availability (99.9\%), which means that the system can be down for a less than 9 hours per year.\\
+In the event of an unplanned system downtime, all features should be restored as quickly as possible to minimize any inconvenience. 
+To prevent such occurrences, the CKB platform must have a reliable infrastructure, including redundant servers, to ensure continuous operation.
+The aimed availability of the system is 3-nines availability (99.9\%), which means that the system can be down for less than 9 hours per year.\\
 The system should also be able to handle a large number of concurrent users.
 
 \subsection{Security}
@@ -811,9 +923,10 @@ Users of the system have distinct privileges according to their roles (student /
 All data and information transferred and stored within the system are secured through robust encryption methods, such as HTTPS, ensuring data privacy and security.
 
 \subsection{Maintainability}
-The source code and associated documentation must include clear comments and should be consistently maintained. During the design and development phases, emphasis should be placed on achieving modularity, minimizing coupling, and ensuring high cohesion between components.
+The source code and associated documentation must include clear comments and should be consistently maintained. 
+During the design and development phases, emphasis should be placed on achieving modularity, minimizing coupling, and ensuring high cohesion between components.
 This is especially crucial for both the front-end and back-end, allowing developers to make updates to the back-end seamlessly without causing any disruptions or noticeable changes for users.\\
 To avoid inconvenience in solving any type of problem (e.g. server downtime), maintenance services are notified to all users with an advance notice of at least 36 hours.
 
 \subsection{Portability}
-Due to the fact that the CKB platform is a distributed system, and it doesn't rely on a specific hardware or software, it can be used / accessed in multiples way.
+Due to the fact that the CKB platform is a distributed system, and it does not rely on specific hardware or software, it can be used / accessed in multiple ways.

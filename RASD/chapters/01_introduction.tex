@@ -1,7 +1,7 @@
 \chapter{Introduction}
 
 \section{Purpose}
-Software development is one of the most sought-after skills globally, and its growing importance is setted to persist in during future years.
+Software development is one of the most sought-after skills globally, and its growing importance is set to persist during future years.
 The versatility of this ability allows solving many problems in different fields, including science, art, and entrepreneurship.
 The acquisition of software development skills improves both creativity and innovation, as well as fosters the development of fundamental skills such as problem-solving, logical thinking, and effective communication.
 
@@ -11,140 +11,150 @@ Theory is a foundational element, but it is only the start of developing your sk
 
 \subsection{Purpose of the product}
 The purpose of the product is to provide a solution to the problem previously highlighted.
-The \textbf{C}ode\textbf{K}ata\textbf{B}attle project, or CKB, is a platform that assist students in enhancing their software development abilities through battles.
+The \textbf{C}ode\textbf{K}ata\textbf{B}attle project, or CKB, is a platform that assists students in enhancing their software development abilities through battles.
 Students in teams participate in programming exercises where they complete software projects following a test-first approach.
 Creating battles, setting rules, and evaluating students' performance are tasks that educators do.
-CKB promotes skill development, competition, and evaluation, fostering a collaborative and skill-building atmosphere.
+CKB promotes skill development, encourages healthy competition, and facilitates assessment, fostering an environment that encourages collaboration and enhances competencies.
 
 \subsection{Goals}
 The following table provides an aggregate list of the specific goals that must be accomplished by CodeKataBattle system.
 
 \begin{table}[H]
     \centering
-    \renewcommand{\arraystretch}{1.5}
+    \renewcommand{\arraystretch}{0.5}
     \begin{tabular}{l l p{12.5cm}}
         \hline
-        \textbf{G1} &  & Educators can create tournaments that involve coding battles to challenge students.                                                                                          \\
-        \textbf{G2} &  & Provides educators with the ability to track student software development knowledge.                                                                                         \\
-        \textbf{G3} &  & Students can improve software development skills by taking part in coding tournaments and battles where they must write programs.                                            \\
-        \textbf{G4} &  & Coding battles enable students to enhance their soft skills, such as communication, collaboration, and time management, by creating team and collaborating with the members. \\
+                     &        &                                                                                                                                                                                     \\
+        \textbf{ID}  & \vline & \textbf{Description}                                                                                                                                                                \\
+                     &        &                                                                                                                                                                                     \\\hline & & \\
+        \textbf{G1}  & \vline & Educators can create tournaments that involve coding battles to challenge students.                                                                                                 \\    
+                     &        &                                                                                                                                                                                     \\\hline & & \\
+        \textbf{G2}  & \vline & Provides educators with the ability to track student software development knowledge.                                                                                                \\ 
+                     &        &                                                                                                                                                                                     \\\hline & & \\
+        \textbf{G3}  & \vline & Students can improve their software development skills by taking part in coding tournaments and battles where they must write programs.                                             \\
+                     &        &                                                                                                                                                                                     \\\hline & & \\
+        \textbf{G4}  & \vline & Coding battles enable students to enhance their soft skills, such as communication, collaboration, and time management, by creating teams and collaborating with the members.       \\ 
+                     &        &                                                                                                                                                                                     \\
         \hline
     \end{tabular}
     \caption{Goals}
 \end{table}
 
 \section{Scope}
-CodeKataBattle (CKB) is a platform that allows students to improve their software development skills by participating in coding challenges.
+CKB is a platform that allows students to improve their software development skills by participating in coding challenges.
 Educators create coding battles within specific tournaments, encouraging students to improve their programming proficiency.
-Students compete in coding battles to solve programming exercises in their chosen language while adhering to the test-first approach.
+Students compete in coding battles to solve programming exercises in the defined programming language while following a test-first approach.
 
-Educators create a battle by uploading a programming exercise (also known as Code Kata), specifying the group size, registration and submission deadlines, and scoring parameters.
-Once created, students can form teams, a team colud be composed of just one person or at most the number specified by the group size.
-Each team can be changed between different battles in the same tournament, register for the battle, and receive access to a GitHub repository containing the code kata.
-They are required to fork the repository and automate their workflow through GitHub Actions.
+Educators create tournaments and battles by uploading a programming exercise (also known as Code Kata), defining group size limits by specifying both minimum and maximum participants, registration and submission deadlines, and scoring parameters.
+Once a battle is created, students can form teams, a team is a group of students that follows the size boundaries defined, if no minimum is established CKB accepts teams formed by only one person.
+Each team can be changed between different battles in the same tournament, and so also in different tournaments. 
+When the registration deadline for the battle has expired, each team receives access to a GitHub repository containing the Code Kata.
+They are required to fork the repository and an automatic workflow through GitHub Actions, so from this point, students can work on their code.
 
 The battle score ranges from 0 to 100 and is determined by both mandatory automated evaluation (test case pass rate, timeliness, source code quality) and optional manual evaluation (personal scores assigned by educators).
-The platform updates the battle score as students commit their code, in this way students and educators can keep track of the battle's ranking.
-Following the deadline for submission, educators perform an optional manual evaluation before sharing the final battle rank with participants.
+The platform updates the battle score as students commit their code to GitHub, in this way students and educators can keep track of the battle's ranking.
+Following the deadline for submission, educators can perform an optional manual evaluation, if previously defined, before sharing the final battle rank with all the participants.
 
-All students on the CKB platform have a personal tournament score, which is the sum of their battle scores in that tournament.
+Each enrolled student in the tournament is assigned a personal score, calculated as the sum of their battle scores within it.
 This score is determined by CKB when educators close a battle, and it is accessible to all platform users.
-
 When educators close a tournament, the final tournament rank remains available to all platform users.
-Gamification badges, which educators can define when creating a tournament, reward students for their performance or achievement.
 
-CodeKataBattle fosters collaborative coding challenges, helping students improve their software development skills while introducing competition and gamification elements to enhance engagement and recognition.
+Educator allows other colleagues to create battles within the context of a tournament.
+Educators can create gamification badges, which can be used in tournaments to reward students for their performance or achievement.
 
 \subsection{World Phenomena}
-
 \renewcommand{\arraystretch}{0.5}
 \begin{table}[H]
     \centering
-    \begin{longtable}{l l p{12cm}}
+    \begin{tabular}{l l p{12cm}}
         \hline
-                     &        &                                                                                                                                                             \\
-        \textbf{ID}  & \vline & \textbf{Description}                                                                                                                                        \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP1} & \vline & Students partecipating in a tournament can decide whether doing a battle or not by subscribing or not to that battle.                                       \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP2} & \vline & Students choose for each battle if coding alone or forming a team.                                                                                          \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP3} & \vline & The student who formed the team fork the GitHub repository of the code kata                                                                                 \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP4} & \vline & Students set up an automatic workflow in the GitHub repository.                                                                                             \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP4} & \vline & Student invites team member to its repository.                                                                                                              \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP4} & \vline & Students work and complete the code kata battle with their code.                                                                                            \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP4} & \vline & The students push their work to the GitHub repository.                                                                                                      \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP4} & \vline & An educator creates a correct code kata, defining a coherent description of the project within its test cases and the configuration for automation scripts. \\
-                     &        &                                                                                                                                                             \\\hline & & \\
-        \textbf{WP4} & \vline & An educator checks the work done by students in order to evaluate them.                                                                                     \\
-                     &        &                                                                                                                                                             \\
+                     &        &                                                                                                                                                                 \\
+        \textbf{ID}  & \vline & \textbf{Description}                                                                                                                                            \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP1} & \vline & Students participating in a tournament can decide whether to do a battle or not by subscribing or not to it.                                                    \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP2} & \vline & Students choose for each battle if coding alone, when it is possible, or forming a team, respecting the limit imposed.                                          \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP3} & \vline & Only the student who formed the team forks the GitHub repository of the Code Kata.                                                                              \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP4} & \vline & Only the student who formed the team sets up an automatic workflow in the GitHub repository.                                                                    \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP5} & \vline & Student invites team members to its Code Kata repository.                                                                                                       \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP6} & \vline & Students work and compete in CKB with their code.                                                                                                               \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP7} & \vline & The students push their work to the GitHub repository.                                                                                                          \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP8} & \vline & An educator creates correct Code Kata, defining a coherent description of the project within its test cases and the configuration for automation scripts.       \\
+                     &        &                                                                                                                                                                 \\\hline & & \\
+        \textbf{WP9} & \vline & Educators check the work done by students in order to evaluate them, this is possible only if the manual evaluation option is chosen.                           \\
+                     &        &                                                                                                                                                                 \\
         \hline
-    \end{longtable}
+    \end{tabular}
     \caption{World Phenomena}
 \end{table}
 
+\newpage
+
 \subsection{Shared Phenomena}
+
+{\color{red} Definire controlled by} \\
 
 \renewcommand{\arraystretch}{0.5}
 \begin{longtable}[H]{l l p{8.5cm} l l}
     \hline
-                   &        &                                                                                                                                 &        &                        \\
-    \textbf{ID}    & \vline & \textbf{Description}                                                                                                            & \vline & \textbf{Controlled by} \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP1}   & \vline & A user registers its personal datas in CodeKataBattle system specifing if it is a student or an educator                        & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP2}   & \vline & A registered user insert its credentials to get in CodeKataBattle environment                                                   & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP3}   & \vline & An educator creates a tournament, defining all necessary details                                                                & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP5}   & \vline & The educator who created a specific tournament grants other colleagues permission to create battles inside it                   & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP4}   & \vline & An educator that has permission creates battles, defining all necessary details, within a tournament                            & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP7}   & \vline & Students are notified of an upcoming tournament                                                                                 & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP8}   & \vline & Students join a tournament                                                                                                      & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP9}   & \vline & Students are notified of an upcoming battle within a tournament they are subscribed to                                          & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP10}  & \vline & Student joins a battle                                                                                                          & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP13}  & \vline & Student invites other students, which are subscribed in the same tournament, to join its team respecting the boundaries imposed & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP14}  & \vline & Student joins a team and therefore it gets enrolled to a battle via an invite by another student                                & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP16}  & \vline & The platform sends the link of the GitHub repository to the students who created the team for the battle                        & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP17}  & \vline & Students who recieved the GitHub repository link are asked to fork it and set up an automated workflow                          & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP18}  & \vline & The forked repository's workflow notifies the platform of a new GitHub push action                                              & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP19}  & \vline & The platform updates the battle score of the students whenever their repository gets pushed                                     & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP20}  & \vline & Educator and student subscribed to the battle can monitor the battle ranking among other partecipants                           & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP21}  & \vline & The educator uses the platform to go through the sources produced by each team                                                  & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP6}   & \vline & The educator evaluates manually the work done by students in his own battle                                                     & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP23}  & \vline & The platform notifies students of the end of a battle when the final battle rank becomes available                              & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP25}  & \vline & An educator that has permission to create battles whitin a tournament, can also closes the tournament                           & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP26}  & \vline & The platform notifies all students involved in the tournament about its end when the tournament ranking is available            & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP27}  & \vline & All users can see the list of ongoing and ended tournaments as well as the corresponding tournament rank at any time            & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\\hline & & & & \\
-    \textbf{SP285} & \vline & An educator creates a gamification badge within the CKB platform and asociates to it a rule and a variable                      & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\ \hline & & & & \\
-    \textbf{SP29}  & \vline & An user checks the personal badges gained by anyone subscribed to the CKB platform                                              & \vline &                        \\
-                   &        &                                                                                                                                 &        &                        \\
-    \hline         &        &                                                                                                                                 &        &                        \\
+                   &        &                                                                                                                                   &        &                        \\
+    \textbf{ID}    & \vline & \textbf{Description}                                                                                                              & \vline & \textbf{Controlled by} \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP1}   & \vline & A user registers their personal data in CKB system specifying if it is a student or an educator.                                  & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP2}   & \vline & A registered user inserts its credentials to get into CKB environment.                                                            & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP3}   & \vline & An educator creates a tournament, defining all necessary details.                                                                 & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP4}   & \vline & The educator who created a specific tournament grants other colleagues permission to create battles inside it.                    & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP5}   & \vline & An educator that has permission creates battles, defining all necessary details, within a tournament.                             & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP6}   & \vline & Students are notified of upcoming tournaments.                                                                                    & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP7}   & \vline & Students join tournaments.                                                                                                        & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP8}   & \vline & Students are notified of upcoming battles within a tournament they are subscribed to.                                             & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP9}   & \vline & Student joins battles.                                                                                                            & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP10}  & \vline & Student invites other students, who are subscribed in the same tournament, to join its team respecting the boundaries imposed.    & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP11}  & \vline & Student joins a team, it gets enrolled in a battle via an invite by another student if it was not already part of it.             & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP12}  & \vline & CKB platform sends the link of the GitHub repository to the students who created the team for the battle.                         & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP13}  & \vline & Students who received the GitHub repository link are asked to fork it and set up an automated workflow.                           & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP14}  & \vline & The forked repository's workflow notifies the platform of a new GitHub push action, performed by students.                        & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP15}  & \vline & The platform updates the battle score of the students whenever their repository gets pushed.                                      & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP16}  & \vline & Educator and student subscribed to the battle can monitor the battle ranking among other participants.                            & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP17}  & \vline & The educator uses the platform to go through the sources produced by each team.                                                   & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP18}  & \vline & The educator, in its own battles, manually evaluates the work done by students.                                                   & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP19}  & \vline & The platform notifies students of the end of a battle as soon as the final battle rank becomes available.                         & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP20}  & \vline & An educator that has permission to create battles within a tournament, can also closes that tournament.                           & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP21}  & \vline & The platform notifies all students involved in the tournament about its end when the tournament rank is available.                & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP22}  & \vline & At any time, all users can see the list of ongoing and ended tournaments as well as the corresponding tournament rank.            & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP23}  & \vline & An educator creates gamification badges inside CKB platform, defining a name, some variables, and a rule.                         & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\\hline & & \\
+    \textbf{SP24}  & \vline & A user checks the profile of any student subscribed to the CKB platform.                                                          & \vline &                        \\
+                   &        &                                                                                                                                   &        &                        \\
+    \hline                                                   
     \caption{Shared Phenomena}
 \end{longtable}
 
@@ -153,16 +163,25 @@ CodeKataBattle fosters collaborative coding challenges, helping students improve
 \subsection{Definitions}
 \begin{table}[H]
     \centering
-    \renewcommand{\arraystretch}{1.5}
-    \begin{tabular}{l l p{11cm}}
+    \renewcommand{\arraystretch}{0.5}
+    \begin{tabular}{l l p{10cm}}
         \hline
-        \textbf{Term}       &  & \textbf{Definition}                                                                                                                                                                                                                          \\
-        \hline
-        User                &  & Can be a Student or a User                                                                                                                                                                                                                   \\                                                                                                                                                                                                                                 \\
-        Educator            &  & Identifies a person who provides instruction or education, such as a teacher.                                                                                                                                                                \\
-        Student             &  & Identifies a person who is studying at a school or college.                                                                                                                                                                                  \\
-        Kata                &  & A training exercise system for karate where you repeat a form multiple times, making small improvements to each one.                                                                                                                         \\
-        Test-first approach &  & A software development process that is based on converting software requirements into test cases before creating the software, and then tracking the entire development process by repeatedly testing the software against those test cases. \\                                                                                                                                                          \\
+                            &        &                                                                                                                              \\
+        \textbf{Term}       & \vline & \textbf{Definition}                                                                                                          \\
+                            &        &                                                                                                                              \\\hline & & \\
+        User / Actor        & \vline & A person who uses CKB platform, could be a Student or an Educator.                                                          \\                                                                                                                                                                                                                                 \\
+                            &        &                                                                                                                              \\\hline & & \\
+        Educator            & \vline & Identifies a person who provides instruction or education, such as a teacher.                                                \\
+                            &        &                                                                                                                              \\\hline & & \\
+        Student             & \vline & Identifies a person who is studying at school or college.                                                                    \\
+                            &        &                                                                                                                              \\\hline & & \\
+        Kata                & \vline & A training exercise system for karate where you repeat a form multiple times, making small improvements to each one.         \\
+                            &        &                                                                                                                              \\\hline & & \\
+        Test-first approach & \vline & A software development process based on converting software requirements into test cases before creating the software, 
+                                       and then tracking the entire development process by repeatedly testing the software against those test cases.                \\
+                            &        &                                                                                                                              \\\hline & & \\
+        Code Kata           & \vline & Programming battles in which teams of students compete against each other.                                                   \\
+                            &        &                                                                                                                              \\
         \hline
     \end{tabular}
     \caption{Definitions}
@@ -171,14 +190,20 @@ CodeKataBattle fosters collaborative coding challenges, helping students improve
 \subsection{Acronyms}
 \begin{table}[H]
     \centering
-    \renewcommand{\arraystretch}{1.5}
+    \renewcommand{\arraystretch}{0.5}
     \begin{tabular}{l l p{11cm}}
         \hline
-        \textbf{Acronyms} &  & \textbf{Term}  \\
-        \hline
-        CKB               &  & CodeKataBattle \\
-        EDU               &  & Educator       \\
-        STU               &  & Student        \\
+                          &        &                                            \\
+        \textbf{Acronyms} & \vline & \textbf{Term}                              \\
+                          &        &                                            \\\hline & & \\
+        CKB               & \vline & CodeKataBattle                             \\
+                          &        &                                            \\\hline & & \\
+        EDU               & \vline & Educator                                   \\
+                          &        &                                            \\\hline & & \\
+        STU               & \vline & Student                                    \\
+                          &        &                                            \\\hline & & \\
+        IDE               & \vline & Integrated Development Environment         \\
+                          &        &                                            \\
         \hline
     \end{tabular}
     \caption{Acronyms}
@@ -187,20 +212,32 @@ CodeKataBattle fosters collaborative coding challenges, helping students improve
 \subsection{Abbreviations}
 \begin{table}[H]
     \centering
-    \renewcommand{\arraystretch}{1.5}
+    \renewcommand{\arraystretch}{0.5}
     \begin{tabular}{l l p{10.5cm}}
         \hline
-        \textbf{Abbreviation} &  & \textbf{Term}          \\
-        \hline
-        \textbf{G}\(_i\)      &  & i-th goal              \\
-        \textbf{WP}\(_i\)     &  & i-th World Phenomena   \\
-        \textbf{SP}\(_i\)     &  & i-th Shared Phenomena  \\
-        \textbf{DA}\(_i\)     &  & i-th Domain Assumption \\
-        \textbf{Dep}\(_i\)    &  & i-th Dependencie       \\
-        \textbf{R}\(_i\)      &  & i-th Requirement       \\
-        \textbf{UC}\(_i\)     &  & i-th Use Case          \\
-        \textbf{i.e.}         &  & that is                \\
-        \textbf{e.g.}         &  & for example            \\
+                              &        &                            \\
+        \textbf{Abbreviation} & \vline & \textbf{Term}              \\
+                              &        &                            \\\hline & & \\
+        \textbf{G}\(_i\)      & \vline & i-th goal                  \\
+                              &        &                            \\\hline & & \\
+        \textbf{WP}\(_i\)     & \vline & i-th World Phenomena       \\
+                              &        &                            \\\hline & & \\
+        \textbf{SP}\(_i\)     & \vline & i-th Shared Phenomena      \\
+                              &        &                            \\\hline & & \\
+        \textbf{DA}\(_i\)     & \vline & i-th Domain Assumption     \\
+                              &        &                            \\\hline & & \\
+        \textbf{Dep}\(_i\)    & \vline & i-th Dependencies          \\
+                              &        &                            \\\hline & & \\
+        \textbf{R}\(_i\)      & \vline & i-th Requirement           \\
+                              &        &                            \\\hline & & \\
+        \textbf{UC}\(_i\)     & \vline & i-th Use Case              \\
+                              &        &                            \\\hline & & \\
+        \textbf{i.e.}         & \vline & in other words             \\
+                              &        &                            \\\hline & & \\
+        \textbf{e.g.}         & \vline & for example                \\
+                              &        &                            \\\hline & & \\
+        \textbf{iff}          & \vline & if and only if             \\
+                              &        &                            \\
         \hline
     \end{tabular}
     \caption{Abbreviations}
@@ -209,37 +246,42 @@ CodeKataBattle fosters collaborative coding challenges, helping students improve
 \section{Reference Documents}
 \begin{itemize}
     \item Assignment RDD A.Y. 2023-2024\footnote{\url{https://webeep.polimi.it/mod/folder/view.php?id=219353}}
-    \item Course slides on WeeBeep \footnote{\url{https://webeep.polimi.it/mod/folder/view.php?id=207692}}
-    % \item RASD review by Prof. M. Camilli
-    \item ISO/IEC/IEEE 29148 dated 2018, Systems and software engineering - Life cycle processes - Requirements engineering\footnote{\url{https://www.iso.org/obp/ui/\#iso:std:iso-iec-ieee:29148:ed-2:v1:en}}
+    \item Course slides on WeeBeep\footnote{\url{https://webeep.polimi.it/mod/folder/view.php?id=207692}}
+    %\item RASD review by Prof. M. Camilli
+    \item ISO/IEC/IEEE 29148 dated 2018, \\
+          Systems and software engineering - Life cycle processes - Requirements engineering\footnote{\url{https://www.iso.org/obp/ui/\#iso:std:iso-iec-ieee:29148:ed-2:v1:en}}
 \end{itemize}
+
+\newpage
 
 \section{Document Structure}
 The structure of this RASD document follows six main sections:
 \begin{enumerate}
     \item \textbf{Introduction:}
-          provides an overview of the problem at hand, the purpose of the document and
-          the project, the scope of the domain, and introduces the main goals of the system as a solution.
+          provides an overview of the problem at hand, the purpose of the project, 
+          the scope of the domain, and introduces the main goals of the system as a solution.
 
     \item \textbf{Overall Description:}
-          gives a general description of the system, going into more details about its main functions.
-          The description is assisted with the help of UML diagrams, such as class, activity and state diagram.
+          gives a general description of the system, going into more detail about its main functions.
+          The description is assisted with the help of UML diagrams, such as class, activity, and state diagrams.
           The domain assumptions of the examined world are then explained along with any dependencies and constraints.
 
     \item \textbf{Specific Requirements:}
           specifies the functional and non-functional requirements of a software system.
-          It includes use cases diagrams, descriptions of each use case, and related sequence diagrams.
-          Finally, it provides a mapping of the requirements to both goals and use cases.
+          It includes use case diagrams, descriptions of each use case, and related sequence diagrams.
+          Finally, it provides a mapping of the requirements for both goals and use cases.
 
     \item \textbf{Formal Analysis Using Alloy:}
-          contains Alloy models which are used for the description of the application domain and his properties,
-          referring to the operations which the system has to provide and some critical aspects of the system.
+          contains Alloy models which are used for the description of the application domain and its properties,
+          referring to the operations that the system has to provide and some critical aspects of the system.
 
     \item \textbf{Effort Spent:}
-          keeps track of the time spent to complete this document.
-          The first table defines the amount of hours used by the whole team to get important decisions and to make reviews,
-          the other tables contains the individual effort spent by each team member.
+          keep track of the time spent to complete this document.
+          The first table defines the amount of hours used by the whole team to make important decisions and to make reviews,
+          the other tables contain the individual effort spent by each team member.
 
+    {\color{red}
     \item \textbf{References:}
-          lists all the documents used and that were helpfull in drafting the RASD.
+          lists all the documents used and that were helpful in drafting the RASD. \\
+          => Rimuoviamo? Vogliamo aggiungere nella sezione sopra altre cose?}
 \end{enumerate}
