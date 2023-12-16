@@ -1,5 +1,3 @@
-\newlist{requirementsenumerate}{enumerate}{1}
-\setlist[requirementsenumerate,1]{label=\textbf{R}\arabic*., ref=R\arabic*}
 \chapter{Specific Requirements}
 
 \section{External Interface Requirements}
@@ -111,6 +109,8 @@ To work properly, the software must fulfill the following functional requirement
     \caption{STU Use Case Diagram}
 \end{figure}
 
+\newpage
+
 \subsection{Use cases Description}
 The following use cases within the exception section do not contain, for the sake of enhancing readability and simplifying the sequence diagrams, these anomalies:
 \begin{enumerate}
@@ -148,24 +148,22 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Register                                                                                                                      \\ \hline
-        ID                    & UC1 (Figure \ref{fig:uc1})                                                                                                    \\ \hline
-        Actors                & EDU or STU                                                                                                                    \\ \hline
-        Entry \par conditions & The actor is not registered and wants to create an account                                                                    \\ \hline
+        Name                  & Register                                                                                                                                \\ \hline
+        ID                    & UC1 (Figure \ref{fig:uc1})                                                                                                              \\ \hline
+        Actors                & EDU or STU                                                                                                                              \\ \hline
+        Entry \par conditions & The actor is not registered and wants to create an account                                                                              \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor enters the registration page
                                     \item The system shows the registration form
                                     \item The actor specifies whether is an educator or a student
-                                    \item The actor fills out the form with truthful informations
+                                    \item The actor fills out the form with truthful information
                                     \item The actor confirms the account creation
-                                    \item The system creates an account with respect to the informations inserted by the actor
-                                \end{enumerate}                                     \\ \hline
-        Exit \par conditions  & The system successfully creates the account                                                                                   \\ \hline
+                                    \item The system creates an account concerning  the information inserted by the actor
+                                \end{enumerate}                                                                                                                         \\ \hline
+        Exit \par conditions  & The system successfully creates the account and shows the "Log in" page                                                                 \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item The actor inserts informations (i.e. email) about an account which already exists: a human-readable message is displayed
-                                    \item The actor inserts data in the wrong format: a human-readable message is displayed
-                                    \item The actor does not fill the form but press the confirm button: a human-readable message is displayed
-                                \end{itemize} \\ \hline
+                                    \item The actor inserts information (e.g. email) about an account that already exists: a human-readable message is displayed
+                                \end{itemize}                                                                                                                           \\ \hline
     \end{tabular}
 \end{center}
 
@@ -197,10 +195,10 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Create tournament                                                                                                                    \\ \hline
-        ID                    & UC3 (Figure \ref{fig:uc3})                                                                                                           \\ \hline
-        Actors                & EDU and ESP                                                                                                                          \\ \hline
-        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is on the "Dashboard" page                                                          \\ \hline
+        Name                  & Create tournament                                                                                                                       \\ \hline
+        ID                    & UC3 (Figure \ref{fig:uc3})                                                                                                              \\ \hline
+        Actors                & EDU and ESP                                                                                                                             \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is in the "Dashboard" page                                                             \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item EDU clicks on the "Create new" button
                                     \item The system shows the "Create tournament" page with a form to be compiled
@@ -208,12 +206,12 @@ It is imperative to note that in the event of any anomalies related to these sce
                                     \item EDU clicks on the "Create" button
                                     \item The system notifies all the registered STUs about the creation of a new tournament, by sending an email through ESP
                                     \item EDU is redirected to the "Dashboard" page showing the new tournament created
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & The system has created the new tournament                                                                                            \\ \hline
+                                \end{enumerate}                                                                                                                         \\ \hline
+        Exit \par conditions  & The system has created the new tournament                                                                                               \\ \hline
         Exceptions            & \begin{itemize}
                                     \item The EDU inserts a Tournament name already used for another tournament: a human-readable message is displayed
                                     \item The EDU specifies a deadline in the past: a human-readable message is displayed
-                                \end{itemize}                    \\ \hline
+                                \end{itemize}                                                                                                                           \\ \hline
     \end{tabular}
 \end{center}
 
@@ -222,26 +220,22 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Battle creation                                                                                                                                                               \\ \hline
-        ID                    & UC4 (Figure \ref{fig:uc4})                                                                                                                                                    \\ \hline
-        Actors                & EDU                                                                                                                                                                           \\ \hline
-        Entry \par conditions & The actor is already subscribed to CKB platform and is an educator already logged in the platform                                                                             \\ \hline
+        Name                  & Create Battle                                                                                                                                                                       \\ \hline
+        ID                    & UC4 (Figure \ref{fig:uc4})                                                                                                                                                          \\ \hline
+        Actors                & EDU and ESP                                                                                                                                                                                \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is in the "Dashboard" page \textbf{and} it has the permission to create battles inside a specific tournament                       \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item The actor opens the page correlated to the tournament in which he wants to create a new battle
-                                    \item The system shows the tournament page
-                                    \item If the actor has enough permissions, the system shows the "create a new battle" button
-                                    \item The actor opens the battle creation page
-                                    \item The system shows the battle creation form
-                                    \item The actor fills the form with the details about the battle (e.g. code language, deadlines)
-                                    \item The actor uploads the code kata
-                                    \item The system checks if all fields are correctly filled
-                                    \item The system creates the battle
-                                \end{enumerate}                                                                           \\ \hline
-        Exit \par conditions  & The system creates successfully the new battle    {\color{red} Maybe we should say that the system send to all the STU in the tournament a notification about the new battle} \\ \hline
+                                    \item The EDU clicks on the tournament in which it wants to create a new battle
+                                    \item The system shows the "Tournament View" page with the "Create new battle" button
+                                    \item The EDU clicks the "Create new battle" button
+                                    \item The system shows the "Battle creation" page with a form to be compiled 
+                                    \item The EDU fills the form with the details about the battle (e.g. battle name, code language, deadlines) and uploads the Code Kata
+                                    \item The system checks if all fields are correctly filled and then creates the battle
+                                \end{enumerate}                                                                                                                                                                     \\ \hline
+        Exit \par conditions  & All STU subscribed to the tournament in which the battle is created get notified through ESP, that a new battle is available                                                        \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item The actor has not enough permissions for the selected tournament: the system doesn't show the "create a new battle" button
-                                    \item The actor uploads files not allowed or it inserts data in the wrong format: a human-readable message is displayed
-                                \end{itemize}                                               \\ \hline
+                                    \item The EDU does not have enough permissions for the selected tournament: the system does not show the "Create new battle" button
+                                \end{itemize}                                                                                                                                                                       \\ \hline
     \end{tabular}
 \end{center}
 
@@ -250,10 +244,10 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Share permission                                                                                                     \\ \hline
-        ID                    & UC5 (Figure \ref{fig:uc5})                                                                                           \\ \hline
-        Actors                & EDU                                                                                                                  \\ \hline
-        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is in the "Dashboard" page \textbf{and} a tournament is in progress \\ \hline
+        Name                  & Share permission                                                                                                        \\ \hline
+        ID                    & UC5 (Figure \ref{fig:uc5})                                                                                              \\ \hline
+        Actors                & EDU                                                                                                                     \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is in the "Dashboard" page \textbf{and} a tournament is in progress    \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The EDU selects a tournament it has created
                                     \item The system shows the "Tournament View" page
@@ -261,14 +255,14 @@ It is imperative to note that in the event of any anomalies related to these sce
                                     \item The system shows the list of all the EDUs subscribed to the CKB platform
                                     \item The EDU searches the EDU(s) to which it wants to share the permission
                                     \item The user adds an EDU to the tournament by clicking the "Add" button
-                                \end{enumerate}                                        \\ \hline
-        Exit \par conditions  & The other EDU(s) can now create battles within that tournament                                                       \\ \hline
+                                \end{enumerate}                                                                                                         \\ \hline
+        Exit \par conditions  & The other EDU(s) can now create battles within that tournament                                                          \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item THe actor opens a tournament that does not exist: a human-readable message is displayed
+                                    \item The actor opens a tournament that does not exist: a human-readable message is displayed
                                     \item The actor searches for an EDU that does not exist in the system: a human-readable message is displayed
                                     \item The actor adds an EDU already part of the tournament: a human-readable message is displayed
-                                \end{itemize}         \\ \hline
-        Note                  & To make the research of a specific EDU easier, the system provides a search bar                                      \\ \hline
+                                \end{itemize}                                                                                                           \\ \hline
+        Note                  & To make the research of a specific EDU easier, the system provides a search bar                                         \\ \hline
     \end{tabular}
 \end{center}
 
@@ -277,22 +271,22 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a tournament                                                                                          \\ \hline
-        ID                    & UC6 (Figure \ref{fig:uc6})                                                                                 \\ \hline
-        Actors                & STU                                                                                                        \\ \hline
-        Entry \par conditions & The actor is logged in as a STU \textbf{and} it has received an e-mail from about a new tournament created \\ \hline
+        Name                  & Join a tournament                                                                                           \\ \hline
+        ID                    & UC6 (Figure \ref{fig:uc6})                                                                                  \\ \hline
+        Actors                & STU                                                                                                         \\ \hline
+        Entry \par conditions & The actor is logged in as a STU \textbf{and} it has received an e-mail from about a new tournament created  \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item STU opens the e-mail and clicks on the link attached to be redirected to the tournament
                                     \item The system shows the "Tournament View" page
                                     \item STU clicks on the "Join Tournament" button
                                     \item The system processes the request and confirms the enrollment
-                                \end{enumerate}               \\ \hline
-        Exit \par conditions  & STU is now part of that tournament                                                                         \\ \hline
+                                \end{enumerate}                                                                                             \\ \hline
+        Exit \par conditions  & STU is now part of that tournament                                                                          \\ \hline
         Exceptions            & \begin{itemize}
                                     \item The actor opens a tournament that does not exist: a human-readable message is displayed
                                     \item The tournament registration window is expired: a human-readable message is displayed
                                     \item The STU is already part of the tournament: a human-readable message is displayed
-                                \end{itemize}               \\ \hline
+                                \end{itemize}                                                                                               \\ \hline
     \end{tabular}
 \end{center}
 
@@ -301,27 +295,30 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a Battle (Figure \ref{fig:uc7})                                                                                                             \\ \hline
-        ID                    & UC7                                                                                                                                              \\ \hline
-        Actors                & STU, Mail Provider                                                                                                                               \\ \hline
-        Entry \par conditions & The actor is an authenticated STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to the tournament                  \\ \hline
+        Name                  & Join a Battle                                                                                                                                                                       \\ \hline
+        ID                    & UC7 (Figure \ref{fig:uc7})                                                                                                                                                          \\ \hline
+        Actors                & STU and ESP                                                                                                                                                                         \\ \hline
+        Entry \par conditions & The actor is logged in as a STU \textbf{and} a tournament is in progress \textbf{and} the STU is subscribed to that tournament                                                      \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item The actor opens the tournament page in which he is subscribed
-                                    \item The system shows the battles of the tournament
-                                    \item The actor opens the kata battle page
-                                    \item If the subscribing deadline is not expired yet, the system shows the kata battle page with the function "join and create a team"
-                                    \item The actor clicks on "join and create a team"
-                                    \item The system displays a form to invite other members
-                                    \item The actor inserts emails of his mates
-                                    \item If the invited members are subscribed to that tournament, the system sends an email to each invited member
-                                    \item The system subscribes the actor to the battle
-                                \end{enumerate}            \\ \hline
-        Exit \par conditions  & The actor can now invite other STUs to his team or he can wait the start of the battle and partecipating alone                                   \\ \hline
+                                    \item The STU clicks on the tournament in which it wants to battle
+                                    \item The system shows the "Tournament View" page with a list of battles
+                                    \item The STU clicks on the battle it wants to join
+                                    \item The system shows the "Battle View" page with all the information about it, if the subscribing deadline has not expired yet, the system shows the "Join Battle" button
+                                    \item The STU clicks on the "Join Battle" button to enter the battle
+                                    \item The system displays a form to create a team and invite other members
+                                    \item The STU, if wants or must invite friends to be part of its team, inserts their emails and then presses the "Join" button
+                                    \item The system sends an email to each invited member
+                                \end{enumerate}                                                                                                                                                                     \\ \hline
+        Exit \par conditions  & The system subscribes the STU to the battle that now waits for the reply of other STUs or can invite other mates to the team                                                         \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item The deadline expires and the team does not satisfy the constraint for the minimum team participants: the team is not enrolled to the battle
-                                    \item The emails inserted are not subscribed to the tournament : the system displays a human-readable error message
-                                \end{itemize} \\ \hline
-        Note                  & The system offers always the possibility to invite new members and sends via email the link to let other STUs join the team created by the actor \\ \hline
+                                    \item The STU wants to invite a number of mates greater or less than the boundaries imposed: a human-readable message is displayed
+                                    \item The deadline expires and the team does not satisfy the constraint for the minimum team participants: the team is not enrolled in the battle
+                                    \item The emails inserted are not subscribed to the tournament: a human-readable message is displayed
+                                \end{itemize}                                                                                                                                                                       \\ \hline
+        Note                  & \begin{itemize}
+                                    \item To make the research of a specific STU easier, the system provides a search bar
+                                    \item The system offers the possibility to invite new members to the team and let other STUs join it, iff boundaries constraint are respected            
+                                \end{itemize}                                                                                                                                                                       \\ \hline
     \end{tabular}
 \end{center}
 
@@ -330,38 +327,35 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a team - when already in the battle (Figure \ref{fig:uc8.1})                                                                                                                                \\ \hline
-        ID                    & UC8.1                                                                                                                                                                                            \\ \hline
-        Actors                & STU                                                                                                                                                                                              \\ \hline
-        Entry \par conditions & STU is registered in CKB platform
-        \textbf{and} is enrolled in a tournament
-        \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament
-        \textbf{and} it has already joined that battle alone.                                                                                                                                                                    \\ \hline
+        Name                  & Join a team - when already in the battle                                                                                                                                                                                                                                                            \\ \hline
+        ID                    & UC8.1 (Figure \ref{fig:uc8})                                                                                                                                                                                                                                                                        \\ \hline
+        Actors                & STU                                                                                                                                                                                                                                                                                                 \\ \hline
+        Entry \par conditions & STU is registered in CKB platform \textbf{and} is enrolled in a tournament \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament \textbf{and} it has already joined that battle alone     \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item User open the e-mail and clicks on the link attached to be redirect to the system
-                                    \item {\color{red} Should we talk about the log-in here?}
-                                    \item The system show the "Dashboard" page with the invitation, if the join windows for the battle is still open
-                                    \item User decide to Accept or Decline the invite
-                                          \begin{itemize}
-                      \item User click "Accept" button
-                  \end{itemize}
-                                          \begin{enumerate}
-                      \item The system add the STU to the team
-                      \item User now is part of that team in that battle
-                  \end{enumerate}
-                                          \begin{itemize}
-                      \item User click "Decline" button
-                  \end{itemize}
-                                          \begin{enumerate}
-                      \item The system delete the notification from its "Dashboard" page
-                      \item The system notify the STU that sent the invite of the decision and allows it to invite a new STU
-                  \end{enumerate}
-                                \end{enumerate}                                                                                  \\ \hline
-        Exit \par conditions  & STU partecipates to the battle, depending on its choice, alone or in a team of more then one STU.                                                                                                \\ \hline
+                                    \item User opens the e-mail and clicks on the link attached to be redirected to the system
+                                    \item The system shows the "Dashboard" page with the invitation if the join window for the battle is still open
+                                    \item User decides to Accept or Decline the invite
+                                    \begin{itemize}
+                                        \item User clicks the "Accept" button
+                                    \end{itemize}
+                                        \begin{enumerate}
+                                            \item The system adds the STU to the team
+                                            \item User now is part of that team in the battle
+                                        \end{enumerate}
+                                    \begin{itemize}
+                                        \item User clicks the "Decline" button
+                                    \end{itemize}
+                                        \begin{enumerate}
+                                            \item The system deletes the notification from its "Dashboard" page
+                                            \item The system notifies the STU that sent the invite of the decision and allows it to invite a new STU
+                                        \end{enumerate}
+                                \end{enumerate}                                                                                                                                                                                                                                                                                     \\ \hline
+        Exit \par conditions  & STU participates in the battle, depending on its choice, alone or in a team of more than one STU                                                                                                                                                                                                    \\ \hline
         Exceptions            & \begin{itemize}
-                                    \item STU ignore the invite received: STU partecipates alone and at the end of the registration window, for that specific battle, all the invites related are cancelled from the "Dashboard" page
-                                    \item STU received multiple invitation for the same battle, but from different teams: after one invite is accepted all the other are cancelled in its "Dashboard" page
-                                \end{itemize} \\ \hline
+                                    \item STU ignores the invite received: STU participates alone and at the end of the registration window, for that specific battle, all the invites related are canceled from the "Dashboard" page
+                                    \item STU received multiple invitations for the same battle, but from different teams: after one invite is accepted all the others are canceled in its "Dashboard" page
+                                    \item STUs already part of a team can not be selected to be in a different team
+                                \end{itemize}                                                                                                                                                                                                                                                                                       \\ \hline
     \end{tabular}
 \end{center}
 
@@ -370,37 +364,35 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Join a team - when not in the battle yet (Figure \ref{fig:uc8.2})                                                                                                                                                    \\ \hline
-        ID                    & UC8.2                                                                                                                                                                                                                \\ \hline
-        Actors                & STU                                                                                                                                                                                                                  \\ \hline
-        Entry \par conditions & STU is registered in CKB platform
-        \textbf{and} is enrolled in a tournament
-        \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament                                                                              \\ \hline
+        Name                  & Join a team - when not in the battle yet                                                                                                                                                                                                        \\ \hline
+        ID                    & UC8.2 (Figure \ref{fig:uc8})                                                                                                                                                                                                                    \\ \hline
+        Actors                & STU                                                                                                                                                                                                                                             \\ \hline
+        Entry \par conditions & STU is registered in CKB platform \textbf{and} is enrolled in a tournament \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament      \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item User open the e-mail and clicks on the link attached to be redirect to the system
-                                    \item {\color{red} Should we talk about the log-in here?}
-                                    \item The system show the "Dashboard" page with the invitation, if the join windows for the battle is still open
-                                    \item User decide to Accept or Decline the invite
-                                          \begin{itemize}
-                      \item User click "Accept" button
-                  \end{itemize}
-                                          \begin{enumerate}
-                      \item The system enrolls the STU to the battle and then adds it to the team that sent the invite
-                      \item User now is part of the battle and it competes in it with a team
-                  \end{enumerate}
-                                          \begin{itemize}
-                      \item User click "Decline" button
-                  \end{itemize}
-                                          \begin{enumerate}
-                      \item The system delete the notification from its "Dashboard" page
-                      \item The system notify the STU that sent the invite of the decision and allows it to invite a new STU
-                  \end{enumerate}
-                                \end{enumerate}                                                                                                      \\ \hline
-        Exit \par conditions  & STU is part of the battle and the team if it accepts the invite, else is not part of none of that                                                                                                                    \\ \hline
-        Exceptions            & \begin{itemize}
-                                    \item STU ignore the invite received: STU is not part of the battle nor the team and at the end of the registration window, for that specific battle, all the invites related are cancelled from the "Dashboard" page
-                                    \item STU received multiple invitation for the same battle, but from different teams: after one invite is accepted all the other are cancelled in its "Dashboard" page
-                                \end{itemize} \\ \hline
+                                    \item User opens the e-mail and clicks on the link attached to be redirected to the system
+                                    \item The system shows the "Dashboard" page with the invitation if the join windows for the battle is still open
+                                    \item User decides to Accept or Decline the invite
+                                    \begin{itemize}
+                                        \item User click the "Accept" button
+                                    \end{itemize}
+                                        \begin{enumerate}
+                                            \item The system enrolls the STU to the battle and then adds it to the team that sent the invite
+                                            \item User is part of the battle and it competes in it with a team
+                                        \end{enumerate}
+                                    \begin{itemize}
+                                        \item User clicks the "Decline" button
+                                    \end{itemize}
+                                        \begin{enumerate}
+                                            \item The system deletes the notification from its "Dashboard" page
+                                            \item The system notifies the STU that sent the invite of the decision and allows it to invite a new STU
+                                        \end{enumerate}
+                                \end{enumerate}                                                                                                                                                                                                                                 \\ \hline
+        Exit \par conditions  & STU is part of the battle and the team if it accepts the invite, else is not part of none of that                                                                                                                                               \\ \hline
+        Exceptions            & \begin{itemize}                                    
+                                    \item STU ignores the invite received: STU is neither part of the battle nor the team and at the end of the registration window, for that specific battle, all the related invites are canceled from the "Dashboard" page
+                                    \item STU received multiple invitations for the same battle, but from different teams: after one invite is accepted all the others are canceled in its "Dashboard" page
+                                    \item STUs already part of a team can not be selected to be in a different team
+                                \end{itemize}                                                                                                                                                                                                                                   \\ \hline
     \end{tabular}
 \end{center}
 
@@ -409,10 +401,10 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Manual evaluation                                                                                                                                                                        \\ \hline
-        ID                    & UC9 (Figure \ref{fig:uc9})                                                                                                                                                               \\ \hline
-        Actors                & EDU ans ESP                                                                                                                                                                              \\ \hline
-        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is on the "Tournament View" where at least a battle's deadline has expired \textbf{and} that battle has the "manual evaluation" enabled \\ \hline
+        Name                  & Manual evaluation                                                                                                                                                                           \\ \hline
+        ID                    & UC9 (Figure \ref{fig:uc9})                                                                                                                                                                  \\ \hline
+        Actors                & EDU ans ESP                                                                                                                                                                                 \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is on the "Tournament View" where at least a battle's deadline has expired \textbf{and} that battle has the "manual evaluation" enabled    \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The EDU selects a battle it has created
                                     \item The system shows the "Battle View" page, which has a list of all the teams that have submitted their work within the deadline
@@ -421,14 +413,14 @@ It is imperative to note that in the event of any anomalies related to these sce
                                     \item The EDU clicks on the "Submit" button
                                     \item The system updates the battle score of the team
                                     \item When all the teams are evaluated, the EDU clicks on the "Close battle" button
-                                \end{enumerate}                                                       \\ \hline
-        Exit \par conditions  & All participants in the battle get notified through ESP, that the final score is available                                                                                               \\ \hline
+                                \end{enumerate}                                                                                                                                                                             \\ \hline
+        Exit \par conditions  & All participants in the battle get notified through ESP, that the final score is available                                                                                                  \\ \hline
         Exceptions            & \begin{itemize}
                                     \item The EDU does not evaluate the code of a team and clicks on the "Submit" button: a human-readable message is displayed
                                     \item The EDU assigns a score that is not in the range [0, 100]: a human-readable message is displayed
                                     \item The EDU wants to change the score assigned to a team: the system lets the EDU change the score and then it updates the battle score of the team
-                                \end{itemize}                                     \\ \hline
-        Note                  & The system offers the possibility to stop the evaluation process, it saves the scores assigned to the teams and the evaluation process can be resumed later                              \\ \hline
+                                \end{itemize}                                                                                                                                                                               \\ \hline
+        Note                  & The system offers the possibility to stop the evaluation process, it saves the scores assigned to the teams and the evaluation process can be resumed later                                 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -437,19 +429,19 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Create new badge                                                                                                              \\ \hline
-        ID                    & UC10 (Figure \ref{fig:uc10})                                                                                                  \\ \hline
-        Actors                & EDU                                                                                                                           \\ \hline
-        Entry \par conditions & The user is logged in as EDU \textbf{and} it is in the "Dashboard" page                                                       \\ \hline
+        Name                  & Create new badge                                                                                                                        \\ \hline
+        ID                    & UC10 (Figure \ref{fig:uc10})                                                                                                            \\ \hline
+        Actors                & EDU                                                                                                                                     \\ \hline
+        Entry \par conditions & The user is logged in as EDU \textbf{and} it is in the "Dashboard" page                                                                 \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item EDU clicks on the "Badges" button
                                     \item The system shows the "Create badge" page with a form to be compiled
                                     \item EDU fills the form with the required information as a title and rule that STU must fulfill to obtain that specific badge
                                     \item EDU clicks on the "Create" button
                                     \item The system redirects the EDU to the "Dashboard" page
-                                \end{enumerate} \\ \hline
-        Exit \par conditions  & The systems create the new badge and now available whenever EDUs in CKB create tournaments                                    \\ \hline
-        Exceptions            & \textit{None}                                                                                                                 \\ \hline
+                                \end{enumerate}                                                                                                                         \\ \hline
+        Exit \par conditions  & The systems create the new badge and now available whenever EDUs in CKB create tournaments                                              \\ \hline
+        Exceptions            & \textit{None}                                                                                                                           \\ \hline
     \end{tabular}
 \end{center}
 
@@ -458,21 +450,21 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Close tournament                                                                                                                              \\ \hline
-        ID                    & UC11 (Figure \ref{fig:uc11})                                                                                                                  \\ \hline
-        Actors                & EDU and ESP                                                                                                                                   \\ \hline
-        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it has all the authorization in the tournament \textbf{and} it is in the "Tournament View" page \\ \hline
+        Name                  & Close tournament                                                                                                                                \\ \hline
+        ID                    & UC11 (Figure \ref{fig:uc11})                                                                                                                    \\ \hline
+        Actors                & EDU and ESP                                                                                                                                     \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it has all the authorization in the tournament \textbf{and} it is in the "Tournament View" page   \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The EDU clicks on the "Close tournament" button
                                     \item The system shows a confirmation message
                                     \item The EDU clicks on the "Confirm" button
                                     \item The system closes the tournament and elaborates the final tournament rank
-                                \end{enumerate}                                                                \\ \hline
-        Exit \par conditions  & All the STUs enrolled in the tournament get notified through ESP and can check the tournament final ranking                                   \\ \hline
+                                \end{enumerate}                                                                                                                                 \\ \hline
+        Exit \par conditions  & All the STUs enrolled in the tournament get notified through ESP and can check the tournament final ranking                                     \\ \hline
         Exceptions            & \begin{itemize}
                                     \item The EDU clicks on the "Cancel" button: the system closes the message and shows normally the tournament page
                                     \item The tournament is already closed: a human-readable message is displayed
-                                \end{itemize}                         \\ \hline
+                                \end{itemize}                                                                                                                                   \\ \hline
     \end{tabular}
 \end{center}
 
@@ -481,18 +473,18 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualizing battle ranking (Figure \ref{fig:uc12})                                                 \\ \hline
-        ID                    & UC12                                                                                               \\ \hline
-        Actors                & EDU and STU                                                                                        \\ \hline
-        Entry \par conditions & The actor is in the page of the tournament it is looking for                                       \\ \hline
+        Name                  & View battle rank                                                                                                                                            \\ \hline
+        ID                    & UC12 (Figure \ref{fig:uc12})                                                                                                                                \\ \hline
+        Actors                & EDU and STU                                                                                                                                                 \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU or a STU \textbf{and} it is in the "Tournament View" page of the tournament containing the battle is looking forking       \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item The actor searches the battle
-                                    \item The actor clicks on the button of the battle
-                                    \item The system shows the battle page
-                                \end{enumerate}                                                  \\ \hline
-        Exit \par conditions  & The actor is able to see the ranking of the battle it was looking for                              \\ \hline
-        Exceptions            & None                                                                                               \\ \hline
-        Note                  & If the battle is not started yet, the system will show the battle page and the score will be zero. \\ \hline
+                                    \item The actor searches through battles
+                                    \item The actor clicks on the chosen battle
+                                    \item The system shows the rank of that battle next to the battle list
+                                \end{enumerate}                                                                                                                                             \\ \hline
+        Exit \par conditions  & The actor can see the rank of the battle it was looking for                                                                                                 \\ \hline
+        Exceptions            & \textit{None}                                                                                                                                               \\ \hline
+        Note                  & If the battle is not started yet, the system will show an empty rank                                                                                        \\ \hline
     \end{tabular}
 \end{center}
 
@@ -501,18 +493,18 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & View tournament rank                                                                               \\ \hline
-        ID                    & UC13 (Figure \ref{fig:uc13})                                                                       \\ \hline
-        Actors                & EDU or STU                                                                                         \\ \hline
-        Entry \par conditions & The actor is logged in as an EDU or a STU \textbf{and} it is in the "Dashboard" page               \\ \hline
+        Name                  & View tournament rank                                                                                \\ \hline
+        ID                    & UC13 (Figure \ref{fig:uc13})                                                                        \\ \hline
+        Actors                & EDU or STU                                                                                          \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU or a STU \textbf{and} it is in the "Dashboard" page                \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The system shows the list of all the tournaments
                                     \item The actor selects a tournament, either ongoing or closed
                                     \item The system shows the "Tournament View" page
-                                \end{enumerate}                                      \\ \hline
-        Exit \par conditions  & The actor can now see the tournament rank                                                          \\ \hline
-        Exceptions            & \textit{None}                                                                                      \\ \hline
-        Notes                 & The "Tournament View" page shows both the rank and the list of battles within it, ongoing or ended \\ \hline
+                                \end{enumerate}                                                                                     \\ \hline
+        Exit \par conditions  & The actor can now see the tournament rank                                                           \\ \hline
+        Exceptions            & \textit{None}                                                                                       \\ \hline
+        Notes                 & The "Tournament View" page shows both the rank and the list of battles within it, ongoing or ended  \\ \hline
     \end{tabular}
 \end{center}
 
@@ -521,18 +513,18 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & View STU's profile                                                                                                   \\ \hline
-        ID                    & UC14 (Figure \ref{fig:uc14})                                                                                         \\ \hline
-        Actors                & EDU or STU                                                                                                           \\ \hline
-        Entry \par conditions & The actor is logged in as an EDU or a STU                                                                            \\ \hline
+        Name                  & View STU's profile                                                                                                      \\ \hline
+        ID                    & UC14 (Figure \ref{fig:uc14})                                                                                            \\ \hline
+        Actors                & EDU or STU                                                                                                              \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU or a STU                                                                               \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The actor clicks on a STU username
                                     \item The system redirects the actor to the "Profile View" page of the STU with that username
-                                \end{enumerate}                         \\ \hline
-        Exit \par conditions  & The user see the profile of the STU, it can visualize gained badges and the list of the tournament it is enrolled in \\ \hline
+                                \end{enumerate}                                                                                                         \\ \hline
+        Exit \par conditions  & The user sees the profile of the STU, it can visualize gained badges and the list of the tournament it is enrolled in    \\ \hline
         Exceptions            & \begin{enumerate}
                                     \item There is no STU with the username specified
-                                \end{enumerate}                                                                     \\ \hline
+                                \end{enumerate}                                                                                                         \\ \hline
     \end{tabular}
 \end{center}
 
@@ -541,23 +533,27 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualizing tournaments (Figure \ref{fig:uc15.2})                           \\ \hline
-        ID                    & 15.1                                                                        \\ \hline
-        Actors                & EDU                                                                         \\ \hline
-        Entry \par conditions & The actor is logged \textbf{and} he is in his dashboard                     \\ \hline
+        Name                  & View tournaments                                                                                                                \\ \hline
+        ID                    & UC15.1 (Figure \ref{fig:uc15.1})                                                                                                  \\ \hline
+        Actors                & EDU                                                                                                                             \\ \hline
+        Entry \par conditions & The actor is logged in as an EDU \textbf{and} it is in the "Dashboard" page                                                     \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item The system shows the list of all the tournaments the actor has created
-                                    \item The actor selects a tournament, either ongoing or closed
-                                    \item The system shows the tournament page
-                                \end{enumerate}
-        Alternatively:
-        \begin{enumerate}
-            \item The actor clicks on "Show all" button
-            \item The actor clicks the search bar and insert the name of a tournament he is looking for
-            \item The system shows the tournament page corresponding to the search
-        \end{enumerate}          \\ \hline
-        Exit \par conditions  & The actor can see the tournament page                                       \\ \hline
-        Exceptions            & \textit{None}                                                               \\ \hline
+                                    \item The system, in the "Dashboard" page, shows the list of all tournaments created by the EDU
+                                    \item The EDU can select a tournament, either ongoing or closed
+                                    \item The system shows the "Tournament View" page with the list of its ongoing or closed battles
+                                \end{enumerate}                                                                                                                 
+                                \textbf{Alternatively:}
+                                \begin{enumerate}
+                                    \item The EDU, in the "Dashboard" page, clicks on the "Show all" button
+                                    \item The EDU type in the search bar the name of a tournament it is looking for
+                                    \item The system shows the matching result 
+                                    \item The EDU can select the resulting tournament, either ongoing or closed
+                                    \item The system shows the "Tournament View" page with the list of its ongoing or closed battles
+                                \end{enumerate}                                                                                                                 \\ \hline
+        Exit \par conditions  & The EDU see the "Tournament View" page and can take actions in it                                                               \\ \hline
+        Exceptions            & \begin{enumerate}
+                                    \item The EDU type, in the search bar, a tournament name that does not exist: a human-readable message is displayed
+                                \end{enumerate}                                                                                                                 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -567,24 +563,28 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Visualizing tournaments (Figure \ref{fig:uc15.2})                                                                          \\ \hline
-        ID                    & 15.2                                                                                                                       \\ \hline
-        Actors                & STU                                                                                                                        \\ \hline
-        Entry \par conditions & The actor is logged \textbf{and} he is in his dashboard                                                                    \\ \hline
+        Name                  & View tournaments                                                                                                                                                                \\ \hline
+        ID                    & UC15.2 (Figure \ref{fig:uc15.2})                                                                                                                                                  \\ \hline
+        Actors                & STU                                                                                                                                                                             \\ \hline
+        Entry \par conditions & The actor is logged in as a STU \textbf{and} it is in the "Dashboard" page                                                                                                      \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item The system shows the list of all the tournaments to which the actor has subscribed
-                                    \item The actor selects a tournament, either ongoing or closed
-                                    \item The system shows the tournament page
+                                    \item The system, in the "Dashboard" page, shows the list of all the tournaments to which the STU is subscribed
+                                    \item The STU can select a tournament, either ongoing or closed
+                                    \item The system shows the "Tournament View" page with the list of its ongoing or closed battles
                                 \end{enumerate}
-        Alternatively:
-        \begin{enumerate}
-            \item The actor clicks on "Show all" button
-            \item The actor clicks the search bar and insert the name of a tournament he is looking for
-            \item The system shows the tournament page corresponding to the search
-        \end{enumerate}                                                         \\ \hline
-        Exit \par conditions  & The actor can see the tournament he has selected                                                                           \\ \hline
-        Exceptions            & If the tournament does not exists, the system suggests other tournaments showing their names and the subscribing deadlines \\ \hline
-        Notes                 & In the dashboard are shwon both the suggested torunaments and the torunaments to which the actor is subscribed             \\ \hline
+                                \textbf{Alternatively:}
+                                \begin{enumerate}
+                                    \item The STU, in the "Dashboard" page, clicks on the "Show all" button
+                                    \item The STU type in the search bar the name of a tournament it is looking for
+                                    \item The system shows the matching result 
+                                    \item The STU can select the resulting tournament, either ongoing or closed
+                                    \item The system shows the "Tournament View" page with the list of its ongoing or closed battles
+                                \end{enumerate}                                                                                                                                                                 \\ \hline
+        Exit \par conditions  & The STU see the "Tournament View" page and can take actions in it                                                                                                               \\ \hline
+        Exceptions            & \begin{enumerate}
+                                    \item The STU type, in the search bar, a tournament name that does not exist: the system suggests other tournaments showing their names and the subscribing deadlines
+                                \end{enumerate}                                                                                                                                                                 \\ \hline
+        Notes                 & In the "Dashboard" page are shown both suggested tournaments and tournaments to which the STU is subscribed                                                                     \\ \hline
     \end{tabular}
 \end{center}
 
@@ -601,7 +601,7 @@ It is imperative to note that in the event of any anomalies related to these sce
         Event \par flow       & \begin{enumerate}
                                     \item The actor selects a tournament
                                     \item The system shows the "Tournament View" page
-                                \end{enumerate}                                            \\ \hline
+                                \end{enumerate}                                                                             \\ \hline
         Exit \par conditions  & The actor can see the list of all battles within that tournament                            \\ \hline
         Exceptions            & \textit{None}                                                                               \\ \hline
         Notes                 & The tournament page shows both the rank and the list of battles within it, ongoing or ended \\ \hline
@@ -613,20 +613,20 @@ It is imperative to note that in the event of any anomalies related to these sce
     \setlist[enumerate]{itemsep=.1pt}
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
-        Name                  & Push commit and score updating (Figure \ref{fig:uc18})                                                                                                                       \\ \hline
-        ID                    & UC18                                                                                                                                                                         \\ \hline
-        Actors                & STU, GitHub API                                                                                                                                                              \\ \hline
-        Entry \par conditions & The registration deadline for a battle has expired \textbf{and} STU is subscribed to the battle \textbf{and} the battle is not ended yet                                     \\ \hline
+        Name                  & Push commit and score updating                                                                                                                                          \\ \hline
+        ID                    & UC17 (Figure \ref{fig:uc17})                                                                                                                                            \\ \hline
+        Actors                & STU and GitHub API                                                                                                                                                      \\ \hline
+        Entry \par conditions & STU is subscribed to the battle \textbf{and} the registration deadline for a battle has expired \textbf{and} the battle is in progress and not ended yet                \\ \hline
         Event \par flow       & \begin{enumerate}
-                                    \item STU pushes his changes to the GitHub repository
-                                    \item GitHub actions use the CKB platform 's API to inform of the new changes
-                                    \item CKB platform pulls the latest sources and analyzes them
-                                    \item CKB platform runs the tests on the corresponding executables
-                                    \item CKB platform computes and updates the battle score of the team corresponding to STU
-                                \end{enumerate}                                                                                     \\ \hline
-        Exit \par conditions  & The STU's team can see the updated score                                                                                                                                     \\ \hline
-        Exceptions            & \textit{None}                                                                                                                                                                \\ \hline
-        Notes                 & We have assumed that the STU setted properly the GitHub repository and the GitHub actions in the domain assumptions, so, by the side of the platform, nothing could go wrong \\ \hline
+                                    \item STU pushes changes to its GitHub repository
+                                    \item GitHub actions inform the CKB platform's API of a new push has been performed by STU
+                                    \item The system pulls the latest sources and analyzes them
+                                    \item The system runs the tests on the corresponding executables
+                                    \item The system computes and updates the battle score of the team corresponding to STU
+                                \end{enumerate}                                                                                                                                                         \\ \hline
+        Exit \par conditions  & The STU's team can see the updated score                                                                                                                                \\ \hline
+        Exceptions            & \textit{None}                                                                                                                                                           \\ \hline
+        Notes                 & We assumed, in the Domain Assumptions section, that the STU set properly the GitHub repository and actions, so, by the side of the platform, nothing could go wrong     \\ \hline
     \end{tabular}
 \end{center}
 
@@ -636,17 +636,17 @@ It is imperative to note that in the event of any anomalies related to these sce
     \begin{tabular}{| m{2cm} | m{10cm}|}
         \hline
         Name                  & Repository creation                                                                                                                         \\ \hline
-        ID                    & UC19 (Figure \ref{fig:uc19})                                                                                                                \\ \hline
+        ID                    & UC18 (Figure \ref{fig:uc18})                                                                                                                \\ \hline
         Actors                & STU, GitHub API and ESP                                                                                                                     \\ \hline
         Entry \par conditions & The actor is logged in as a STU \textbf{and} it is subscribed to a battle \textbf{and} the registration deadline for that battle is expired \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item The system creates a GitHub repository for the battle through the GitHub API
                                     \item The system sends an email to all STUs subscribed to the battle with the link to the GitHub repository
                                     \item The STU clicks on the link and is redirected to the GitHub repository
-                                \end{enumerate}                                  \\ \hline
+                                \end{enumerate}                                                                                                                             \\ \hline
         Exit \par conditions  & The STU its team can start working on the Code Kata, just after forking the repository and setting up an automated workflow                 \\ \hline
         Exceptions            & \textit{None}                                                                                                                               \\ \hline
-        Notes                 & Only one student per team receive the GitHub repository link via mail, moreover, the correct functioning of the API is assumed              \\ \hline
+        Notes                 & Only one student per team receives the GitHub repository link via mail, moreover, the correct functioning of the API is assumed              \\ \hline
     \end{tabular}
 \end{center}
 
@@ -659,9 +659,33 @@ It is imperative to note that in the event of any anomalies related to these sce
 \end{figure}
 \begin{figure}[H]
     \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Log_In - UC2.png}
+    \caption{Log In Use Case}
+    \label{fig:uc2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Create_Tournament - UC3.png}
+    \caption{Create a Tournament Use Case}
+    \label{fig:uc3}
+\end{figure}
+\begin{figure}[H]
+    \centering
     \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC4- SequenceDiagram.png}
     \caption{Battle creation Use Case}
     \label{fig:uc4}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Share_Permission - UC5.png}
+    \caption{Share permission Use Case}
+    \label{fig:uc5}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Join_Tournament - UC6.png}
+    \caption{Join a tournament Use Case}
+    \label{fig:uc6}
 \end{figure}
 \begin{figure}[H]
     \centering
@@ -671,26 +695,74 @@ It is imperative to note that in the event of any anomalies related to these sce
 \end{figure}
 \begin{figure}[H]
     \centering
+    %\includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/...}
+    \caption{\color{red} Join team Use Case}
+    \label{fig:uc8}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Manual_Evaluation - UC9.png}
+    \caption{Manual evaluation Use Case}
+    \label{fig:uc9}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Create_New_Badge - UC10.png}
+    \caption{Create new badge Use Case}
+    \label{fig:uc10}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Close_Tournament - UC11.png}
+    \caption{Close tournament Use Case}
+    \label{fig:uc11}
+\end{figure}
+\begin{figure}[H]
+    \centering
     \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC12-SequenceDiagram.png}
-    \caption{Visualizing battle ranking Use Case}
+    \caption{View battle rank Use Case}
     \label{fig:uc12}
 \end{figure}
 \begin{figure}[H]
     \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/View_Tournament_Rank - UC13.png}
+    \caption{View tournament rank Use Case}
+    \label{fig:uc13}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/View_STU's_Profile - UC14.png}
+    \caption{View STU's profile Use Case}
+    \label{fig:uc14}
+\end{figure}
+\begin{figure}[H]
+    \centering
     \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC15.1-SequenceDiagram.png}
-    \caption{Visualizing tournaments Use Case}
+    \caption{View tournaments Use Case}
     \label{fig:uc15.1}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC15.2-SequenceDiagram.png}
-    \caption{Visualizing tournaments Use Case}
+    \caption{View tournaments Use Case}
     \label{fig:uc15.2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/View_Battles_in_Tournament - UC16.png}
+    \caption{View battles in tournament Use Case}
+    \label{fig:uc16}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/sequence_diagrams/ClassDiagram-UC18-SequenceDiagram.png}
     \caption{Push commit and score updating Use Case}
+    \label{fig:uc17}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Repository_Creation - UC18.png}
+    \caption{Repository creation Use Case}
     \label{fig:uc18}
 \end{figure}
 
@@ -793,23 +865,22 @@ It is imperative to note that in the event of any anomalies related to these sce
         \textbf{Use case} & \textbf{Functional requirements} \\ \hline
         UC1               & R1, R17                          \\ \hline
         UC2               & R2, R18                          \\ \hline
-        UC3               &                                  \\ \hline
+        UC3               & R3, R13                          \\ \hline
         UC4               & R5                               \\ \hline
         UC5               & R4                               \\ \hline
-        UC6               &                                  \\ \hline
+        UC6               & R21                              \\ \hline
         UC7               & R19, R20                         \\ \hline
-        UC8               &                                  \\ \hline
-        UC9               & R6, R7                           \\ \hline
-        UC10              &                                  \\ \hline
-        UC11              & R12                              \\ \hline
+        UC8               & R20                              \\ \hline
+        UC9               & R6, R7, R26                      \\ \hline
+        UC10              & R13, R14, R15                    \\ \hline
+        UC11              & R12, R31                         \\ \hline
         UC12              & R11, R27                         \\ \hline
         UC13              & R8, R9, R10, R28, R29, R30       \\ \hline
-        UC14              & R10, R30                         \\ \hline
-        UC15              &                                  \\ \hline
+        UC14              & R16, R32                         \\ \hline
+        UC15              & R10, R30                         \\ \hline
         UC16              & R11, R27                         \\ \hline
-        UC17              &                                  \\ \hline
-        UC18              & R7, R22, R25                     \\ \hline
-        UC19              & R22, R24                         \\ \hline
+        UC17              & R7, R22, R25                     \\ \hline
+        UC18              & R22, R23, R24                    \\ \hline
     \end{longtable}
 \end{center}
 
