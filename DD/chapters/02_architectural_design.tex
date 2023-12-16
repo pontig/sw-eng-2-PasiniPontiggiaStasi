@@ -211,220 +211,261 @@ In this case, the GitHub API notify the system which through the related compone
 The following section describes one by one the endpoints of the APIs offered by the system.\\
 {\color{red} Qui vi lascio tutte le api con le relative informazioni che mi sevono, poi i path per raggiungerle gestiteveli voi come vi è più comodo e fatemi sapere}
 
-\section*{Common APIs}
-
-\subsection{Search for a STU}
-users.js\\
+\section*{GET endpoints - General User}
+\subsection{Search for a student}
 This endpoint allows the anyone who writes in the searchbox to search for a STU by name, surname or email.\\
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/student/:query \\
+\textbf{URL Parameters} : 
+    \begin{itemize}
+        \item {\ttfamily{query}} : the string that the user has written in the searchbox\\
+    \end{itemize}
+\textbf{Response} : 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+            [
+                {
+                    "id": Number,
+                    "name": String,
+                    "surname": String,
+                    "url": String
+                },
+                ...
+            ]
+            \end{lstlisting}
+        \item {\ttfamily{400}} : error String("The searchbox is empty, at least 1 character is required")
+        \item {\ttfamily{401}} : error String("Unauthorized")
+    \end{itemize}
 
-Method: \textbf{GET}\\
-URL Parameters:
-\begin{itemize}
-    \item {\ttfamily{query}}: the string that the user has written in the searchbox
-\end{itemize}
-Response: JSON array
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-[
-    {
-        "id": Number,
-        "name": String,
-        "surname": String
-    },
-    ...
-]
-\end{lstlisting}
+\subsection{Get all tournaments}
+This endpoint allows the EDU to get the list of all the tournaments on the CKB platform, it will be accessed whenever the EDU clicks on the "Show all tournaments" button on the dashboard.\\
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournaments \\
+\textbf{URL Parameters}: None \\
+\textbf{Response}: 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+            [
+                {
+                    "id": Number,
+                    //name of the tournament
+                    "name": String,
+                    // first name of the tournament creator
+                    "first_name": String, 
+                    // last name of the tournament creator
+                    "last_name": String,
+                    // if the tournament is open (true) or closed (false)
+                    "active": Boolean,
+                    "url" : String
+                },
+                ...
+            ]
+        \end{lstlisting}
+        \item {\ttfamily{401}}: error String("unauthorized)
+    \end{itemize}
 
-\section*{EDU WebApp}
+
+\section*{GET endpoints - EDU}
 
 \subsection{Get owned tournaments}
-ownedTournaments.js\\
 This endpoint allows the EDU to get the list of the tournaments that it owns, it will be accessed every time the EDU opens the dashboard.\\
 
-Method: \textbf{GET}\\
-URL Parameters:
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournaments/:parameters \\
+\textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{id}}: the id of the EDU that is requesting the list of the tournaments
 \end{itemize}
-Response: JSON array
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-[
-    {
-        "id": Number,
-        "name": String,
-        // first name of the tournament creator
-        "first_name": String, 
-        // last name of the tournament creator
-        "last_name": String,
-        // if the tournament is open (true) or closed (false)
-        "active": Boolean,
-    },
-    ...
-]
-\end{lstlisting}
-
-\subsection{Get all tournaments}
-allTournaments.js\\
-This endpoint allows the EDU to get the list of all the tournaments on the CKB platform, it will be accessed whenever the EDU clicks on the "Show all tournaments" button on the dashboard.\\
-
-Method: \textbf{GET}\\
-URL Parameters: none\\
-Response: JSON array (same as the previous endpoint)
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-[
-    {
-        "id": Number,
-        "name": String,
-        // first name of the tournament creator
-        "first_name": String, 
-        // last name of the tournament creator
-        "last_name": String,
-        // if the tournament is open (true) or closed (false)
-        "active": Boolean,
-    },
-    ...
-]
-\end{lstlisting}
+\textbf{Response}: 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+            [
+                {
+                    "id": Number,
+                    //name of the tournament
+                    "name": String,
+                    // first name of the tournament creator
+                    "first_name": String, 
+                    // last name of the tournament creator
+                    "last_name": String,
+                    // if the tournament is open (true) or closed (false)
+                    "active": Boolean,
+                    "url" : String
+                },
+                ...
+            ]
+            \end{lstlisting}
+        \item {\ttfamily{401}} : error String("Unauthorized")
+    \end{itemize}
 
 \subsection{Get tournament details}
-tournamentInfo.js\\
 This endpoint allows the EDU to get the details of a tournament, it will be accessed when an EDU selects a tournament from the list of the tournaments in the dashboard.\\
-
-Method: \textbf{GET}\\
-URL Parameters:
-\begin{itemize}
-    \item {\ttfamily{id}}: the id of the tournament that the EDU wants to get the details of
-    \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the tournament
-\end{itemize}
-Response: JSON array of one element
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-[
-    {
-        "id": Number,
-        "name": String,
-        "language": String,
-        "participants": Number,
-        "phase": Number,
-        "remaining": String(Date),
-        "battles": [
-            {
-                "id": Number,
-                "name": String,
-                "language": String,
-                "participants": Number,
-                "phase": Number[1 - 4],
-                // Time remaining in the current phase
-                "remaining": String(Date)
-            },
-            ...
-        ],
-        "ranking": [
-            {
-                "id": Number,
-                "name": String,
-                "points": Number
-            },
-            ...
-        ]
-    }
-]
-
-/*
-    phases of the battles:
-    1 - Registration
-    2 - Code Submission
-    3 - Manual evaluation
-    4 - Finished, closed
-*/
-\end{lstlisting}
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournaments/:parameters \\
+\textbf{URL Parameters}: 
+    \begin{itemize}
+        \item {\ttfamily{id}} : id of the tournament
+        \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the tournament 
+    \end{itemize}
+\textbf{Response}: 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+            [
+                {
+                    "id": Number,
+                    "name": String,
+                    "language": String,
+                    "participants": Number,
+                    "phase": Number,
+                    "remaining": String(Date),
+                    "battles": [
+                        {
+                            "id": Number,
+                            "name": String,
+                            "language": String,
+                            "participants": Number,
+                            "phase": Number[1 - 4],
+                            // Time remaining in the current phase
+                            "remaining": String(Date)
+                        },
+                        ...
+                    ],
+                    "ranking": [
+                        {
+                            "id": Number,
+                            "name": String,
+                            "points": Number
+                        },
+                        ...
+                    ],
+                    "url" : String
+                }
+            ]
+            
+            /*
+                phases of the battles:
+                1 - Registration
+                2 - Code Submission
+                3 - Manual evaluation
+                4 - Finished, closed
+            */
+            \end{lstlisting}
+        \item {\ttfamily{401}} : error String("Unauthorized")
+    \end{itemize}
 
 \subsection{Get battle details}
-battleInfo.js\\
 This endpoint allows the EDU to get the details of a battle, it will be accessed when an EDU selects a battle from the list of the battles in a tournament view.\\
 
-Method: \textbf{GET}\\
-URL Parameters:
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/:id/battles/:parameters \\
+\textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{id}}: the id of the battle that the EDU wants to get the details of
     \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the battle
 \end{itemize}
-Response: JSON array of one element
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-[
-    {
-        "id": Number,
-        "title": String,
-        "description": String,
-        "language": String,
-        "opening": String(Date),
-        "registration": String(Date),
-        "closing": String(Date),
-        "min_group_size": Number,
-        "max_group_size": Number,
-        "link": String,
-        "phase": Number[1 - 4],
-        "tournament_name": String,
-        "tournament_id": Number,
-        // Could be reduntant with phase, but it's easier to check
-        "manual": Boolean,
-        "ranking": [
+\textbf{Response}: 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+            [
+                {
+                    "id": Number,
+                    "title": String,
+                    "description": String,
+                    "language": String,
+                    "opening": String(Date),
+                    "registration": String(Date),
+                    "closing": String(Date),
+                    "min_group_size": Number,
+                    "max_group_size": Number,
+                    "link": String,
+                    "phase": Number[1 - 4],
+                    "tournament_name": String,
+                    "tournament_id": Number,
+                    // Could be reduntant with phase, but it's easier to check
+                    "manual": Boolean,
+                    "ranking": [
+                        {
+                            "id": Number,
+                            "name": String,
+                            "score": Number
+                        },
+                        ...
+                    ],
+                    "url" : String
+                }
+            ]
+            \end{lstlisting}
+        \item {\ttfamily{401}} : error String("Unauthorized")    
+    \end{itemize}
+
+\subsection{Get the list of codes to evaluate}
+This endpoint allows the EDU to get the list of the codes that need to be evaluated, it will be accessed when an EDU clicks on the "Manual evaluation" button in the battle view, if it is in the manual evaluation phase.\\
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/:tournament\_id/battles/:battle\_id/:manualEvaluation=true\&phase=3 \\
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{tournament\_id}} : the id of the tournament of the correlated battle 
+    \item {\ttfamily{battle\_id}} : the id of the battle that the EDU wants to get the list of the codes to evaluate of
+    \item {\ttfamily{manualEvaluation}} : it is a parameter that represent the boolean variable "manual" of the battle
+    \item {\ttfamily{phase}} : it is a parameter that represents the phase in which a specific battle is. In this case, the battle must be in phase 3, which corresponds to the manual evalation 
+\end{itemize}
+\textbf{Response}: 
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+    \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+        [
             {
                 "id": Number,
-                "name": String,
-                "score": Number
+                "team": String,
+                "score"?: Number
             },
             ...
         ]
-
-    }
-]
-\end{lstlisting}
-
-\subsection{Get the list of codes to evaluate}
-mannualEval.js\\
-This endpoint allows the EDU to get the list of the codes that need to be evaluated, it will be accessed when an EDU clicks on the "Manual evaluation" button in the battle view, if it is in the manual evaluation phase.\\
-
-Method: \textbf{GET}\\
-URL Parameters:
-\begin{itemize}
-    \item {\ttfamily{id}}: the id of the battle that the EDU wants to get the list of the codes to evaluate of
+        \end{lstlisting}
+    \item {\ttfamily{401}} : String("unauthorized")
 \end{itemize}
-Response: JSON array
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-[
-    {
-        "id": Number,
-        "team": String,
-        "score"?: Number
-    },
-    ...
-]
-\end{lstlisting}
 
 \subsection{Evaluate code}
 code.js\\
 This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU clicks on the "Evaluate" button from the table of the codes to evaluate.\\
 
-Method: \textbf{GET}\\
-URL Parameters:
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/:tournament\_id/battles/:battle\_id/:team\_id     \\
+\textbf{URL Parameters}:
 \begin{itemize}
-    \item {\ttfamily{group\_id}}: the id of the group that the EDU wants to evaluate
+    \item {\ttfamily{tournament\_id}} : the id of the tournament of the correlated battle 
+    \item {\ttfamily{team\_id}}: the id of the group that the EDU wants to evaluate
     \item {\ttfamily{battle\_id}}: the id of the battle that the EDU wants to evaluate
 \end{itemize}
-Response: JSON object
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
-{
-    "group_id": Number,
-    "battle_id": Number,
-    "language": String,
-    "code": String,
-    // Name of the group
-    "name": String,
-    // Score of the group, null if not evaluated yet
-    "score"?: Number,
-    // Code of the group
-    "code": String,
-}
-\end{lstlisting}
+\textbf{Response}: 
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+    \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+    {
+        "group_id": Number,
+        "battle_id": Number,
+        "language": String,
+        // Name of the group
+        "name": String,
+        // Score of the group, null if not evaluated yet
+        "score"?: Number,
+        // Code of the group. The url links to the file
+        "code": url,
+    }
+    \end{lstlisting} 
+    \item {\ttfamily{401}} : error String("unauthorized")
+\end{itemize}
+
+
+
+\section*{POST endpoints}
+
+
 
 
 
