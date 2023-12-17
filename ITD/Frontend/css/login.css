@@ -1,0 +1,53 @@
+body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+form {
+  position: fixed;
+  width: 30vw;
+  min-height: 80vh;
+  left: 33vw;
+  padding: 2vw;
+  background-color: #FCE9F5;
+  top: 5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border-radius: 20px;
+  box-shadow: 0px 4px 50px 5px rgba(23, 4, 47, 0.49);
+  align-items: center;
+}
+form h5 {
+  font-size: 1.5rem;
+  margin: 1rem;
+}
+form h5 span {
+  color: #6614D1;
+}
+form input {
+  box-shadow: 0px 4px 4px 0 rgba(23, 4, 47, 0.49);
+}
+form img {
+  width: 50%;
+}
+form a {
+  color: #888;
+}
+form label[for=terms] {
+  font-size: 0.6rem;
+}
+form div img {
+  width: 15%;
+  float: left;
+  margin: 0 1rem;
+}
+form div h5 {
+  font-size: 1rem;
+}
+
+#register {
+  display: none;
+  opacity: 0;
+}/*# sourceMappingURL=login.css.map */

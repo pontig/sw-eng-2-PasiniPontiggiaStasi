@@ -1,0 +1,82 @@
+.hidden {
+  display: none;
+}
+
+.expandable {
+  background-color: rgba(204, 32, 142, 0.32);
+  border-radius: 20px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.expandable span {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 1rem;
+}
+
+.grade1 {
+  color: white;
+  font-size: 1em;
+}
+
+.grade2 {
+  color: yellow;
+  font-size: 1.2em;
+}
+
+.grade3 {
+  color: orange;
+  font-size: 1.4em;
+}
+
+.grade4 {
+  color: green;
+  font-size: 1.6em;
+}
+
+.grade5 {
+  color: blue;
+  font-size: 1.8em;
+}
+
+.grade6 {
+  color: brown;
+  font-size: 2em;
+}
+
+.grade7 {
+  color: black;
+  font-size: 2.2em;
+}
+
+.badge {
+  text-shadow: 0 0 3px black;
+}
+
+#content.profile > div {
+  justify-content: flex-start;
+}
+
+#content.profile {
+  grid-template-columns: 2fr 3fr !important;
+}
+#content.profile #prof1 {
+  justify-content: flex-start;
+}
+#content.profile > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+}
+#content.profile > div img {
+  width: 50%;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  align-self: center;
+}
+#content.profile > div ul li {
+  list-style: none;
+  margin-bottom: 0.5rem;
+}/*# sourceMappingURL=profile.css.map */
