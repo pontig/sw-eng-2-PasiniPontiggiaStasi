@@ -53,7 +53,6 @@ It allows:
 \begin{itemize}
     \item the creation of new badges;
     \item the assignment of badges to the STUs;
-    \item the visualization of the badges assigned to a user (?)
 \end{itemize}
 {\color{red}Qui devo interfacciare anche con battle e user?}
 It is interfaced with the auth manager (since the creation of a badge is admissible only for the EDUs) and with the query manager (since it needs to access the database to store the badges).\\
@@ -68,7 +67,8 @@ It allows:
     \item the visualization of the tournaments;
     \item the excange of admin permission between EDUs;
     \item the subscription of the STUs to the tournaments;
-    \item the visualization of the scores of the EDUs in the tournaments, and so of the ranking
+    \item the visualization of the scores of the STUs in the tournaments, and so of the ranking
+    \item the visualization of the battles within a tournament
 \end{itemize}
 It is interfaced with the auth manager (to allow and perform different actions depending on the level of the user that made the request), with the query manager (since it needs to access the database) and the notification manager (since it needs to notify the users of the start and the end of a tournament).\\
 It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
@@ -467,8 +467,13 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
 
 
 
-
-
+\section{Component interfaces}
+In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/diagrams/ComponentInterfaces.png}
+    \caption{Component interfaces diagram}
+\end{figure}
 \section{Other design decisions}
 \subsection{Web Application}
 As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers, so there is no need to develop a mobile application, which would require a significant amount of additional work.\\
