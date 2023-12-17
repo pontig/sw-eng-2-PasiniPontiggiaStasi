@@ -248,8 +248,16 @@ This endpoint allows the anyone who writes in the searchbox to search for a STU 
 
 \subsection*{Inspect a STU's profile}
 This endpoint allows the anyone who clicks on a STU's name in the search results to inspect its profile.\\ % or click on a STU's name in any point of the system
-
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/student/id/profile \\
+\textbf{URL Parameters} :
+    \begin{itemize}
+        \item {\ttfamily{id}} : the id of the student the user is looking for
+    \end{itemize}
+\textbf{Response} : 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 {
     "name": String,
     "surname": String,  
@@ -279,7 +287,10 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
         ...
     ]
 }
-\end{lstlisting}
+        \end{lstlisting}
+        \item {\ttfamily{401}} : error String("unauthorized")
+    \end{itemize}
+
 
 
 \section*{GET endpoints - EDU}
@@ -498,7 +509,17 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
 \subsection*{Get subscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is subscribed to, it will be accessed every time the STU opens the dashboard.\\
 
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/:subscribed=email     \\
+\textbf{URL Parameters}:
+    \begin{itemize}
+        \item {\ttfamily{email}} : the email of the user actually logged into the platform
+    \end{itemize}
+
+\textbf{Response}:
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object 
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -512,12 +533,22 @@ This endpoint allows the STU to get the list of the tournaments that it is subsc
     },
     ...
 ]
-    \end{lstlisting}
-
+            \end{lstlisting}
+        \item {\ttfamily{401}} : error String("unauthorized") 
+    \end{itemize}
 \subsection*{Get unsubscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is not subscribed to, it will be accessed every time the STU opens the dashboard.\\
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/:subscribed!=email     \\
+\textbf{URL Parameters}:
+    \begin{itemize}
+        \item {\ttfamily{email}} : the email of the user actually logged into the platform
+    \end{itemize}
 
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Response}:
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -526,13 +557,23 @@ This endpoint allows the STU to get the list of the tournaments that it is not s
     },
     ...
 ]
-
-\end{lstlisting}
+        \end{lstlisting}
+        \item {\ttfamily{401}} : error String("unauthorized") 
+        \end{itemize}
 
 \subsection*{Get tournament details}
 This endpoint allows the STU to get the details of a tournament, it will be accessed when a STU selects a tournament from the list of the tournaments in the dashboard.\\
-
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/STU=true\&id=tournament\_id\\
+\textbf{URL Parameters}:
+        \begin{itemize}
+            \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
+            \item {\ttfamily{tournament\_id}} : this is the id of the tournament the user is looking for
+        \end{itemize}
+\textbf{Response}:
+        \begin{itemize}
+            \item {\ttfamily{200}} : JSON object
+            \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -563,12 +604,24 @@ This endpoint allows the STU to get the details of a tournament, it will be acce
         ]
     }
 ]
-\end{lstlisting}
+            \end{lstlisting}
+            \item {\ttfamily{401}} : error String("unauthorized")
+        \end{itemize}
+
 
 \subsection*{Get battle details}
 This endpoint allows the STU to get the details of a battle, it will be accessed when a STU selects a battle from the list of the battles in a tournament view.\\
-
-\begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Method} : GET \\
+\textbf{EndPoint} : api/search/tournament/STU=true\&id=battle\_id\\
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
+    \item {\ttfamily{battle\_id}} : this is the id of the battle the user is looking for
+\end{itemize}
+\textbf{Response} : 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -594,7 +647,9 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         ]
     }
 ]
-\end{lstlisting}
+        \end{lstlisting} 
+        \item {\ttfamily{401}} : error String("unauthorized")
+    \end{itemize}
 
 \section{Component interfaces}
 In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users. 
