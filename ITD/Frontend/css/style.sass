@@ -1,0 +1,438 @@
+$primary-color: #6614D1
+$secondary-color: #CC208E
+$white: #FCE9F5
+$black: #17042F
+$gray: #D9D9D9
+
+$gold: #FFD700
+$silver: #888
+$bronze: #CD7F32
+
+@font-face
+    font-family: 'Roboto Mono'
+    src: url('RobotoMono.ttf') format('truetype')
+
+:root
+    --primary-color: $primary-color
+    --secondary-color: $secondary-color
+    --white: $white
+    --gray: $gray
+    --primary-background: rgba($primary-color, 0.32)
+    --secondary-background: rgba($secondary-color, 0.32)
+
+*
+    transition: .5s ease
+
+html, body
+    margin: 0
+    padding: 0
+    font-family: 'Roboto Mono', sans-serif
+    // min-width: 100%
+    // min-height: 100%
+
+html
+    background: linear-gradient(180deg, $primary-color 0%, $secondary-color 100%)
+    background-repeat: no-repeat
+    background-attachment: fixed
+
+body
+    display: grid
+    grid-template-columns: 1fr 3fr
+    column-gap: 1rem
+
+a
+    text-decoration: none
+    color: inherit
+
+    &:hover
+        text-decoration: underline
+        cursor: pointer
+
+input[type="text"], input[type="date"], input[type="number"], input[type="password"], input[type="email"], select
+    height: 3rem
+    width: 70%
+    border-radius: 15px
+    background-color: $gray
+    border: none
+    margin: 0 auto
+    padding: 0 1rem
+    color: $black
+    font-family: 'Roboto Mono', sans-serif
+
+button, input[type="submit"]
+    border-radius: 15px
+    background-color: $secondary-color
+    border: none
+    box-shadow: 0px 4px 4px 0 rgba($black, 0.49)
+    color: $white
+    padding: .5rem 2rem
+    width: 200px
+    height: 50px
+    font-size: 1rem
+    font-family: 'Roboto Mono', sans-serif
+    margin: 10px auto
+
+button:hover, input[type="submit"]:hover
+    cursor: pointer
+
+#importante
+    background-color: $primary-color
+    color: $white
+    width: 30%
+    height: 50px
+    margin: 0 35%
+    margin-bottom: 20px
+
+#screen
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    background: rgba($black, 0.5)
+    // backdrop-filter: blur(5px)
+    display: none
+
+#formContainer
+    position: fixed
+    top: 5vh
+    width: 32vw
+    left: 34vw
+    background: $white
+    border-radius: 20px
+    box-shadow: 0px 4px 50px 5px rgba($black, 0.49)
+    display: none
+    // padding: 2rem
+
+    h4
+        background: $secondary-color
+        color: $white
+        margin: 0
+        padding: 2rem
+        text-align: center
+        border-radius: 20px 20px 0 0
+
+    form
+        // display: flex
+        flex-direction: column
+        align-items: flex-start
+        padding: 2rem
+        display: none
+
+        input[type="text"], input[type="date"], input[type="number"], select
+            box-shadow: 0px 4px 4px 0 rgba($black, 0.49)
+
+// ============================================================= 
+//  NAV
+// ============================================================= 
+
+#nav
+    background: $black
+    position: sticky
+    top: 0
+    left: 0
+    height: 100vh
+    border-radius: 0 40px 40px 0
+    display: grid
+    grid-template-rows: 1fr 4fr 1fr
+    // row-gap: 2rem
+    color: $white
+
+    #profile
+        display: grid
+        grid-template-columns: 100px 1fr
+        grid-template-rows: 1fr 1fr
+        align-items: center
+        padding: 4rem
+        text-align: center
+
+        img
+            width: 70px
+            border-radius: 50%
+            margin-bottom: 1rem
+            grid-row: 1 / 3
+
+    #noticed
+        margin-left: 4rem
+
+        h5
+            font-weight: bold
+            font-size: 1.2rem
+            margin-bottom: 1rem
+
+        li
+            list-style: none
+            margin-bottom: .5rem
+
+        ul
+            padding-left: 0
+
+    #profileName
+        font-size: 1.5rem
+        font-weight: 700
+
+// =============================================================
+//  Results
+// =============================================================
+
+#queryResult
+    position: fixed
+    display: none
+    bottom: 5vh
+    width: 50vw
+    // right: 15vw
+    background: $white
+    border-radius: 20px
+    box-shadow: 0px 4px 50px 5px rgba($black, 0.49)
+    padding: 2rem
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    flex-wrap: wrap
+    max-height: 80vh
+    overflow-y: overlay
+
+    .liRes
+        background: $secondary-color
+        color: $white
+        padding: .5rem 1rem
+        border-radius: 5px
+        margin: .5rem
+        font-size: 1.2rem
+        cursor: pointer
+
+// =============================================================
+//  ARTICLE
+// =============================================================
+
+.more
+    color: $silver
+    font-style: italic
+
+    &:hover
+        cursor: pointer
+        text-decoration: underline
+
+#article
+    background: $white
+    padding: 2rem
+    width: 90%
+    margin: 3vh auto
+    border-radius: 40px
+    box-shadow: 0px 4px 50px 5px rgba($black, 0.49)
+
+    #path
+        font-size: .8rem
+        margin-left: 2rem
+
+    h1
+        font-size: 2.5rem
+        color: $primary-color
+        text-align: center
+        font-weight: bolder
+
+    #content
+        display: grid
+        grid-template-columns: 1fr 1fr
+        column-gap: 5rem
+
+        h2
+            font-size: 1.75rem
+            font-weight: bold
+            color: $secondary-color
+            margin-bottom: 1rem
+            font-weight: bolder
+            text-align: center
+
+        // Ranking
+        ol
+            margin: 10px 30px
+
+            li
+                margin-bottom: 1rem
+                font-size: 1rem
+
+            li:first-child
+                color: $gold
+                text-shadow: 0px 1px 1px $black, 0px -1px 1px $black, 1px 0px 1px $black, -1px 0px 1px $black
+                font-weight: bold
+
+            li:nth-child(2)
+                color: $silver
+                font-weight: bold
+
+            li:nth-child(3)
+                color: $bronze
+                font-weight: bold
+
+        // Explore torunaments
+        // Pushbutton
+        #pushbutton > div, #list > div, #share, #xplore
+            display: flex
+            align-items: center
+            margin-top: 2rem
+            flex-direction: column
+
+        #list > div
+            align-items: flex-start
+
+        #xplore
+            table
+                margin-top: 3rem
+                border-collapse: collapse
+                border: 0
+                width: 80%
+                text-align: left
+
+                td, th
+                    border: 0
+                    padding: 0.5rem
+
+        // List of battles or torunaments
+        #list
+            .selectable
+                width: 60%
+                margin: 10px auto
+                border-radius: 20px
+                box-shadow: 0px 4px 4px 0px rgba($black, 0.49)
+                padding: .5rem 3rem
+
+                p
+                    margin: .5rem
+
+                h3
+                    margin: .5rem
+                    font-weight: bold
+
+                &:hover
+                    cursor: pointer
+                    box-shadow: 0px 4px 4px 0px rgba($black, 0.49), 0px 0px 0px 2px $primary-color
+
+            .battle
+                background: rgba($secondary-color, 0.32)
+
+                h3
+                    color: $secondary-color
+
+            .tournament
+                background: rgba($primary-color, 0.32)
+
+                h3
+                    color: $primary-color
+
+            .inactive
+                background: rgba($silver, 0.32)
+
+                h3
+                    color: $silver
+
+            battleID
+                    display: none
+
+        // Manual evaluation
+        #toBeReviewed, #codeToReview
+            grid-column: 1 / 3
+
+            table
+                margin: 0 auto
+                border-collapse: collapse
+                border: 0
+                width: 80%
+                border-bottom: 1px solid $secondary-color
+
+                td
+                    border-left: 1px solid $secondary-color
+                    border-right: 1px solid $secondary-color
+
+                th, td
+                    padding: 0.5rem
+
+                th, td:nth-child(1), td:nth-child(3)
+                    text-align: center
+
+                th
+                    font-weight: bold
+                    font-size: 1.2rem
+                    color: $white
+                    background: $secondary-color
+
+                    &:first-child
+                        border-radius: 20px 0 0 0
+
+                    &:last-child
+                        border-radius: 0 20px 0 0
+
+                tr:nth-child(odd)
+                    background-color: $white
+
+                tr:nth-child(even)
+                    background-color: rgba($secondary-color , 0.32)
+
+@keyframes click-wave 
+    0% 
+        height: 40px
+        width: 40px
+        opacity: 0.35
+        position: relative
+    100% 
+        height: 200px
+        width: 200px
+        margin-left: -80px
+        margin-top: -80px
+        opacity: 0
+
+input[type=radio], input[type=checkbox]
+    -webkit-appearance: none
+    -moz-appearance: none
+    -ms-appearance: none
+    -o-appearance: none
+    appearance: none
+    position: relative
+    //  top: 13.33333px
+    // right: 0
+    // bottom: 0
+    // left: 0 
+    height: 40px
+    width: 40px
+    transition: all 0.15s ease-out 0s
+    background: $gray
+    border: none
+    color: $white
+    cursor: pointer
+    display: inline-block
+    margin-right: 0.5rem
+    outline: none
+    position: relative
+    z-index: 1000
+    border-radius: 6px
+    box-shadow: 0px 4px 4px 0px rgba($black, 0.49)
+
+input[type=radio]:hover, input[type=checkbox]:hover
+    background: $gray
+
+input[type=radio]:checked, input[type=checkbox]:checked
+    background: $secondary-color
+
+input[type=radio]:checked::before, input[type=checkbox]:checked::before
+    height: 40px
+    width: 40px
+    position: absolute
+    content: '✔'
+    display: inline-block
+    font-size: 26.66667px
+    text-align: center
+    line-height: 40px
+
+input[type=radio]:checked::after, input[type=checkbox]:checked::after
+    -webkit-animation: click-wave 0.65s
+    -moz-animation: click-wave 0.65s
+    animation: click-wave 0.65s
+    background: $secondary-color
+    content: ''
+    display: block
+    position: relative
+    z-index: 100
+
+input[type=checkbox]+label 
+    position: relative
+    bottom: 16px
