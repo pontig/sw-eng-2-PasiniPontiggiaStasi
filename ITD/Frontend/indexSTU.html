@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="icons/logoCKB.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+    <title>CKB: Dashboard</title>
+    <script>var permissions = "STU"</script>
+</head>
+
+<body>
+    <div id="nav">
+        <div id="profile">
+            <img src="css/quadrifoglio.jpg" alt="quattroFoglie" />
+            <div id="profileName">Gladstone Ganer</div>
+            <a href>Logout</a>
+        </div>
+        <div id="noticed">
+            <h5>Recent Activities</h5>
+            <ul>
+                <li><a href>Pixel Perfection Challenge</a></li>
+                <li><a href>sprint_to_success</a></li>
+                <li><a href>Whitespace war</a></li>
+                <li><a href>Encoding_expedition</a></li>
+            </ul>
+        </div>
+        <input type="text" name="findSTU" id="findSTUSearchBox" placeholder="Find a student..." />
+    </div>
+    <div id="article">
+        <p id="path">Path</p>
+        <h1 id="title">Dashboard</h1>
+        <button id="importante">qui ci va la cosa importante</button>
+        <div id="content" class="profile">
+
+            <!-- STU's Profile -->
+            <div id="prof1" style="display: none;">
+                <img src="css/goofy.jpg" alt="quattroFoglie" />
+                <h2>Currently active in</h2>
+                <ul>
+                </ul>
+            </div>
+            <div id="prof2" style="display: none;">
+            </div> 
+
+
+            <div id="list">
+                <h2>tournaments</h2>
+                <div></div>
+            </div>
+            <div id="description" style="display: none;"></div>
+
+            <!-- Left ^ -->
+            <!-- Right v -->
+
+            <div id="ranking" style="display: none;">
+                <h2>Top ranking</h2>
+                <ol></ol>
+
+                <div id="share" style="display: none;">
+                    <h2>Want to share this tournament with collegues?</h2>
+                    <input type="text" name="findEDU" id="findEDUSearchBox" placeholder="Search by name...">
+                </div>
+
+            </div>
+            <div id="pushbutton" >
+                <h2>Select action</h2>
+                <div>
+                    <button onclick="requestAllTournaments()">View all</button>
+                    <button>Badges</button>
+                    <button onclick="showForm('Tournament')">Create new</button>
+                </div>
+            </div>
+            <div id="xplore" style="display: none;">
+                <h2>Explore open tournaments</h2>
+                <!-- <input type="text" name="findtournament" id="findtournamentSearchBox" placeholder="Search a tournament..."> -->
+                <table></table>
+            </div>
+
+            <!-- Just one -->
+            <div id="toBeReviewed" style="display: none;">
+                <table></table>
+            </div>
+
+            <div id="codeToReview">
+                <input type="number" name="core" id="scoreEvaluated" style="width: 10%;" required>
+                <input type="hidden" name="battle_id">
+                <input type="hidden" name="group_id">
+                <button onclick="sendScore()">Evaluate</button>
+                <pre></pre>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="screen"></div>
+
+    <div id="queryResult"></div>
+
+    <div id="formContainer">
+        <h4>Title</h4>
+        <form action="" method="post" id="newTournament">
+            <input type="text" name="tournamentName" id="tournamentName" required placeholder="Tournament name"><br>
+            <input type="text" name="addBadges" id="" disabled placeholder="Add badges (WIP)"><br>
+            <input type="submit" value="Create" name="createNewTournament">
+        </form>
+        <form action="" method="post" id="newBattle">
+            <input type="text" name="battleName" required placeholder="Battle name"><br>
+            <input type="text" name="Language" id="" required placeholder="Language"><br>
+            <input type="number" name="minSize" id="" required placeholder="Minimum group size" min="1"><br>
+            <input type="number" name="maxSize" id="" required placeholder="Maximum group size" min="1"><br>
+            <label for="codeKata">Upload you code Kata:</label><br>
+            <input type="file" name="codeKata" id=""><br>
+            <label for="registrationDeadline">Registration deadline:</label>
+            <input type="date" name="registrationDeadline" id="" required><br>
+            <label for="submissionDeadline">Submission deadline:</label>
+            <input type="date" name="submissionDeadline" id="" required><br>
+            <!-- I haven't yet added controls for dates, I promise I will eventually -->
+            <div><input type="checkbox" name="manual" id="">
+            <label for="manual">Manual approval</label></div><br>
+            <input type="submit" value="Create" name="createNewBattle">
+        </form>
+    </div>
+</body>
+
+</html>

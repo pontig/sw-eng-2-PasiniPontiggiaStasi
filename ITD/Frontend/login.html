@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="icons/logoCKB.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/login.css" />
+    <!-- <script src="js/main.js"></script> -->
+    <script src="js/login.js"></script>
+    <!-- <script src="js/profile.js"></script> -->
+    <title>CKB: Login</title>
+</head>
+
+<body>
+    <form action="" method="post" id="login">
+        <img src="icons/logoCKB.png" alt="">
+        <h5>Welcome back to <span>CKB platform!</span></h5>
+        <input type="email" name="email" id="" placeholder="email">
+        <input type="password" name="password" id="" placeholder="password">
+        <input type="submit" value="Log in">
+        <a onclick="register()">Don't have an account yet? create one</a>
+    </form>
+    <form action="" method="post" id="register">
+        <div>
+            <img src="icons/logoCKB.png" alt="">
+            <h5>Create an account in <span>CKB platform!</span></h5>
+        </div>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="surname" placeholder="Surname" required>
+        <input type="email" name="email" placeholder="email" required>
+        <input type="text" name="uni" placeholder="Home university" required>
+        <select name="role" required>
+            <option value="EDU">Educator</option>
+            <option value="STU">Student</option>
+        </select>
+        <input type="password" name="password" placeholder="password" required>
+        <input type="password" name="password2" placeholder="confirm password" required>
+        <div>
+            <input type="checkbox" name="terms" id="terms" required>
+            <label for="terms">I agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a></label>
+        </div>
+        <input type="submit" value="Create new">
+        <a onclick="login()">Already have an account? Log in</a>
+    </form>
+</body>
+
+</html>
