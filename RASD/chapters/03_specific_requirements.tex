@@ -339,7 +339,7 @@ It is imperative to note that in the event of any anomalies related to these sce
         \hline
         Name                  & Join a team - when already in the battle                                                                                                                                                                                                                                                            \\ \hline
         ID                    & UC8.1 (Figure \ref{fig:uc8})                                                                                                                                                                                                                                                                        \\ \hline
-        Actors                & STU                                                                                                                                                                                                                                                                                                 \\ \hline
+        Actors                & STU and ESP                                                                                                                                                                                                                                                                                                 \\ \hline
         Entry \par conditions & STU is registered in CKB platform \textbf{and} is enrolled in a tournament \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament \textbf{and} it has already joined that battle alone     \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item User opens the e-mail and clicks on the link attached to be redirected to the system
@@ -376,7 +376,7 @@ It is imperative to note that in the event of any anomalies related to these sce
         \hline
         Name                  & Join a team - when not in the battle yet                                                                                                                                                                                                        \\ \hline
         ID                    & UC8.2 (Figure \ref{fig:uc8})                                                                                                                                                                                                                    \\ \hline
-        Actors                & STU                                                                                                                                                                                                                                             \\ \hline
+        Actors                & STU and ESP                                                                                                                                                                                                                                            \\ \hline
         Entry \par conditions & STU is registered in CKB platform \textbf{and} is enrolled in a tournament \textbf{and} has received an email notification from the system inviting it to join a team for an upcoming battle within the context of the enrolled tournament      \\ \hline
         Event \par flow       & \begin{enumerate}
                                     \item User opens the e-mail and clicks on the link attached to be redirected to the system
@@ -705,8 +705,8 @@ It is imperative to note that in the event of any anomalies related to these sce
 \end{figure}
 \begin{figure}[H]
     \centering
-    %\includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/...}
-    \caption{\color{red} Join team Use Case}
+    \includegraphics[width=1\textwidth]{images/sequence_diagrams/.png/Join_Team - UC8.png}
+    \caption{Join team Use Case}
     \label{fig:uc8}
 \end{figure}
 \begin{figure}[H]
@@ -775,6 +775,8 @@ It is imperative to note that in the event of any anomalies related to these sce
     \caption{Repository creation Use Case}
     \label{fig:uc18}
 \end{figure}
+
+\newpage
 
 \subsection{List of functional requirements}
 
@@ -865,6 +867,8 @@ It is imperative to note that in the event of any anomalies related to these sce
     \caption{STU's requirements}
 \end{longtable}
 
+\newpage
+
 \subsection{Traceability matrices}
 
 \subsubsection*{Mapping of functional requirements on use cases}
@@ -893,6 +897,8 @@ It is imperative to note that in the event of any anomalies related to these sce
         UC18              & R22, R23, R24                    \\ \hline
     \end{longtable}
 \end{center}
+
+\newpage
 
 \subsubsection*{Mapping $D \wedge R \vDash G$}
 
@@ -925,6 +931,8 @@ To guarantee a good user experience, the system must:
     \item Send email notifications quickly, so users do not even notice the delay.
 \end{itemize}
 
+\newpage
+
 \section{Design Constraints}
 
 \subsection*{Standards Compliance}
@@ -949,6 +957,8 @@ The system should also be able to handle a large number of concurrent users.
 \subsection{Security}
 Users of the system have distinct privileges according to their roles (student / educator), determined during the login process.\\
 All data and information transferred and stored within the system are secured through robust encryption methods, such as HTTPS, ensuring data privacy and security.
+
+\newpage
 
 \subsection{Maintainability}
 The source code and associated documentation must include clear comments and should be consistently maintained.
