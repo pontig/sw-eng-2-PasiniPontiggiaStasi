@@ -148,7 +148,7 @@ In this chapter the Alloy model of the CKB system is implemented by describing t
         all b: Battle| all t : Team | t in b.subscribedTeams => (#t.students >= b.minStudents and #t.students <= b.maxStudents)
     }    
     
-    /*A STU can not partecipate to the same battle with two different teams.*/
+    /*A STU can not participate to the same battle with two different teams.*/
     fact noStudentInTwoTeams{
         all b: Battle, t1 : Team, t2 : Team | no s: Student | t1 in b.subscribedTeams and t2 in b.subscribedTeams and (s in t1.students and s in t2.students) and t1 != t2
     }
@@ -163,7 +163,7 @@ In this chapter the Alloy model of the CKB system is implemented by describing t
         all t :Tournament | all b : Battle | t in Educator.closedTournaments <=> (b in t.battles and b.closed = True)
     }
     
-    /*A STU is partecipating to a battle if and only if it is in a subscribed team of that battle*/
+    /*A STU is participating to a battle if and only if it is in a subscribed team of that battle*/
     fact inBattleIfInTeam{
         all s : Student | all t: Team | t.battle in s.battles
     }
