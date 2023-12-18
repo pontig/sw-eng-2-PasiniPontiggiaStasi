@@ -619,6 +619,12 @@ async function changePage(page, id) {
                             if (i == 9) container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
                         })
 
+                    if (!data.subscribed && data.phase == 1) {
+                        document.getElementById("importante").style.display = "block"
+                        document.getElementById("importante").innerHTML = "Subscribe"
+                        document.getElementById("importante").onclick = (() => { subscribeBattle(id) })
+                    }
+
                     break
 
                 case "profile":
