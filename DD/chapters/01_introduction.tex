@@ -8,7 +8,6 @@ This document is mainly addressed to developers, testers, and project manager si
 
 \section{Scope}
 
-
 \section{Definitions, Acronyms, Abbreviations}
 \subsection{Definitions}
 \begin{table}[H]
@@ -19,7 +18,7 @@ This document is mainly addressed to developers, testers, and project manager si
                             &        &                                                                                                                        \\
         \textbf{Term}       & \vline & \textbf{Definition}                                                                                                    \\
                             &        &                                                                                                                        \\\hline \\
-        User / Actor        & \vline & A person who uses CKB platform, could be a Student or an Educator.                                                     \\                                                                                                                                                                                                                                 \\
+        User / Actor        & \vline & A person who uses CKB platform, could be a Student or an Educator.                                                     \\       
                             &        &                                                                                                                        \\\hline \\
         Educator            & \vline & Identifies a person who provides instruction or education, such as a teacher.                                          \\
                             &        &                                                                                                                        \\\hline \\
@@ -32,15 +31,15 @@ This document is mainly addressed to developers, testers, and project manager si
                             &        &                                                                                                                        \\\hline \\
         Code Kata           & \vline & Programming battles in which teams of students compete against each other.                                             \\
                             &        &                                                                                                                        \\\hline \\
-        Tier                & \vline & Programming battles in which teams of students compete against each other.                                             \\
+        Tier                & \vline & Physical components or servers that constitute a system.                                                               \\
+                            &        &                                                                                                                        \\\hline \\
+        Layer               & \vline & Logical separation of elements with associated functionality, such as presentation, business logic, and data access, 
+                                       each carrying out specific tasks within an application.                                                                \\
                             &        &                                                                                                                        \\
-        
-        
         \hline
     \end{tabular}
     \caption{Definitions}
 \end{table}
-
 
 \subsection{Acronyms}
 \begin{table}[H]
@@ -48,27 +47,45 @@ This document is mainly addressed to developers, testers, and project manager si
     \renewcommand{\arraystretch}{0.5}
     \begin{tabular}{l l p{11cm}}
         \hline
-                          &        &                                    \\
-        \textbf{Acronyms} & \vline & \textbf{Term}                      \\
-                          &        &                                    \\\hline & & \\
-        CKB               & \vline & CodeKataBattle                     \\
-                          &        &                                    \\\hline & & \\
-        EDU               & \vline & Educator                           \\
-                          &        &                                    \\\hline & & \\
-        STU               & \vline & Student                            \\
-                          &        &                                    \\\hline & & \\
-        IDE               & \vline & Integrated Development Environment \\
-                          &        &                                    \\\hline & & \\
-        ESP               & \vline & Email Service Provider             \\
-                          &        &                                    \\
-        RASD
-        API 
-                          
+                          &        &                                                        \\
+        \textbf{Acronyms} & \vline & \textbf{Term}                                          \\
+                          &        &                                                        \\\hline \\
+        CKB               & \vline & CodeKataBattle                                         \\
+                          &        &                                                        \\\hline \\
+        EDU               & \vline & Educator                                               \\
+                          &        &                                                        \\\hline \\
+        STU               & \vline & Student                                                \\
+                          &        &                                                        \\\hline \\
+        IDE               & \vline & Integrated Development Environment                     \\
+                          &        &                                                        \\\hline \\
+        ESP               & \vline & Email Service Provider                                 \\
+                          &        &                                                        \\\hline \\
+        RASD              & \vline & Requirement Analysis and Specification Document        \\
+                          &        &                                                        \\\hline \\
+        UML               & \vline & Unified Modeling Language                              \\
+                          &        &                                                        \\\hline \\
+        API               & \vline & Application Programming Interface                      \\
+                          &        &                                                        \\\hline \\
+        UI                & \vline & User Interface                                         \\
+                          &        &                                                        \\\hline \\
+        UX                & \vline & User Experience                                        \\
+                          &        &                                                        \\\hline \\
+        OS                & \vline & Operating System                                       \\
+                          &        &                                                        \\\hline \\
+        REST              & \vline & Representational State Transfer                        \\
+                          &        &                                                        \\\hline \\
+        HTTPS             & \vline & HyperText Transfer Protocol Secure                     \\
+                          &        &                                                        \\\hline \\
+        JSON              & \vline & JavaScript Object Notation                             \\
+                          &        &                                                        \\\hline \\
+        DB                & \vline & DataBase                                               \\
+                          &        &                                                        \\\hline \\
+        DBMS              & \vline & DataBase Management Systems                            \\
+                          &        &                                                        \\
         \hline
     \end{tabular}
     \caption{Acronyms}
 \end{table}
-
 
 \subsection{Abbreviations}
 \begin{table}[H]
@@ -94,6 +111,7 @@ This document is mainly addressed to developers, testers, and project manager si
 
 \section{Reference Documents}
 \begin{itemize}
+    \item CodeKataBattle RASD\footnote{\url{https://github.com/pontig/sw-eng-2-PasiniPontiggiaStasi/blob/main/RASD/RASD.pdf}}
     \item Assignment RDD A.Y. 2023-2024\footnote{\url{https://webeep.polimi.it/mod/folder/view.php?id=219353}}
     \item Course slides on WeeBeep\footnote{\url{https://webeep.polimi.it/mod/folder/view.php?id=207692}}
     \item ISO/IEC/IEEE 29148 dated 2018, \\
@@ -101,5 +119,32 @@ This document is mainly addressed to developers, testers, and project manager si
 \end{itemize}
 
 \section{Document Structure}
+The structure of this DD document follows six main sections:
+\begin{enumerate}
+    \item \textbf{Introduction:}
+          provides an overview of the problem at hand, the purpose of the project,
+          the scope of the domain, and introduces the main goals of the system as a solution.
 
-{\color{red} Questa parte qui è mooooolto simile a quella che c'è nel RASD, quindi aspettiamo di avere il RASD definitivo per fare il merge}
+    \item \textbf{Architectural Design:}
+          gives a general description of the system, going into more detail about its main functions.
+          The description is assisted with the help of UML diagrams, such as class, activity, and state diagrams.
+          The domain assumptions of the examined world are then explained along with any dependencies and constraints.
+
+    \item \textbf{User Interface Design:}
+          specifies the functional and non-functional requirements of a software system.
+          It includes use case diagrams, descriptions of each use case, and related sequence diagrams.
+          Finally, it provides a mapping of the requirements for both goals and use cases.
+
+    \item \textbf{Requirements Traceability:}
+          provides a cross-reference that connects system components to the requirements specified in the Requirements Analysis and Specification Document (RASD). 
+          This cross-reference is presented in a tabular format, which clearly shows which system components fulfill each of the functional requirements defined in the RASD.
+
+    \item \textbf{Implementation, Integration, and Test Plan:}   
+          details the strategy and sequence for deploying subsystems and components. 
+          It identifies the order in which sub-components are implemented, integrated, and tested. Additionally, it provides a comprehensive explanation of the methodologies and technologies to employ throughout the process.
+
+    \item \textbf{Effort Spent:}
+          keeps track of the time spent to complete this document.
+          The first table defines the amount of hours used by the whole team to make important decisions and to make reviews,
+          the other tables contain the individual effort spent by each team member.
+\end{enumerate}
