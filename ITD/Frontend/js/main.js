@@ -1,11 +1,10 @@
 // var permissions = "STU"
 
+// Loading the page
 window.addEventListener("load", async () => {
 
-    //getTournaments("https://pontiggiaelia.altervista.org/ckb/ownedTournaments.php?user=1")
     changePage("dashboard", 0)
-
-    document.getElementById("importante").style.display = "none"
+    document.getElementById("importantButton").style.display = "none"
 
     document.getElementById("findSTUSearchBox").addEventListener("input", async () => {
         showResult(document.getElementById("findSTUSearchBox"), document.getElementById("findEDUSearchBox"), "https://pontiggiaelia.altervista.org/ckb/users.php?query=")
@@ -19,6 +18,7 @@ window.addEventListener("load", async () => {
     })
 })
 
+// Hide the fotms in a more user friendly way: pushing the esc key
 window.addEventListener("keydown", (e) => {
     if (e.key == "Escape") {
         document.getElementById("findSTUSearchBox").value = ""
@@ -30,7 +30,8 @@ window.addEventListener("keydown", (e) => {
     }
 })
 
-
+// When clicking on the "Show all..." button in the ranking, it shows all the users
+// @param text: the button itself, to remove it after showing all the users
 function showAllRanking(text) {
     document.querySelectorAll("#ranking ol li").forEach(li => {
         li.style.display = "list-item"
@@ -38,14 +39,19 @@ function showAllRanking(text) {
     text.parentNode.removeChild(text)
 }
 
-// When searching for a STU or a EDU
+// When searching for a STU or a EDU, it shows the result box and makes the request to the server keeping the result updated
+// @param listened: the input box that is being written in
+// @param other: the other input box, to disable it
+// @param url: the url to make the request to (STU or EDU)
 async function showResult(listened, other, url) {
     resultBox = document.getElementById("queryResult")
     if (listened.value.length == 0) {
+        // Empty box, hide the result box
         other.disabled = false
         resultBox.innerHTML = ""
         resultBox.style.display = "none"
     } else {
+        // Not empty box, show the result box and update it
         other.disabled = true
         resultBox.style.display = "flex"
         let res = await fetch(url + listened.value)
@@ -71,17 +77,18 @@ async function showResult(listened, other, url) {
             resultBox.appendChild(li)
         })
     }
+    // showScreen() // Non si può fare, perché se no non si vede la search box
 }
 
-// Makes the request to the server to get the tournaments, all or owned depending on the url
-// and then creates the divs to show them
+// Makes the request to the server to get the tournaments, all or owned depending on the url and then creates the divs to show them
+// @param url: the url to make the request to (all or owned or subscribed or unsubscribed)
 async function getTournaments(url) {
     let res = await fetch(url)
     let data = await res.json()
     let container = document.querySelector("#list > div")
     container.innerHTML = ""
     data
-        .sort((a, b) => b.active - a.active)
+        .sort((a, b) => b.active - a.active) // penso che si possa togliere, che le ordini il db
         .forEach(e => {
             let div = document.createElement("div")
             div.classList.add("selectable")
@@ -100,11 +107,13 @@ async function getTournaments(url) {
         })
 }
 
+// Gets the list of all the tournaments and shows them through the getTournaments function
 function requestAllTournaments() {
     document.querySelector("#list h2").innerHTML = "All tournaments"
     getTournaments("https://pontiggiaelia.altervista.org/ckb/allTournaments.php")
 }
 
+// Sends the score of a manual evaluation to the server, it automatically retrieves the inofs from the html
 function sendScore() {
     let res = document.getElementsByName("core")[0]
     let battle_id = document.getElementsByName("battle_id")[0].value
@@ -116,28 +125,32 @@ function sendScore() {
     }
 }
 
+// Page orchestrator, it changes the page and shows the right elements
+// @param page: the page to show
+// @param id: the id of the infos to ask to the server
 async function changePage(page, id) {
-    console.log(page, id, permissions)
+    // console.log(page, id, permissions)
     window.scrollTo(0, 0)
-    Array.from(document.querySelectorAll("#content > div, #article > button")).forEach(e => {
-        e.style.display = "none"
-    })
 
+    // Hide all the elements
+    Array.from(document.querySelectorAll("#content > div, #article > button")).forEach(e => { e.style.display = "none" })
+
+    // Eventually, remove the css refernce for the profile
     let link = document.createElement("link")
     link.rel = "stylesheet"
     link.href = "css/profile.css"
     link.type = "text/css"
-
     if (document.querySelector("link[href='css/profile.css']"))
         document.head.removeChild(document.querySelector("link[href='css/profile.css']"))
 
+    // Initialization of the path
     let apath = document.createElement("a")
     apath.onclick = (() => { changePage("dashboard", 0) })
     apath.innerHTML = "Dashboard"
+    let apatht, apathb, c, c2 // Other variables for the path
+    let res, data, container // Other variables for the page
 
-    let apatht, apathb, c, c2
 
-    let res, data, container
     switch (permissions) {
         case "EDU":
             switch (page) {
@@ -161,7 +174,7 @@ async function changePage(page, id) {
                     document.getElementById("list").style.display = "block"
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"
-                    document.getElementById("share").style.display = "block"
+                    document.getElementById("share").style.display = "flex"
 
                     res = await fetch("https://pontiggiaelia.altervista.org/ckb/tournamentInfo.php?id=" + id)
                     data = await res.json()
@@ -229,9 +242,9 @@ async function changePage(page, id) {
                         let numberActive = data.battles.filter(e => e.phase != 4).length
                         if (numberActive == 0) {
 
-                            document.getElementById("importante").style.display = "block"
-                            document.getElementById("importante").innerHTML = "Close tournament"
-                            document.getElementById("importante").onclick = (() => { closeTournament(id) }) // TODO: implementare la chiusura del torneo
+                            document.getElementById("importantButton").style.display = "block"
+                            document.getElementById("importantButton").innerHTML = "Close tournament"
+                            document.getElementById("importantButton").onclick = (() => { closeTournament(id) }) // TODO: implementare la chiusura del torneo
                         }
                     }
 
@@ -301,9 +314,9 @@ async function changePage(page, id) {
 
                     // SOLO SE VA FATTA MANUAL EVALUATION
                     if (data.phase == 3 && data.admin) {
-                        document.getElementById("importante").style.display = "block"
-                        document.getElementById("importante").innerHTML = "Manual evaluation"
-                        document.getElementById("importante").onclick = (() => { changePage("manualEvaluation", id) })
+                        document.getElementById("importantButton").style.display = "block"
+                        document.getElementById("importantButton").innerHTML = "Manual evaluation"
+                        document.getElementById("importantButton").onclick = (() => { changePage("manualEvaluation", id) })
                     }
                     break
 
@@ -430,7 +443,7 @@ async function changePage(page, id) {
                         div.appendChild(span3)
                         div.appendChild(innercontainer)
                         container.appendChild(div)
-                        
+
                     })
 
                     document.querySelectorAll(".togglable").forEach(e => {
@@ -466,6 +479,7 @@ async function changePage(page, id) {
 
                     res = await fetch("https://pontiggiaelia.altervista.org/ckb/unsubscribedTournaments.php?user=1")
                     data = await res.json()
+                    console.log(res.status)
 
                     container = document.querySelector("#xplore > table")
                     container.innerHTML = "<tr><th><b>Name</b></th><th>&#8987</th></tr>"
@@ -549,10 +563,10 @@ async function changePage(page, id) {
                         })
 
 
-                    if (data.active && !data.subscribed) {
-                        document.getElementById("importante").style.display = "block"
-                        document.getElementById("importante").innerHTML = "Subscribe"
-                        document.getElementById("importante").onclick = (() => { subscribeTournament(id) })
+                    if (data.active && !data.subscribed && data.canSubscribe) {
+                        document.getElementById("importantButton").style.display = "block"
+                        document.getElementById("importantButton").innerHTML = "Subscribe"
+                        document.getElementById("importantButton").onclick = (() => { subscribeTournament(id) })
                     }
 
                     break
@@ -603,7 +617,7 @@ async function changePage(page, id) {
 
                     document.getElementById("description").appendChild(p1)
                     document.getElementById("description").appendChild(p2)
-                    document.getElementById("description").appendChild(a)
+                    if (data.subscribed && data.phase > 1) document.getElementById("description").appendChild(a)
 
                     container = document.querySelector("#ranking > ol")
                     container.innerHTML = ""
@@ -619,10 +633,48 @@ async function changePage(page, id) {
                             if (i == 9) container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
                         })
 
-                    if (!data.subscribed && data.phase == 1) {
-                        document.getElementById("importante").style.display = "block"
-                        document.getElementById("importante").innerHTML = "Subscribe"
-                        document.getElementById("importante").onclick = (() => { subscribeBattle(id) })
+                    if (/*!data.subscribed && data.phase == 1 &&*/ data.canSubscribe) {
+                        document.getElementById("importantButton").style.display = "block"
+                        document.getElementById("importantButton").innerHTML = "Subscribe"
+                        document.getElementById("importantButton").onclick = (() => {
+                            showForm("Registration")
+                            document.getElementById("newRegistration").onsubmit = ((event) => {
+                                event.preventDefault()
+                                let res = document.getElementById("newRegistration").checkValidity()
+                                if (res) {
+                                    // TODO: fare la richiesta al server
+                                    document.getElementById("newRegistration").reset()
+                                }
+                            })
+                        })
+                    }
+
+                    if (data.canInviteOthers) {
+                        document.getElementById("importantButton").style.display = "block"
+                        document.getElementById("importantButton").innerHTML = "Invite others"
+                        document.getElementById("importantButton").onclick = (() => {
+                            showForm("Invitation")
+                            document.getElementById("newInvitation").onsubmit = ((event) => {
+                                event.preventDefault()
+                                let res = document.getElementById("newInvitation").checkValidity()
+                                if (res) {
+                                    // TODO: fare la richiesta al server
+                                    document.getElementById("newInvitation").reset()
+                                }
+                            })
+                        })
+                    }
+
+                    if (!data.minConstraintSatisfied) {
+                        let spsp = document.createElement("span")
+                        spsp.innerHTML = "⚠️"
+                        spsp.id = "warningHover"
+                        let dividiv = document.createElement("span")
+                        dividiv.id = "warning"
+                        dividiv.innerHTML = "Your team does not have enough participants, invite others, or your registration will be cancelled"
+                        spsp.appendChild(document.createElement("br"))
+                        spsp.appendChild(dividiv)
+                        document.getElementById("title").appendChild(spsp)
                     }
 
                     break
@@ -644,8 +696,12 @@ async function changePage(page, id) {
 function showForm(which) {
     document.getElementById("formContainer").style.display = "block"
     document.getElementById("new" + which).style.display = "flex"
-    let screen = document.getElementById("screen")
     document.querySelector("#formContainer h4").innerHTML = "New " + which
+    showScreen()
+}
+
+function showScreen() {
+    let screen = document.getElementById("screen")
     screen.style.display = "block"
     screen.onclick = (() => { hideForm() })
     setTimeout(() => { screen.style.backdropFilter = "blur(5px)" }, 100)

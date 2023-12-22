@@ -74,7 +74,17 @@ button:hover, input[type=submit]:hover {
   cursor: pointer;
 }
 
-#importante {
+#warning {
+  display: none;
+  font-size: 1rem;
+  color: red;
+}
+
+#warningHover:hover #warning {
+  display: inline;
+}
+
+#importantButton {
   background-color: #6614D1;
   color: #FCE9F5;
   width: 30%;
