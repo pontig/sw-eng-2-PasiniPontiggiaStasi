@@ -7,6 +7,31 @@ It also presents the implementation, integration, and testing plan.
 This document is mainly addressed to developers, testers, and project manager since it guides during the development process through an accurate vision of all parts of the software-to-be. 
 
 \section{Scope}
+As explained in the RASD, CKB is a versatile platform designed to enhance students' software development skills through coding challenges. 
+Educators can create coding battles in tournaments, where students solve programming exercises using a test-first approach. 
+The system allows educators to upload Code Kata, set parameters like group size limits and deadlines, and define scoring criteria.
+
+Teams, adhering to size constraints, participate in battles and can switch between different tournaments. 
+After the registration deadline, teams access a GitHub repository for their Code Kata, working through an automated workflow.
+
+Scoring ranges from 0 to 100, considering automated evaluations (test case pass rate, timeliness, source code quality) and optional manual evaluations by educators. 
+Scores update in real-time as students commit code. 
+Educators can perform manual evaluations before sharing the final rank.
+
+Each student receives a personal score, the sum of their battle scores within a tournament. 
+Educators can delegate battle creation and introduce gamification badges for student recognition. 
+The platform provides a comprehensive system for coding skill improvement and competition.
+
+The proposed system will take the form of a Web Application, accessible through any modern web browser. 
+It will feature two distinct views, one for EDU and another for STU, each designed to implement the specified features effectively.
+For a comprehensive understanding of the functionalities available to end-users, please consult the RASD.
+The system architecture is structured into three physically separated layers, strategically installed on different tiers to optimize performance and functionality. \\
+These layers include:
+\begin{enumerate}
+    \item \textbf{Presentation Layer:} responsible for managing the presentation logic and facilitating all interactions with end-users.
+    \item \textbf{Business Logic Layer:} tasked with overseeing the application functions provided by the system under development.
+    \item \textbf{Data Layer:} responsible for managing secure data storage and controlling access to the stored information.
+\end{enumerate} 
 
 \section{Definitions, Acronyms, Abbreviations}
 \subsection{Definitions}
@@ -18,7 +43,7 @@ This document is mainly addressed to developers, testers, and project manager si
                             &        &                                                                                                                        \\
         \textbf{Term}       & \vline & \textbf{Definition}                                                                                                    \\
                             &        &                                                                                                                        \\\hline \\
-        User / Actor        & \vline & A person who uses CKB platform, could be a Student or an Educator.                                                     \\       
+        User / Actor        & \vline & A person who uses the CKB platform, could be a Student or an Educator.                                                 \\       
                             &        &                                                                                                                        \\\hline \\
         Educator            & \vline & Identifies a person who provides instruction or education, such as a teacher.                                          \\
                             &        &                                                                                                                        \\\hline \\
@@ -35,6 +60,10 @@ This document is mainly addressed to developers, testers, and project manager si
                             &        &                                                                                                                        \\\hline \\
         Layer               & \vline & Logical separation of elements with associated functionality, such as presentation, business logic, and data access, 
                                        each carrying out specific tasks within an application.                                                                \\
+                            &        &                                                                                                                        \\\hline \\
+        Frontend            & \vline & Manages the visual appearance and interaction of the application with users, also called Presentation Layer.           \\
+                            &        &                                                                                                                        \\\hline \\
+        Backend             & \vline & Manages the logic and server operations, comprising the "Business Logic Layer" and the "Data Layer."                   \\
                             &        &                                                                                                                        \\
         \hline
     \end{tabular}
@@ -64,6 +93,8 @@ This document is mainly addressed to developers, testers, and project manager si
                           &        &                                                        \\\hline \\
         UML               & \vline & Unified Modeling Language                              \\
                           &        &                                                        \\\hline \\
+        ER                & \vline & Entity relationship                                    \\
+                          &        &                                                        \\\hline \\
         API               & \vline & Application Programming Interface                      \\
                           &        &                                                        \\\hline \\
         UI                & \vline & User Interface                                         \\
@@ -73,6 +104,8 @@ This document is mainly addressed to developers, testers, and project manager si
         OS                & \vline & Operating System                                       \\
                           &        &                                                        \\\hline \\
         REST              & \vline & Representational State Transfer                        \\
+                          &        &                                                        \\\hline \\
+        SPA               & \vline & Single Page Application                                \\  
                           &        &                                                        \\\hline \\
         HTTPS             & \vline & HyperText Transfer Protocol Secure                     \\
                           &        &                                                        \\\hline \\
@@ -118,23 +151,23 @@ This document is mainly addressed to developers, testers, and project manager si
           Systems and software engineering - Life cycle processes - Requirements engineering\footnote{\url{https://www.iso.org/obp/ui/\#iso:std:iso-iec-ieee:29148:ed-2:v1:en}}
 \end{itemize}
 
+\newpage
+
 \section{Document Structure}
 The structure of this DD document follows six main sections:
 \begin{enumerate}
     \item \textbf{Introduction:}
-          provides an overview of the problem at hand, the purpose of the project,
-          the scope of the domain, and introduces the main goals of the system as a solution.
+          provides a general overview of the system, its purpose, and its main components. 
+          It describes the design as a whole, highlighting key terms, and references to related documents, and giving an idea of the overall design.
 
     \item \textbf{Architectural Design:}
-          gives a general description of the system, going into more detail about its main functions.
-          The description is assisted with the help of UML diagrams, such as class, activity, and state diagrams.
-          The domain assumptions of the examined world are then explained along with any dependencies and constraints.
-
+          provides a high-level overview of how system responsibilities are distributed and assigned to subsystems. 
+          It identifies each high-level subsystem and the roles assigned to them. 
+          Additionally, it describes how these subsystems collaborate to achieve the desired functionality.
+          
     \item \textbf{User Interface Design:}
-          specifies the functional and non-functional requirements of a software system.
-          It includes use case diagrams, descriptions of each use case, and related sequence diagrams.
-          Finally, it provides a mapping of the requirements for both goals and use cases.
-
+          illustrates the design of the UI of the system, including UX flowcharts.
+    
     \item \textbf{Requirements Traceability:}
           provides a cross-reference that connects system components to the requirements specified in the Requirements Analysis and Specification Document (RASD). 
           This cross-reference is presented in a tabular format, which clearly shows which system components fulfill each of the functional requirements defined in the RASD.

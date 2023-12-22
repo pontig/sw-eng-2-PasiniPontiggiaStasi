@@ -1,80 +1,115 @@
 \chapter{Architectural Design}
+This section provides a top-down exploration of the system's architecture. 
+It starts with an overview of the overall architecture, accompanied by diagrams illustrating its components. 
+Subsequently, it utilizes an ER diagram to elucidate the system's data structure and a deployment view to outline the layers and tiers involved. 
+Sequence diagrams are employed to illustrate the main runtime perspectives, while the class diagram delineates component interfaces. 
+The section concludes by discussing the architectural design choices and their underlying rationales.
 
 \section{Overview}
-The CKB platform system is composed by a 3-tier architecture.\\
-Its software application architecture is organized into three logical tiers: the presentation tier, or user interface; the application tier, where data is processed; and the data tier, where the data associated with the application is stored and managed.
+The CKB platform software architecture is organized into three main logical layers, which are associated with an autonomous tier so that the system fits in a 3-tier architecture:
+\begin{itemize}
+    \item the presentation tier, defines the user interface.
+    \item the application tier, where data are processed.
+    \item the data tier, where data are stored and managed.
+\end{itemize}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/high_level_diagram.png}
+    {\color{red}
+        Client => Web Application \\ 
+        Data => DB \\   
+        Diagramma ad Alto o Basso Livello? \\
+         - Alto: aggiungerei email server, load balancer, firewall tra Client e Web server \\
+         - Basso: togliere tutti i firewall e li specifichiamo dopo nel deploy.
+    }
     \caption{High level components diagram}
 \end{figure}
 
-The service will be accessed through a web interface, employing a Single Page Application (SPA). Utilizing an SPA is ideal for this application, as it facilitates extensive interaction without necessitating frequent page reloads.\\
-The system's architecture is structured into distinct layers, with application servers interacting with a database management system and utilizing APIs for data retrieval and storage. Adhering to REST standards, the application servers are intentionally designed to be stateless, handling the login sessions for user thanks to the caching, following the best practices for web applications.\\
-The system will include more than one firewall to ensure security.\\
+The system is accessible through a web interface and is developed as SPA. 
+This web application type is ideal, as it facilitates extensive interaction without requiring frequent page reloads. 
+In addition, this type of system allows for easy expansion of the services offered without major modifications to the system itself. 
+
+The system architecture is organized into separate layers, where application servers communicate with a database management system and employ APIs for data retrieval and storage. 
+Following REST standards, the application servers are deliberately designed as stateless, managing user login sessions through caching and adhering to web application best practices. 
+
+Moreover, the system will incorporate multiple firewalls to enhance security.
 
 \section{Component view}
-The system is composed by the following components:
+{\color{red} Non parliamo da nessuna parte della funzione per formare i team, non so se da mettere singola oppure includerla in altre \\}
+
+The system is composed of the following components:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/component_diagram.png}
+    {\color{red}
+        Badges Manager non deve collegarsi a Battles Manager, ma a Tournaments Manger \\
+        AuthInit non va collegato anche a Profile Inspector? Perchè alla fine è meglio controllare sempre se l'user può eseguire le azioni ed esiste \\
+    }
     \caption{Component diagram}
 \end{figure}
 
-In order to maintain the readability of the diagram, the interfaces have been grouped with respect to their functionality; the complete set of endpoints is available later in the document.\\
+To maintain the readability of this diagram, the interfaces have been grouped according to their functionality.
+A complete set of endpoints is available later in the document.
+
+{\color{red} Non mi è chiara la storia delle proper APIs per comunicare con la WebApp di EDU o STU }
 
 \subsection{Client components}
-
-The client components are represented by only a single component, a user-friendly WebApp, that will behave differently depending on the type of the user that is using it (whether it is an EDU or a STU).\\
-The WebApp is interfaced with the server components through all the APIs offeded by the server (see later for a detailed description of the APIs).\\
-
+The client components are represented only by a single one, a user-friendly WebApp, that behaves differently depending on the type of user using it, an EDU or a STU. \\
+The only logic incorporated is the ability to perform basic checks, such as the detection of incomplete forms or wrong data format. 
+The WebApp is interfaced with the server components through all the APIs offered by the server, a detailed description is in the following sections.
 \subsection{Server components}
 
 \subsubsection*{Query manager}
-The query manager is the component that handles the queries made by the other components that need to access the database. It is responsible for the execution of the queries and for the communication with the database.\\
-It is interfaced with all the internal models of the system that need to access the database, i.e. all the other components of the system exept for the notification manager.\\
+The query manager is the component that handles the queries made by the other components that need to access the database. \\
+It is responsible for the execution of the queries and for the communication with the database. \\
+It is interfaced with all the internal models of the system that need to access the database, i.e. all the other components of the system except for the notification manager. \\
 It is interfaced with the database through the DBMS API, external to the system.
 
 \subsubsection*{Auth manager}
-The auth manager is the component that handles the authentication of the users and the authorization of the requests made by the other components that need to access the database with respect to the user that made the request.\\
-It is interfaced with all the internal models of the system that behave differently depending on the level of the user that made the request, i.e. the badges manager, the tournament manager and the battle manager.\\
+The auth manager is the component that handles the authentication of the users and the authorization of the requests made by the other components that need to access the database concerning the user who made the request.\\
+It is interfaced with all the internal models of the system that behave differently depending on the level of the user that made the request, i.e. the badges manager, the tournament manager, and the battle manager.\\
 It isn't interfaced with any external component.
 
 \subsubsection*{Notification manager}
-The notification manager is the component that handles the need of the system to notify the users of some events, such as the start of a tournament or the end of a battle.\\
-It is interfaced with all the internal models of the system that need to notify the users, i.e. the tournament manager and the battle manager.\\
+The notification manager is the component that handles the need of the system to notify the users of some events, such as the start of a tournament or the end of a battle. \\
+It is interfaced with all the internal models of the system that need to notify the users, i.e. the tournament manager and the battle manager. \\
 It is interfaced with the Email API, external to the system.
 
 \subsubsection*{Badges manager}
-The badges manager is the component that handles the gamification badges.\\
+The badges manager is the component that handles the gamification badges. \\
 It allows:
 \begin{itemize}
     \item the creation of new badges;
     \item the assignment of badges to the STUs;
+    \item {\color{red} Aggiungere badges ad un torneo, i badge sono del torneo non delle battle}
 \end{itemize}
-{\color{red}Qui devo interfacciare anche con battle e user?}
-It is interfaced with the auth manager (since the creation of a badge is admissible only for the EDUs) and with the query manager (since it needs to access the database to store the badges).\\
-It is interfaced with the EDU WebApp through the proprer, external to the system.
+{\color{red} Qui devo interfacciare anche con battle e user? Tommi: Secondo me no\\}
+It is interfaced with the auth manager since the creation of a badge is admissible only by the EDUs. \\
+It is interfaced with the query manager to access the database to store the badges. \\
+It is interfaced with the EDU WebApp through the proper APIs, external to the system.
 
 \subsubsection*{Tournaments manager}
 The tournament manager is the component that handles the management of the tournaments.\\
 It allows:
 \begin{itemize}
     \item the creation of new tournaments;
-    \item the closure of the torunaments
+    \item the closure of the tournaments;
     \item the visualization of the tournaments;
-    \item the excange of admin permission between EDUs;
+    \item the exchange of admin permission between EDUs;
     \item the subscription of the STUs to the tournaments;
-    \item the visualization of the scores of the STUs in the tournaments, and so of the ranking
-    \item the visualization of the battles within a tournament
+    \item the visualization of the STUs' score in the tournaments, and so the overall ranking;
+    \item the visualization of the battles within a tournament.
 \end{itemize}
-It is interfaced with the auth manager (to allow and perform different actions depending on the level of the user that made the request), with the query manager (since it needs to access the database) and the notification manager (since it needs to notify the users of the start and the end of a tournament).\\
+{\color{red} Si interfaccia con i badge che si possono specificare per la battaglia\\}
+It is interfaced with the auth manager to allow and perform different actions depending on the level of the user that made the request. \\
+It is interfaced with the query manager to access the database to store or retrieve data. \\
+It is interfaced with the notification manager to notify the users about the start and the end of a tournament.\\
 It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
 
 \subsubsection*{Battles manager}
-{\color{red} specificare meglio}
+{\color{red} specificare meglio => Tommi: non mi sembra male! Solo l'ultima frase non ho capito bene \\}
 The battles manager is the component that handles the management of the battles.\\
 It allows:
 \begin{itemize}
@@ -85,16 +120,18 @@ It allows:
     \item the automatic evaluation of the battles;
     \item the eventual manual evaluation of the battles by the EDUs
 \end{itemize}
-It is interfaced with the auth manager (to allow and perform different actions depending on the level of the user that made the request), with the query manager (since it needs to access the database) and the notification manager (since it needs to notify the users of the opening of subscriptions, the start and the end of a bettle).\\
-It is interfaced with the WebApp, both EDU and STU, through the proper APIs and with GitHub (to perform the manual evaluation), all external to the system.
+It is interfaced with the auth manager to allow and perform different actions depending on the level of the user that made the request. \\
+It is interfaced with the query manager to access the database to store or retrieve data. \\
+It is interfaced with the notification manager to notify the users of the opening of subscriptions, the start and the end of a battle.\\
+It is interfaced with the WebApp, both EDU and STU and the proper APIs and with GitHub (to perform the manual evaluation), all external to the system.
 
 \subsubsection*{Profile Inspector}
-The profile inspector is the component that handles the visualization of the profiles of the STUs and, consequently, of the badges that a STU has earned during the battles and the tournaments.\\
-It is interfaced with the query manager (since it needs to access the database).
+The profile inspector is the component that handles the visualization of the profiles of the STUs and, consequently, of the badges that it has earned during the tournaments. \\
+It is interfaced with the query manager to access the database to retrieve data. \\
 It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
 
 \subsection{Logical description of the data}
-The data of the system is organized in a relational database, with the following entity-relationship diagram:
+The data of the system is organized in a relational database, following the below ER diagram:
 
 \begin{figure}[H]
     \centering
@@ -103,16 +140,24 @@ The data of the system is organized in a relational database, with the following
     \label{fig:er_diagram}
 \end{figure}
 
+{\color{red} Vogliamo magari scrivere le tabelle come saranno - Progetto logico? \\}
+
 \section{Deployment view}
-The diagram \ref{fig:deployment_diagram} shows the deployment view of the system.\\\\
-Our system comprises two essential components: a static web server and an application server. The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality. To optimize performance, we have opted for distinct solutions for these components.\\
-The static web server will be hosted on a CDN (Content Delivery Network) on cloud, exploiting its edge location caches and reverse proxies to ensure rapid response times. On the other hand, the application server, containing both a business logic layer and a data tier, will find its home on a cloud provider. This decision offers numerous advantages over traditional in-house hosting, including:
+The diagram \ref{fig:deployment_diagram} shows the deployment view of the system.\\
+{\color{red} Rimuoverei la parola statico, perchè un Web Server Statico non è in grado di far chiamate AJAX e generare HTML dinamicamente (Togliere o cambiare con dinamico)\\}
+Our system comprises two essential components: a static web server and an application server. 
+The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality. 
+To optimize performance, these components follow distinct solutions.\\
+The static web server is hosted on a CDN (Content Delivery Network) on cloud, exploiting its edge location caches and reverse proxies to ensure rapid response times. \\
+On the other hand, the application server, containing both the business logic and the data layer, is home based on a cloud provider. \\
+This decision offers numerous advantages over traditional in-house hosting, including:
 \begin{itemize}
     \item \textbf{Scalability and Flexibility}: The cloud infrastructure allows for the dynamic addition or removal of resources like virtual machines, performance cores, or memory as per the evolving needs. Load balancing services further enable the application server to adapt seamlessly to changes in traffic or workload.
     \item \textbf{Security}: Enhanced security features, such as live monitoring and firewalls, contribute to safeguarding the application server against potential data breaches, cyberattacks, and other security threats.
     \item \textbf{Cost-efficiency}: The cloud provider's pay-as-you-go model ensures cost efficiency by charging only for the utilized resources. This approach helps in reducing overall costs, making it a financially prudent choice.
 \end{itemize}
-These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications. The selected cloud provider must respect all these features to effectively meet our system requirements.\\
+These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications. 
+The selected cloud provider must respect all these features to effectively meet our system requirements.
 
 \begin{figure}[ht]
     \centering
