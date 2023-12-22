@@ -1,8 +1,8 @@
 \chapter{Architectural Design}
-This section provides a top-down exploration of the system's architecture. 
-It starts with an overview of the overall architecture, accompanied by diagrams illustrating its components. 
-Subsequently, it utilizes an ER diagram to elucidate the system's data structure and a deployment view to outline the layers and tiers involved. 
-Sequence diagrams are employed to illustrate the main runtime perspectives, while the class diagram delineates component interfaces. 
+This section provides a top-down exploration of the system's architecture.
+It starts with an overview of the overall architecture, accompanied by diagrams illustrating its components.
+Subsequently, it utilizes an ER diagram to elucidate the system's data structure and a deployment view to outline the layers and tiers involved.
+Sequence diagrams are employed to illustrate the main runtime perspectives, while the class diagram delineates component interfaces.
 The section concludes by discussing the architectural design choices and their underlying rationales.
 
 \section{Overview}
@@ -17,26 +17,26 @@ The CKB platform software architecture is organized into three main logical laye
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/high_level_diagram.png}
     {\color{red}
-        Client => Web Application \\ 
-        Data => DB \\   
+        Client => Web Application \\
+        Data => DB \\
         Diagramma ad Alto o Basso Livello? \\
-         - Alto: aggiungerei email server, load balancer, firewall tra Client e Web server \\
-         - Basso: togliere tutti i firewall e li specifichiamo dopo nel deploy.
+        - Alto: aggiungerei email server, load balancer, firewall tra Client e Web server \\
+        - Basso: togliere tutti i firewall e li specifichiamo dopo nel deploy.
     }
     \caption{High level components diagram}
 \end{figure}
 
-The system is accessible through a web interface and is developed as SPA. 
-This web application type is ideal, as it facilitates extensive interaction without requiring frequent page reloads. 
-In addition, this type of system allows for easy expansion of the services offered without major modifications to the system itself. 
+The system is accessible through a web interface and is developed as SPA.
+This web application type is ideal, as it facilitates extensive interaction without requiring frequent page reloads.
+In addition, this type of system allows for easy expansion of the services offered without major modifications to the system itself.
 
-The system architecture is organized into separate layers, where application servers communicate with a database management system and employ APIs for data retrieval and storage. 
-Following REST standards, the application servers are deliberately designed as stateless, managing user login sessions through caching and adhering to web application best practices. 
+The system architecture is organized into separate layers, where application servers communicate with a database management system and employ APIs for data retrieval and storage.
+Following REST standards, the application servers are deliberately designed as stateless, managing user login sessions through caching and adhering to web application best practices.
 
 Moreover, the system will incorporate multiple firewalls to enhance security.
 
 \section{Component view}
-{\color{red} Non parliamo da nessuna parte della funzione per formare i team, non so se da mettere singola oppure includerla in altre \\}
+ {\color{red} Non parliamo da nessuna parte della funzione per formare i team, non so se da mettere singola oppure includerla in altre \\}
 
 The system is composed of the following components:
 
@@ -53,11 +53,11 @@ The system is composed of the following components:
 To maintain the readability of this diagram, the interfaces have been grouped according to their functionality.
 A complete set of endpoints is available later in the document.
 
-{\color{red} Non mi è chiara la storia delle proper APIs per comunicare con la WebApp di EDU o STU }
+    {\color{red} Non mi è chiara la storia delle proper APIs per comunicare con la WebApp di EDU o STU }
 
 \subsection{Client components}
 The client components are represented only by a single one, a user-friendly WebApp, that behaves differently depending on the type of user using it, an EDU or a STU. \\
-The only logic incorporated is the ability to perform basic checks, such as the detection of incomplete forms or wrong data format. 
+The only logic incorporated is the ability to perform basic checks, such as the detection of incomplete forms or wrong data format.
 The WebApp is interfaced with the server components through all the APIs offered by the server, a detailed description is in the following sections.
 \subsection{Server components}
 
@@ -145,8 +145,8 @@ The data of the system is organized in a relational database, following the belo
 \section{Deployment view}
 The diagram \ref{fig:deployment_diagram} shows the deployment view of the system.\\
 {\color{red} Rimuoverei la parola statico, perchè un Web Server Statico non è in grado di far chiamate AJAX e generare HTML dinamicamente (Togliere o cambiare con dinamico)\\}
-Our system comprises two essential components: a static web server and an application server. 
-The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality. 
+Our system comprises two essential components: a static web server and an application server.
+The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality.
 To optimize performance, these components follow distinct solutions.\\
 The static web server is hosted on a CDN (Content Delivery Network) on cloud, exploiting its edge location caches and reverse proxies to ensure rapid response times. \\
 On the other hand, the application server, containing both the business logic and the data layer, is home based on a cloud provider. \\
@@ -156,7 +156,7 @@ This decision offers numerous advantages over traditional in-house hosting, incl
     \item \textbf{Security}: Enhanced security features, such as live monitoring and firewalls, contribute to safeguarding the application server against potential data breaches, cyberattacks, and other security threats.
     \item \textbf{Cost-efficiency}: The cloud provider's pay-as-you-go model ensures cost efficiency by charging only for the utilized resources. This approach helps in reducing overall costs, making it a financially prudent choice.
 \end{itemize}
-These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications. 
+These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications.
 The selected cloud provider must respect all these features to effectively meet our system requirements.
 
 \begin{figure}[ht]
@@ -296,13 +296,13 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/student/id/profile \\
 \textbf{URL Parameters} :
-    \begin{itemize}
-        \item {\ttfamily{id}} : the id of the student the user is looking for
-    \end{itemize}
-\textbf{Response} : 
-    \begin{itemize}
-        \item {\ttfamily{200}} : JSON object
-        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\begin{itemize}
+    \item {\ttfamily{id}} : the id of the student the user is looking for
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 {
     "name": String,
     "surname": String,  
@@ -333,8 +333,8 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
     ]
 }
         \end{lstlisting}
-        \item {\ttfamily{401}} : error String("unauthorized")
-    \end{itemize}
+    \item {\ttfamily{401}} : error String("unauthorized")
+\end{itemize}
 
 
 
@@ -557,14 +557,14 @@ This endpoint allows the STU to get the list of the tournaments that it is subsc
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:subscribed=email     \\
 \textbf{URL Parameters}:
-    \begin{itemize}
-        \item {\ttfamily{email}} : the email of the user actually logged into the platform
-    \end{itemize}
+\begin{itemize}
+    \item {\ttfamily{email}} : the email of the user actually logged into the platform
+\end{itemize}
 
 \textbf{Response}:
-    \begin{itemize}
-        \item {\ttfamily{200}} : JSON object 
-        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -579,21 +579,21 @@ This endpoint allows the STU to get the list of the tournaments that it is subsc
     ...
 ]
             \end{lstlisting}
-        \item {\ttfamily{401}} : error String("unauthorized") 
-    \end{itemize}
+    \item {\ttfamily{401}} : error String("unauthorized")
+\end{itemize}
 \subsection*{Get unsubscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is not subscribed to, it will be accessed every time the STU opens the dashboard.\\
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:subscribed!=email     \\
 \textbf{URL Parameters}:
-    \begin{itemize}
-        \item {\ttfamily{email}} : the email of the user actually logged into the platform
-    \end{itemize}
+\begin{itemize}
+    \item {\ttfamily{email}} : the email of the user actually logged into the platform
+\end{itemize}
 
 \textbf{Response}:
-    \begin{itemize}
-        \item {\ttfamily{200}} : JSON object
-        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -603,27 +603,28 @@ This endpoint allows the STU to get the list of the tournaments that it is not s
     ...
 ]
         \end{lstlisting}
-        \item {\ttfamily{401}} : error String("unauthorized") 
-        \end{itemize}
+    \item {\ttfamily{401}} : error String("unauthorized")
+\end{itemize}
 
 \subsection*{Get tournament details}
 This endpoint allows the STU to get the details of a tournament, it will be accessed when a STU selects a tournament from the list of the tournaments in the dashboard.\\
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/STU=true\&id=tournament\_id\\
 \textbf{URL Parameters}:
-        \begin{itemize}
-            \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
-            \item {\ttfamily{tournament\_id}} : this is the id of the tournament the user is looking for
-        \end{itemize}
+\begin{itemize}
+    \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
+    \item {\ttfamily{tournament\_id}} : this is the id of the tournament the user is looking for
+\end{itemize}
 \textbf{Response}:
-        \begin{itemize}
-            \item {\ttfamily{200}} : JSON object
-            \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
         "name": String,
         "active": Boolean,
+        "canSubscribe": Boolean,
         "subscribed": Boolean,
         "battles": [
             {
@@ -650,8 +651,8 @@ This endpoint allows the STU to get the details of a tournament, it will be acce
     }
 ]
             \end{lstlisting}
-            \item {\ttfamily{401}} : error String("unauthorized")
-        \end{itemize}
+    \item {\ttfamily{401}} : error String("unauthorized")
+\end{itemize}
 
 
 \subsection*{Get battle details}
@@ -663,10 +664,10 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
     \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
     \item {\ttfamily{battle\_id}} : this is the id of the battle the user is looking for
 \end{itemize}
-\textbf{Response} : 
-    \begin{itemize}
-        \item {\ttfamily{200}} : JSON object
-        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -679,6 +680,10 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         "min_group_size": Number,
         "max_group_size": Number,
         "link": String,
+        "canSubscribe": Boolean,
+        "canInviteOthers": Boolean,
+        // If the user's team satisfies the min members constraint
+        "minConstraintSatisfied": Boolean,
         "subscribed": Boolean,
         "phase": Number[1 - 4],
         "tournament_name": String,
@@ -693,12 +698,12 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         ]
     }
 ]
-        \end{lstlisting} 
-        \item {\ttfamily{401}} : error String("unauthorized")
-    \end{itemize}
+        \end{lstlisting}
+    \item {\ttfamily{401}} : error String("unauthorized")
+\end{itemize}
 
 \section{Component interfaces}
-In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users. 
+In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/ComponentInterfaces.png}

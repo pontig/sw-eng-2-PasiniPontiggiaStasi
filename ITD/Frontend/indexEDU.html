@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="icons/logoCKB.png" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css" />
-    
+
     <script src="js/main.js"></script>
     <script src="js/profile.js"></script>
     <title>CKB: Dashboard</title>
@@ -32,7 +32,7 @@
     <div id="article">
         <p id="path">Path</p>
         <h1 id="title">Dashboard</h1>
-        <button id="importante">qui ci va la cosa importante</button>
+        <button id="importantButton">qui ci va la cosa importantButton</button>
         <div id="content" class="profile">
 
             <!-- STU's Profile -->
@@ -43,7 +43,7 @@
                 </ul>
             </div>
             <div id="prof2" style="display: none;">
-            </div> 
+            </div>
 
 
             <div id="list">
@@ -65,7 +65,7 @@
                 </div>
 
             </div>
-            <div id="pushbutton" >
+            <div id="pushbutton">
                 <h2>Select action</h2>
                 <div>
                     <button onclick="requestAllTournaments()">View all</button>
@@ -119,8 +119,17 @@
             <input type="date" name="submissionDeadline" id="" required><br>
             <!-- I haven't yet added controls for dates, I promise I will eventually -->
             <div><input type="checkbox" name="manual" id="">
-            <label for="manual">Manual approval</label></div><br>
+                <label for="manual">Manual approval</label>
+            </div><br>
             <input type="submit" value="Create" name="createNewBattle">
+        </form>
+        <form action="" method="post" id="newInvitation">
+            <input type="email" name="emailToInvite" id="" required placeholder="your.friend@mail.co">
+            <input type="submit" value="Invite" name="invite">
+        </form>
+        <form action="" method="post" id="newRegistration">
+            <input type="text" name="teamName" id="" required placeholder="How do you wanna call your team?">
+            <input type="submit" value="Register" name="register">
         </form>
     </div>
 </body>
