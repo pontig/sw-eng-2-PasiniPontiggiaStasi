@@ -62,7 +62,7 @@ async function showResult(listened, other, url) {
             let li = document.createElement("span")
             li.classList.add("liRes")
             li.innerHTML = e.name + " " + e.surname
-            li.addEventListener("click", () => {
+            li.addEventListener("click", async () => {
                 listened.value = e.name + " " + e.surname
                 // alert("clicked " + listened.value)
                 if (listened.id == "findSTUSearchBox") {
@@ -71,6 +71,29 @@ async function showResult(listened, other, url) {
                     other.disabled = false
                     resultBox.innerHTML = ""
                     resultBox.style.display = "none"
+                } else if (listened.id == "findEDUSearchBox") {
+                    if (confirm("Do you want to invite " + listened.value + " to your tournament?")) {
+                        let res2 = await fetch("https://pontiggiaelia.altervista.org/ckb/invite.php?user=" + e.id + "&tournament=" + sessionStorage.getItem("tournament"))
+                        let status = await res2.status
+                        switch (status) {
+                            case 200:
+                                alert("Invitation sent!")
+                                break
+                            case 400:
+                                alert("Invitation already sent!")
+                                break
+                            // case 403:
+                            //     alert("You are not the admin of this tournament!")
+                            //     break
+                            // case 404:
+                            //     alert("User not found!")
+                            //     break
+                            default:
+                                alert("Something went wrong!")
+                                break
+
+                        }
+                    }
                 }
 
             })
@@ -167,6 +190,9 @@ async function changePage(page, id) {
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
+                    sessionStorage.setItem("tournament", null)
+                    sessionStorage.setItem("battle", null)
+
                     break
 
                 case "tournament":
@@ -224,15 +250,18 @@ async function changePage(page, id) {
                         .sort((a, b) => b.points - a.points)
                         .forEach((e, i) => {
                             let li = document.createElement("li")
-                            li.innerHTML = e.name + " - " + e.points + "pts" // TODO: aggiungere il link al profilo
+                            let aaa = document.createElement("a")
+                            aaa.onclick = function () { changePage("profile", e.id) }
+                            aaa.innerHTML = e.name + " - " + e.points + "pts"
+
                             if (i > 9) li.style.display = "none"
 
+                            li.appendChild(aaa)
                             container.appendChild(li)
                             if (i == 9) container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
                         })
 
                     if (data.active && data.admin) {
-
                         let btn = document.createElement("button")
                         btn.innerHTML = "New..."
                         btn.onclick = (() => { showForm("Battle") })
@@ -241,12 +270,15 @@ async function changePage(page, id) {
 
                         let numberActive = data.battles.filter(e => e.phase != 4).length
                         if (numberActive == 0) {
-
+                            // Close tournament
                             document.getElementById("importantButton").style.display = "block"
                             document.getElementById("importantButton").innerHTML = "Close tournament"
                             document.getElementById("importantButton").onclick = (() => { closeTournament(id) }) // TODO: implementare la chiusura del torneo
                         }
                     }
+
+                    sessionStorage.setItem("tournament", id)
+                    sessionStorage.setItem("battle", null)
 
                     break
 
@@ -318,6 +350,9 @@ async function changePage(page, id) {
                         document.getElementById("importantButton").innerHTML = "Manual evaluation"
                         document.getElementById("importantButton").onclick = (() => { changePage("manualEvaluation", id) })
                     }
+
+                    sessionStorage.setItem("battle", id)
+                    sessionStorage.setItem("tournament", data.tournament_id)
                     break
 
                 case "manualEvaluation":
@@ -453,6 +488,9 @@ async function changePage(page, id) {
                         })
                     })
 
+                    sessionStorage.setItem("battle", null)
+                    sessionStorage.setItem("tournament", null)
+
                     break
 
 
@@ -497,6 +535,9 @@ async function changePage(page, id) {
                         tr.appendChild(td2)
                         container.appendChild(tr)
                     })
+
+                    sessionStorage.setItem("tournament", null)
+                    sessionStorage.setItem("battle", null)
 
                     break
 
@@ -555,9 +596,13 @@ async function changePage(page, id) {
                         .sort((a, b) => b.points - a.points)
                         .forEach((e, i) => {
                             let li = document.createElement("li")
-                            li.innerHTML = e.name + " - " + e.points + "pts" // TODO: aggiungere il link al profilo
+                            let aaa = document.createElement("a")
+                            aaa.onclick = function () { changePage("profile", e.id) }
+                            aaa.innerHTML = e.name + " - " + e.points + "pts"
+
                             if (i > 9) li.style.display = "none"
 
+                            li.appendChild(aaa)
                             container.appendChild(li)
                             if (i == 9) container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
                         })
@@ -568,6 +613,9 @@ async function changePage(page, id) {
                         document.getElementById("importantButton").innerHTML = "Subscribe"
                         document.getElementById("importantButton").onclick = (() => { subscribeTournament(id) })
                     }
+
+                    sessionStorage.setItem("tournament", id)
+                    sessionStorage.setItem("battle", null)
 
                     break
 
@@ -660,6 +708,7 @@ async function changePage(page, id) {
                                 if (res) {
                                     // TODO: fare la richiesta al server
                                     document.getElementById("newInvitation").reset()
+                                    alert("Invitation sent!")
                                 }
                             })
                         })
@@ -677,6 +726,9 @@ async function changePage(page, id) {
                         document.getElementById("title").appendChild(spsp)
                     }
 
+                    sessionStorage.setItem("battle", id)
+                    sessionStorage.setItem("tournament", data.tournament_id)
+
                     break
 
                 case "profile":
@@ -693,6 +745,8 @@ async function changePage(page, id) {
     }
 }
 
+// Shows a particular form in the page
+// @param which: the form to show
 function showForm(which) {
     document.getElementById("formContainer").style.display = "block"
     document.getElementById("new" + which).style.display = "flex"
@@ -700,6 +754,7 @@ function showForm(which) {
     showScreen()
 }
 
+// Shows the div that blurs the background, in order to make the form more visible
 function showScreen() {
     let screen = document.getElementById("screen")
     screen.style.display = "block"
@@ -707,6 +762,7 @@ function showScreen() {
     setTimeout(() => { screen.style.backdropFilter = "blur(5px)" }, 100)
 }
 
+// Hides the form and the div that blurs the background
 function hideForm() {
     document.querySelectorAll("#formContainer form").forEach(e => e.style.display = "none")
     document.getElementById("formContainer").style.display = "none"

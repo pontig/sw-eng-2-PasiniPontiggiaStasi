@@ -702,6 +702,36 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
     \item {\ttfamily{401}} : error String("unauthorized")
 \end{itemize}
 
+\section*{POST endpoints}
+
+\subsection*{Registration}
+This endpoint allows the user to register to the platform.\\
+\textbf{Method} : POST \\
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{name}} : the name of the user
+    \item {\ttfamily{surname}} : the surname of the user
+    \item {\ttfamily{email}} : the email of the user
+    \item {\ttfamily{uni}} : the university of the user
+    \item {\ttfamily{role}} : the role of the user (with value "STU" or "EDU")
+    \item {\ttfamily{password}} : the password of the user
+    \item {\ttfamily{password2}} : the password of the user, repeated
+\end{itemize}
+\textbf{Response} :
+
+
+\subsection*{Login}
+This endpoint allows the user to login to the platform.\\
+\textbf{Method} : POST \\
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{email}} : the email of the user
+    \item {\ttfamily{password}} : the password of the user
+\end{itemize}
+\textbf{Response} :
+
+
+
 \section{Component interfaces}
 In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users.
 \begin{figure}[H]
