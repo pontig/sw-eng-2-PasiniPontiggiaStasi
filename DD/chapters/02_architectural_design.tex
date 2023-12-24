@@ -1,8 +1,8 @@
 \chapter{Architectural Design}
-This section provides a top-down exploration of the system's architecture.
-It starts with an overview of the overall architecture, accompanied by diagrams illustrating its components.
-Subsequently, it utilizes an ER diagram to elucidate the system's data structure and a deployment view to outline the layers and tiers involved.
-Sequence diagrams are employed to illustrate the main runtime perspectives, while the class diagram delineates component interfaces.
+This section provides a top-down exploration of the system's architecture. 
+It starts with an overview of the overall architecture, accompanied by diagrams illustrating its components. 
+Subsequently, it utilizes an ER diagram to elucidate the system's data structure and a deployment view to outline the layers and tiers involved. 
+Sequence diagrams are employed to illustrate the main runtime perspectives, while the class diagram delineates component interfaces. 
 The section concludes by discussing the architectural design choices and their underlying rationales.
 
 \section{Overview}
@@ -17,26 +17,28 @@ The CKB platform software architecture is organized into three main logical laye
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/high_level_diagram.png}
     {\color{red}
-        Client => Web Application \\
-        Data => DB \\
+        Client => Web Application \\ 
+        Data => DB \\   
         Diagramma ad Alto o Basso Livello? \\
-        - Alto: aggiungerei email server, load balancer, firewall tra Client e Web server \\
-        - Basso: togliere tutti i firewall e li specifichiamo dopo nel deploy.
+         - Alto: aggiungerei email server, load balancer, firewall tra Client e Web server \\
+            a) 3 tier: Web e application server uniti, allora no firewall tra loro\\
+            b) 4 tier: Web e application server separati, firewall ok tra loro\\
+         - Basso: togliere tutti i firewall e li specifichiamo dopo nel deploy.
     }
     \caption{High level components diagram}
 \end{figure}
 
-The system is accessible through a web interface and is developed as SPA.
-This web application type is ideal, as it facilitates extensive interaction without requiring frequent page reloads.
-In addition, this type of system allows for easy expansion of the services offered without major modifications to the system itself.
+The system is accessible through a web interface and is developed as SPA. 
+This web application type is ideal, as it facilitates extensive interaction without requiring frequent page reloads. 
+In addition, this type of system allows for easy expansion of the services offered without major modifications to the system itself. 
 
-The system architecture is organized into separate layers, where application servers communicate with a database management system and employ APIs for data retrieval and storage.
-Following REST standards, the application servers are deliberately designed as stateless, managing user login sessions through caching and adhering to web application best practices.
+The system architecture is organized into separate layers, where application servers communicate with a database management system and employ APIs for data retrieval and storage. 
+Following REST standards, the application servers are deliberately designed as stateless, managing user login sessions through caching and adhering to web application best practices. 
 
 Moreover, the system will incorporate multiple firewalls to enhance security.
 
 \section{Component view}
- {\color{red} Non parliamo da nessuna parte della funzione per formare i team, non so se da mettere singola oppure includerla in altre \\}
+{\color{red} Non parliamo da nessuna parte della funzione per formare i team, non so se da mettere singola oppure includerla in altre \\}
 
 The system is composed of the following components:
 
@@ -53,11 +55,11 @@ The system is composed of the following components:
 To maintain the readability of this diagram, the interfaces have been grouped according to their functionality.
 A complete set of endpoints is available later in the document.
 
-    {\color{red} Non mi è chiara la storia delle proper APIs per comunicare con la WebApp di EDU o STU }
+{\color{red} Non mi è chiara la storia delle proper APIs per comunicare con la WebApp di EDU o STU }
 
 \subsection{Client components}
 The client components are represented only by a single one, a user-friendly WebApp, that behaves differently depending on the type of user using it, an EDU or a STU. \\
-The only logic incorporated is the ability to perform basic checks, such as the detection of incomplete forms or wrong data format.
+The only logic incorporated is the ability to perform basic checks, such as the detection of incomplete forms or wrong data format. 
 The WebApp is interfaced with the server components through all the APIs offered by the server, a detailed description is in the following sections.
 \subsection{Server components}
 
@@ -140,23 +142,22 @@ The data of the system is organized in a relational database, following the belo
     \label{fig:er_diagram}
 \end{figure}
 
-{\color{red} Vogliamo magari scrivere le tabelle come saranno - Progetto logico? \\}
+{\color{red} Vogliamo magari scrivere il progetto logico? \\}
 
 \section{Deployment view}
 The diagram \ref{fig:deployment_diagram} shows the deployment view of the system.\\
-{\color{red} Rimuoverei la parola statico, perchè un Web Server Statico non è in grado di far chiamate AJAX e generare HTML dinamicamente (Togliere o cambiare con dinamico)\\}
-Our system comprises two essential components: a static web server and an application server.
-The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality.
+Our system comprises two essential components: a static web server and an application server. 
+The static web server serves as the entry point for clients to access the SPA, while the application server furnishes the necessary APIs for the SPA's functionality. 
 To optimize performance, these components follow distinct solutions.\\
-The static web server is hosted on a CDN (Content Delivery Network) on cloud, exploiting its edge location caches and reverse proxies to ensure rapid response times. \\
-On the other hand, the application server, containing both the business logic and the data layer, is home based on a cloud provider. \\
+The static web server is hosted on a CDN (Content Delivery Network) on the cloud, exploiting its edge location caches and reverse proxies to ensure rapid response times. \\
+On the other hand, the application server, containing both the business logic and the data layer, is home-based on a cloud provider. \\
 This decision offers numerous advantages over traditional in-house hosting, including:
 \begin{itemize}
     \item \textbf{Scalability and Flexibility}: The cloud infrastructure allows for the dynamic addition or removal of resources like virtual machines, performance cores, or memory as per the evolving needs. Load balancing services further enable the application server to adapt seamlessly to changes in traffic or workload.
     \item \textbf{Security}: Enhanced security features, such as live monitoring and firewalls, contribute to safeguarding the application server against potential data breaches, cyberattacks, and other security threats.
     \item \textbf{Cost-efficiency}: The cloud provider's pay-as-you-go model ensures cost efficiency by charging only for the utilized resources. This approach helps in reducing overall costs, making it a financially prudent choice.
 \end{itemize}
-These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications.
+These attributes position a cloud provider as an ideal hosting solution for large, high-traffic applications. 
 The selected cloud provider must respect all these features to effectively meet our system requirements.
 
 \begin{figure}[ht]
@@ -166,25 +167,42 @@ The selected cloud provider must respect all these features to effectively meet 
     \label{fig:deployment_diagram}
 \end{figure}
 
-{\color{red} mettere la cdn in mezzo, come sulle slides di tiw}
+{\color{red}
+    Se Web e Application Server son server diversi, quindi due tier, e il sistema diventa 4-tier al posto di 3. \\
+    3 tier: Client -> Firewall -> Load Balancer -> (CDN) Web Server -> Application server -> Firewall -> DB\\
+    4 tier: Client -> Firewall -> Load Balancer -> (CDN) Web Server -> Firewall -> Load Balancer -> Application server -> Firewall -> DB\\
+            Client -> HTTPS -> Apllicazion Server -> HTTPS / TCP-IP -> DB\\
+    Mettere la CDN in mezzo, come sulle slides di tiw
+}
 
-The components of the system are explaineed in the following:
+The components of the system are explained in the following:
 \begin{itemize}
-    \item \textbf{PC}: Personal computer of the user, it suffices to have a wordking O.S. and a browser installed that supports JavaScript and HTML5 in order to use the system.
-    \item \textbf{CDN}: As said before, the CDN is used to host the static web server, that serves as the entry point for clients to access the SPA. It will allow it to be downloaded without affecting the performance of the main application server. The SPA is static and all of its code is run on the client's machine, so there is no need for any logic to be implemented on the CDN side.
-    \item \textbf{Cloud provider}: The cloud provider is used to host the application server. It will allow the system to be scalable and flexible, to be secure and to be cost-efficient.\\
+    \item \textbf{PC}: Personal computer of the user, it suffices to have a working OS and a Browser installed that supports JavaScript and HTML5 to use the system.
+    \item \textbf{CDN}: The CDN is used to host the static web server, that serves as the entry point for clients to access the SPA. 
+                        It allows to download the static web pages without affecting the performance of the main application server. 
+                        The SPA is static and all of its code is run on the client's machine, so there is no need for any logic to be implemented on the CDN side.
+    \item \textbf{Cloud provider}: The cloud provider is used to host the application server. {\color{red} anche il web server hosta no?} 
+                                   It allows the system to be scalable, flexible, secure, and cost-efficient.\\
           It is composed by:
           \begin{itemize}
-              \item \textbf{Load balancer}: The load balancer is used to distribute the traffic between the different instances of the application server. It is used to make the system scalable and flexible.
-              \item \textbf{Application servers}: The application servers are used to host the application server. They will be in an array of instances, so that the load balancer can distribute the traffic between them. The number of instances can be changed dynamically, so that the system can adapt to the traffic. They are used to make the system scalable and flexible.
+              \item \textbf{Load balancer}: The load balancer is used to distribute the traffic between the different instances of the application server. 
+                                            It is used to make the system scalable and flexible.
+              \item \textbf{Application servers}: The application servers are used to host the application server. 
+                                                  They are in an array of instances so that the load balancer can distribute the traffic between them. 
+                                                  The number of instances can be changed dynamically so that the system can adapt to the traffic. 
+                                                  They are used to make the system scalable and flexible.
               \item \textbf{DBMS server}: The DBMS server is used to host the database.
-              \item \textbf{Firewalls}: They are used to make the system secure, and are placed between the load balancer and the external world and between the application servers and the DBMS server. They provide an additional layer of security by blocking or allowing traffic based on predetermined rules. This helps to protect the system from unauthorized access or malicious attacks
+              \item \textbf{Firewalls}: Firewalls are used to make the system secure, and are placed between the load balancer and the external world and between the application servers and the DBMS server. 
+                                        They provide an additional layer of security by blocking or allowing traffic based on predetermined rules. 
+                                        This helps to protect the system from unauthorized access or malicious attacks.
           \end{itemize}
 \end{itemize}
 
+{\color{red} Da qui in avanti dobbiamo prima parlarne un secondo su cosa metter (secondo me la sezione \textit{API endpoints}, visto che c'è prevalentemente server-side, dovrebbe scriverlo chi si occuperà del backend )\\}
+\newpage
 
-{\color{red} Da qui in avanti in questo capitolo dobbiamo prima parlarne un secondo su cosa metter (secondo me la sezione \textit{API endpoints}, visto che c'è prevalentemente server-side, dovrebbe scriverlo chi si occuperà del backend )}
 \section{Runtime View}
+{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli del RASD\\}
 This section describes the most important components interactions of the system.
 
 \subsection{User login}
@@ -296,13 +314,13 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/student/id/profile \\
 \textbf{URL Parameters} :
-\begin{itemize}
-    \item {\ttfamily{id}} : the id of the student the user is looking for
-\end{itemize}
-\textbf{Response} :
-\begin{itemize}
-    \item {\ttfamily{200}} : JSON object
-          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+    \begin{itemize}
+        \item {\ttfamily{id}} : the id of the student the user is looking for
+    \end{itemize}
+\textbf{Response} : 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 {
     "name": String,
     "surname": String,  
@@ -333,8 +351,8 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
     ]
 }
         \end{lstlisting}
-    \item {\ttfamily{401}} : error String("unauthorized")
-\end{itemize}
+        \item {\ttfamily{401}} : error String("unauthorized")
+    \end{itemize}
 
 
 
@@ -547,8 +565,6 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
     \item {\ttfamily{401}} : error String("unauthorized")
 \end{itemize}
 
-
-
 \section*{GET endpoints - STU}
 
 \subsection*{Get subscribed tournaments}
@@ -557,14 +573,14 @@ This endpoint allows the STU to get the list of the tournaments that it is subsc
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:subscribed=email     \\
 \textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{email}} : the email of the user actually logged into the platform
-\end{itemize}
+    \begin{itemize}
+        \item {\ttfamily{email}} : the email of the user actually logged into the platform
+    \end{itemize}
 
 \textbf{Response}:
-\begin{itemize}
-    \item {\ttfamily{200}} : JSON object
-          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object 
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -579,21 +595,21 @@ This endpoint allows the STU to get the list of the tournaments that it is subsc
     ...
 ]
             \end{lstlisting}
-    \item {\ttfamily{401}} : error String("unauthorized")
-\end{itemize}
+        \item {\ttfamily{401}} : error String("unauthorized") 
+    \end{itemize}
 \subsection*{Get unsubscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is not subscribed to, it will be accessed every time the STU opens the dashboard.\\
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:subscribed!=email     \\
 \textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{email}} : the email of the user actually logged into the platform
-\end{itemize}
+    \begin{itemize}
+        \item {\ttfamily{email}} : the email of the user actually logged into the platform
+    \end{itemize}
 
 \textbf{Response}:
-\begin{itemize}
-    \item {\ttfamily{200}} : JSON object
-          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -603,28 +619,28 @@ This endpoint allows the STU to get the list of the tournaments that it is not s
     ...
 ]
         \end{lstlisting}
-    \item {\ttfamily{401}} : error String("unauthorized")
-\end{itemize}
+        \item {\ttfamily{401}} : error String("unauthorized") 
+        \end{itemize}
 
 \subsection*{Get tournament details}
 This endpoint allows the STU to get the details of a tournament, it will be accessed when a STU selects a tournament from the list of the tournaments in the dashboard.\\
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/STU=true\&id=tournament\_id\\
 \textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
-    \item {\ttfamily{tournament\_id}} : this is the id of the tournament the user is looking for
-\end{itemize}
+        \begin{itemize}
+            \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
+            \item {\ttfamily{tournament\_id}} : this is the id of the tournament the user is looking for
+        \end{itemize}
 \textbf{Response}:
-\begin{itemize}
-    \item {\ttfamily{200}} : JSON object
-          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+        \begin{itemize}
+            \item {\ttfamily{200}} : JSON object
+            \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
         "name": String,
         "active": Boolean,
-        "canSubscribe": Boolean,
+"canSubscribe": Boolean,
         "subscribed": Boolean,
         "battles": [
             {
@@ -651,9 +667,8 @@ This endpoint allows the STU to get the details of a tournament, it will be acce
     }
 ]
             \end{lstlisting}
-    \item {\ttfamily{401}} : error String("unauthorized")
-\end{itemize}
-
+            \item {\ttfamily{401}} : error String("unauthorized")
+        \end{itemize}
 
 \subsection*{Get battle details}
 This endpoint allows the STU to get the details of a battle, it will be accessed when a STU selects a battle from the list of the battles in a tournament view.\\
@@ -664,10 +679,10 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
     \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
     \item {\ttfamily{battle\_id}} : this is the id of the battle the user is looking for
 \end{itemize}
-\textbf{Response} :
-\begin{itemize}
-    \item {\ttfamily{200}} : JSON object
-          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+\textbf{Response} : 
+    \begin{itemize}
+        \item {\ttfamily{200}} : JSON object
+        \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
 [
     {
         "id": Number,
@@ -680,7 +695,7 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         "min_group_size": Number,
         "max_group_size": Number,
         "link": String,
-        "canSubscribe": Boolean,
+"canSubscribe": Boolean,
         "canInviteOthers": Boolean,
         // If the user's team satisfies the min members constraint
         "minConstraintSatisfied": Boolean,
@@ -698,9 +713,9 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         ]
     }
 ]
-        \end{lstlisting}
-    \item {\ttfamily{401}} : error String("unauthorized")
-\end{itemize}
+        \end{lstlisting} 
+        \item {\ttfamily{401}} : error String("unauthorized")
+    \end{itemize}
 
 \section*{POST endpoints}
 
@@ -719,7 +734,6 @@ This endpoint allows the user to register to the platform.\\
 \end{itemize}
 \textbf{Response} :
 
-
 \subsection*{Login}
 This endpoint allows the user to login to the platform.\\
 \textbf{Method} : POST \\
@@ -730,27 +744,66 @@ This endpoint allows the user to login to the platform.\\
 \end{itemize}
 \textbf{Response} :
 
-
+\newpage
 
 \section{Component interfaces}
-In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users.
+{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli del RASD e delle Runtime View \\}
+In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/ComponentInterfaces.png}
     \caption{Component interfaces diagram}
 \end{figure}
+
+\newpage
+
+\section{Selected Architectural Styles and Patterns}
+\subsection{Client - Server Paradigm}
+The client-server paradigm represents a software architecture model in which two distinct components, identified as the client and server, interact to deliver a service. 
+The client is the component that requests the service, while the server is responsible for its provision. 
+Communication between them is based on the concept of asynchrony, allowing the client to send requests without waiting for an immediate response. 
+The server, in turn, can process the request at a later time and send a response to the client. This highly flexible paradigm finds extensive use in implementing various applications, including web, network, and distributed contexts. 
+Key advantages include flexibility, scalability, and the ability to configure the system to ensure an adequate level of security.
+
+\subsection{N - tiers Architecture}
+{\color{red} Modificare in base a se teniamo una 3 o 4 tier application \\}
+The 4-tier architecture is a software architecture model that divides an application into four distinct layers: Client, Web Server, Application Server, and Database Server. 
+In its implementation for web applications, users send requests to the web server through the browser, which provides static content and forwards dynamic requests to the application server. 
+The application server processes the requests, interacts with the database server, and sends responses to the web server, which, in turn, transmits them to the client.
+The advantages of this architecture include scalability, enhanced security through data isolation, and increased ease of maintenance and testing due to the separation of various layers. 
+The 4-tier architecture is particularly suitable for complex and high-traffic web applications, offering flexibility and scalability to meet a wide range of application needs.
+
+\subsection{MVC Design Pattern}
+The MVC is a widely adopted architectural pattern for the development of UI, separating the logic of the user interface from the business logic to enhance maintainability and scalability. 
+Comprising three main components:
+\begin{itemize}
+    \item \textbf{Model:} manages data and business rules.
+    \item \textbf{View:} displays data to the user.
+    \item \textbf{Controller:} handles user requests.
+\end{itemize} 
+Advantages of the MVC pattern include the separation of concerns, ease of scalability, and maintainability of the application. 
+MVC is a versatile model suitable for various applications, particularly for web applications.
+
+\subsection{RESTfull API}
+The RESTful API architecture is a software model for creating APIs based on the HTTP protocol. 
+RESTful APIs consist of resources identified by URLs and operate through HTTP methods such as GET, POST, PUT, and DELETE. 
+They adhere to the principles of REST, ensuring flexibility, scalability, and ease of use. 
+Key principles include the use of unique URIs for each resource, the adoption of HTTP methods to define operations, and the standardized representation of data (such as JSON or XML). 
+RESTful APIs have been widely embraced for web API development due to their flexibility, scalability, and ease of implementation.
+
 \section{Other design decisions}
 \subsection{Web Application}
-As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers, so there is no need to develop a mobile application, which would require a significant amount of additional work.\\
-Instead, the system will be accessible through a web application, that is much easier to develop, maintain and being accessed by the users.
+As the platform's primary functionality is closely tied to coding activities, it is expected that users will predominantly employ personal computers, so there is no need to develop a mobile application, which would require a significant amount of additional work. \\
+Instead, the system will be accessible through a web application, that is much easier to develop, maintain, and access by the users.
 
 \subsection{Single Page Application}
-The system will be developed as a Single Page Application (SPA), that is a web application that interacts with the user by dynamically rewriting the current web page with new data from the web server, instead of the default method of the browser loading entire new pages.\\
-This approach will allow the system to be more responsive and to be more similar to a desktop application, since the user will not have to wait for the entire page to be reloaded every time he performs an action. Furthermore, it will allow the system to be more efficient, since the server will not have to send the entire page every time the user performs an action, but only the data that has changed, leaving the client to render the page.
+The system is developed as a SPA, which is a web application that interacts with the user by dynamically rewriting the current web page with new data from the web server, instead of the default method of the browser loading entire new pages.\\
+This approach allows the system to be more responsive and similar to a desktop application since the user does not wait for the entire page to be reloaded every time it performs an action. 
+Furthermore, it will allow the system to be more efficient, since the server does not have to send the entire page every time the user performs an action, but only the data that has changed, leaving the client to render the page.
 
 \subsection{Relational Database}
-We selected a relational database for our system design because it is effective at storing structured data, granting data integrity, and providing fast query performance. It can also be easily scaled to handle large amounts of data and support many concurrent users. The database allows us to store and retrieve information efficiently, while also ensuring that the data is accurate and consistent
+The system is designed to use a relational database because it is effective at storing structured data, granting data integrity, and providing fast query performance. 
+It can also be easily scaled to handle large amounts of data and support many concurrent users. 
+The database allows us to store and retrieve information efficiently, while also ensuring that the data is accurate and consistent.
 
-\subsection{RESTful API}
-We have chosen to implement a RESTful API for our system because it is a simple, lightweight, and flexible architecture that is easy to understand and use. It is also scalable and reliable, making it ideal for our application.\\
-
+{\color{red}Non abbiamo mai parlato di Gradle secondo me nel design è da mettere, non so bene dove, ma bisonga mostrare che è parte del sistema \\}
