@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import java.util.List;
 
 
-@Entity @Table(name = "students")
+@Entity @Table(name = "Student")
 public class Student extends User{
 
     @ManyToMany

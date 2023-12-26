@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Entity @Table(name = "tournaments")
+@Entity @Table(name = "Tournament")
 public class Tournament {
 
     private @Id @GeneratedValue Long id;
