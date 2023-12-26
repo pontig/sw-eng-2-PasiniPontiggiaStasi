@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.*;
 
-@Entity @Table(name = "battles")
+@Entity @Table(name = "Battle")
 public class Battle {
 
     private @Id @GeneratedValue Long id;

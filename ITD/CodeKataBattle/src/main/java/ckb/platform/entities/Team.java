@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity @Table(name = "teams")
+@Entity @Table(name = "Team")
 public class Team {
     private @Id @GeneratedValue Long id;
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity @Table(name = "educators")
+@Entity @Table(name = "Educator")
 public class Educator extends User{
 
     @ManyToMany

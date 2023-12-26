@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity @Table(name = "badges")
+@Entity @Table(name = "Badge")
 public class Badge {
 
     private @Id @GeneratedValue Long id;
