@@ -1,0 +1,53 @@
+\chapter{Description of the software}
+
+This document contains the description of the implementation of the CodeKataBattle platform.
+
+Its purpose is to provide a complete and detailed explanation of the system and its structure to the developers who will work on the project (in our case, the members of other teams and our professors). It is also a useful reference for the developers who will maintain the system in the future.
+
+\section{Links}
+In the following list are provided the links to all the documents that are part of the CodeKataBattle project's implementation
+
+\begin{itemize}
+    \item \href{https://github.com/pontig/sw-eng-2-PasiniPontiggiaStasi/tree/main/ITD/CodeKataBattle}{Source Code}
+    \item {\color{red}{executable ready to be run}}
+\end{itemize}
+
+\section{Implemented features}
+
+In the following, we list the features and the requirements that have been implemented in the system.
+
+Since the group that has implemented the system is composed of three people, as the assignment required, we have not implemented the features regarding the ganmification aspects of the system
+
+\section{Adopted development framework}
+
+\subsubsection{Backend}
+The system has been developed using the \textbf{Spring Boot} framework, which is a framework that allows to create web applications in Java.\\
+The main reason for this choice is that it is a framework often used in this context since it allows to create a web application with REST APIs in a simple way.\\In addiction, there are a lot of libraries that can be used to integrate the framework with other technologies, such as the database, which is very useful.
+
+\subsubsection{Frontend}
+For the development of the frontend, we have implemented a single page application simply using \textbf{HTML, SCSS and JavaScript}.\\Even it is a dated approach, we have chosen this solution because it is the one that we are most familiar with and because it is the one that we have used in the previous projects.\\Moreover, since the application is very simple, we have not felt the need to use a more complex framework.
+
+\subsubsection{Database}
+The database has been implemented using \textbf{MySQL}.\\
+The main reason for this choice is that it is the most used database in the world and it can be easily integrated with the Spring Boot framework thanks to the \textbf{Spring Data JPA} library.
+
+\section{Structure of the source code}
+
+The source code of the system can be found in the \href{https://github.com/pontig/sw-eng-2-PasiniPontiggiaStasi/tree/main/ITD/CodeKataBattle}{ITD folder} of the repository.\\
+Its structure is the classical one of a Spring Boot application, which is the following:
+\begin{itemize}
+    \item {\ttfamily{src/main/java/ckb/platform/}}: contains the source code of the spring application, divided in the following subfolders:
+          \begin{itemize}
+              \item {\ttfamily{advices/}}: contains the classes that are used to insert into the response the error messages in case of exceptions
+              \item {\ttfamily{controllers/}}: contains the classes that are used to handle the requests and are the responsible of the communication between the APIs and the database
+              \item {\ttfamily{entities/}}: contains the JPA classes that represent the entities of the database
+              \item {\ttfamily{exceptions/}}: contains the classes that are used to handle the exceptions
+              \item {\ttfamily{repositories/}}: contains the interfaces that are used to communicate with the database
+          \end{itemize}
+    \item {\ttfamily{src/main/resources/static/}}: contains the files of the frontend application, i.e. the HTML, SCSS and JavaScript files
+\end{itemize}
+
+{\color{red} \chapter{Performed test}}
+
+\chapter{Installation instructions}
+
