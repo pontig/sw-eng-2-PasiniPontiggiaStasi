@@ -137,6 +137,7 @@ The data of the system is organized in a relational database, following the belo
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{images/diagrams/er_diagram.png}
+    {\color{red} Da aggiungere tabella per le richieste di join team [IDTEAM - IDBATTLE - IDTOURNAMENT - IDSTU]}
     \caption{Entity-relationship diagram}
     \label{fig:er_diagram}
 \end{figure}
@@ -536,7 +537,6 @@ This endpoint allows the EDU to get the list of the groups subscribed to a battl
 \subsection*{Evaluate code}
 code.js\\
 This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU clicks on the "Evaluate" button from the table of the codes to evaluate.\\
-
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:tournament\_id/battles/:battle\_id/:team\_id     \\
 \textbf{URL Parameters}:
@@ -568,7 +568,6 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
 
 \subsection*{Get subscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is subscribed to, it will be accessed every time the STU opens the dashboard.\\
-
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:subscribed=email     \\
 \textbf{URL Parameters}:
@@ -716,11 +715,11 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         \item {\ttfamily{401}} : error String("unauthorized")
     \end{itemize}
 
-\section*{POST endpoints}
-
+\section*{POST endpoints - General User}
 \subsection*{Registration}
 This endpoint allows the user to register to the platform.\\
 \textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{name}} : the name of the user
@@ -732,16 +731,219 @@ This endpoint allows the user to register to the platform.\\
     \item {\ttfamily{password2}} : the password of the user, repeated
 \end{itemize}
 \textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{409}} : error String("")
+\end{itemize}
 
 \subsection*{Login}
 This endpoint allows the user to login to the platform.\\
 \textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{email}} : the email of the user
     \item {\ttfamily{password}} : the password of the user
 \end{itemize}
 \textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{401}} : error String("")
+\end{itemize}
+
+\section*{POST endpoints - EDU}
+\subsection*{Create Tournament}
+This endpoint allows the EDU to create a new tournament.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{EDU\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{tournemant\_name}} : String
+    \item {\ttfamily{registration\_deadline}} : String (date)
+    \item {\ttfamily{badges}} : Array of Objects (badge\_id)
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+\end{itemize}
+
+\subsection*{Share Tournament}
+This endpoint allows the EDU to share a tournament with other colleagues.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{EDU\_id}} : Integer
+    \item {\ttfamily{tournament\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{invited\_EDU\_id}} : Integer
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+\end{itemize}
+
+\subsection*{Create Battle}
+This endpoint allows the EDU to create a new battle within the context of a tournament.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{EDU\_id}} : Integer
+    \item {\ttfamily{tournament\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{battle\_name}} : String
+    \item {\ttfamily{programming\_language}} : String
+    \item {\ttfamily{registration\_deadline}} : String (date)
+    \item {\ttfamily{end\_battle}} : String (date)
+    \item {\ttfamily{manual\_evaluation}} : Boolean
+    \item {\ttfamily{min\_STU}} : Integer
+    \item {\ttfamily{max\_STU}} : Integer
+    
+    {\color{red}
+    Gradle
+    \item {\ttfamily{test\_cases}} : ?
+    \item {\ttfamily{build\_script}} : ?
+    \item {\ttfamily{problem\_spec}} : File PDF
+    }
+    
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+\end{itemize}
+
+\subsection*{Create Badge}
+This endpoint allows the EDU to create a new badge insisde the CKB platform.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{EDU\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{badge\_name}} : String
+    \item {\ttfamily{rules}} : Array of String    
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+\end{itemize}
+
+\subsection*{Manual Evaluation}
+This endpoint allows the EDU to evaluate perform a manual evaluation on team's code.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{EDU\_id}} : Integer
+    \item {\ttfamily{tournament\_id}} : Integer
+    \item {\ttfamily{battle\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{given\_grades}} : Array of Tuple (team\_id - score)   
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+\end{itemize}
+
+\section*{POST endpoints - STU}
+\subsection*{Join Tournament}
+This endpoint allows the STU to join a tournament.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{STU\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{tournament\_id}} : Integer   
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{409}} : error String("")
+\end{itemize}
+
+\subsection*{Join Battle}
+This endpoint allows the STU to join a battle forming a team respection the boundaries imposed.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{STU\_id}} : Integer
+    \item {\ttfamily{tournament\_id}} : Integer   
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{battle\_id}} : Integer  
+    \item {\ttfamily{team\_name}} : String  
+    \item {\ttfamily{STU\_invited}} : Array of STU (STU_id)  
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{409}} : error String("")
+\end{itemize}
+
+\subsection*{Join Team}
+This endpoint allows the STU to join a team to compete in a battle.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{URL Parameters}:
+\begin{itemize}
+    \item {\ttfamily{STU\_id}} : Integer
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{team\_id}} : String  
+    \item {\ttfamily{tournament\_id}} : Integer  
+    \item {\ttfamily{battle\_id}} : Integer  
+    \item {\ttfamily{choice}} : Boolean 
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("")
+    \item {\ttfamily{400}} : error String("")
+    \item {\ttfamily{403}} : error String("")
+    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{409}} : error String("")
+\end{itemize}
 
 \newpage
 
