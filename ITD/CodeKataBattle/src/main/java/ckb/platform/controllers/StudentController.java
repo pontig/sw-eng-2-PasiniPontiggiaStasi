@@ -8,7 +8,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -30,23 +33,53 @@ public class StudentController {
     //CollectionModel is another Spring HATEOAS container aimed at encapsulating collections of resources, instea dof a single resource entity.
 
     @GetMapping("/students")
-    CollectionModel<EntityModel<Student>> all() {
-        List<EntityModel<Student>> students = repository.findAll().stream()
-            .map(assembler::toModel)
-            .collect(Collectors.toList());
+    Map<String, Object> all() {
+        List<Student> students = repository.findAll();
 
-        return CollectionModel.of(students, linkTo(methodOn(StudentController.class).all()).withSelfRel());
+        Map<String, Object> response = new HashMap<>();
+        students.forEach(s ->{
+            response.put("id", s.getId());
+            response.put("firstName", s.getFirstName());
+            response.put("surname", s.getLastName());
+        });
+
+        return response;
     }
 
     // end::get-aggregate-root[]
 
     // Single item
-    @GetMapping("/students/{id}")
-    EntityModel<Student> one(@PathVariable Long id) {
+    @GetMapping("/students/{id}/profile")
+    Map<String, Object> one(@PathVariable Long id) {
         Student student = repository.findById(id)
             .orElseThrow(() -> new StudentNotFoundException(id));
 
-        return assembler.toModel(student);
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("id", student.getId());
+        response.put("firstName", student.getFirstName());
+        response.put("surname", student.getLastName());
+
+        Map<String, Object> tournament = new HashMap<>();
+        student.getTournaments().stream().map(t -> {
+            tournament.put("id", t.getId());
+            tournament.put("name", t.getName());
+            return tournament;
+        });
+
+        response.put("tournaments", tournament);
+
+        Map<String, Object> badges = new HashMap<>();
+        student.getAchieveBadges().stream().map(b -> {
+            badges.put("id", b.getId());
+            //badges.put("name", b.getName());
+            //TODO;
+            return badges;
+        });
+
+        response.put("badges", badges);
+
+        return response;
     }
 
     @PostMapping("/students")
@@ -58,29 +91,6 @@ public class StudentController {
             .body(entityModel);
     }
 
-    @PutMapping("/students/{id}")
-    ResponseEntity<?> replaceStudent(@RequestBody Student newStudent, @PathVariable Long id) {
-        Student updatedStudent = repository.findById(id)
-            .map(student -> {
-                student.setEmail(newStudent.getEmail());
-                student.setFirstName(newStudent.getFirstName());
-                student.setLastName(newStudent.getLastName());
-                student.setBattles(newStudent.getBattles());
-                student.setAchieveBadges(newStudent.getAchieveBadges());
-                student.setTournaments(newStudent.getTournaments());
-                return repository.save(student);
-            })
-            .orElseGet(() -> {
-                newStudent.setId(id);
-                return repository.save(newStudent);
-            });
-
-        EntityModel<Student> entityModel = assembler.toModel(updatedStudent);
-
-        return ResponseEntity
-            .created(entityModel.getRequiredLink("self").toUri())
-            .body(entityModel);
-    }
 
     @DeleteMapping("/students/{id}")
     ResponseEntity<?> deleteStudent(@PathVariable Long id) {

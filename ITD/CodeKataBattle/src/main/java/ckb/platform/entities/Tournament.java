@@ -2,10 +2,7 @@ package ckb.platform.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity @Table(name = "Tournament")
 public class Tournament {
@@ -17,7 +14,7 @@ public class Tournament {
     @ManyToOne @JoinColumn(name = "educator_id")
     private Educator creator;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Educator> grantedEducators;
     @ManyToMany
     private List<Student> subscribedStudents;
@@ -35,6 +32,7 @@ public class Tournament {
         this.name = name;
         this.subscriptionDeadline = subscriptionDeadline;
         this.creator = creator;
+        grantedEducators = new ArrayList<Educator>();
         grantedEducators.add(creator);
     }
 
