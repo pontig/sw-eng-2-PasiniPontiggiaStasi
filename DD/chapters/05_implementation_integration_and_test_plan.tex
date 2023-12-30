@@ -40,7 +40,6 @@ The Query Manager is the only component that can access the database and nearly 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/test_plan/test-plan-3.png}
-    {\color{red} Se query manager è l'unico componente che si interfaccia al DB, allora Auth Manager deve star collegato ad esso}
     \caption{Integration plan for the query manager}
     \label{fig:test-plan-3}
 \end{figure}
@@ -58,14 +57,12 @@ It can be integrated in parallel with the Query Manager since it does not need t
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/test_plan/test-plan-4.png}
-    {\color{red} Non credo si debbano mettere Profile inspector e Badges Manager}
     \caption{Integration plan for the notification manager}
     \label{fig:test-plan-4}
 \end{figure}
 
 Profile Inspector, Badge Manager, Battle Manager, and Tournament Manager are components that need to be integrated with both the Query and the Auth Manager.\\
 Some of them rely on the Notification Manager as well, so they need an integration with it.\\
-
 
 Finally, once all the unit tests are passed and the components are integrated, the presentation layer can be integrated with the other components and a full testing phase can be performed on the whole system.\\
 \begin{figure}[H]
@@ -74,8 +71,6 @@ Finally, once all the unit tests are passed and the components are integrated, t
     \caption{Integration plan for the presentation layer}
     \label{fig:test-plan-5}
 \end{figure}
-
-{\color{red} Vogliamo mettere un diagramma riassuntivo di tutto l'Application server per mostrare le dipendenze?}
 
 \section{System Testing}
 The testing phase aims to verify the functional and non-functional requirements and must take place in a testing environment that is as close as possible to the production environment.\\

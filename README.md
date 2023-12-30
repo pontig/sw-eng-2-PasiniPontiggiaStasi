@@ -13,12 +13,12 @@ This repository houses the CodeKataBattle (CKB) platform, a tool designed to hel
 - `Assignment/`: this folder contains the assignments of the project, both the RDD and the IT
 - `DD/`: this folder contains all the latex files for the Design Document of the CKB platform.
 - `DeliveryFolder/`: this folder contains the various versions of the pdf files of the documents that are going to be delivered plus eventual additional files.
-- `ITD/`: this folder contains the code of the implementation of the CKB platform.
+- `ITD/`: this folder contains the code of the implementation of the CKB platform and the relative documentation.
 - `RASD/`: this folder contains all the latex files for the Requirement Analysis and Specification Document of the CKB platform.
 
 
 ## Contributors
 
 * [Tommaso Pasini](https://github.com/TommiPasi) - Email: tommaso1.pasini@mail.polimi.it
-* [Elia Pontiggia](https://gtihub.com/pontig) - Email: elia.pontiggia@mail.polimi.it
+* [Elia Pontiggia](https://github.com/pontig) - Email: elia.pontiggia@mail.polimi.it
 * [Michelangelo Stasi](https://github.com/MyKe01) - Email: michelangelo.stasi@mail.polimi.it
