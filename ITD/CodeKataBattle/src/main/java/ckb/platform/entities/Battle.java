@@ -8,7 +8,8 @@ import java.util.*;
 public class Battle {
 
     private @Id @GeneratedValue Long id;
-    @ManyToOne @JoinColumn(name = "educator_id")
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "educator_id")
     private Educator creator;
     @ElementCollection
     private Map<Team, Integer> ranking;
@@ -24,7 +25,8 @@ public class Battle {
     private Date finalSubmissionDeadline;
     @OneToMany(mappedBy = "id")
     private List<Team> teams;
-    @ManyToOne @JoinColumn(name = "tournament_id")
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
     public Battle() {}
