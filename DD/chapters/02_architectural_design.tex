@@ -355,10 +355,10 @@ This endpoint allows the EDU to get the list of all the tournaments on the CKB p
 This endpoint allows the EDU to get the list of the tournaments that it owns, it will be accessed every time the EDU opens the dashboard.\\
 
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournaments/:parameters \\
+\textbf{EndPoint} : api/search/tournaments/owned/{edu\_id} \\
 \textbf{URL Parameters}:
 \begin{itemize}
-    \item {\ttfamily{id}}: the id of the EDU that is requesting the list of the tournaments
+    \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the list of the tournaments
 \end{itemize}
 \textbf{Response}:
 \begin{itemize}
@@ -431,10 +431,10 @@ This endpoint allows the EDU to get the details of a tournament, it will be acce
 This endpoint allows the EDU to get the details of a battle, it will be accessed when an EDU selects a battle from the list of the battles in a tournament view.\\
 
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/:id/battles/:parameters \\
+\textbf{EndPoint} : api/search/battles/{b\_id}\&{edu\_id}\\
 \textbf{URL Parameters}:
 \begin{itemize}
-    \item {\ttfamily{id}}: the id of the battle that the EDU wants to get the details of
+    \item {\ttfamily{b\_id}}: the id of the battle that the EDU wants to get the details of
     \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the battle
 \end{itemize}
 \textbf{Response}:
@@ -476,7 +476,7 @@ This endpoint allows the EDU to get the details of a battle, it will be accessed
 \subsection*{Get the list of groups for the manual evalation}
 This endpoint allows the EDU to get the list of the groups subscribed to a battle in the "manual evaluation" stage, and for each group that has already been evaluated it provides the score that it has obtained.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/:tournament\_id/battles/:battle\_id/:manualEvaluation=true\&phase=3 \\
+\textbf{EndPoint} : api/search/battles/:battle\_id/:manualEvaluation=true\&phase=3 \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{tournament\_id}} : the id of the tournament of the correlated battle
