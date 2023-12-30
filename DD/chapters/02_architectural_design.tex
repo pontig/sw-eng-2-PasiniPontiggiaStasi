@@ -6,9 +6,10 @@ Sequence diagrams are employed to illustrate the main runtime perspectives, whil
 The section concludes by discussing the architectural design choices and their underlying rationales.
 
 \section{Overview}
-The CKB platform software architecture is organized into three main logical layers, which are associated with an autonomous tier so that the system fits in a 3-tier architecture:
+The CKB platform software architecture is organized into four main logical layers, which are associated with an autonomous tier so that the system fits in a 4-tier architecture:
 \begin{itemize}
     \item the presentation tier, defines the user interface.
+    \item the web server tier, in which the web server runs.
     \item the application tier, where data are processed.
     \item the data tier, where data are stored and managed.
 \end{itemize}
@@ -16,15 +17,6 @@ The CKB platform software architecture is organized into three main logical laye
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/high_level_diagram.png}
-    {\color{red}
-        Client => Web Application \\ 
-        Data => DB \\   
-        Diagramma ad Alto o Basso Livello? \\
-         - Alto: aggiungerei email server, load balancer, firewall tra Client e Web server \\
-            a) 3 tier: Web e application server uniti, allora no firewall tra loro\\
-            b) 4 tier: Web e application server separati, firewall ok tra loro\\
-         - Basso: togliere tutti i firewall e li specifichiamo dopo nel deploy.
-    }
     \caption{High level components diagram}
 \end{figure}
 
@@ -44,17 +36,11 @@ The system is composed of the following components:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/diagrams/component_diagram.png}
-    {\color{red}
-        Badges Manager non deve collegarsi a Battles Manager, ma a Tournaments Manger \\
-        AuthInit non va collegato anche a Profile Inspector? Perchè alla fine è meglio controllare sempre se l'user può eseguire le azioni ed esiste \\
-    }
     \caption{Component diagram}
 \end{figure}
 
 To maintain the readability of this diagram, the interfaces have been grouped according to their functionality.
 A complete set of endpoints is available later in the document.
-
-{\color{red} Non mi è chiara la storia delle proper APIs per comunicare con la WebApp di EDU o STU }
 
 \subsection{Client components}
 The client components are represented only by a single one, a user-friendly WebApp, that behaves differently depending on the type of user using it, an EDU or a STU. \\
@@ -84,9 +70,7 @@ It allows:
 \begin{itemize}
     \item the creation of new badges;
     \item the assignment of badges to the STUs;
-    \item {\color{red} Aggiungere badges ad un torneo, i badge sono del torneo non delle battle}
 \end{itemize}
-{\color{red} Qui devo interfacciare anche con battle e user? Tommi: Secondo me no\\}
 It is interfaced with the auth manager since the creation of a badge is admissible only by the EDUs. \\
 It is interfaced with the query manager to access the database to store the badges. \\
 It is interfaced with the EDU WebApp through the proper APIs, external to the system.
@@ -103,14 +87,12 @@ It allows:
     \item the visualization of the STUs' score in the tournaments, and so the overall ranking;
     \item the visualization of the battles within a tournament.
 \end{itemize}
-{\color{red} Si interfaccia con i badge che si possono specificare per la battaglia\\}
 It is interfaced with the auth manager to allow and perform different actions depending on the level of the user that made the request. \\
 It is interfaced with the query manager to access the database to store or retrieve data. \\
 It is interfaced with the notification manager to notify the users about the start and the end of a tournament.\\
 It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
 
 \subsubsection*{Battles manager}
-{\color{red} specificare meglio => Tommi: non mi sembra male! Solo l'ultima frase non ho capito bene \\}
 The battles manager is the component that handles the management of the battles.\\
 It allows:
 \begin{itemize}
@@ -124,7 +106,8 @@ It allows:
 It is interfaced with the auth manager to allow and perform different actions depending on the level of the user that made the request. \\
 It is interfaced with the query manager to access the database to store or retrieve data. \\
 It is interfaced with the notification manager to notify the users of the opening of subscriptions, the start and the end of a battle.\\
-It is interfaced with the WebApp, both EDU and STU and the proper APIs and with GitHub (to perform the manual evaluation), all external to the system.
+It is interfaced with the WebApp, both EDU and STU and the proper APIs and with GitHub (to perform the manual evaluation), all external to the system. \\
+It is interfaced with the badges manager in order to check if a badge has been achieved or not.
 
 \subsubsection*{Profile Inspector}
 The profile inspector is the component that handles the visualization of the profiles of the STUs and, consequently, of the badges that it has earned during the tournaments. \\
@@ -137,12 +120,9 @@ The data of the system is organized in a relational database, following the belo
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{images/diagrams/er_diagram.png}
-    {\color{red} Da aggiungere tabella per le richieste di join team [IDTEAM - IDBATTLE - IDTOURNAMENT - IDSTU]}
     \caption{Entity-relationship diagram}
     \label{fig:er_diagram}
 \end{figure}
-
-{\color{red} Vogliamo magari scrivere il progetto logico? \\}
 
 \section{Deployment view}
 The diagram \ref{fig:deployment_diagram} shows the deployment view of the system.\\
@@ -167,21 +147,13 @@ The selected cloud provider must respect all these features to effectively meet 
     \label{fig:deployment_diagram}
 \end{figure}
 
-{\color{red}
-    Se Web e Application Server son server diversi, quindi due tier, e il sistema diventa 4-tier al posto di 3. \\
-    3 tier: Client -> Firewall -> Load Balancer -> (CDN) Web Server -> Application server -> Firewall -> DB\\
-    4 tier: Client -> Firewall -> Load Balancer -> (CDN) Web Server -> Firewall -> Load Balancer -> Application server -> Firewall -> DB\\
-            Client -> HTTPS -> Apllicazion Server -> HTTPS / TCP-IP -> DB\\
-    Mettere la CDN in mezzo, come sulle slides di tiw
-}
-
 The components of the system are explained in the following:
 \begin{itemize}
     \item \textbf{PC}: Personal computer of the user, it suffices to have a working OS and a Browser installed that supports JavaScript and HTML5 to use the system.
     \item \textbf{CDN}: The CDN is used to host the static web server, that serves as the entry point for clients to access the SPA. 
                         It allows to download the static web pages without affecting the performance of the main application server. 
                         The SPA is static and all of its code is run on the client's machine, so there is no need for any logic to be implemented on the CDN side.
-    \item \textbf{Cloud provider}: The cloud provider is used to host the application server. {\color{red} anche il web server hosta no?} 
+    \item \textbf{Cloud provider}: The cloud provider is used to host the application server. 
                                    It allows the system to be scalable, flexible, secure, and cost-efficient.\\
           It is composed by:
           \begin{itemize}
@@ -198,11 +170,7 @@ The components of the system are explained in the following:
           \end{itemize}
 \end{itemize}
 
-{\color{red} Da qui in avanti dobbiamo prima parlarne un secondo su cosa metter (secondo me la sezione \textit{API endpoints}, visto che c'è prevalentemente server-side, dovrebbe scriverlo chi si occuperà del backend )\\}
-\newpage
-
 \section{Runtime View}
-{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli del RASD\\}
 This section describes the most important components interactions of the system.
 
 \subsection{User login}
@@ -279,8 +247,6 @@ For the "battle" object, the "phase" attribute is intended to be as an enumerati
     \item 3 - Manual evaluation
     \item 4 - Finished, closed
 \end{itemize}
-
-{\color{red} Qui vi lascio tutte le api con le relative informazioni che mi sevono, poi i path per raggiungerle gestiteveli voi come vi è più comodo e fatemi sapere}
 
 \section*{GET endpoints - General User}
 
@@ -817,7 +783,7 @@ This endpoint allows the EDU to create a new battle within the context of a tour
     \item {\ttfamily{max\_STU}} : Integer
     
     {\color{red}
-    Gradle
+    Gradle => Da modificare con footer
     \item {\ttfamily{test\_cases}} : ?
     \item {\ttfamily{build\_script}} : ?
     \item {\ttfamily{problem\_spec}} : File PDF
@@ -948,7 +914,7 @@ This endpoint allows the STU to join a team to compete in a battle.\\
 \newpage
 
 \section{Component interfaces}
-{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli del RASD e delle Runtime View \\}
+{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli delle Runtime View \\}
 In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users. 
 \begin{figure}[H]
     \centering
@@ -961,13 +927,12 @@ In this diagram are displayed all the functions that each component uses to comm
 \section{Selected Architectural Styles and Patterns}
 \subsection{Client - Server Paradigm}
 The client-server paradigm represents a software architecture model in which two distinct components, identified as the client and server, interact to deliver a service. 
-The client is the component that requests the service, while the server is responsible for its provision. 
+The client is the component that requests the service, while the server is responsible for its provision.
 Communication between them is based on the concept of asynchrony, allowing the client to send requests without waiting for an immediate response. 
-The server, in turn, can process the request at a later time and send a response to the client. This highly flexible paradigm finds extensive use in implementing various applications, including web, network, and distributed contexts. 
+The server, in turn, can process the request at a later time and send a response to the client. This highly flexible paradigm finds extensive use in implementing various applications, including web, network, and distributed contexts.
 Key advantages include flexibility, scalability, and the ability to configure the system to ensure an adequate level of security.
 
-\subsection{N - tiers Architecture}
-{\color{red} Modificare in base a se teniamo una 3 o 4 tier application \\}
+\subsection{4 - tiers Architecture}
 The 4-tier architecture is a software architecture model that divides an application into four distinct layers: Client, Web Server, Application Server, and Database Server. 
 In its implementation for web applications, users send requests to the web server through the browser, which provides static content and forwards dynamic requests to the application server. 
 The application server processes the requests, interacts with the database server, and sends responses to the web server, which, in turn, transmits them to the client.
@@ -985,7 +950,7 @@ Comprising three main components:
 Advantages of the MVC pattern include the separation of concerns, ease of scalability, and maintainability of the application. 
 MVC is a versatile model suitable for various applications, particularly for web applications.
 
-\subsection{RESTfull API}
+\subsection{RESTful APIs}
 The RESTful API architecture is a software model for creating APIs based on the HTTP protocol. 
 RESTful APIs consist of resources identified by URLs and operate through HTTP methods such as GET, POST, PUT, and DELETE. 
 They adhere to the principles of REST, ensuring flexibility, scalability, and ease of use. 
@@ -1007,4 +972,5 @@ The system is designed to use a relational database because it is effective at s
 It can also be easily scaled to handle large amounts of data and support many concurrent users. 
 The database allows us to store and retrieve information efficiently, while also ensuring that the data is accurate and consistent.
 
+\subsection{- TODO -}
 {\color{red}Non abbiamo mai parlato di Gradle secondo me nel design è da mettere, non so bene dove, ma bisonga mostrare che è parte del sistema \\}
