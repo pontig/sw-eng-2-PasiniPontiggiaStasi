@@ -16,6 +16,8 @@ public class Team {
     @ManyToMany
     private List<Student> students;
 
+    //TODO: Secondo me bisogna aggiungere anche Torneo
+
     public Team() {
     }
 

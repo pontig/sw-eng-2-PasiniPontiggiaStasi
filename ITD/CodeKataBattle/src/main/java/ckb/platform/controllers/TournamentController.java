@@ -138,8 +138,6 @@ public class TournamentController {
                 .body(entityModel);
     }
 
-
-
     //TODO: now i use a stu id as session token, but it has to be replaced, same to all other endpoints, we need to pass the token to check the permits
     @GetMapping("/tournaments/{t_id}&{stu_id}")
     Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @PathVariable Long stu_id) {

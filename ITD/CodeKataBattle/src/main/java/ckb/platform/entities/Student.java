@@ -20,10 +20,8 @@ public class Student extends User{
     @ManyToMany
     List<Battle> battles;
 
-
-
-    public Student(String firstName, String lastName, String email) {
-        super(firstName, lastName, email);
+    public Student(String firstName, String lastName, String email, String password) {
+        super(firstName, lastName, email, password);
     }
 
     public Student() {}

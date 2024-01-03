@@ -22,7 +22,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class BattleController {
     private final BattleRepository battleRepository;
-
     private final TournamentRepository tournamentRepository;
     private final StudentRepository studentRepository;
     private final EducatorRepository educatorRepository;

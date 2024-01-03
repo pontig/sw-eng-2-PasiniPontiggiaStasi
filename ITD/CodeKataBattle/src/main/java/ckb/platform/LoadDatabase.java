@@ -24,12 +24,11 @@ class LoadDatabase {
     @Bean
         // indicates that a method produces a bean to be managed by the Spring container
     CommandLineRunner initDatabase1STU(StudentRepository repository) {
-
         return args -> {// Some students
-            log.info("Preloading " + repository.save(new Student("Bilbo", "Baggins", "bilbo@gmail.com")));
-            log.info("Preloading " + repository.save(new Student("Frodo", "Baggins", "frodo@hotmail.com")));
-            log.info("Preloading " + repository.save(new Student("Samwise", "Gamgee", "samwiseGmg@hotmail.com")));
-            log.info("Preloading " + repository.save(new Student("Meriadoc", "Brandybuck", "meridaBrandy69@hotmail.com")));
+            log.info("Preloading " + repository.save(new Student("Bilbo", "Baggins", "bilbo@gmail.com", "0000")));
+            log.info("Preloading " + repository.save(new Student("Frodo", "Baggins", "frodo@hotmail.com", "0000")));
+            log.info("Preloading " + repository.save(new Student("Samwise", "Gamgee", "samwiseGmg@hotmail.com", "0000")));
+            log.info("Preloading " + repository.save(new Student("Meriadoc", "Brandybuck", "meridaBrandy69@hotmail.com", "0000")));
 
         };
     }
@@ -38,8 +37,8 @@ class LoadDatabase {
     CommandLineRunner initDatabase2EDU(EducatorRepository repository) {
         return args -> {
             // A couple of educators
-            log.info("Preloading " + repository.save(new Educator("Gandalf", "The Grey", "gandalfTheBlack@hotmail.com")));
-            log.info("Preloading " + repository.save(new Educator("Saruhan", "The White", "evenMoreWhite@hotmail.com")));
+            log.info("Preloading " + repository.save(new Educator("Gandalf", "The Grey", "gandalfTheBlack@hotmail.com", "0000")));
+            log.info("Preloading " + repository.save(new Educator("Saruhan", "The White", "evenMoreWhite@hotmail.com", "0000")));
 
         };
     }
@@ -48,7 +47,7 @@ class LoadDatabase {
     CommandLineRunner initDatabase3TOU(TournamentRepository repository) {
         return args -> {
             // A couple of tournaments
-            log.info("Preloading " + repository.save(new Tournament("Tournament 1", new Date(), new Educator("Myke", "01", "mstasi01@gmail.com"))));
+            log.info("Preloading " + repository.save(new Tournament("Tournament 1", new Date(), new Educator("Myke", "01", "mstasi01@gmail.com", "0000"))));
         };
     }
 
@@ -56,8 +55,7 @@ class LoadDatabase {
     CommandLineRunner initDatabase4BAT(BattleRepository repository) {
         return args -> {
             // A couple of battles
-            log.info("Preloading " + repository.save(new Battle(new Educator("Myke", "01", ""), true, 2, 4, new Date(), new Date(), new Tournament("Tournament 1", new Date(), new Educator("Myke", "01", "")))));
+            log.info("Preloading " + repository.save(new Battle(new Educator("Myke", "02", "", "0000"), true, 2, 4, new Date(), new Date(), new Tournament("Tournament 1", new Date(), new Educator("Myke", "03", "", "0000")))));
        };
     }
 }
-
