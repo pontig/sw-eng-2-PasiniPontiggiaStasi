@@ -17,8 +17,8 @@ public class Educator extends User{
     @OneToMany (mappedBy = "id")
     private List<Battle> ownedBattles;
 
-    public Educator(String firstName, String lastName, String email) {
-        super(firstName, lastName, email);
+    public Educator(String firstName, String lastName, String email, String password) {
+        super(firstName, lastName, email, password);
         ownedTournaments = new ArrayList<Tournament>();
         ownedBattles = new ArrayList<Battle>();
     }

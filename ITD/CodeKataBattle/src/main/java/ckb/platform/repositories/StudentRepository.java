@@ -1,7 +1,17 @@
 package ckb.platform.repositories;
 
 import ckb.platform.entities.Student;
+
+import ckb.platform.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    @Query("SELECT u FROM Student u WHERE u.email = :email AND u.password = :password")
+    User findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
+
+    @Query("SELECT u FROM Student u WHERE u.email = :email")
+    User alreadyRegistered(@Param("email") String email);
 }

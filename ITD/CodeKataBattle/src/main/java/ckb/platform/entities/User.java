@@ -12,13 +12,14 @@ public abstract class User {
     private String firstName;
     private String lastName;
     private String email;
-
+    private String password;
     public User() {}
 
-    public User(String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -36,6 +37,7 @@ public abstract class User {
     public String getEmail() {
         return this.email;
     }
+    public String getPassword() {return this.password;}
 
     public void setId(Long id) {
         this.id = id;
@@ -52,6 +54,7 @@ public abstract class User {
     public void setEmail(String email) {
         this.email = email;
     }
+    public void setPassword(String password) {this.password = password;}
 
     @Override
     public boolean equals(Object o) {
