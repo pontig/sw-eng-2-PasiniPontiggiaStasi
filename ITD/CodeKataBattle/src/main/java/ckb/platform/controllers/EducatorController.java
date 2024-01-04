@@ -3,6 +3,7 @@ package ckb.platform.controllers;
 import ckb.platform.entities.Educator;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.repositories.EducatorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class EducatorController {
-
+    @Autowired
     private final EducatorRepository repository;
     private final EducatorModelAssembler assembler;
 

@@ -3,15 +3,13 @@ package ckb.platform.controllers;
 import ckb.platform.entities.Student;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.repositories.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -19,6 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController //It indicates that the data returned by each method will be written straight into the response body instead of rendering a template.
 public class StudentController {
+    @Autowired
     private final StudentRepository repository;
     private final StudentModelAssembler assembler;
 
@@ -33,14 +32,16 @@ public class StudentController {
     //CollectionModel is another Spring HATEOAS container aimed at encapsulating collections of resources, instea dof a single resource entity.
 
     @GetMapping("/students")
-    Map<String, Object> all() {
+    List<Map<String, Object>> all() {
         List<Student> students = repository.findAll();
 
-        Map<String, Object> response = new HashMap<>();
+        List<Map<String, Object>> response = new ArrayList<>();
         students.forEach(s ->{
-            response.put("id", s.getId());
-            response.put("firstName", s.getFirstName());
-            response.put("surname", s.getLastName());
+            Map<String, Object> student = new LinkedHashMap<>();
+            student.put("id", s.getId());
+            student.put("firstName", s.getFirstName());
+            student.put("surname", s.getLastName());
+            response.add(student);
         });
 
         return response;
@@ -54,27 +55,29 @@ public class StudentController {
         Student student = repository.findById(id)
             .orElseThrow(() -> new StudentNotFoundException(id));
 
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new LinkedHashMap<>();
 
         response.put("id", student.getId());
         response.put("firstName", student.getFirstName());
         response.put("surname", student.getLastName());
 
-        Map<String, Object> tournament = new HashMap<>();
-        student.getTournaments().stream().map(t -> {
+        List<Map<String, Object>> tournaments = new ArrayList<>();
+        student.getTournaments().forEach(t -> {
+            Map<String, Object> tournament = new LinkedHashMap<>();
             tournament.put("id", t.getId());
             tournament.put("name", t.getName());
-            return tournament;
+            tournaments.add(tournament);
         });
 
-        response.put("tournaments", tournament);
+        response.put("tournaments", tournaments);
 
-        Map<String, Object> badges = new HashMap<>();
-        student.getAchieveBadges().stream().map(b -> {
-            badges.put("id", b.getId());
+        List<Map<String, Object>> badges = new ArrayList<>();
+        student.getAchieveBadges().forEach(b -> {
+            Map<String, Object> badge = new LinkedHashMap<>();
+            badge.put("id", b.getId());
             //badges.put("name", b.getName());
             //TODO;
-            return badges;
+            badges.add(badge);
         });
 
         response.put("badges", badges);

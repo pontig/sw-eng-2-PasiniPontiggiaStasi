@@ -7,7 +7,7 @@ import java.util.*;
 @Entity @Table(name = "Battle")
 public class Battle {
 
-    private @Id @GeneratedValue Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "educator_id")
     private Educator creator;
