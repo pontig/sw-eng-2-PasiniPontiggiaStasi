@@ -1,15 +1,14 @@
 package ckb.platform.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity @Table(name = "Educator")
+@Entity
+//@DiscriminatorValue("1")
+@Table(name = "Educator")
 public class Educator extends User{
 
     @ManyToMany
@@ -17,8 +16,8 @@ public class Educator extends User{
     @OneToMany (mappedBy = "id")
     private List<Battle> ownedBattles;
 
-    public Educator(String firstName, String lastName, String email, String password) {
-        super(firstName, lastName, email, password);
+    public Educator(int id, String firstName, String lastName, String home_uni, String email, String password) {
+        super(id, firstName, lastName, email, password, true, home_uni);
         ownedTournaments = new ArrayList<Tournament>();
         ownedBattles = new ArrayList<Battle>();
     }

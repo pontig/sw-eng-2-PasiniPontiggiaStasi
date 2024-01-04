@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 @MappedSuperclass
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "is_Edu", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class User {
 
     @Column(name = "id", nullable = false)
@@ -18,13 +20,18 @@ public abstract class User {
     @Column(name = "email")
     private String email;
     private String password;
+    private boolean is_Edu;
+    private String home_uni;
     public User() {}
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(int id, String firstName, String lastName, String email, String password, boolean is_Edu, String home_uni) {
+        this.id = (long) id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.is_Edu = is_Edu;
+        this.home_uni = home_uni;
     }
 
     public Long getId() {

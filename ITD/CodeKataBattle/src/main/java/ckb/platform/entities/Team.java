@@ -13,10 +13,14 @@ public class Team {
     @ManyToOne @JoinColumn(name = "battle_id")
     private Battle battle;
 
+    private String name;
+    private int score;
+
     @ManyToMany
     private List<Student> students;
 
     //TODO: Secondo me bisogna aggiungere anche Torneo
+
 
     public Team() {
     }
@@ -27,8 +31,24 @@ public class Team {
         students.add(student);
     }
 
+    public Team(int id, String name, Battle battle) {
+        this.id = (long) id;
+        this.name = name;
+        this.battle = battle;
+        students = new ArrayList<Student>();
+        this.score = 0;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public void addStudent(Student student){
@@ -51,12 +71,22 @@ public class Team {
         return students;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "Team{" +
                 "id=" + id +
                 ", battle='" + battle +
                 ", students='" + students +
+                ", name='" + name + '\'' +
+                ", score='" + score + '\'' +
                 '}';
     }
 
@@ -75,4 +105,6 @@ public class Team {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+
+
 }

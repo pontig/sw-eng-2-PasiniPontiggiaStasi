@@ -14,6 +14,9 @@ public class Battle {
     @ElementCollection
     private Map<Team, Integer> ranking;
     private Boolean manualEvaluation;
+    private String name;
+    private Boolean hasBeenEvaluated;
+    private String language;
     /*
     private Enum language;
     private String Description;
@@ -23,6 +26,7 @@ public class Battle {
     private int maxStudents;
     private Date registrationDeadline;
     private Date finalSubmissionDeadline;
+    private Date openDate;
     @OneToMany(mappedBy = "id")
     private List<Team> teams;
     @ManyToOne (cascade = CascadeType.ALL)
@@ -31,14 +35,31 @@ public class Battle {
 
     public Battle() {}
 
-    public Battle(Educator creator, Boolean manualEvaluation, int minStudents, int maxStudents, Date registrationDeadline, Date finalSubmissionDeadline, Tournament tournament) {
+    public Battle(int id,
+                  String name,
+                  Date openDate,
+                  Date registrationDeadline,
+                  Date finalSubmissionDeadline,
+                  String language,
+                  Boolean manualEvaluation,
+                  int minStudents,
+                  int maxStudents,
+                  Educator creator,
+                  Tournament tournament,
+                  Boolean hasBeenEvaluated
+    ) {
+        this.id = (long) id;
         this.creator = creator;
         this.manualEvaluation = manualEvaluation;
+        this.hasBeenEvaluated = hasBeenEvaluated;
         this.minStudents = minStudents;
         this.maxStudents = maxStudents;
         this.registrationDeadline = registrationDeadline;
         this.finalSubmissionDeadline = finalSubmissionDeadline;
         this.tournament = tournament;
+        this.name = name;
+        this.openDate = openDate;
+        this.language = language;
         teams = new ArrayList<Team>();
     }
 
@@ -56,6 +77,10 @@ public class Battle {
 
     public void setManualEvaluation(Boolean manualEvaluation){
         this.manualEvaluation = manualEvaluation;
+    }
+
+    public void setHasBeenEvaluated(Boolean hasBeenEvaluated){
+        this.hasBeenEvaluated = hasBeenEvaluated;
     }
 
     public void setMinStudents(int minStudents){
@@ -92,6 +117,10 @@ public class Battle {
 
     public Boolean getManualEvaluation(){
         return manualEvaluation;
+    }
+
+    public Boolean getHasBeenEvaluated(){
+        return hasBeenEvaluated;
     }
 
     public int getMinStudents(){
@@ -145,6 +174,7 @@ public class Battle {
         Battle battle = (Battle) o;
         return Objects.equals(this.id, battle.id) && Objects.equals(this.creator, battle.creator)
                 && Objects.equals(this.ranking, battle.ranking) && Objects.equals(this.manualEvaluation, battle.manualEvaluation)
+                && Objects.equals(this.hasBeenEvaluated, battle.hasBeenEvaluated)
                 && Objects.equals(this.minStudents, battle.minStudents) && Objects.equals(this.maxStudents, battle.maxStudents)
                 && Objects.equals(this.registrationDeadline, battle.registrationDeadline) && Objects.equals(this.finalSubmissionDeadline, battle.finalSubmissionDeadline)
                 && Objects.equals(this.teams, battle.teams) && Objects.equals(this.tournament, battle.tournament);
@@ -152,12 +182,12 @@ public class Battle {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.creator, this.manualEvaluation, this.minStudents, this.maxStudents, this.registrationDeadline, this.finalSubmissionDeadline, this.tournament);
+        return Objects.hash(this.id, this.creator, this.manualEvaluation, this.hasBeenEvaluated, this.minStudents, this.maxStudents, this.registrationDeadline, this.finalSubmissionDeadline, this.tournament);
     }
 
     @Override
     public String toString() {
-        return "Battle{" + "id=" + this.id + ", creator='" + this.creator + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament + '\'' + '}';
+        return "Battle{" + "id=" + this.id + ", creator='" + this.creator + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament + '\'' + '}';
     }
 
 }

@@ -10,6 +10,7 @@ public class Tournament {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     private String name;
     private Date subscriptionDeadline;
+    private Date endDate;
 
     @ManyToOne @JoinColumn(name = "educator_id")
     private Educator creator;
@@ -28,9 +29,11 @@ public class Tournament {
     @ElementCollection
     private Map<Student, Integer> ranking;
 
-    public Tournament(String name, Date subscriptionDeadline, Educator creator) {
+    public Tournament(int id, String name, Date subscriptionDeadline, Date endDate, Educator creator) {
+        this.id = (long) id;
         this.name = name;
         this.subscriptionDeadline = subscriptionDeadline;
+        this.endDate = endDate;
         this.creator = creator;
         grantedEducators = new ArrayList<Educator>();
         grantedEducators.add(creator);

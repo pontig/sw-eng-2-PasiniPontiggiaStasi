@@ -1,14 +1,13 @@
 package ckb.platform.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 
-@Entity @Table(name = "Student")
+@Entity
+//@DiscriminatorValue("0")
+@Table(name = "Student")
 public class Student extends User{
 
     @ManyToMany
@@ -20,8 +19,8 @@ public class Student extends User{
     @ManyToMany
     List<Battle> battles;
 
-    public Student(String firstName, String lastName, String email, String password) {
-        super(firstName, lastName, email, password);
+    public Student(int id,String firstName, String lastName, String email, String password, String home_uni) {
+        super(id, firstName, lastName, email, password, false, home_uni);
     }
 
     public Student() {}
