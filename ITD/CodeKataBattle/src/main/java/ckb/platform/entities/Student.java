@@ -19,8 +19,8 @@ public class Student extends User{
     @ManyToMany
     List<Battle> battles;
 
-    public Student(int id,String firstName, String lastName, String email, String password, String home_uni) {
-        super(id, firstName, lastName, email, password, false, home_uni);
+    public Student(String firstName, String lastName, String email, String password, String home_uni) {
+        super(firstName, lastName, email, password, false, home_uni);
     }
 
     public Student() {}
