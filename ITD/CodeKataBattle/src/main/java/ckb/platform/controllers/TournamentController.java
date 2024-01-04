@@ -148,7 +148,7 @@ public class TournamentController {
 
     //mapped to "Get tournament details " for a stu
     //TODO: now i use a stu id as session token, but it has to be replaced, same to all other endpoints, we need to pass the token to check the permits
-    @GetMapping("/tournaments/{t_id}")
+    @GetMapping("/tournaments/stu/{id}")
     Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @RequestParam Long stu_id) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
@@ -189,7 +189,7 @@ public class TournamentController {
 
 
     //mapped to "Get tournament details"
-    @GetMapping("/tournaments/{id}")
+    @GetMapping("/tournaments/edu/{id}")
     Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, @RequestParam Long edu_id) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));

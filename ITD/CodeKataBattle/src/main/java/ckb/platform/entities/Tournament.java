@@ -15,7 +15,7 @@ public class Tournament {
     @ManyToOne @JoinColumn(name = "educator_id")
     private Educator creator;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Educator> grantedEducators;
     @ManyToMany
     private List<Student> subscribedStudents;
