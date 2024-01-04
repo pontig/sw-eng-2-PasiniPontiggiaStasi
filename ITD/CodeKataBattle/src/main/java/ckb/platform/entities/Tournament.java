@@ -29,8 +29,7 @@ public class Tournament {
     @ElementCollection
     private Map<Student, Integer> ranking;
 
-    public Tournament(int id, String name, Date subscriptionDeadline, Date endDate, Educator creator) {
-        this.id = (long) id;
+    public Tournament(String name, Date subscriptionDeadline, Date endDate, Educator creator) {
         this.name = name;
         this.subscriptionDeadline = subscriptionDeadline;
         this.endDate = endDate;

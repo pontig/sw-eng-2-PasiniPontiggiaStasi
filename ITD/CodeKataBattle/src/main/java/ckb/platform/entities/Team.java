@@ -31,8 +31,7 @@ public class Team {
         students.add(student);
     }
 
-    public Team(int id, String name, Battle battle) {
-        this.id = (long) id;
+    public Team( String name, Battle battle) {
         this.name = name;
         this.battle = battle;
         students = new ArrayList<Student>();

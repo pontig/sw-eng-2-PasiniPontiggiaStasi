@@ -35,7 +35,7 @@ public class Battle {
 
     public Battle() {}
 
-    public Battle(int id,
+    public Battle(
                   String name,
                   Date openDate,
                   Date registrationDeadline,
@@ -48,7 +48,6 @@ public class Battle {
                   Tournament tournament,
                   Boolean hasBeenEvaluated
     ) {
-        this.id = (long) id;
         this.creator = creator;
         this.manualEvaluation = manualEvaluation;
         this.hasBeenEvaluated = hasBeenEvaluated;
