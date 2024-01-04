@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity @Table(name = "Team")
 public class Team {
-    private @Id @GeneratedValue Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
     @ManyToOne @JoinColumn(name = "battle_id")
     private Battle battle;

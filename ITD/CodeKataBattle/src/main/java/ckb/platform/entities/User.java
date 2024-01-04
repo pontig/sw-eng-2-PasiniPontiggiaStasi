@@ -1,16 +1,21 @@
 package ckb.platform.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 @MappedSuperclass
 public abstract class User {
-    private @Id @GeneratedValue Long id;
+
+    @Column(name = "id", nullable = false)
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+
+    @Column(name = "firstName")
     private String firstName;
+
+    @Column(name = "lastName")
     private String lastName;
+
+    @Column(name = "email")
     private String email;
     private String password;
     public User() {}

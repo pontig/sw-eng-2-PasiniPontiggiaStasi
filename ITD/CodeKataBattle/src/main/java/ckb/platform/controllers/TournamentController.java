@@ -13,15 +13,13 @@ import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TournamentRepository;
 import jakarta.websocket.OnClose;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -30,10 +28,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class TournamentController {
 
+    @Autowired
     private final TournamentRepository tournamentRepository;
     private final TournamentModelAssembler assembler;
+    @Autowired
     private final EducatorRepository educatorRepository;
+    @Autowired
     private final StudentRepository studentRepository;
+    @Autowired
     private final BattleRepository battleRepository;
 
     TournamentController(TournamentRepository tournamentRepository, TournamentModelAssembler assembler, EducatorRepository educatorRepository, StudentRepository studentRepository, BattleRepository battleRepository) {
@@ -48,17 +50,19 @@ public class TournamentController {
     //tag::get-aggregate-root[]
     //CollectionModel is another Spring HATEOAS container aimed at encapsulating collections of resources, instead of a single resource entity.
     @GetMapping("/tournaments")
-    Map<String, Object> all() {
+    List<Map<String, Object>> all() {
         List<Tournament>tournaments = tournamentRepository.findAll();
 
-        Map<String, Object> response = new HashMap<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
         tournaments.forEach(t -> {
-            response.put("id", t.getId());
-            response.put("name", t.getName());
-            response.put("first_name", t.getCreator().getFirstName());
-            response.put("last_name", t.getCreator().getLastName());
-            //response.put("active", t.isActive());
+            Map<String, Object> tournament = new LinkedHashMap<>();
+            tournament.put("id", t.getId());
+            tournament.put("name", t.getName());
+            tournament.put("first_name", t.getCreator().getFirstName());
+            tournament.put("last_name", t.getCreator().getLastName());
+            //tournament.put("active", t.isActive());
+            response.add(tournament);
         });
 
         return response;
@@ -76,18 +80,20 @@ public class TournamentController {
     }
 
     @GetMapping("/tournaments/owned/{edu_id}")
-    Map<String, Object> getOwnedTournaments(@PathVariable Long edu_id) {
+    List<Map<String, Object>> getOwnedTournaments(@PathVariable Long edu_id) {
         Educator educator = educatorRepository.findById(edu_id)
                 .orElseThrow(() -> new EducatorNotFoundException(edu_id));
 
-
-        Map<String, Object> response = new HashMap<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
         educator.getOwnedTournaments().forEach(t -> {
-            response.put("id", t.getId());
-            response.put("first_name", t.getCreator().getFirstName());
-            response.put("last_name", t.getCreator().getLastName());
-            //response.put("active", t.isActive());
+            Map<String, Object> tournament = new LinkedHashMap<>();
+
+            tournament.put("id", t.getId());
+            tournament.put("first_name", t.getCreator().getFirstName());
+            tournament.put("last_name", t.getCreator().getLastName());
+            //tournament.put("active", t.isActive());
+            response.add(tournament);
         });
 
         return response;
@@ -147,14 +153,14 @@ public class TournamentController {
         Student student = studentRepository.findById(stu_id)
                 .orElseThrow(() -> new StudentNotFoundException(stu_id));
 
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", tournament.getId());
         response.put("name", tournament.getName());
         //response.put("active", tournament.isActive());
         response.put("canSubscribe", tournament.getSubscriptionDeadline().compareTo(new Date())>0);
         response.put("subscribed", tournament.getSubscribedStudents().contains(student));
         response.put("battles", tournament.getBattles().stream().map( battle -> {
-            Map<String, Object> battleMap = new HashMap<>();
+            Map<String, Object> battleMap = new LinkedHashMap<>();
             battleMap.put("id", battle.getId());
             //battleMap.put("name", battle.getName());
             //battleMap.put("language", battle.getLanguage());
@@ -165,14 +171,16 @@ public class TournamentController {
             //battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
             return battleMap;
         }));
-        Map<String, Object> rankingMap = new HashMap<>();
+        ArrayList<Map<String, Object>> rankings= new ArrayList<>();
         tournament.getRanking().forEach((Student, score) -> {
+            Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", Student.getId());
             rankingMap.put("firstname", Student.getFirstName());
             rankingMap.put("lastname", Student.getLastName());
             rankingMap.put("points", score);
+            rankings.add(rankingMap);
         });
-        response.put("ranking", rankingMap);
+        response.put("ranking", rankings);
         return response;
     }
 
@@ -184,13 +192,13 @@ public class TournamentController {
         Educator educator = educatorRepository.findById(edu_id)
                 .orElseThrow(() -> new EducatorNotFoundException(edu_id));
 
-        Map<String, Object> tournamentMap = new HashMap<>();
+        Map<String, Object> tournamentMap = new LinkedHashMap<>();
         tournamentMap.put("id", tournament.getId());
         tournamentMap.put("name", tournament.getName());
         //tournamentMap.put("active", tournament.isActive());
         tournamentMap.put("admin", tournament.getGrantedEducators().contains(educator));
         tournamentMap.put("battles", tournament.getBattles().stream().map( battle -> {
-            Map<String, Object> battleMap = new HashMap<>();
+            Map<String, Object> battleMap = new LinkedHashMap<>();
             battleMap.put("id", battle.getId());
             //battleMap.put("name", battle.getName());
             //battleMap.put("language", battle.getLanguage());
@@ -199,14 +207,17 @@ public class TournamentController {
             //battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
             return battleMap;
         }));
-        Map<String, Object> rankingMap = new HashMap<>();
+
+        ArrayList<Map<String, Object>> rankings= new ArrayList<>();
          tournament.getRanking().forEach((Student, score) -> {
-            rankingMap.put("id", Student.getId());
-            rankingMap.put("firstname", Student.getFirstName());
-            rankingMap.put("lastname", Student.getLastName());
-            rankingMap.put("points", score);
+             Map<String, Object> rankingMap = new LinkedHashMap<>();
+             rankingMap.put("id", Student.getId());
+             rankingMap.put("firstname", Student.getFirstName());
+             rankingMap.put("lastname", Student.getLastName());
+             rankingMap.put("points", score);
+             rankings.add(rankingMap);
         });
-        tournamentMap.put("ranking", rankingMap);
+        tournamentMap.put("ranking", rankings);
         return tournamentMap;
     }
 
@@ -215,7 +226,7 @@ public class TournamentController {
         Battle battle = battleRepository.findById(b_id)
                 .orElseThrow();
 
-        Map<String, Object> battleMap = new HashMap<>();
+        Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         //battleMap.put("title", battle.getTitle());
         //battleMap.put("description", battle.getDescription());
@@ -231,50 +242,56 @@ public class TournamentController {
         battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educatorRepository.findById(edu_id).orElseThrow()));
         battleMap.put("manual", battle.getManualEvaluation());
 
-        Map<String, Object> rankingMap = new HashMap<>();
+        ArrayList<Map<String, Object>> rankings = new ArrayList<>();
         battle.getRanking().forEach((team, score) -> {
+            Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
             //rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
+            rankings.add(rankingMap);
         });
 
-        battleMap.put("ranking", rankingMap);
+        battleMap.put("ranking", rankings);
 
         return battleMap;
     }
 
     @GetMapping("/tournaments/subscribed/{s_id}")
-    Map<String, Object> getSubscribedTournaments(@PathVariable Long s_id) {
+    List<Map<String, Object>> getSubscribedTournaments(@PathVariable Long s_id) {
         Student student = studentRepository.findById(s_id)
                 .orElseThrow(() -> new StudentNotFoundException(s_id));
 
-        Map<String, Object> response = new HashMap<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
         student.getTournaments().forEach(t -> {
-            response.put("id", t.getId());
-            response.put("name", t.getName());
-            response.put("first_name", t.getCreator().getFirstName());
-            response.put("last_name", t.getCreator().getLastName());
-            //response.put("active", t.isActive());
+            Map<String, Object> tournamentMap = new LinkedHashMap<>();
+            tournamentMap.put("id", t.getId());
+            tournamentMap.put("name", t.getName());
+            tournamentMap.put("first_name", t.getCreator().getFirstName());
+            tournamentMap.put("last_name", t.getCreator().getLastName());
+            //tournamentMap.put("active", t.isActive());
+            response.add(tournamentMap);
         });
 
         return response;
     }
 
     @GetMapping("/tournaments/unsuscribed/{s_id}")
-    Map<String, Object> getUnsubscribedTournaments(@PathVariable Long s_id) {
+    List<Map<String, Object>> getUnsubscribedTournaments(@PathVariable Long s_id) {
         Student student = studentRepository.findById(s_id)
                 .orElseThrow(() -> new StudentNotFoundException(s_id));
 
-        Map<String, Object> response = new HashMap<>();
+       List<Map<String, Object>> response = new ArrayList<>();
 
         tournamentRepository.findAll().forEach(t -> {
             if(!student.getTournaments().contains(t)) {
-                response.put("id", t.getId());
-                response.put("name", t.getName());
-                response.put("first_name", t.getCreator().getFirstName());
-                response.put("last_name", t.getCreator().getLastName());
-                //response.put("daysLeft", t.getSubscriptionDeadline());
+                Map<String, Object> tournamentMap = new LinkedHashMap<>();
+                tournamentMap.put("id", t.getId());
+                tournamentMap.put("name", t.getName());
+                tournamentMap.put("first_name", t.getCreator().getFirstName());
+                tournamentMap.put("last_name", t.getCreator().getLastName());
+                //tournamentMap.put("daysLeft", t.getSubscriptionDeadline());
+                response.add(tournamentMap);
             }
         });
 

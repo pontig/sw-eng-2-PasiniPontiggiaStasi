@@ -5,15 +5,13 @@ import ckb.platform.entities.Student;
 import ckb.platform.entities.Team;
 import ckb.platform.entities.Tournament;
 import ckb.platform.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -21,11 +19,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class BattleController {
+
+    @Autowired
     private final BattleRepository battleRepository;
+    @Autowired
     private final TournamentRepository tournamentRepository;
+    @Autowired
     private final StudentRepository studentRepository;
+    @Autowired
     private final EducatorRepository educatorRepository;
     private final BattleModelAssembler assembler;
+    @Autowired
     private final TeamRepository teamRepository;
 
     BattleController(BattleRepository battleRepository, BattleModelAssembler assembler, TournamentRepository tournamentRepository, StudentRepository studentRepository, EducatorRepository educatorRepository, TeamRepository teamRepository) {
@@ -56,7 +60,7 @@ public class BattleController {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow();
 
-        Map<String, Object> battleMap = new HashMap<>();
+        Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         //battleMap.put("title", battle.getTitle());
         //battleMap.put("description", battle.getDescription());
@@ -70,14 +74,16 @@ public class BattleController {
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
-        Map<String, Object> rankingMap = new HashMap<>();
+        List<Map<String, Object>> rankings = new ArrayList<>();
         battle.getRanking().forEach((team, score) -> {
+            Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
             //rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
+            rankings.add(rankingMap);
         });
 
-        battleMap.put("ranking", rankingMap);
+        battleMap.put("ranking", rankings);
 
         return battleMap;
         }
@@ -87,7 +93,7 @@ public class BattleController {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow();
 
-        Map<String, Object> battleMap = new HashMap<>();
+        Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         //battleMap.put("title", battle.getTitle());
         //battleMap.put("description", battle.getDescription());
@@ -105,14 +111,16 @@ public class BattleController {
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
-        Map<String, Object> rankingMap = new HashMap<>();
+        List<Map<String, Object>> rankings = new ArrayList<>();
         battle.getRanking().forEach((team, score) -> {
+            Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
             //rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
+            rankings.add(rankingMap);
         });
 
-        battleMap.put("ranking", rankingMap);
+        battleMap.put("ranking", rankings);
 
         return battleMap;
     }
@@ -124,7 +132,7 @@ public class BattleController {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow();
 
-        Map<String, Object> battleMap = new HashMap<>();
+        Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         //battleMap.put("title", battle.getTitle());
         //battleMap.put("description", battle.getDescription());
@@ -140,14 +148,16 @@ public class BattleController {
         battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educatorRepository.findById(edu_id).orElseThrow()));
         battleMap.put("manual", battle.getManualEvaluation());
 
-        Map<String, Object> rankingMap = new HashMap<>();
+        List<Map<String, Object>> rankings = new ArrayList<>();
         battle.getRanking().forEach((team, score) -> {
+            Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
             //rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
+            rankings.add(rankingMap);
         });
 
-        battleMap.put("ranking", rankingMap);
+        battleMap.put("ranking", rankings);
 
         return battleMap;
     }
@@ -158,7 +168,7 @@ public class BattleController {
         Battle battle = battleRepository.findById(b_id)
                 .orElseThrow();
 
-        Map<String, Object> response= new HashMap<>();
+        Map<String, Object> response= new LinkedHashMap<>();
         return response;
     }
 
@@ -169,7 +179,7 @@ public class BattleController {
         Team team = teamRepository.findById(t_id)
                 .orElseThrow();
 
-        Map<String, Object> response= new HashMap<>();
+        Map<String, Object> response= new LinkedHashMap<>();
         response.put("group_id", team.getId());
         response.put("battle_id", battle.getId());
         //response.put("language", battle.getLanguage());
@@ -231,18 +241,30 @@ public class BattleController {
     }
 
     @GetMapping("/battles/{id}/students")
-    CollectionModel<EntityModel<Student>> getStudents(@PathVariable Long id) {
+    List<Map<String, Object>> getStudents(@PathVariable Long id) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow();
 
-        List<EntityModel<Student>> students = battle.getTeams().stream()
-                .flatMap(team -> team.getStudents().stream())
-                .map( student -> EntityModel.of(student,
-                        linkTo(methodOn(StudentController.class).one(student.getId())).withSelfRel(),
-                        linkTo(methodOn(StudentController.class).all()).withRel("students")))
-                .collect(Collectors.toList());
+        List<Map<String, Object>> response = new ArrayList<>();
+        battle.getTeams()
+                .forEach(t -> {
+                    Map<String, Object> team = new LinkedHashMap<>();
+                    team.put("id", t.getId());
+                    //team.put("name", t.getName());
+                    team.put("score", battle.getRanking().get(t));
+                    List<Map<String, Object>> students = new ArrayList<>();
+                    t.getStudents().forEach(s -> {
+                        Map<String, Object> student = new LinkedHashMap<>();
+                        student.put("id", s.getId());
+                        student.put("firstName", s.getFirstName());
+                        student.put("lastName", s.getLastName());
+                        students.add(student);
+                    });
+                    team.put("students", students);
+                    response.add(team);
+                });
 
-        return CollectionModel.of(students, linkTo(methodOn(BattleController.class).getStudents(id)).withSelfRel());
+        return response;
     }
 
 }

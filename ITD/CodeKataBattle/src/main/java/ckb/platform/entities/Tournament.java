@@ -7,7 +7,7 @@ import java.util.*;
 @Entity @Table(name = "Tournament")
 public class Tournament {
 
-    private @Id @GeneratedValue Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     private String name;
     private Date subscriptionDeadline;
 

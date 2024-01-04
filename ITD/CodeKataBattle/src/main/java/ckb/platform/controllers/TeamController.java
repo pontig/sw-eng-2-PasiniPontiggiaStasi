@@ -3,6 +3,7 @@ package ckb.platform.controllers;
 import ckb.platform.entities.Team;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.repositories.TeamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class TeamController {
 
+    @Autowired
     private final TeamRepository repository;
     private final TeamModelAssembler assembler;
 

@@ -2,6 +2,7 @@ package ckb.platform.controllers;
 
 import ckb.platform.entities.Badge;
 import ckb.platform.repositories.BadgeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class BadgeController {
-
+    @Autowired
     private final BadgeRepository repository;
     private final BadgeModelAssembler assembler;
 
