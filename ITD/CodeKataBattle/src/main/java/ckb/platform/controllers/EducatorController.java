@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -48,6 +50,24 @@ public class EducatorController {
             .orElseThrow(() -> new EducatorNotFoundException(id));
 
         return assembler.toModel(educator);
+    }
+
+
+    //mapped to "Search for an EDU"
+    @GetMapping("/educators/{query}")
+    List<Map<String, Object>> search(@PathVariable String query) {
+        List<Educator> educators = repository.findByQuery(query);
+
+        return educators.stream()
+            .map(educator -> {
+                Map<String, Object> educatorMap = Map.of(
+                    "id", educator.getId(),
+                    "name", educator.getFirstName(),
+                    "surname", educator.getLastName()
+                );
+                return educatorMap;
+            })
+            .collect(Collectors.toList());
     }
 
     @PostMapping("/educators")

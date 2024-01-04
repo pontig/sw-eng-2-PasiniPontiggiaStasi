@@ -47,9 +47,28 @@ public class StudentController {
         return response;
     }
 
+
+    //mapped to "Search for a student"
+    @GetMapping("/students/{query}")
+    List<Map<String, Object>> search(@PathVariable String query) {
+        List<Student> students = repository.findByQuery(query);
+
+        List<Map<String, Object>> response = new ArrayList<>();
+        students.forEach(s ->{
+            Map<String, Object> student = new LinkedHashMap<>();
+            student.put("id", s.getId());
+            student.put("firstName", s.getFirstName());
+            student.put("surname", s.getLastName());
+            response.add(student);
+        });
+
+        return response;
+    }
+
     // end::get-aggregate-root[]
 
     // Single item
+    //mapped to "Inspect a STU's profile"
     @GetMapping("/students/{id}/profile")
     Map<String, Object> one(@PathVariable Long id) {
         Student student = repository.findById(id)
