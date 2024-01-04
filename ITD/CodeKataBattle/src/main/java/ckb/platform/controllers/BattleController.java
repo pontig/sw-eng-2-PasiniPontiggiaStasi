@@ -90,7 +90,7 @@ public class BattleController {
         }
 
     //mapped to "Get Battle Details"
-    @GetMapping("/battles/{id}")
+    @GetMapping("/battles/stu/{id}")
     Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, @RequestParam Long stu_id){
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
@@ -134,7 +134,7 @@ public class BattleController {
 
     // Single item
     //mapped to "Get Battle Details"
-    @GetMapping("/battles/{id}")
+    @GetMapping("/battles/edu/{id}")
     Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @RequestParam Long edu_id) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow();

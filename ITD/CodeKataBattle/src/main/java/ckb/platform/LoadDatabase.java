@@ -86,7 +86,7 @@ class LoadDatabase {
            battles.add(new Battle("CodeCraft Clash",           sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "C++", true, 3, 5,       educators.get(1-1), tournaments.get(1-1), false));
            battles.add(new Battle("Whitespace Warriors",       sdf.parse("2023-12-15"), sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), "C", false, 2, 6,        educators.get(1-1), tournaments.get(1-1), false));
            battles.add(new Battle("Opening battle",            sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), sdf.parse("2024-02-20"), "Java", false, 1, 2,     educators.get(1-1), tournaments.get(1-1), false));
-
+/*
             teams.add(new Team("Team 01", battles.get(1-1)));
             teams.getLast().addStudent(students.get(19-5));
             log.info("added a player to a team");
@@ -183,7 +183,7 @@ class LoadDatabase {
             log.info("added a player to a team");
             teams.add(new Team("Team 20", battles.get(4-1)));
             teams.getLast().addStudent(students.get(11-5));
-            log.info("added a player to a team");
+            log.info("added a player to a team");*/
 
             teams.forEach(team -> log.info("Preloading " + teamRep.save(team)));
         };

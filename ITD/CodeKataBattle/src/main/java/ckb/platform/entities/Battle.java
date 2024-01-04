@@ -8,7 +8,7 @@ import java.util.*;
 public class Battle {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne (cascade = CascadeType.MERGE)
     @JoinColumn(name = "educator_id")
     private Educator creator;
     @ElementCollection

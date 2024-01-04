@@ -413,7 +413,7 @@ This endpoint allows the EDU to get the list of the tournaments that it owns, it
 \subsection*{Get tournament details}
 This endpoint allows the EDU to get the details of a tournament, it will be accessed when an EDU selects a tournament from the list of the tournaments in the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : /tournaments/\{id\} \\
+\textbf{EndPoint} : /tournaments/edu/\{id\} \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{id}} : id of the tournament
@@ -462,7 +462,7 @@ This endpoint allows the EDU to get the details of a tournament, it will be acce
 This endpoint allows the EDU to get the details of a battle, it will be accessed when an EDU selects a battle from the list of the battles in a tournament view.\\
 
 \textbf{Method} : GET \\
-\textbf{EndPoint} : /battles/\{id\}\\
+\textbf{EndPoint} : /battles/edu/\{id\}\\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{id}}: the id of the battle that the EDU wants to get the details of
@@ -612,7 +612,7 @@ This endpoint allows the STU to get the list of the tournaments that it is not s
 \subsection*{Get tournament details}
 This endpoint allows the STU to get the details of a tournament, it will be accessed when a STU selects a tournament from the list of the tournaments in the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : /tournaments/\{t\_id\}\\
+\textbf{EndPoint} : /tournaments/stu/\{t\_id\}\\
 \textbf{URL Parameters}:
         \begin{itemize}
             \item {\ttfamily{t\_id}} : this is the id of the tournament the user is looking for
@@ -659,7 +659,7 @@ This endpoint allows the STU to get the details of a tournament, it will be acce
 \subsection*{Get battle details}
 This endpoint allows the STU to get the details of a battle, it will be accessed when a STU selects a battle from the list of the battles in a tournament view.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} :  battles/\{battle\_id\}\\
+\textbf{EndPoint} :  battles/stu/\{battle\_id\}\\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{battle\_id}} : this is the id of the battle the user is looking for
