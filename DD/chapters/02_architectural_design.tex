@@ -248,6 +248,31 @@ For the "battle" object, the "phase" attribute is intended to be as an enumerati
     \item 4 - Finished, closed
 \end{itemize}
 
+\subsection*{Search for an EDU to share the admin permission}
+This endpoint allows a tournament admin to search for an EDU to share the admin permission with.\\
+\textbf{Method} : GET \\
+\textbf{EndPoint} : 
+\textbf{URL Parameters} :
+\begin{itemize}
+    \item {\ttfamily{query}} : the string that the user has written in the searchbox\\
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : JSON object
+          \begin{lstlisting}[language=JavaScript, label={lst:jscode}, basicstyle=\ttfamily]
+[
+    {
+        "id": Number,
+        "name": String,
+        "surname": String,
+    },
+    ...
+]
+            \end{lstlisting}
+    \item {\ttfamily{400}} : error String("The searchbox is empty, at least 1 character is required")
+    \item {\ttfamily{401}} : error String("Unauthorized")
+\end{itemize}
+
 \section*{GET endpoints - General User}
 
 \subsection*{Search for a student}
@@ -501,7 +526,6 @@ This endpoint allows the EDU to get the list of the groups subscribed to a battl
 \end{itemize}
 
 \subsection*{Evaluate code}
-code.js\\
 This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU clicks on the "Evaluate" button from the table of the codes to evaluate.\\
 \textbf{Method} : GET \\
 \textbf{EndPoint} : api/search/tournament/:tournament\_id/battles/:battle\_id/:team\_id     \\
@@ -529,6 +553,7 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
     \end{lstlisting}
     \item {\ttfamily{401}} : error String("unauthorized")
 \end{itemize}
+
 
 \section*{GET endpoints - STU}
 
