@@ -49,6 +49,7 @@ public class TournamentController {
     //Aggregate root
     //tag::get-aggregate-root[]
     //CollectionModel is another Spring HATEOAS container aimed at encapsulating collections of resources, instead of a single resource entity.
+    //mapped to "Get all Tournaments"
     @GetMapping("/tournaments")
     List<Map<String, Object>> all() {
         List<Tournament>tournaments = tournamentRepository.findAll();
@@ -79,6 +80,7 @@ public class TournamentController {
         return assembler.toModel(tournament);
     }
 
+    //mapped to "Get owned Tournaments"
     @GetMapping("/tournaments/owned/{edu_id}")
     List<Map<String, Object>> getOwnedTournaments(@PathVariable Long edu_id) {
         Educator educator = educatorRepository.findById(edu_id)
@@ -144,9 +146,10 @@ public class TournamentController {
                 .body(entityModel);
     }
 
+    //mapped to "Get tournament details " for a stu
     //TODO: now i use a stu id as session token, but it has to be replaced, same to all other endpoints, we need to pass the token to check the permits
-    @GetMapping("/tournaments/{t_id}&{stu_id}")
-    Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @PathVariable Long stu_id) {
+    @GetMapping("/tournaments/{t_id}")
+    Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @RequestParam Long stu_id) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
 
@@ -184,13 +187,16 @@ public class TournamentController {
         return response;
     }
 
-    @GetMapping("/tournaments/{t_id}&{edu_id}")
-    Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, @PathVariable Long edu_id) {
+
+    //mapped to "Get tournament details"
+    @GetMapping("/tournaments/{id}")
+    Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, @RequestParam Long edu_id) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
-
+        //check if the id is an educator
         Educator educator = educatorRepository.findById(edu_id)
                 .orElseThrow(() -> new EducatorNotFoundException(edu_id));
+
 
         Map<String, Object> tournamentMap = new LinkedHashMap<>();
         tournamentMap.put("id", tournament.getId());
@@ -221,43 +227,9 @@ public class TournamentController {
         return tournamentMap;
     }
 
-    @GetMapping("/tournaments/battles/{b_id}&{edu_id}")
-    Map<String, Object> getBattleDetails(@PathVariable Long b_id, @PathVariable Long edu_id) {
-        Battle battle = battleRepository.findById(b_id)
-                .orElseThrow();
-
-        Map<String, Object> battleMap = new LinkedHashMap<>();
-        battleMap.put("id", battle.getId());
-        //battleMap.put("title", battle.getTitle());
-        //battleMap.put("description", battle.getDescription());
-        //battleMap.put("language", battle.getLanguage());
-        // battleMap.put("Opening", battle.getOpening());
-        battleMap.put("registration", battle.getRegistrationDeadline().toString());
-        battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
-        battleMap.put("min_group_size", battle.getMinStudents());
-        battleMap.put("max_group_size", battle.getMaxStudents());
-        //battleMap.put("phase", battle.phase());
-        battleMap.put("tournament_name", battle.getTournament().getName());
-        battleMap.put("tournament_id", battle.getTournament().getId());
-        battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educatorRepository.findById(edu_id).orElseThrow()));
-        battleMap.put("manual", battle.getManualEvaluation());
-
-        ArrayList<Map<String, Object>> rankings = new ArrayList<>();
-        battle.getRanking().forEach((team, score) -> {
-            Map<String, Object> rankingMap = new LinkedHashMap<>();
-            rankingMap.put("id", team.getId());
-            //rankingMap.put("name", team.getName());
-            rankingMap.put("score", score);
-            rankings.add(rankingMap);
-        });
-
-        battleMap.put("ranking", rankings);
-
-        return battleMap;
-    }
-
-    @GetMapping("/tournaments/subscribed/{s_id}")
-    List<Map<String, Object>> getSubscribedTournaments(@PathVariable Long s_id) {
+    //mapped to "Get subscribed tournaments"
+    @GetMapping("/tournaments/subscribed/")
+    List<Map<String, Object>> getSubscribedTournaments(@RequestParam Long s_id) {
         Student student = studentRepository.findById(s_id)
                 .orElseThrow(() -> new StudentNotFoundException(s_id));
 
@@ -276,8 +248,9 @@ public class TournamentController {
         return response;
     }
 
-    @GetMapping("/tournaments/unsuscribed/{s_id}")
-    List<Map<String, Object>> getUnsubscribedTournaments(@PathVariable Long s_id) {
+    //mapped to "Get unsubscribed tournaments"
+    @GetMapping("/tournaments/unsuscribed/")
+    List<Map<String, Object>> getUnsubscribedTournaments(@RequestParam Long s_id) {
         Student student = studentRepository.findById(s_id)
                 .orElseThrow(() -> new StudentNotFoundException(s_id));
 

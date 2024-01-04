@@ -3,6 +3,7 @@ package ckb.platform.controllers;
 import ckb.platform.entities.Educator;
 import ckb.platform.entities.Student;
 import ckb.platform.entities.User;
+import ckb.platform.exceptions.UserNotFoundException;
 import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,13 @@ public class AuthController {
         System.out.println("I'm a user " + email + " " + password);
         User user;
 
-        user = stuRepository.findByEmailAndPassword(email, password);
+        user = stuRepository.findByEmailAndPassword(email, password).orElseThrow(UserNotFoundException::new);
 
         if (user != null) {
             System.out.println("I'm a STU");
             return new ModelAndView(new RedirectView("/indexSTU.html", true));
         } else {
-            user = eduRepository.findByEmailAndPassword(email, password);
+            user = eduRepository.findByEmailAndPassword(email, password).orElseThrow(UserNotFoundException::new);
             if (user != null) {
                 System.out.println("I'm an EDU");
                 return new ModelAndView(new RedirectView("/indexEDU.html", true));
@@ -55,11 +56,7 @@ public class AuthController {
                 return new ModelAndView(new RedirectView("/index.html", true));
             }
 
-            Student newStu = new Student();
-            newStu.setEmail(email);
-            newStu.setFirstName(name);
-            newStu.setLastName(surname);
-            newStu.setPassword(password);
+            Student newStu = new Student(name, surname, email, password, uni);
 
             System.out.println("Sono uno STU - nome: " + name + " cognome: " + surname + " email: " + email + " password: " + password);
 
@@ -71,11 +68,7 @@ public class AuthController {
                 return new ModelAndView(new RedirectView("/index.html", true));
             }
 
-            Educator newEdu = new Educator();
-            newEdu.setEmail(email);
-            newEdu.setFirstName(name);
-            newEdu.setLastName(surname);
-            newEdu.setPassword(password);
+            Educator newEdu = new Educator(name, surname, email, password, uni);
 
             System.out.println("Sono un EDU - nome: " + name + " cognome: " + surname + " email: " + email + " password: " + password);
 

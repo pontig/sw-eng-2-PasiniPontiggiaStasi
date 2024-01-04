@@ -1,9 +1,10 @@
 package ckb.platform.controllers;
 
-import ckb.platform.entities.Battle;
-import ckb.platform.entities.Student;
-import ckb.platform.entities.Team;
-import ckb.platform.entities.Tournament;
+import ckb.platform.entities.*;
+import ckb.platform.exceptions.BattleNotFoundException;
+import ckb.platform.exceptions.EducatorNotFoundException;
+import ckb.platform.exceptions.StudentNotFoundException;
+import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -88,10 +89,15 @@ public class BattleController {
         return battleMap;
         }
 
-    @GetMapping("/battles/{id}&{stu_id}")
-    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, @PathVariable Long stu_id){
+    //mapped to "Get Battle Details"
+    @GetMapping("/battles/{id}")
+    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, @RequestParam Long stu_id){
         Battle battle = battleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(id));
+
+        //check user passed is a stu
+        Student student = studentRepository.findById(stu_id)
+                .orElseThrow(() -> new StudentNotFoundException(stu_id));
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
@@ -107,7 +113,7 @@ public class BattleController {
         battleMap.put("canSubscribe", battle.getRegistrationDeadline().compareTo(new Date())> 0 && !battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow()));
         //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow()));
         battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(stu_id).orElseThrow())).count());
-        battleMap.put("subscribed", battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow()));
+        battleMap.put("subscribed", battle.isSubscribed(student));
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
@@ -127,10 +133,15 @@ public class BattleController {
 
 
     // Single item
-    @GetMapping("/battles/{id}&{edu_id}")
-    Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @PathVariable Long edu_id) {
+    //mapped to "Get Battle Details"
+    @GetMapping("/battles/{id}")
+    Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @RequestParam Long edu_id) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow();
+
+        //check if user passed is edu
+        Educator educator = educatorRepository.findById(edu_id)
+                .orElseThrow( () -> new EducatorNotFoundException(edu_id));
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
@@ -145,7 +156,7 @@ public class BattleController {
         //battleMap.put("phase", battle.phase());
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
-        battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educatorRepository.findById(edu_id).orElseThrow()));
+        battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educator));
         battleMap.put("manual", battle.getManualEvaluation());
 
         List<Map<String, Object>> rankings = new ArrayList<>();
@@ -162,22 +173,28 @@ public class BattleController {
         return battleMap;
     }
 
+    //mapped to "Get the list of groups for the manual evaluation"
     //TODO : MANCA LA PARTE DELLE EVALUATION, COME CAPISCO SE UN TEAM HA GIà LO SCORE O NO?
     @GetMapping("/battles/{b_id}/manualevalution")
-    Map<String, Object> manualEvalGroups(@PathVariable Long b_id) {
+    List<Map<String, Object>> manualEvalGroups(@PathVariable Long b_id) {
         Battle battle = battleRepository.findById(b_id)
-                .orElseThrow();
+                .orElseThrow( () -> new BattleNotFoundException(b_id));
 
-        Map<String, Object> response= new LinkedHashMap<>();
+        List<Map<String, Object>> response= new ArrayList<>();
+
         return response;
     }
 
+    //mapped to "Evaluate code"
     @GetMapping("/battles/{b_id}/teams/{t_id}")
-    Map<String, Object> getCode(@PathVariable Long b_id, @PathVariable Long t_id) {
+    Map<String, Object> getCode(@PathVariable Long b_id, @PathVariable Long t_id, @RequestParam Long edu_id) {
         Battle battle = battleRepository.findById(b_id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(b_id));
         Team team = teamRepository.findById(t_id)
-                .orElseThrow();
+                .orElseThrow(() -> new TeamNotFoundException(t_id));
+        //check if user passed is edu
+        Educator educator = educatorRepository.findById(edu_id)
+                .orElseThrow( () -> new EducatorNotFoundException(edu_id));
 
         Map<String, Object> response= new LinkedHashMap<>();
         response.put("group_id", team.getId());

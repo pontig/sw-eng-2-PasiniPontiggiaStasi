@@ -248,10 +248,12 @@ For the "battle" object, the "phase" attribute is intended to be as an enumerati
     \item 4 - Finished, closed
 \end{itemize}
 
-\subsection*{Search for an EDU to share the admin permission}
-This endpoint allows a tournament admin to search for an EDU to share the admin permission with.\\
+\section*{GET endpoints - General User}
+In these endpoints it is not required to pass the id of the user actually connected.
+\subsection*{Search for a student}
+This endpoint allows the anyone who writes in the searchbox to search for a STU by name, surname or email.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : 
+\textbf{EndPoint} : /students/:\{query\} \\
 \textbf{URL Parameters} :
 \begin{itemize}
     \item {\ttfamily{query}} : the string that the user has written in the searchbox\\
@@ -273,12 +275,11 @@ This endpoint allows a tournament admin to search for an EDU to share the admin 
     \item {\ttfamily{401}} : error String("Unauthorized")
 \end{itemize}
 
-\section*{GET endpoints - General User}
 
-\subsection*{Search for a student}
-This endpoint allows the anyone who writes in the searchbox to search for a STU by name, surname or email.\\
+\subsection*{Search for an EDU}
+This endpoint allows to search for an EDU by name, surname or email\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/student/:query \\
+\textbf{EndPoint} : /educators/\{query\}  \\
 \textbf{URL Parameters} :
 \begin{itemize}
     \item {\ttfamily{query}} : the string that the user has written in the searchbox\\
@@ -303,7 +304,7 @@ This endpoint allows the anyone who writes in the searchbox to search for a STU 
 \subsection*{Inspect a STU's profile}
 This endpoint allows the anyone who clicks on a STU's name in the search results to inspect its profile.\\ % or click on a STU's name in any point of the system
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/student/id/profile \\
+\textbf{EndPoint} : /student/\{id\}/profile \\
 \textbf{URL Parameters} :
     \begin{itemize}
         \item {\ttfamily{id}} : the id of the student the user is looking for
@@ -348,11 +349,13 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
 
 
 \section*{GET endpoints - EDU}
+In these endpoints each request will have to pass also a specific field in the body.\\ 
+This field is the id of the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
 
 \subsection*{Get all tournaments}
 This endpoint allows the EDU to get the list of all the tournaments on the CKB platform, it will be accessed whenever the EDU clicks on the "Show all tournaments" button on the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournaments \\
+\textbf{EndPoint} : /tournaments \\
 \textbf{URL Parameters}: None \\
 \textbf{Response}:
 \begin{itemize}
@@ -380,7 +383,7 @@ This endpoint allows the EDU to get the list of all the tournaments on the CKB p
 This endpoint allows the EDU to get the list of the tournaments that it owns, it will be accessed every time the EDU opens the dashboard.\\
 
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournaments/owned/{edu\_id} \\
+\textbf{EndPoint} : /tournaments/owned/\{edu\_id\} \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the list of the tournaments
@@ -410,10 +413,13 @@ This endpoint allows the EDU to get the list of the tournaments that it owns, it
 \subsection*{Get tournament details}
 This endpoint allows the EDU to get the details of a tournament, it will be accessed when an EDU selects a tournament from the list of the tournaments in the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournaments/:parameters \\
+\textbf{EndPoint} : /tournaments/\{id\} \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{id}} : id of the tournament
+\end{itemize}
+\textbf{Body Parameters} :
+\begin{itemize}
     \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the tournament
 \end{itemize}
 \textbf{Response}:
@@ -456,11 +462,10 @@ This endpoint allows the EDU to get the details of a tournament, it will be acce
 This endpoint allows the EDU to get the details of a battle, it will be accessed when an EDU selects a battle from the list of the battles in a tournament view.\\
 
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/battles/{b\_id}\&{edu\_id}\\
+\textbf{EndPoint} : /battles/\{id\}\\
 \textbf{URL Parameters}:
 \begin{itemize}
-    \item {\ttfamily{b\_id}}: the id of the battle that the EDU wants to get the details of
-    \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the battle
+    \item {\ttfamily{id}}: the id of the battle that the EDU wants to get the details of
 \end{itemize}
 \textbf{Response}:
 \begin{itemize}
@@ -498,10 +503,10 @@ This endpoint allows the EDU to get the details of a battle, it will be accessed
     \item {\ttfamily{401}} : error String("Unauthorized")
 \end{itemize}
 
-\subsection*{Get the list of groups for the manual evalation}
+\subsection*{Get the list of groups for the manual evaluation}
 This endpoint allows the EDU to get the list of the groups subscribed to a battle in the "manual evaluation" stage, and for each group that has already been evaluated it provides the score that it has obtained.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/battles/:battle\_id/:manualEvaluation=true\&phase=3 \\
+\textbf{EndPoint} : /battles/:battle\_id/manualEvaluation \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{tournament\_id}} : the id of the tournament of the correlated battle
@@ -528,7 +533,7 @@ This endpoint allows the EDU to get the list of the groups subscribed to a battl
 \subsection*{Evaluate code}
 This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU clicks on the "Evaluate" button from the table of the codes to evaluate.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/:tournament\_id/battles/:battle\_id/:team\_id     \\
+\textbf{EndPoint} : /battles/\{battle\_id\}/teams/\{team\_id\}     \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{tournament\_id}} : the id of the tournament of the correlated battle
@@ -556,16 +561,13 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
 
 
 \section*{GET endpoints - STU}
+In these endpoints each request will have to pass also a specific field in the body.\\ 
+This field is the id of the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
 
 \subsection*{Get subscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is subscribed to, it will be accessed every time the STU opens the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/:subscribed=email     \\
-\textbf{URL Parameters}:
-    \begin{itemize}
-        \item {\ttfamily{email}} : the email of the user actually logged into the platform
-    \end{itemize}
-
+\textbf{EndPoint} : /tournaments/subscribed     \\
 \textbf{Response}:
     \begin{itemize}
         \item {\ttfamily{200}} : JSON object 
@@ -586,15 +588,11 @@ This endpoint allows the STU to get the list of the tournaments that it is subsc
             \end{lstlisting}
         \item {\ttfamily{401}} : error String("unauthorized") 
     \end{itemize}
+
 \subsection*{Get unsubscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is not subscribed to, it will be accessed every time the STU opens the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/:subscribed!=email     \\
-\textbf{URL Parameters}:
-    \begin{itemize}
-        \item {\ttfamily{email}} : the email of the user actually logged into the platform
-    \end{itemize}
-
+\textbf{EndPoint} : /tournament/unsubscribed     \\
 \textbf{Response}:
     \begin{itemize}
         \item {\ttfamily{200}} : JSON object
@@ -614,11 +612,10 @@ This endpoint allows the STU to get the list of the tournaments that it is not s
 \subsection*{Get tournament details}
 This endpoint allows the STU to get the details of a tournament, it will be accessed when a STU selects a tournament from the list of the tournaments in the dashboard.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/STU=true\&id=tournament\_id\\
+\textbf{EndPoint} : /tournaments/\{t\_id\}\\
 \textbf{URL Parameters}:
         \begin{itemize}
-            \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
-            \item {\ttfamily{tournament\_id}} : this is the id of the tournament the user is looking for
+            \item {\ttfamily{t\_id}} : this is the id of the tournament the user is looking for
         \end{itemize}
 \textbf{Response}:
         \begin{itemize}
@@ -629,7 +626,7 @@ This endpoint allows the STU to get the details of a tournament, it will be acce
         "id": Number,
         "name": String,
         "active": Boolean,
-"canSubscribe": Boolean,
+        "canSubscribe": Boolean,
         "subscribed": Boolean,
         "battles": [
             {
@@ -662,10 +659,9 @@ This endpoint allows the STU to get the details of a tournament, it will be acce
 \subsection*{Get battle details}
 This endpoint allows the STU to get the details of a battle, it will be accessed when a STU selects a battle from the list of the battles in a tournament view.\\
 \textbf{Method} : GET \\
-\textbf{EndPoint} : api/search/tournament/STU=true\&id=battle\_id\\
+\textbf{EndPoint} :  battles/\{battle\_id\}\\
 \textbf{URL Parameters}:
 \begin{itemize}
-    \item {\ttfamily{STU}} : it is needed to retrieve the correct object for a STU
     \item {\ttfamily{battle\_id}} : this is the id of the battle the user is looking for
 \end{itemize}
 \textbf{Response} : 
@@ -684,7 +680,7 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
         "min_group_size": Number,
         "max_group_size": Number,
         "link": String,
-"canSubscribe": Boolean,
+        "canSubscribe": Boolean,
         "canInviteOthers": Boolean,
         // If the user's team satisfies the min members constraint
         "minConstraintSatisfied": Boolean,
