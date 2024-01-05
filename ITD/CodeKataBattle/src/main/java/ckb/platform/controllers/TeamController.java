@@ -44,7 +44,7 @@ public class TeamController {
     @GetMapping("/teams/{id}")
     EntityModel<Team> one(Long id) {
         Team team = repository.findById(id)
-            .orElseThrow();
+            .orElseThrow(() -> new TeamNotFoundException(id));
 
         return assembler.toModel(team);
     }
