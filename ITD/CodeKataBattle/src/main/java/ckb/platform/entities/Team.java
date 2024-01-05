@@ -82,7 +82,7 @@ public class Team {
     public String toString() {
         return "Team{" +
                 "id=" + id +
-                ", battle='" + battle +
+                ", battle='" + battle.getId() +
                 ", students='" + students +
                 ", name='" + name + '\'' +
                 ", score='" + score + '\'' +
