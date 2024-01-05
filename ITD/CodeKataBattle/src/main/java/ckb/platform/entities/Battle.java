@@ -9,7 +9,7 @@ public class Battle {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     @ManyToOne (cascade = CascadeType.MERGE)
-    @JoinColumn(name = "educator_id")
+    @JoinColumn(name = "educator_id",  referencedColumnName = "id")
     private Educator creator;
     @ElementCollection
     private Map<Team, Integer> ranking;
@@ -27,10 +27,10 @@ public class Battle {
     private Date registrationDeadline;
     private Date finalSubmissionDeadline;
     private Date openDate;
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Team> teams;
     @ManyToOne (cascade = CascadeType.MERGE)
-    @JoinColumn(name = "tournament_id")
+    @JoinColumn(name = "tournament_id",  referencedColumnName = "id")
     private Tournament tournament;
 
     public Battle() {}
