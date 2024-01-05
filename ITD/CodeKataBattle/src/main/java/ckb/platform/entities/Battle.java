@@ -29,7 +29,7 @@ public class Battle {
     private Date openDate;
     @OneToMany(mappedBy = "id")
     private List<Team> teams;
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne (cascade = CascadeType.MERGE)
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 

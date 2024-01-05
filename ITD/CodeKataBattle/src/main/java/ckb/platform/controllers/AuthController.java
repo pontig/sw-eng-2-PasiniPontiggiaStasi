@@ -25,19 +25,20 @@ public class AuthController {
         System.out.println("I'm a user " + email + " " + password);
         User user;
 
-        user = stuRepository.findByEmailAndPassword(email, password).orElseThrow(UserNotFoundException::new);
-
+        user = stuRepository.findByEmailAndPassword(email, password);
         if (user != null) {
             System.out.println("I'm a STU");
             return new ModelAndView(new RedirectView("/indexSTU.html", true));
         } else {
-            user = eduRepository.findByEmailAndPassword(email, password).orElseThrow(UserNotFoundException::new);
+            user = eduRepository.findByEmailAndPassword(email, password);
             if (user != null) {
-                System.out.println("I'm an EDU");
                 return new ModelAndView(new RedirectView("/indexEDU.html", true));
+
             }
             return new ModelAndView(new RedirectView("/index.html", true));
+
         }
+
     }
 
     @PostMapping("/register")
