@@ -62,6 +62,11 @@ public class Battle {
         teams = new ArrayList<Team>();
     }
 
+
+    public String getTitle() {
+        return this.name;
+    }
+
     public Boolean isClosed(){
         return (new Date().after(finalSubmissionDeadline));
     }
@@ -186,8 +191,9 @@ public class Battle {
 
     @Override
     public String toString() {
-        return "Battle{" + "id=" + this.id + ", creator='" + this.creator + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament + '\'' + '}';
+        return "Battle{" + "id=" + this.id + ", creator='" + this.creator.getId() + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament.getId() + '\'' + '}';
         //return "Ciao michelangelo";
     }
+
 
 }

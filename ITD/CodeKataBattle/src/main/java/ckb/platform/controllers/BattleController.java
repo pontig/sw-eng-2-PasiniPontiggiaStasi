@@ -45,12 +45,27 @@ public class BattleController {
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/battles")
-    CollectionModel<EntityModel<Battle>> all() {
-        List<EntityModel<Battle>> battles = battleRepository.findAll().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+    List<Map<String, Object>> all() {
+        List<Battle> battles = battleRepository.findAll();
+        List<Map<String, Object>> response = new ArrayList<>();
 
-        return CollectionModel.of(battles, linkTo(methodOn(BattleController.class).all()).withSelfRel());
+        for (Battle battle : battles) {
+            Map<String, Object> battleMap = new LinkedHashMap<>();
+            battleMap.put("id", battle.getId());
+            battleMap.put("title", battle.getTitle());
+            //battleMap.put("description", battle.getDescription());
+            //battleMap.put("language", battle.getLanguage());
+            // battleMap.put("Opening", battle.getOpening());
+            battleMap.put("registration", battle.getRegistrationDeadline().toString());
+            battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
+            battleMap.put("min_group_size", battle.getMinStudents());
+            battleMap.put("max_group_size", battle.getMaxStudents());
+            //battleMap.put("phase", battle.phase());
+            battleMap.put("tournament_name", battle.getTournament().getName());
+            battleMap.put("tournament_id", battle.getTournament().getId());
+            response.add(battleMap);
+        }
+        return response;
     }
 
     // end::get-aggregate-root[]
@@ -63,7 +78,7 @@ public class BattleController {
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
-        //battleMap.put("title", battle.getTitle());
+        battleMap.put("title", battle.getTitle());
         //battleMap.put("description", battle.getDescription());
         //battleMap.put("language", battle.getLanguage());
         // battleMap.put("Opening", battle.getOpening());
