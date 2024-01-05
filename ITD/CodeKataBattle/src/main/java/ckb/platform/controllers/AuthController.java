@@ -6,8 +6,11 @@ import ckb.platform.entities.User;
 import ckb.platform.exceptions.UserNotFoundException;
 import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
+import jakarta.servlet.http.HttpSession;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,13 +24,14 @@ public class AuthController {
     private EducatorRepository eduRepository;
 
     @PostMapping("/login")
-    public ModelAndView login(@RequestParam String email, @RequestParam String password) {
+    public ModelAndView login(@RequestParam String email, @RequestParam String password, HttpSession session) {
         System.out.println("I'm a user " + email + " " + password);
         User user;
 
         user = stuRepository.findByEmailAndPassword(email, password);
         if (user != null) {
             System.out.println("I'm a STU");
+            session.setAttribute("user", user);
             return new ModelAndView(new RedirectView("/indexSTU.html", true));
         } else {
             user = eduRepository.findByEmailAndPassword(email, password);
@@ -38,6 +42,14 @@ public class AuthController {
             return new ModelAndView(new RedirectView("/index.html", true));
 
         }
+
+    }
+
+    @GetMapping("/profile")
+    public ModelAndView profile(HttpSession session) {
+        // recupera l'utente dalla sessione
+        User user = (User) session.getAttribute("user");
+        return new ModelAndView(new RedirectView("/index.html", true));
 
     }
 
