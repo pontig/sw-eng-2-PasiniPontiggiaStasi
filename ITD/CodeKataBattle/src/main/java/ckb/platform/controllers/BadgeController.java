@@ -56,15 +56,4 @@ public class BadgeController {
             .created(entityModel.getRequiredLink("self").toUri())
             .body(entityModel);
     }
-
-    // @PutMapping("/badges/{id}")
-
-    @DeleteMapping("/badges/{id}")
-    ResponseEntity<?> deleteBadge(@PathVariable Long id) {
-        repository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-
 }

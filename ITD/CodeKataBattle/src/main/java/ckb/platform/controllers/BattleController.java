@@ -53,14 +53,14 @@ public class BattleController {
             Map<String, Object> battleMap = new LinkedHashMap<>();
             battleMap.put("id", battle.getId());
             battleMap.put("title", battle.getTitle());
-            //battleMap.put("description", battle.getDescription());
-            //battleMap.put("language", battle.getLanguage());
-            // battleMap.put("Opening", battle.getOpening());
+            battleMap.put("description", battle.getDescription());
+            battleMap.put("language", battle.getLanguage());
+            battleMap.put("Opening", battle.getOpenDate());
             battleMap.put("registration", battle.getRegistrationDeadline().toString());
             battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
             battleMap.put("min_group_size", battle.getMinStudents());
             battleMap.put("max_group_size", battle.getMaxStudents());
-            //battleMap.put("phase", battle.phase());
+            battleMap.put("phase", battle.getPhase());
             battleMap.put("tournament_name", battle.getTournament().getName());
             battleMap.put("tournament_id", battle.getTournament().getId());
             response.add(battleMap);
@@ -79,14 +79,14 @@ public class BattleController {
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         battleMap.put("title", battle.getTitle());
-        //battleMap.put("description", battle.getDescription());
-        //battleMap.put("language", battle.getLanguage());
-        // battleMap.put("Opening", battle.getOpening());
+        battleMap.put("description", battle.getDescription());
+        battleMap.put("language", battle.getLanguage());
+        battleMap.put("Opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
         battleMap.put("max_group_size", battle.getMaxStudents());
-        //battleMap.put("phase", battle.phase());
+        battleMap.put("phase", battle.getPhase());
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
@@ -94,7 +94,7 @@ public class BattleController {
         battle.getRanking().forEach((team, score) -> {
             Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
-            //rankingMap.put("name", team.getName());
+            rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
             rankings.add(rankingMap);
         });
@@ -116,15 +116,15 @@ public class BattleController {
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
-        //battleMap.put("title", battle.getTitle());
-        //battleMap.put("description", battle.getDescription());
-        //battleMap.put("language", battle.getLanguage());
-        // battleMap.put("Opening", battle.getOpening());
+        battleMap.put("title", battle.getTitle());
+        battleMap.put("description", battle.getDescription());
+        battleMap.put("language", battle.getLanguage());
+        battleMap.put("Opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
         battleMap.put("max_group_size", battle.getMaxStudents());
-        //battleMap.put("phase", battle.phase());
+        battleMap.put("phase", battle.getPhase());
         battleMap.put("canSubscribe", battle.getRegistrationDeadline().compareTo(new Date())> 0 && !battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
         //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
         battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id)))).count());
@@ -136,7 +136,7 @@ public class BattleController {
         battle.getRanking().forEach((team, score) -> {
             Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
-            //rankingMap.put("name", team.getName());
+            rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
             rankings.add(rankingMap);
         });
@@ -160,15 +160,15 @@ public class BattleController {
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
-        //battleMap.put("title", battle.getTitle());
-        //battleMap.put("description", battle.getDescription());
-        //battleMap.put("language", battle.getLanguage());
-        // battleMap.put("Opening", battle.getOpening());
+        battleMap.put("title", battle.getTitle());
+        battleMap.put("description", battle.getDescription());
+        battleMap.put("language", battle.getLanguage());
+        battleMap.put("Opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
         battleMap.put("max_group_size", battle.getMaxStudents());
-        //battleMap.put("phase", battle.phase());
+        battleMap.put("phase", battle.getPhase());
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
         battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educator));
@@ -178,7 +178,7 @@ public class BattleController {
         battle.getRanking().forEach((team, score) -> {
             Map<String, Object> rankingMap = new LinkedHashMap<>();
             rankingMap.put("id", team.getId());
-            //rankingMap.put("name", team.getName());
+            rankingMap.put("name", team.getName());
             rankingMap.put("score", score);
             rankings.add(rankingMap);
         });
@@ -214,10 +214,10 @@ public class BattleController {
         Map<String, Object> response= new LinkedHashMap<>();
         response.put("group_id", team.getId());
         response.put("battle_id", battle.getId());
-        //response.put("language", battle.getLanguage());
-        //response.put("name", team.getName());
+        response.put("language", battle.getLanguage());
+        response.put("name", team.getName());
         response.put("score", battle.getRanking().get(team));
-        //response.put("code", team.getCode());
+        response.put("code", team.getCode());
         return response;
     }
 
@@ -282,7 +282,7 @@ public class BattleController {
                 .forEach(t -> {
                     Map<String, Object> team = new LinkedHashMap<>();
                     team.put("id", t.getId());
-                    //team.put("name", t.getName());
+                    team.put("name", t.getName());
                     team.put("score", battle.getRanking().get(t));
                     List<Map<String, Object>> students = new ArrayList<>();
                     t.getStudents().forEach(s -> {

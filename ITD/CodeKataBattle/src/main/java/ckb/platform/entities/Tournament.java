@@ -28,6 +28,7 @@ public class Tournament {
 
     @ElementCollection
     private Map<Student, Integer> ranking;
+    private Boolean active;
 
     public Tournament(String name, Date subscriptionDeadline, Date endDate, Educator creator) {
         this.name = name;
@@ -129,5 +130,9 @@ public class Tournament {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, subscriptionDeadline, creator);
+    }
+
+    public Boolean isActive() {
+        return this.active;
     }
 }
