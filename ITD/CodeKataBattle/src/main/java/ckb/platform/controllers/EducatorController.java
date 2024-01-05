@@ -9,6 +9,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,8 +37,8 @@ public class EducatorController {
     @GetMapping("/educators")
     CollectionModel<EntityModel<Educator>> all() {
         List<EntityModel<Educator>> educators = repository.findAll().stream()
-            .map(assembler::toModel)
-            .collect(Collectors.toList());
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
 
         return CollectionModel.of(educators, linkTo(methodOn(EducatorController.class).all()).withSelfRel());
     }
@@ -47,7 +48,7 @@ public class EducatorController {
     @GetMapping("/educators/{id}")
     EntityModel<Educator> one(@PathVariable Long id) {
         Educator educator = repository.findById(id)
-            .orElseThrow(() -> new EducatorNotFoundException(id));
+                .orElseThrow(() -> new EducatorNotFoundException(id));
 
         return assembler.toModel(educator);
     }
@@ -59,15 +60,15 @@ public class EducatorController {
         List<Educator> educators = repository.findByQuery(query);
 
         return educators.stream()
-            .map(educator -> {
-                Map<String, Object> educatorMap = Map.of(
-                    "id", educator.getId(),
-                    "name", educator.getFirstName(),
-                    "surname", educator.getLastName()
-                );
-                return educatorMap;
-            })
-            .collect(Collectors.toList());
+                .map(educator -> {
+                    Map<String, Object> educatorMap = new HashMap<>();
+                    educatorMap.put("id", educator.getId());
+                    educatorMap.put("name", educator.getFirstName());
+                    educatorMap.put("surname", educator.getLastName());
+
+                    return educatorMap;
+                })
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/educators")
@@ -75,31 +76,31 @@ public class EducatorController {
         EntityModel<Educator> entityModel = assembler.toModel(repository.save(newEducator));
 
         return ResponseEntity
-            .created(entityModel.getRequiredLink("self").toUri())
-            .body(entityModel);
+                .created(entityModel.getRequiredLink("self").toUri())
+                .body(entityModel);
     }
 
     @PutMapping("/educators/{id}")
     ResponseEntity<?> replaceEducator(@RequestBody Educator newEducator, @PathVariable Long id) {
         Educator updatedEducator = repository.findById(id)
-            .map(educator -> {
-                educator.setEmail(newEducator.getEmail());
-                educator.setFirstName(newEducator.getFirstName());
-                educator.setLastName(newEducator.getLastName());
-                educator.setOwnedBattles(newEducator.getOwnedBattles());
-                educator.setOwnedTournaments(newEducator.getOwnedTournaments());
-                return repository.save(educator);
-            })
-            .orElseGet(() -> {
-                newEducator.setId(id);
-                return repository.save(newEducator);
-            });
+                .map(educator -> {
+                    educator.setEmail(newEducator.getEmail());
+                    educator.setFirstName(newEducator.getFirstName());
+                    educator.setLastName(newEducator.getLastName());
+                    educator.setOwnedBattles(newEducator.getOwnedBattles());
+                    educator.setOwnedTournaments(newEducator.getOwnedTournaments());
+                    return repository.save(educator);
+                })
+                .orElseGet(() -> {
+                    newEducator.setId(id);
+                    return repository.save(newEducator);
+                });
 
         EntityModel<Educator> entityModel = assembler.toModel(updatedEducator);
 
         return ResponseEntity
-            .created(entityModel.getRequiredLink("self").toUri())
-            .body(entityModel);
+                .created(entityModel.getRequiredLink("self").toUri())
+                .body(entityModel);
     }
 
     @DeleteMapping("/educators/{id}")
