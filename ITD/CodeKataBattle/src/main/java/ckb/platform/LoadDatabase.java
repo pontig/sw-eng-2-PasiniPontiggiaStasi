@@ -1,4 +1,4 @@
-package ckb.platform;
+/*package ckb.platform;
 
 import ckb.platform.entities.*;
 import ckb.platform.repositories.*;
@@ -24,9 +24,9 @@ class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
-        /*
+        *
          * Ancora non funziona per via degli id, comincio a pushare
-         * */
+         * *
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         return args -> {
 
@@ -192,4 +192,4 @@ class LoadDatabase {
     }
 
 
-}
+}*/

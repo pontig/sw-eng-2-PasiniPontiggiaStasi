@@ -74,7 +74,7 @@ public class BattleController {
     @GetMapping("/battles/{id}")
     Map<String, Object> one(@PathVariable Long id) {
         Battle battle = battleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(id));
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
@@ -125,9 +125,9 @@ public class BattleController {
         battleMap.put("min_group_size", battle.getMinStudents());
         battleMap.put("max_group_size", battle.getMaxStudents());
         //battleMap.put("phase", battle.phase());
-        battleMap.put("canSubscribe", battle.getRegistrationDeadline().compareTo(new Date())> 0 && !battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow()));
-        //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow()));
-        battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(stu_id).orElseThrow())).count());
+        battleMap.put("canSubscribe", battle.getRegistrationDeadline().compareTo(new Date())> 0 && !battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
+        //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
+        battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id)))).count());
         battleMap.put("subscribed", battle.isSubscribed(student));
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
@@ -152,7 +152,7 @@ public class BattleController {
     @GetMapping("/battles/edu/{id}")
     Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @RequestParam Long edu_id) {
         Battle battle = battleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(id));
 
         //check if user passed is edu
         Educator educator = educatorRepository.findById(edu_id)
@@ -224,7 +224,7 @@ public class BattleController {
     @PostMapping("/battles/{t_id}")
     ResponseEntity<?> newBattle(@PathVariable Long t_id, @RequestBody Battle newBattle) {
         Tournament tournament = tournamentRepository.findById(t_id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(t_id));
 
         tournament.addBattle(newBattle);
         tournamentRepository.save(tournament);
@@ -255,10 +255,10 @@ public class BattleController {
     @PostMapping("/battles/{id}/students/{s_id}")
     ResponseEntity<?> addStudent(@PathVariable Long id, @PathVariable Long s_id) {
         Battle battle = battleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(id));
 
         Student student = studentRepository.findById(s_id)
-                .orElseThrow();
+                .orElseThrow(() -> new StudentNotFoundException(s_id));
 
         Team team = new Team(battle , student);
         battle.addTeam(team);
@@ -275,7 +275,7 @@ public class BattleController {
     @GetMapping("/battles/{id}/students")
     List<Map<String, Object>> getStudents(@PathVariable Long id) {
         Battle battle = battleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new BattleNotFoundException(id));
 
         List<Map<String, Object>> response = new ArrayList<>();
         battle.getTeams()

@@ -1,6 +1,7 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.Badge;
+import ckb.platform.exceptions.BadgeNotFoundException;
 import ckb.platform.repositories.BadgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -42,7 +43,7 @@ public class BadgeController {
     @GetMapping("/badges/{id}")
     EntityModel<Badge> one(Long id) {
         Badge badge = repository.findById(id)
-            .orElseThrow();
+            .orElseThrow(() -> new BadgeNotFoundException(id));
 
         return assembler.toModel(badge);
     }

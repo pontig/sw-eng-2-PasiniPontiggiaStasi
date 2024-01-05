@@ -36,21 +36,19 @@ public class AuthController {
         } else {
             user = eduRepository.findByEmailAndPassword(email, password);
             if (user != null) {
+                session.setAttribute("user", user);
                 return new ModelAndView(new RedirectView("/indexEDU.html", true));
-
             }
             return new ModelAndView(new RedirectView("/index.html", true));
-
         }
-
     }
 
     @GetMapping("/profile")
     public ModelAndView profile(HttpSession session) {
         // recupera l'utente dalla sessione
         User user = (User) session.getAttribute("user");
+        System.out.println("Dati - Id: " + user.getId() + " Mail: " + user.getEmail());
         return new ModelAndView(new RedirectView("/index.html", true));
-
     }
 
     @PostMapping("/register")
