@@ -1,9 +1,6 @@
 package ckb.platform.controllers;
 
-import ckb.platform.entities.Battle;
-import ckb.platform.entities.Educator;
-import ckb.platform.entities.Student;
-import ckb.platform.entities.Tournament;
+import ckb.platform.entities.*;
 import ckb.platform.exceptions.BattleNotFoundException;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
@@ -62,7 +59,7 @@ public class TournamentController {
             tournament.put("name", t.getName());
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
-            //tournament.put("active", t.isActive());
+            tournament.put("active", t.isActive());
             response.add(tournament);
         });
 
@@ -94,7 +91,7 @@ public class TournamentController {
             tournament.put("id", t.getId());
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
-            //tournament.put("active", t.isActive());
+            tournament.put("active", t.isActive());
             response.add(tournament);
         });
 
@@ -159,18 +156,18 @@ public class TournamentController {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", tournament.getId());
         response.put("name", tournament.getName());
-        //response.put("active", tournament.isActive());
+        response.put("active", tournament.isActive());
         response.put("canSubscribe", tournament.getSubscriptionDeadline().compareTo(new Date()) > 0);
         response.put("subscribed", tournament.getSubscribedStudents().contains(student));
         response.put("battles", tournament.getBattles().stream().map(battle -> {
             Map<String, Object> battleMap = new LinkedHashMap<>();
             battleMap.put("id", battle.getId());
-            //battleMap.put("name", battle.getName());
-            //battleMap.put("language", battle.getLanguage());
+            battleMap.put("name", battle.getName());
+            battleMap.put("language", battle.getLanguage());
             battleMap.put("participants", battle.getTeams().stream().reduce(0, (sum, team) -> sum + team.getStudents().size(), Integer::sum));
             battleMap.put("subscribed", battle.getTeams().stream().anyMatch(team -> team.getStudents().contains(student)));
-            //battleMap.put("score",
-            //battleMap.put("phase", battle.getPhase());
+            battleMap.put("score", battle.getTeams().stream().filter(team -> team.getStudents().contains(student)).findFirst().map(Team::getScore).orElse(0));
+            battleMap.put("phase", battle.getPhase());
             //battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
             return battleMap;
         }));
@@ -201,15 +198,15 @@ public class TournamentController {
         Map<String, Object> tournamentMap = new LinkedHashMap<>();
         tournamentMap.put("id", tournament.getId());
         tournamentMap.put("name", tournament.getName());
-        //tournamentMap.put("active", tournament.isActive());
+        tournamentMap.put("active", tournament.isActive());
         tournamentMap.put("admin", tournament.getGrantedEducators().contains(educator));
         tournamentMap.put("battles", tournament.getBattles().stream().map(battle -> {
             Map<String, Object> battleMap = new LinkedHashMap<>();
             battleMap.put("id", battle.getId());
-           // battleMap.put("name", battle.getName());
-           // battleMap.put("language", battle.getLanguage());
+            battleMap.put("name", battle.getName());
+            battleMap.put("language", battle.getLanguage());
             battleMap.put("participants", battle.getTeams().stream().reduce(0, (sum, team) -> sum + team.getStudents().size(), Integer::sum));
-           // battleMap.put("phase", battle.getPhase());
+            battleMap.put("phase", battle.getPhase());
            // battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
             return battleMap;
         }));
@@ -241,7 +238,7 @@ public class TournamentController {
             tournamentMap.put("name", t.getName());
             tournamentMap.put("first_name", t.getCreator().getFirstName());
             tournamentMap.put("last_name", t.getCreator().getLastName());
-            //tournamentMap.put("active", t.isActive());
+            tournamentMap.put("active", t.isActive());
             response.add(tournamentMap);
         });
 

@@ -18,6 +18,7 @@ public class Team {
 
     @ManyToMany
     private List<Student> students;
+    private String repo;
 
     //TODO: Secondo me bisogna aggiungere anche Torneo
 
@@ -106,4 +107,7 @@ public class Team {
     }
 
 
+    public Object getCode() {
+        return repo;
+    }
 }

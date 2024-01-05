@@ -27,6 +27,8 @@ public class Battle {
     private Date registrationDeadline;
     private Date finalSubmissionDeadline;
     private Date openDate;
+    private int phase;
+    private String description;
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Team> teams;
     @ManyToOne (cascade = CascadeType.MERGE)
@@ -62,6 +64,25 @@ public class Battle {
         teams = new ArrayList<Team>();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Date getOpenDate() {
+        return openDate;
+    }
+
+    public int getPhase() {
+        return phase;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
 
     public String getTitle() {
         return this.name;

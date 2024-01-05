@@ -94,7 +94,7 @@ public class StudentController {
         student.getAchieveBadges().forEach(b -> {
             Map<String, Object> badge = new LinkedHashMap<>();
             badge.put("id", b.getId());
-            //badges.put("name", b.getName());
+            //badge.put("name", b.getName());
             //TODO;
             badges.add(badge);
         });
