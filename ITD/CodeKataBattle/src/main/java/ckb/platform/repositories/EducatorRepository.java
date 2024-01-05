@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface EducatorRepository extends JpaRepository<ckb.platform.entities.Educator, Long> {
     @Query("SELECT u FROM Educator u WHERE u.email = :email AND u.password = :password")
-    Optional<User> findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
+    User findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
 
     @Query("SELECT u FROM Educator u WHERE u.email = :email")
-    Optional<User> alreadyRegistered(@Param("email") String email);
+    User alreadyRegistered(@Param("email") String email);
 
     @Query("SELECT u FROM Educator u WHERE u.firstName LIKE %:query% OR u.lastName LIKE %:query% OR u.email LIKE %:query%")
     List<Educator> findByQuery(String query);
