@@ -187,6 +187,7 @@ public class Battle {
     @Override
     public String toString() {
         return "Battle{" + "id=" + this.id + ", creator='" + this.creator + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament + '\'' + '}';
+        //return "Ciao michelangelo";
     }
 
 }
