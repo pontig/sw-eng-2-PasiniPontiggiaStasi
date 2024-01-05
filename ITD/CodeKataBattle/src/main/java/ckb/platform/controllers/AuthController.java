@@ -32,17 +32,19 @@ public class AuthController {
         if (user != null) {
             System.out.println("I'm a STU");
             session.setAttribute("user", user);
-            return new ModelAndView(new RedirectView("/indexSTU.html", true));
+            return new ModelAndView(new RedirectView("/login/indexSTU.html", true));
         } else {
             user = eduRepository.findByEmailAndPassword(email, password);
             if (user != null) {
+                System.out.println("I'm an EDU");
                 session.setAttribute("user", user);
-                return new ModelAndView(new RedirectView("/indexEDU.html", true));
+                return new ModelAndView(new RedirectView("/login/indexEDU.html", true));
             }
             return new ModelAndView(new RedirectView("/index.html", true));
         }
     }
 
+    //Only for testing
     @GetMapping("/profile")
     public ModelAndView profile(HttpSession session) {
         // recupera l'utente dalla sessione
@@ -51,15 +53,23 @@ public class AuthController {
         return new ModelAndView(new RedirectView("/index.html", true));
     }
 
+    @GetMapping("/login/indexSTU.html")
+    public ModelAndView indexSTU(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return new ModelAndView(new RedirectView("/index.html", true));
+        }
+        return new ModelAndView(new RedirectView("/indexSTU.html", true));
+    }
+
     @PostMapping("/register")
     public ModelAndView processRegistration(@RequestParam String name, @RequestParam String surname,
-                                      @RequestParam String email, @RequestParam String uni,
-                                      @RequestParam String role, @RequestParam String password,
-                                      @RequestParam String password2, @RequestParam String terms) {
+                                            @RequestParam String email, @RequestParam String uni,
+                                            @RequestParam String role, @RequestParam String password,
+                                            @RequestParam String password2, @RequestParam String terms) {
 
         if(!password.equals(password2))
             return new ModelAndView(new RedirectView("/index.html", true));
-
 
         if(role.equals("STU")){
             if(stuRepository.alreadyRegistered(email) != null) {

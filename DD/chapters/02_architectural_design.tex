@@ -64,6 +64,8 @@ The notification manager is the component that handles the need of the system to
 It is interfaced with all the internal models of the system that need to notify the users, i.e. the tournament manager and the battle manager. \\
 It is interfaced with the Email API, external to the system.
 
+\newpage
+
 \subsubsection*{Badges manager}
 The badges manager is the component that handles the gamification badges. \\
 It allows:
@@ -92,6 +94,8 @@ It is interfaced with the query manager to access the database to store or retri
 It is interfaced with the notification manager to notify the users about the start and the end of a tournament.\\
 It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
 
+\newpage
+
 \subsubsection*{Battles manager}
 The battles manager is the component that handles the management of the battles.\\
 It allows:
@@ -113,6 +117,8 @@ It is interfaced with the badges manager in order to check if a badge has been a
 The profile inspector is the component that handles the visualization of the profiles of the STUs and, consequently, of the badges that it has earned during the tournaments. \\
 It is interfaced with the query manager to access the database to retrieve data. \\
 It is interfaced with the WebApp, both EDU and STU, through the proper APIs, external to the system.
+
+\newpage
 
 \subsection{Logical description of the data}
 The data of the system is organized in a relational database, following the below ER diagram:
@@ -170,6 +176,7 @@ The components of the system are explained in the following:
           \end{itemize}
 \end{itemize}
 
+\newpage
 \section{Runtime View}
 This section describes the most important components interactions of the system.
 
@@ -182,6 +189,7 @@ At the beginning the end user must log in to use the main functions of the appli
     \label{fig:RuntimeView_UserLogin}
 \end{figure}
 
+\newpage
 \subsection{Create a tournament}
 The following sequence diagram is used to explain how to create a tournament. The end user from its device can create a tournament entering the correlated details through the related component, which are sent to the database. If the tournament has been created successfully, the correlated page is created.(Figure \ref{fig:RuntimeView_CreateTournament} )
 \begin{figure}[H]
@@ -191,6 +199,7 @@ The following sequence diagram is used to explain how to create a tournament. Th
     \label{fig:RuntimeView_CreateTournament}
 \end{figure}
 
+\newpage
 \subsection{Create a battle}
 The following sequence diagram is used to explain how to create a battle within a tournament. The end user from its device can create a battle entering the correlated details through the related component. If the user is a granted educator for the current tournament, then the details of the new battle are sent to the database and if the battle has been created successfully, the correlated page is created and all the users subscribed to the correlated tournament are notified. (Figure \ref{fig:RuntimeView_CreateBattle})
 \begin{figure}[H]
@@ -200,6 +209,7 @@ The following sequence diagram is used to explain how to create a battle within 
     \label{fig:RuntimeView_CreateBattle}
 \end{figure}
 
+\newpage
 \subsection{Join a Battle Solo}
 In this sequence diagram is shown how an user can subscribe to a battle. By joining the battle, the system add to the database the email of the user into the subscribed email of that battle. If the user decides to invite other members, the inserted emails are notified. (Figure \ref{fig:RuntimeView_JoinBattleSolo})
 \begin{figure}[H]
@@ -209,6 +219,7 @@ In this sequence diagram is shown how an user can subscribe to a battle. By join
     \label{fig:RuntimeView_JoinBattleSolo}
 \end{figure}
 
+\newpage
 \subsection{Upload code}
 In this case, the GitHub API notify the system which through the related component computes the new score and update it by sending the new score to the database. Finally, the system updates the battle ranking with the new score. (Figure \ref{fig:RuntimeView_CodeUploaded})
 \begin{figure}[H]
@@ -218,6 +229,7 @@ In this case, the GitHub API notify the system which through the related compone
     \label{fig:RuntimeView_CodeUploaded}
 \end{figure}
 
+\newpage
 \section{API endpoints}
 % Define JavaScript language style
 \lstdefinelanguage{JavaScript}{
@@ -559,7 +571,6 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
     \item {\ttfamily{401}} : error String("unauthorized")
 \end{itemize}
 
-
 \section*{GET endpoints - STU}
 In these endpoints each request will have to pass also a specific field in the body.\\ 
 This field is the id of the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
@@ -706,7 +717,7 @@ This endpoint allows the STU to get the details of a battle, it will be accessed
 \subsection*{Registration}
 This endpoint allows the user to register to the platform.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /register \\
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{name}} : the name of the user
@@ -719,15 +730,15 @@ This endpoint allows the user to register to the platform.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{409}} : error String("")
+    \item {\ttfamily{200}} : message String("index.html")
+    \item {\ttfamily{400}} : error String("Bad Request - Missing or invalid parameters")
+    \item {\ttfamily{409}} : error String("Conflict - An account with the provided email already exists")
 \end{itemize}
 
 \subsection*{Login}
 This endpoint allows the user to login to the platform.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /login \\
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{email}} : the email of the user
@@ -735,16 +746,28 @@ This endpoint allows the user to login to the platform.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{401}} : error String("")
+    \item {\ttfamily{200}} : message String("indexSTU.html") or String("indexEDU.html") 
+    \item {\ttfamily{400}} : error String("Bad Request - Missing or invalid parameters")
+    \item {\ttfamily{401}} : error String("Unauthorized - Invalid email or password")
+\end{itemize}
+
+\subsection*{Logout}
+This endpoint allows the user to logout to the platform.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : /logout \\
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("Logout successful")
+    \item {\ttfamily{401}} : error String("Unauthorized - User not authenticated or session expired")
+    \item {\ttfamily{403}} : error String("Forbidden - Insufficient permissions for logout")
+    \item {\ttfamily{404}} : error String("Not Found - User not found")
 \end{itemize}
 
 \section*{POST endpoints - EDU}
 \subsection*{Create Tournament}
 This endpoint allows the EDU to create a new tournament.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /tournament/create \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{EDU\_id}} : Integer
@@ -757,16 +780,16 @@ This endpoint allows the EDU to create a new tournament.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{200}} : message String("Tournament created successfully - Id: XXX")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to create a tournament")
+    \item {\ttfamily{404}} : error String("Not found - Educator not found")
 \end{itemize}
 
 \subsection*{Share Tournament}
 This endpoint allows the EDU to share a tournament with other colleagues.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /tournament/t\_id/share \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{EDU\_id}} : Integer
@@ -778,16 +801,16 @@ This endpoint allows the EDU to share a tournament with other colleagues.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{200}} : message String("Tournament shared successfully")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to share this tournament")
+    \item {\ttfamily{404}} : error String("Not found - Tournament or user not found")
 \end{itemize}
 
 \subsection*{Create Battle}
 This endpoint allows the EDU to create a new battle within the context of a tournament.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /battle/create \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{EDU\_id}} : Integer
@@ -802,27 +825,27 @@ This endpoint allows the EDU to create a new battle within the context of a tour
     \item {\ttfamily{manual\_evaluation}} : Boolean
     \item {\ttfamily{min\_STU}} : Integer
     \item {\ttfamily{max\_STU}} : Integer
-    
-    {\color{red}
-    Gradle => Da modificare con footer
-    \item {\ttfamily{test\_cases}} : ?
-    \item {\ttfamily{build\_script}} : ?
-    \item {\ttfamily{problem\_spec}} : File PDF
-    }
+    \item {\ttfamily{gradle\_data}} : Il will be update during implementation, need to understand Gradle better
+    %{\color{red}
+    %Gradle => Da modificare con footer
+    %\item {\ttfamily{test\_cases}} : ?
+    %\item {\ttfamily{build\_script}} : ?
+    %\item {\ttfamily{problem\_spec}} : File PDF
+    %}
     
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{200}} : message String("Battle created successfully - Id: XXX")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to create a battle")
+    \item {\ttfamily{404}} : error String("Not found - Educator not found")
 \end{itemize}
 
 \subsection*{Create Badge}
-This endpoint allows the EDU to create a new badge insisde the CKB platform.\\
+This endpoint allows the EDU to create a new badge inside the CKB platform.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /badge/create \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{EDU\_id}} : Integer
@@ -834,16 +857,16 @@ This endpoint allows the EDU to create a new badge insisde the CKB platform.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{200}} : message String("Badge created successfully - Id: XXX")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to create a badge")
+    \item {\ttfamily{404}} : error String("Not found - Educator not found")
 \end{itemize}
 
 \subsection*{Manual Evaluation}
 This endpoint allows the EDU to evaluate perform a manual evaluation on team's code.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /battles/b\_id/manualEvaluation/completed \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{EDU\_id}} : Integer
@@ -856,17 +879,17 @@ This endpoint allows the EDU to evaluate perform a manual evaluation on team's c
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
+    \item {\ttfamily{200}} : message String("Manual evaluation completed successfully")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to perform manual evaluation")
+    \item {\ttfamily{404}} : error String("Not found - Educator or battle not found")
 \end{itemize}
 
 \section*{POST endpoints - STU}
 \subsection*{Join Tournament}
 This endpoint allows the STU to join a tournament.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /tournament/t\_id/join \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{STU\_id}} : Integer
@@ -877,17 +900,17 @@ This endpoint allows the STU to join a tournament.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
-    \item {\ttfamily{409}} : error String("")
+    \item {\ttfamily{200}} : message String("Tournament joined successfully")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have permission to join this tournament")
+    \item {\ttfamily{404}} : error String("Not found - Student or tournament not found")
+    \item {\ttfamily{409}} : error String("Conflict - You are already registered fpr this tournament")
 \end{itemize}
 
 \subsection*{Join Battle}
-This endpoint allows the STU to join a battle forming a team respection the boundaries imposed.\\
+This endpoint allows the STU to join a battle forming a team respecting the boundaries imposed.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /battle/b\_id/join \\
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{STU\_id}} : Integer
@@ -901,17 +924,17 @@ This endpoint allows the STU to join a battle forming a team respection the boun
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
-    \item {\ttfamily{409}} : error String("")
+    \item {\ttfamily{200}} : message String("Battle joined successfully")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have permission to join this battle")
+    \item {\ttfamily{404}} : error String("Not found - Student or battle not found")
+    \item {\ttfamily{409}} : error String("Conflict - You are already registered for this battle")
 \end{itemize}
 
 \subsection*{Join Team}
 This endpoint allows the STU to join a team to compete in a battle.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : {\color{blue} TODO}
+\textbf{EndPoint} : /team/join
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{STU\_id}} : Integer
@@ -925,17 +948,17 @@ This endpoint allows the STU to join a team to compete in a battle.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("")
-    \item {\ttfamily{400}} : error String("")
-    \item {\ttfamily{403}} : error String("")
-    \item {\ttfamily{404}} : error String("")
-    \item {\ttfamily{409}} : error String("")
+    \item {\ttfamily{200}} : message String("Team joined successfully")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have permission to join this team")
+    \item {\ttfamily{404}} : error String("Not found - Student or team not found")
+    \item {\ttfamily{409}} : error String("Conflict - You are already registered for this team")
 \end{itemize}
 
 \newpage
 
 \section{Component interfaces}
-{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli delle Runtime View \\}
+%{\color{green} Da contorllare se i nomi dei metodi usati sono consistenti con quelli delle Runtime View \\}
 In this diagram are displayed all the functions that each component uses to communicate with other components. In particular, the blue interfaces are external APIs in which at this level of abstraction do not require to be detailed as the other interfaces. The interfaces contains both the operations for STU users and EDU users. 
 \begin{figure}[H]
     \centering
@@ -993,5 +1016,7 @@ The system is designed to use a relational database because it is effective at s
 It can also be easily scaled to handle large amounts of data and support many concurrent users. 
 The database allows us to store and retrieve information efficiently, while also ensuring that the data is accurate and consistent.
 
-\subsection{- TODO -}
-{\color{red}Non abbiamo mai parlato di Gradle secondo me nel design è da mettere, non so bene dove, ma bisonga mostrare che è parte del sistema \\}
+\subsection{Gradle}
+Gradle is an advanced tool for building automation and dependency management in software development projects. 
+Its key features include automated build processes, efficient dependency management, flexible configuration using Groovy or Kotlin, a plugin system for extending functionalities, support for multi-module projects, optimized performance with caching and parallelization, and integration with various development environments. 
+Gradle is compatible with multiple programming languages, such as Java, Kotlin, Groovy, Scala, C/C++, Python, and JavaScript (Node.js), and is widely used to simplify software development and enhance the efficiency of build and testing processes.
