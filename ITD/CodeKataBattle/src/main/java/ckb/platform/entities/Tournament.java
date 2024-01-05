@@ -20,7 +20,7 @@ public class Tournament {
     @ManyToMany
     private List<Student> subscribedStudents;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
     private List<Battle> battles;
 
     @ManyToMany
