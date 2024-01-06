@@ -361,8 +361,8 @@ This endpoint allows the anyone who clicks on a STU's name in the search results
 
 
 \section*{GET endpoints - EDU}
-In these endpoints each request will have to pass also a specific field in the body.\\ 
-This field is the id of the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
+In these endpoints for each request the platform will check the user session.\\ 
+This session will contain the infromations about the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
 
 \subsection*{Get all tournaments}
 This endpoint allows the EDU to get the list of all the tournaments on the CKB platform, it will be accessed whenever the EDU clicks on the "Show all tournaments" button on the dashboard.\\
@@ -429,10 +429,6 @@ This endpoint allows the EDU to get the details of a tournament, it will be acce
 \textbf{URL Parameters}:
 \begin{itemize}
     \item {\ttfamily{id}} : id of the tournament
-\end{itemize}
-\textbf{Body Parameters} :
-\begin{itemize}
-    \item {\ttfamily{edu\_id}}: the id of the EDU that is requesting the details of the tournament
 \end{itemize}
 \textbf{Response}:
 \begin{itemize}
@@ -572,8 +568,8 @@ This endpoint allows the EDU to evaluate a code, it will be accessed when an EDU
 \end{itemize}
 
 \section*{GET endpoints - STU}
-In these endpoints each request will have to pass also a specific field in the body.\\ 
-This field is the id of the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
+In these endpoints for each request the platform will check the user session.\\ 
+This session will contain the infromations about the user actually connected to the platform and who is sending the request in order to check if the user is of the correct role.
 
 \subsection*{Get subscribed tournaments}
 This endpoint allows the STU to get the list of the tournaments that it is subscribed to, it will be accessed every time the STU opens the dashboard.\\
