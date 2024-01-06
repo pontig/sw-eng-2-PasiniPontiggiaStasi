@@ -726,7 +726,7 @@ This endpoint allows the user to register to the platform.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("index.html")
+    \item {\ttfamily{200}} : message String("index")
     \item {\ttfamily{400}} : error String("Bad Request - Missing or invalid parameters")
     \item {\ttfamily{409}} : error String("Conflict - An account with the provided email already exists")
 \end{itemize}
@@ -742,7 +742,7 @@ This endpoint allows the user to login to the platform.\\
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
-    \item {\ttfamily{200}} : message String("indexSTU.html") or String("indexEDU.html") 
+    \item {\ttfamily{200}} : message String("indexSTU") or String("indexEDU") 
     \item {\ttfamily{400}} : error String("Bad Request - Missing or invalid parameters")
     \item {\ttfamily{401}} : error String("Unauthorized - Invalid email or password")
 \end{itemize}
@@ -764,10 +764,6 @@ This endpoint allows the user to logout to the platform.\\
 This endpoint allows the EDU to create a new tournament.\\
 \textbf{Method} : POST \\
 \textbf{EndPoint} : /tournament/create \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{EDU\_id}} : Integer
-\end{itemize}
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{tournemant\_name}} : String
@@ -785,14 +781,10 @@ This endpoint allows the EDU to create a new tournament.\\
 \subsection*{Share Tournament}
 This endpoint allows the EDU to share a tournament with other colleagues.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : /tournament/t\_id/share \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{EDU\_id}} : Integer
-    \item {\ttfamily{tournament\_id}} : Integer
-\end{itemize}
+\textbf{EndPoint} : /tournament/share \\
 \textbf{Body Parameters} :
 \begin{itemize}
+    \item {\ttfamily{tournament\_id}} : Integer
     \item {\ttfamily{invited\_EDU\_id}} : Integer
 \end{itemize}
 \textbf{Response} :
@@ -807,13 +799,9 @@ This endpoint allows the EDU to share a tournament with other colleagues.\\
 This endpoint allows the EDU to create a new battle within the context of a tournament.\\
 \textbf{Method} : POST \\
 \textbf{EndPoint} : /battle/create \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{EDU\_id}} : Integer
-    \item {\ttfamily{tournament\_id}} : Integer
-\end{itemize}
 \textbf{Body Parameters} :
 \begin{itemize}
+    \item {\ttfamily{tournament\_id}} : Integer
     \item {\ttfamily{battle\_name}} : String
     \item {\ttfamily{programming\_language}} : String
     \item {\ttfamily{registration\_deadline}} : String (date)
@@ -842,10 +830,6 @@ This endpoint allows the EDU to create a new battle within the context of a tour
 This endpoint allows the EDU to create a new badge inside the CKB platform.\\
 \textbf{Method} : POST \\
 \textbf{EndPoint} : /badge/create \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{EDU\_id}} : Integer
-\end{itemize}
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{badge\_name}} : String
@@ -859,18 +843,32 @@ This endpoint allows the EDU to create a new badge inside the CKB platform.\\
     \item {\ttfamily{404}} : error String("Not found - Educator not found")
 \end{itemize}
 
-\subsection*{Manual Evaluation}
+\subsection*{Manual Evaluation Partial}
 This endpoint allows the EDU to evaluate perform a manual evaluation on team's code.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : /battles/b\_id/manualEvaluation/completed \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{EDU\_id}} : Integer
-    \item {\ttfamily{tournament\_id}} : Integer
-    \item {\ttfamily{battle\_id}} : Integer
-\end{itemize}
+\textbf{EndPoint} : /battle/manualEvaluation/partial \\
 \textbf{Body Parameters} :
 \begin{itemize}
+    \item {\ttfamily{tournament\_id}} : Integer
+    \item {\ttfamily{battle\_id}} : Integer
+    \item {\ttfamily{given\_grades}} : Array of Tuple (team\_id - score)   
+\end{itemize}
+\textbf{Response} :
+\begin{itemize}
+    \item {\ttfamily{200}} : message String("Manual evaluation saved successfully but not completed")
+    \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
+    \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to perform manual evaluation")
+    \item {\ttfamily{404}} : error String("Not found - Educator, battle or tournament not found")
+\end{itemize}
+
+\subsection*{Manual Evaluation Completed}
+This endpoint allows the EDU to evaluate perform a manual evaluation on team's code.\\
+\textbf{Method} : POST \\
+\textbf{EndPoint} : /battle/manualEvaluation/completed \\
+\textbf{Body Parameters} :
+\begin{itemize}
+    \item {\ttfamily{tournament\_id}} : Integer
+    \item {\ttfamily{battle\_id}} : Integer
     \item {\ttfamily{given\_grades}} : Array of Tuple (team\_id - score)   
 \end{itemize}
 \textbf{Response} :
@@ -878,18 +876,14 @@ This endpoint allows the EDU to evaluate perform a manual evaluation on team's c
     \item {\ttfamily{200}} : message String("Manual evaluation completed successfully")
     \item {\ttfamily{400}} : error String("Bad request - Please check your input parameters")
     \item {\ttfamily{403}} : error String("Forbidden - You do not have the necessary rights to perform manual evaluation")
-    \item {\ttfamily{404}} : error String("Not found - Educator or battle not found")
+    \item {\ttfamily{404}} : error String("Not found - Educator, battle or tournament not found")
 \end{itemize}
 
 \section*{POST endpoints - STU}
 \subsection*{Join Tournament}
 This endpoint allows the STU to join a tournament.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : /tournament/t\_id/join \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{STU\_id}} : Integer
-\end{itemize}
+\textbf{EndPoint} : /tournament/join \\
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{tournament\_id}} : Integer   
@@ -906,14 +900,10 @@ This endpoint allows the STU to join a tournament.\\
 \subsection*{Join Battle}
 This endpoint allows the STU to join a battle forming a team respecting the boundaries imposed.\\
 \textbf{Method} : POST \\
-\textbf{EndPoint} : /battle/b\_id/join \\
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{STU\_id}} : Integer
-    \item {\ttfamily{tournament\_id}} : Integer   
-\end{itemize}
+\textbf{EndPoint} : /battle/join \\
 \textbf{Body Parameters} :
 \begin{itemize}
+    \item {\ttfamily{tournament\_id}} : Integer   
     \item {\ttfamily{battle\_id}} : Integer  
     \item {\ttfamily{team\_name}} : String  
     \item {\ttfamily{STU\_invited}} : Array of STU (STU\_id)  
@@ -931,10 +921,6 @@ This endpoint allows the STU to join a battle forming a team respecting the boun
 This endpoint allows the STU to join a team to compete in a battle.\\
 \textbf{Method} : POST \\
 \textbf{EndPoint} : /team/join
-\textbf{URL Parameters}:
-\begin{itemize}
-    \item {\ttfamily{STU\_id}} : Integer
-\end{itemize}
 \textbf{Body Parameters} :
 \begin{itemize}
     \item {\ttfamily{team\_id}} : String  
