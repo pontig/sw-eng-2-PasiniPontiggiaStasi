@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -207,7 +208,7 @@ public class TournamentController {
             battleMap.put("language", battle.getLanguage());
             battleMap.put("participants", battle.getTeams().stream().reduce(0, (sum, team) -> sum + team.getStudents().size(), Integer::sum));
             battleMap.put("phase", battle.getPhase());
-           // battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
+            // battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
             return battleMap;
         }));
 
@@ -254,13 +255,19 @@ public class TournamentController {
         List<Map<String, Object>> response = new ArrayList<>();
 
         tournamentRepository.findAll().forEach(t -> {
-            if (!student.getTournaments().contains(t)) {
+            if (!student.getTournaments().contains(t) && t.getSubscriptionDeadline().getTime() > new Date().getTime()) {
                 Map<String, Object> tournamentMap = new LinkedHashMap<>();
+
+                String daysLeft;
+                long diffInMills = (t.getSubscriptionDeadline().getTime() - new Date().getTime());
+                long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
+                daysLeft = String.valueOf(diff) + "d";
+
                 tournamentMap.put("id", t.getId());
                 tournamentMap.put("name", t.getName());
                 tournamentMap.put("first_name", t.getCreator().getFirstName());
                 tournamentMap.put("last_name", t.getCreator().getLastName());
-                //tournamentMap.put("daysLeft", t.getSubscriptionDeadline());
+                tournamentMap.put("daysLeft", daysLeft);
                 response.add(tournamentMap);
             }
         });
