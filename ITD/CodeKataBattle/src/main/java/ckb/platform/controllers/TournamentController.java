@@ -145,8 +145,8 @@ public class TournamentController {
 
     //mapped to "Get tournament details " for a stu
     //TODO: now i use a stu id as session token, but it has to be replaced, same to all other endpoints, we need to pass the token to check the permits
-    @GetMapping("/tournaments/stu/{t_id}")
-    Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @RequestParam Long stu_id) {
+    @GetMapping("/tournaments/stu/{t_id}&{stu_id}")
+    Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @PathVariable Long stu_id) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
 
@@ -225,8 +225,8 @@ public class TournamentController {
     }
 
     //mapped to "Get subscribed tournaments"
-    @GetMapping("/tournaments/subscribed/")
-    List<Map<String, Object>> getSubscribedTournaments(@RequestParam Long s_id) {
+    @GetMapping("/tournaments/subscribed/{s_id}")
+    List<Map<String, Object>> getSubscribedTournaments(@PathVariable Long s_id) {
         Student student = studentRepository.findById(s_id)
                 .orElseThrow(() -> new StudentNotFoundException(s_id));
 
@@ -246,8 +246,8 @@ public class TournamentController {
     }
 
     //mapped to "Get unsubscribed tournaments"
-    @GetMapping("/tournaments/unsuscribed/")
-    List<Map<String, Object>> getUnsubscribedTournaments(@RequestParam Long s_id) {
+    @GetMapping("/tournaments/unsuscribed/{s_id}")
+    List<Map<String, Object>> getUnsubscribedTournaments(@PathVariable Long s_id) {
         Student student = studentRepository.findById(s_id)
                 .orElseThrow(() -> new StudentNotFoundException(s_id));
 

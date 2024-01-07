@@ -268,7 +268,7 @@ This endpoint allows the anyone who writes in the searchbox to search for a STU 
 \textbf{EndPoint} : /students/:\{query\} \\
 \textbf{URL Parameters} :
 \begin{itemize}
-    \item {\ttfamily{query}} : the string that the user has written in the searchbox\\
+    \item {\ttfamily{query}} : the string that the user has written in the searchbox
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
@@ -294,7 +294,7 @@ This endpoint allows to search for an EDU by name, surname or email\\
 \textbf{EndPoint} : /educators/\{query\}  \\
 \textbf{URL Parameters} :
 \begin{itemize}
-    \item {\ttfamily{query}} : the string that the user has written in the searchbox\\
+    \item {\ttfamily{query}} : the string that the user has written in the searchbox
 \end{itemize}
 \textbf{Response} :
 \begin{itemize}
@@ -316,7 +316,7 @@ This endpoint allows to search for an EDU by name, surname or email\\
 \subsection*{Inspect a STU's profile}
 This endpoint allows the anyone who clicks on a STU's name in the search results to inspect its profile.\\ % or click on a STU's name in any point of the system
 \textbf{Method} : GET \\
-\textbf{EndPoint} : /student/\{id\}/profile \\
+\textbf{EndPoint} : /student/\{id\}/profile
 \textbf{URL Parameters} :
     \begin{itemize}
         \item {\ttfamily{id}} : the id of the student the user is looking for
@@ -388,12 +388,11 @@ This endpoint allows the EDU to get the list of all the tournaments on the CKB p
     ...
 ]
         \end{lstlisting}
-    \item {\ttfamily{401}}: error String("unauthorized)
+    \item {\ttfamily{401}}: error String("unauthorized")
 \end{itemize}
 
 \subsection*{Get owned tournaments}
 This endpoint allows the EDU to get the list of the tournaments that it owns, it will be accessed every time the EDU opens the dashboard.\\
-
 \textbf{Method} : GET \\
 \textbf{EndPoint} : /tournaments/owned/\{edu\_id\} \\
 \textbf{URL Parameters}:
@@ -468,7 +467,6 @@ This endpoint allows the EDU to get the details of a tournament, it will be acce
 
 \subsection*{Get battle details}
 This endpoint allows the EDU to get the details of a battle, it will be accessed when an EDU selects a battle from the list of the battles in a tournament view.\\
-
 \textbf{Method} : GET \\
 \textbf{EndPoint} : /battles/edu/\{id\}\\
 \textbf{URL Parameters}:
