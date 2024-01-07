@@ -45,13 +45,13 @@ public class EducatorController {
     //end::get-aggregate-root[]
 
     //Single item
-    @GetMapping("/educators/{id}")
-    EntityModel<Educator> one(@PathVariable Long id) {
-        Educator educator = repository.findById(id)
-                .orElseThrow(() -> new EducatorNotFoundException(id));
-
-        return assembler.toModel(educator);
-    }
+    //@GetMapping("/educators/{id}")
+    //EntityModel<Educator> one(@PathVariable Long id) {
+    //    Educator educator = repository.findById(id)
+    //            .orElseThrow(() -> new EducatorNotFoundException(id));
+    //
+    //    return assembler.toModel(educator);
+    //}
 
 
     //mapped to "Search for an EDU"

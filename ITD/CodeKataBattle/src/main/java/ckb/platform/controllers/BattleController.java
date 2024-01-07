@@ -55,7 +55,7 @@ public class BattleController {
             battleMap.put("title", battle.getTitle());
             battleMap.put("description", battle.getDescription());
             battleMap.put("language", battle.getLanguage());
-            battleMap.put("Opening", battle.getOpenDate());
+            battleMap.put("opening", battle.getOpenDate());
             battleMap.put("registration", battle.getRegistrationDeadline().toString());
             battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
             battleMap.put("min_group_size", battle.getMinStudents());
@@ -81,7 +81,7 @@ public class BattleController {
         battleMap.put("title", battle.getTitle());
         battleMap.put("description", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
-        battleMap.put("Opening", battle.getOpenDate());
+        battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
@@ -105,8 +105,8 @@ public class BattleController {
         }
 
     //mapped to "Get Battle Details"
-    @GetMapping("/battles/stu/{id}")
-    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, @RequestParam Long stu_id){
+    @GetMapping("/battles/stu/{id}&{stu_id}")
+    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, @PathVariable Long stu_id){
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
 
@@ -119,7 +119,7 @@ public class BattleController {
         battleMap.put("title", battle.getTitle());
         battleMap.put("description", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
-        battleMap.put("Opening", battle.getOpenDate());
+        battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
@@ -149,8 +149,8 @@ public class BattleController {
 
     // Single item
     //mapped to "Get Battle Details"
-    @GetMapping("/battles/edu/{id}")
-    Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @RequestParam Long edu_id) {
+    @GetMapping("/battles/edu/{id}&{edu_id}")
+    Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @PathVariable Long edu_id) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
 
@@ -163,7 +163,7 @@ public class BattleController {
         battleMap.put("title", battle.getTitle());
         battleMap.put("description", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
-        battleMap.put("Opening", battle.getOpenDate());
+        battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
