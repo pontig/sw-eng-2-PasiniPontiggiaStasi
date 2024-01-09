@@ -56,7 +56,7 @@ public class BattleController {
             battleMap.put("title", battle.getTitle());
             battleMap.put("description", battle.getDescription());
             battleMap.put("language", battle.getLanguage());
-            battleMap.put("Opening", battle.getOpenDate());
+            battleMap.put("opening", battle.getOpenDate());
             battleMap.put("registration", battle.getRegistrationDeadline().toString());
             battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
             battleMap.put("min_group_size", battle.getMinStudents());
@@ -82,7 +82,7 @@ public class BattleController {
         battleMap.put("title", battle.getTitle());
         battleMap.put("description", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
-        battleMap.put("Opening", battle.getOpenDate());
+        battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
@@ -123,7 +123,7 @@ public class BattleController {
         battleMap.put("title", battle.getTitle());
         battleMap.put("description", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
-        battleMap.put("Opening", battle.getOpenDate());
+        battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());
@@ -171,7 +171,7 @@ public class BattleController {
         battleMap.put("title", battle.getTitle());
         battleMap.put("description", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
-        battleMap.put("Opening", battle.getOpenDate());
+        battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
         battleMap.put("closing", battle.getFinalSubmissionDeadline().toString());
         battleMap.put("min_group_size", battle.getMinStudents());

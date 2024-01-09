@@ -20,12 +20,12 @@ import java.util.Date;
 class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
-    /*
-    @Bean
+
+    /*@Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return args -> {
 
             ArrayList<Student> students = new ArrayList<>();
@@ -59,10 +59,10 @@ class LoadDatabase {
 
             educators.forEach(educator -> log.info("Preloading " + eduRep.save(educator)));
 
-            tournaments.add(new Tournament("IoT Innovators Clash", sdf.parse("2023-06-15"), sdf.parse("2023-07-15"), educators.get(2 - 1)));
-            tournaments.add(new Tournament("CodeMasters Championship", sdf.parse("2022-04-05"), null, educators.get(3 - 1)));
+            tournaments.add(new Tournament("IoT Innovators Clash", sdf.parse("2024-06-15"), sdf.parse("2024-07-15"), educators.get(2 - 1)));
+            tournaments.add(new Tournament("CodeMasters Championship", sdf.parse("2024-04-05"), null, educators.get(3 - 1)));
             tournaments.add(new Tournament("Blockchain Battles", sdf.parse("2023-01-10"), sdf.parse("2023-02-10"), educators.get(3 - 1)));
-            tournaments.add(new Tournament("CodeInnovate Invitational", sdf.parse("2020-04-25"), null, educators.get(3 - 1)));
+            tournaments.add(new Tournament("CodeInnovate Invitational", sdf.parse("2024-04-25"), null, educators.get(3 - 1)));
             tournaments.add(new Tournament("GameDev Grand Prix", sdf.parse("2022-07-20"), null, educators.get(1 - 1)));
             tournaments.add(new Tournament("MobileMasters Marathon", sdf.parse("2021-12-05"), sdf.parse("2022-01-05"), educators.get(1 - 1)));
             tournaments.add(new Tournament("CodeGurus Gala", sdf.parse("2023-02-15"), sdf.parse("2023-03-15"), educators.get(1 - 1)));
@@ -70,11 +70,11 @@ class LoadDatabase {
             tournaments.add(new Tournament("Robot Rumble", sdf.parse("2021-08-10"), sdf.parse("2021-09-10"), educators.get(1 - 1)));
             tournaments.add(new Tournament("AI Arena", sdf.parse("2022-09-15"), sdf.parse("2022-10-15"), educators.get(4 - 1)));
             tournaments.add(new Tournament("CodeSprint Showdown", sdf.parse("2023-04-01"), sdf.parse("2023-04-30"), educators.get(4 - 1)));
-            tournaments.add(new Tournament("WebWizards Challenge", sdf.parse("2022-02-20"), null, educators.get(4 - 1)));
-            tournaments.add(new Tournament("AlgoMasters Showcase", sdf.parse("2021-05-10"), sdf.parse("2021-06-10"), educators.get(4 - 1)));
+            tournaments.add(new Tournament("WebWizards Challenge", sdf.parse("2024-02-20"), null, educators.get(4 - 1)));
+            tournaments.add(new Tournament("AlgoMasters Showcase", sdf.parse("2022-05-10"), sdf.parse("2021-06-10"), educators.get(4 - 1)));
             tournaments.add(new Tournament("CodeCraft Cup", sdf.parse("2020-06-01"), null, educators.get(2 - 1)));
             tournaments.add(new Tournament("DataQuest Challenge", sdf.parse("2020-03-15"), sdf.parse("2020-04-15"), educators.get(2 - 1)));
-            tournaments.add(new Tournament("Hackaton Fiesta", sdf.parse("2023-12-30"), null, educators.get(1 - 1)));
+            tournaments.add(new Tournament("Hackaton Fiesta", sdf.parse("2024-12-30"), null, educators.get(1 - 1)));
             tournaments.add(new Tournament("BugMaster League", sdf.parse("2019-01-01"), sdf.parse("2019-02-28"), educators.get(1 - 1)));
             tournaments.add(new Tournament("Codebash Championship", sdf.parse("2019-01-01"), sdf.parse("2019-01-31"), educators.get(1 - 1)));
 
@@ -192,7 +192,7 @@ class LoadDatabase {
 
             teams.forEach(team -> log.info("Preloading " + teamRep.save(team)));
         };
-    }
+    }*/
 
-*/
+
 }

@@ -14,7 +14,7 @@ public class EducatorModelAssembler implements RepresentationModelAssembler<Educ
     @Override
     public EntityModel<Educator> toModel(Educator educator) {
         return EntityModel.of(educator,
-            linkTo(methodOn(EducatorController.class).one(educator.getId())).withSelfRel(),
+            //linkTo(methodOn(EducatorController.class).one(educator.getId())).withSelfRel(),
             linkTo(methodOn(EducatorController.class).all()).withRel("educators"));
     }
 }
