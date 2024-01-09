@@ -57,7 +57,7 @@ public class StudentController {
         students.forEach(s ->{
             Map<String, Object> student = new LinkedHashMap<>();
             student.put("id", s.getId());
-            student.put("firstName", s.getFirstName());
+            student.put("name", s.getFirstName());
             student.put("surname", s.getLastName());
             response.add(student);
         });
@@ -77,7 +77,7 @@ public class StudentController {
         Map<String, Object> response = new LinkedHashMap<>();
 
         response.put("id", student.getId());
-        response.put("firstName", student.getFirstName());
+        response.put("name", student.getFirstName());
         response.put("surname", student.getLastName());
 
         List<Map<String, Object>> tournaments = new ArrayList<>();

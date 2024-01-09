@@ -1,5 +1,3 @@
-// var permissions = "STU"
-
 // Loading the page
 window.addEventListener("load", async () => {
 
@@ -7,12 +5,12 @@ window.addEventListener("load", async () => {
     document.getElementById("importantButton").style.display = "none"
 
     document.getElementById("findSTUSearchBox").addEventListener("input", async () => {
-        showResult(document.getElementById("findSTUSearchBox"), document.getElementById("findEDUSearchBox"), "https://pontiggiaelia.altervista.org/ckb/users.php?query=")
+        showResult(document.getElementById("findSTUSearchBox"), document.getElementById("findEDUSearchBox"), "students/")
         document.getElementById("queryResult").style.right = "15vw"
         document.getElementById("queryResult").style.left = "unset"
     })
     document.getElementById("findEDUSearchBox").addEventListener("input", async () => {
-        showResult(document.getElementById("findEDUSearchBox"), document.getElementById("findSTUSearchBox"), "https://pontiggiaelia.altervista.org/ckb/users.php?query=")
+        showResult(document.getElementById("findEDUSearchBox"), document.getElementById("findSTUSearchBox"), "educators/")
         document.getElementById("queryResult").style.left = "10vw"
         document.getElementById("queryResult").style.right = "unset"
     })
@@ -133,7 +131,7 @@ async function getTournaments(url) {
 // Gets the list of all the tournaments and shows them through the getTournaments function
 function requestAllTournaments() {
     document.querySelector("#list h2").innerHTML = "All tournaments"
-    getTournaments("https://pontiggiaelia.altervista.org/ckb/allTournaments.php")
+    getTournaments("tournaments")
 }
 
 // Sends the score of a manual evaluation to the server, it automatically retrieves the inofs from the html
@@ -196,15 +194,13 @@ async function changePage(page, id) {
                     break
 
                 case "tournament":
-                    // manca la richiesta al server
                     document.getElementById("list").style.display = "block"
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "flex"
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/tournamentInfo.php?id=" + id)
+                    res = await fetch("tournaments/edu/" + id + "&1") // TODO qui va tolto &1
                     data = await res.json()
-                    data = data[0]
                     console.log(data)
 
                     document.getElementById("path").innerHTML = ""
@@ -287,9 +283,8 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "none"
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/battleInfo.php?id=" + id)
+                    res = await fetch("battles/edu/" + id + "&1") // TODO qui va tolto &1
                     data = await res.json()
-                    data = data[0]
                     console.log(data)
 
                     document.getElementById("path").innerHTML = ""
@@ -358,7 +353,7 @@ async function changePage(page, id) {
                 case "manualEvaluation":
                     document.getElementById("toBeReviewed").style.display = "block"
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/manualEval.php?id=" + id)
+                    res = await fetch("battles/" + sessionStorage.getItem("battle") + "/manualevalution")
                     data = await res.json()
                     console.log(data)
 
@@ -400,7 +395,7 @@ async function changePage(page, id) {
                     container = document.querySelector("#codeToReview > pre")
                     container.innerHTML = ""
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/code.php?id=" + id)
+                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/code.php?id=" + id) // TODO: cambiare l'url
                     data = await res.json()
                     console.log(data)
                     data = data
@@ -427,7 +422,7 @@ async function changePage(page, id) {
                     document.getElementById("prof1").style.display = "flex"
                     document.getElementById("prof2").style.display = "flex"
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/profile.php?id=" + id)
+                    res = await fetch("students/" + id + "/profile")
                     data = await res.json()
 
                     document.getElementById("title").innerHTML = data.name + " " + data.surname + "'s profile"
@@ -511,11 +506,11 @@ async function changePage(page, id) {
 
                     document.getElementById("title").innerHTML = "Dashboard"
 
-                    getTournaments("https://pontiggiaelia.altervista.org/ckb/subscribedTournaments.php?user=1")
+                    getTournaments("tournaments/subscribed/" + 1) // TODO: cambiare l'url
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/unsubscribedTournaments.php?user=1")
+                    res = await fetch("tournaments/unsuscribed/" + 1) // TODO: cambiare l'url
                     data = await res.json()
                     console.log(res.status)
 
@@ -547,9 +542,8 @@ async function changePage(page, id) {
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/STUTournamentInfo.php?id=" + id)
+                    res = await fetch("tournaments/stu/" + id + "&1") // TODO qui va tolto &1
                     data = await res.json()
-                    data = data[0]
                     console.log(data)
 
                     document.getElementById("path").innerHTML = ""
@@ -624,9 +618,8 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "none"
 
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/STUBattleInfo.php?id=" + id)
+                    res = await fetch("battles/stu/" + id + "&1") // TODO qui va tolto &1
                     data = await res.json()
-                    data = data[0]
                     console.log(data)
 
                     document.getElementById("path").innerHTML = ""
