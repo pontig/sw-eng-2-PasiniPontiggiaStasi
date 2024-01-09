@@ -12,10 +12,10 @@ public class Tournament {
     private Date subscriptionDeadline;
     private Date endDate;
 
-    @ManyToOne @JoinColumn(name = "educator_id")
+    @ManyToOne @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private Educator creator;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany (cascade = CascadeType.MERGE)
     private List<Educator> grantedEducators;
     @ManyToMany
     private List<Student> subscribedStudents;
@@ -37,6 +37,10 @@ public class Tournament {
         this.creator = creator;
         grantedEducators = new ArrayList<Educator>();
         grantedEducators.add(creator);
+        subscribedStudents = new ArrayList<Student>();
+        battles = new ArrayList<Battle>();
+        badges = new ArrayList<Badge>();
+        ranking = new LinkedHashMap<Student, Integer>();
     }
 
     public Tournament() {}

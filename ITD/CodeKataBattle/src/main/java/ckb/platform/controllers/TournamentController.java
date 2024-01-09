@@ -1,7 +1,6 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.*;
-import ckb.platform.exceptions.BattleNotFoundException;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TournamentNotFoundException;
@@ -9,18 +8,13 @@ import ckb.platform.repositories.BattleRepository;
 import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TournamentRepository;
-import jakarta.websocket.OnClose;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class TournamentController {
@@ -144,14 +138,18 @@ public class TournamentController {
     }
 
     //mapped to "Get tournament details " for a stu
-    //TODO: now i use a stu id as session token, but it has to be replaced, same to all other endpoints, we need to pass the token to check the permits
     @GetMapping("/tournaments/stu/{t_id}")
-    Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, @RequestParam Long stu_id) {
+    Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, HttpSession session) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
 
-        Student student = studentRepository.findById(stu_id)
-                .orElseThrow(() -> new StudentNotFoundException(stu_id));
+        //check if the user is a student
+        User user = (User) session.getAttribute("user");
+        if(user == null || user.isEdu()){
+            throw new StudentNotFoundException(user.getId());
+        }
+        Student student = studentRepository.findById(user.getId())
+                .orElseThrow(() -> new StudentNotFoundException(user.getId()));
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", tournament.getId());
@@ -186,13 +184,17 @@ public class TournamentController {
 
 
     //mapped to "Get tournament details"
-    @GetMapping("/tournaments/edu/{t_id}&{edu_id}")
-    Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, @PathVariable Long edu_id) {
+    @GetMapping("/tournaments/edu/{t_id}")
+    Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, HttpSession session) {
         Tournament tournament = tournamentRepository.findById(t_id)
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
         //check if the id is an educator
-        Educator educator = educatorRepository.findById(edu_id)
-                .orElseThrow(() -> new EducatorNotFoundException(edu_id));
+        User user = (User) session.getAttribute("user");
+        if(user == null || !user.isEdu()){
+            throw new EducatorNotFoundException(user.getId());
+        }
+        Educator educator = educatorRepository.findById(user.getId())
+                .orElseThrow(() -> new EducatorNotFoundException(user.getId()));
 
 
         Map<String, Object> tournamentMap = new LinkedHashMap<>();
@@ -226,9 +228,13 @@ public class TournamentController {
 
     //mapped to "Get subscribed tournaments"
     @GetMapping("/tournaments/subscribed/")
-    List<Map<String, Object>> getSubscribedTournaments(@RequestParam Long s_id) {
-        Student student = studentRepository.findById(s_id)
-                .orElseThrow(() -> new StudentNotFoundException(s_id));
+    List<Map<String, Object>> getSubscribedTournaments(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(user == null || user.isEdu()){
+            throw new StudentNotFoundException(user.getId());
+        }
+        Student student = studentRepository.findById(user.getId())
+                .orElseThrow(() -> new StudentNotFoundException(user.getId()));
 
         List<Map<String, Object>> response = new ArrayList<>();
 
@@ -247,9 +253,13 @@ public class TournamentController {
 
     //mapped to "Get unsubscribed tournaments"
     @GetMapping("/tournaments/unsuscribed/")
-    List<Map<String, Object>> getUnsubscribedTournaments(@RequestParam Long s_id) {
-        Student student = studentRepository.findById(s_id)
-                .orElseThrow(() -> new StudentNotFoundException(s_id));
+    List<Map<String, Object>> getUnsubscribedTournaments(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(user == null || user.isEdu()){
+            throw new StudentNotFoundException(user.getId());
+        }
+        Student student = studentRepository.findById(user.getId())
+                .orElseThrow(() -> new StudentNotFoundException(user.getId()));
 
         List<Map<String, Object>> response = new ArrayList<>();
 

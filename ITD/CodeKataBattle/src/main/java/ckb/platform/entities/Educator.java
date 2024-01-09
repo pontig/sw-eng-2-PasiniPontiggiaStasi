@@ -7,11 +7,10 @@ import java.util.List;
 
 
 @Entity
-//@DiscriminatorValue("1")
-@Table(name = "Educator")
+@DiscriminatorValue("1")
 public class Educator extends User{
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.MERGE, mappedBy = "grantedEducators")
     private List<Tournament> ownedTournaments;
     @OneToMany (mappedBy = "creator", cascade = CascadeType.ALL)
     private List<Battle> ownedBattles;
