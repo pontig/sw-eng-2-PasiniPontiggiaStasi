@@ -12,12 +12,6 @@ import java.util.Optional;
 
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    @Query("SELECT u FROM Student u WHERE u.email = :email AND u.password = :password")
-    User findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
-
-    @Query("SELECT u FROM Student u WHERE u.email = :email")
-    User alreadyRegistered(@Param("email") String email);
-
     @Query("SELECT u FROM Student u WHERE u.firstName LIKE %:query% OR u.lastName LIKE %:query% OR u.email LIKE %:query%")
     List<Student> findByQuery(String query);
 }

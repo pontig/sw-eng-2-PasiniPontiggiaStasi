@@ -3,24 +3,27 @@ package ckb.platform.entities;
 import jakarta.persistence.*;
 
 import java.util.Objects;
-@MappedSuperclass
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-//@DiscriminatorColumn(name = "is_Edu", discriminatorType = DiscriminatorType.INTEGER)
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "is_Edu", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class User {
 
     @Column(name = "id", nullable = false)
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
+    @Column(name = "is_Edu", insertable = false, updatable = false)
     private boolean is_Edu;
+    @Column(name = "home_uni")
     private String home_uni;
     public User() {}
 
@@ -66,6 +69,9 @@ public abstract class User {
         this.email = email;
     }
     public void setPassword(String password) {this.password = password;}
+    public boolean isEdu() {
+        return this.is_Edu;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -88,4 +94,6 @@ public abstract class User {
     public String toString() {
         return "User{" + "id=" + this.id + ", firstname='" + this.firstName + '\'' +", lastname='" + this.lastName +  ", email='" + this.email + '\'' + '}';
     }
+
+
 }

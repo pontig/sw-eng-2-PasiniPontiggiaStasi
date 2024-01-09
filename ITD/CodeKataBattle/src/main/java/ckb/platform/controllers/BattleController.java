@@ -6,6 +6,7 @@ import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.repositories.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -106,13 +107,16 @@ public class BattleController {
 
     //mapped to "Get Battle Details"
     @GetMapping("/battles/stu/{id}")
-    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, @RequestParam Long stu_id){
+    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, HttpSession session){
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
 
         //check user passed is a stu
-        Student student = studentRepository.findById(stu_id)
-                .orElseThrow(() -> new StudentNotFoundException(stu_id));
+        User user = (User) session.getAttribute("user");
+        if(user == null || user.isEdu()){
+            throw new StudentNotFoundException(user.getId());
+        }
+
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
@@ -125,10 +129,10 @@ public class BattleController {
         battleMap.put("min_group_size", battle.getMinStudents());
         battleMap.put("max_group_size", battle.getMaxStudents());
         battleMap.put("phase", battle.getPhase());
-        battleMap.put("canSubscribe", battle.getRegistrationDeadline().compareTo(new Date())> 0 && !battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
+        battleMap.put("canSubscribe", battle.getRegistrationDeadline().compareTo(new Date())> 0 && !battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))));
         //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
-        battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id)))).count());
-        battleMap.put("subscribed", battle.isSubscribed(student));
+        battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).count());
+        battleMap.put("subscribed", battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))));
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
@@ -150,13 +154,17 @@ public class BattleController {
     // Single item
     //mapped to "Get Battle Details"
     @GetMapping("/battles/edu/{id}")
-    Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, @RequestParam Long edu_id) {
+    Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, HttpSession session) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
 
         //check if user passed is edu
-        Educator educator = educatorRepository.findById(edu_id)
-                .orElseThrow( () -> new EducatorNotFoundException(edu_id));
+        User user = (User) session.getAttribute("user");
+        if(user == null || !user.isEdu()){
+            throw new EducatorNotFoundException(user.getId());
+        }
+        Educator educator = educatorRepository.findById(user.getId())
+                .orElseThrow( () -> new EducatorNotFoundException(user.getId()));
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
@@ -202,14 +210,18 @@ public class BattleController {
 
     //mapped to "Evaluate code"
     @GetMapping("/battles/{b_id}/teams/{t_id}")
-    Map<String, Object> getCode(@PathVariable Long b_id, @PathVariable Long t_id, @RequestParam Long edu_id) {
+    Map<String, Object> getCode(@PathVariable Long b_id, @PathVariable Long t_id, HttpSession session) {
         Battle battle = battleRepository.findById(b_id)
                 .orElseThrow(() -> new BattleNotFoundException(b_id));
         Team team = teamRepository.findById(t_id)
                 .orElseThrow(() -> new TeamNotFoundException(t_id));
         //check if user passed is edu
-        Educator educator = educatorRepository.findById(edu_id)
-                .orElseThrow( () -> new EducatorNotFoundException(edu_id));
+        User user = (User) session.getAttribute("user");
+        if(user == null || !user.isEdu()){
+            throw new EducatorNotFoundException(user.getId());
+        }
+        Educator educator = educatorRepository.findById(user.getId())
+                .orElseThrow( () -> new EducatorNotFoundException(user.getId()));
 
         Map<String, Object> response= new LinkedHashMap<>();
         response.put("group_id", team.getId());

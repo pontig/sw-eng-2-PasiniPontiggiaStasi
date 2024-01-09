@@ -2,25 +2,28 @@ package ckb.platform.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
-//@DiscriminatorValue("0")
-@Table(name = "Student")
+@DiscriminatorValue("0")
 public class Student extends User{
 
     @ManyToMany
     List<Badge> achieveBadges;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
     List<Tournament> tournaments;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
     List<Battle> battles;
 
     public Student(String firstName, String lastName, String email, String password, String home_uni) {
         super(firstName, lastName, email, password, false, home_uni);
+        this.tournaments = new ArrayList<>();
+        this.battles = new ArrayList<>();
+        this.achieveBadges = new ArrayList<>();
     }
 
     public Student() {}

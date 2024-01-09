@@ -9,7 +9,7 @@ public class Battle {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     @ManyToOne (cascade = CascadeType.MERGE)
-    @JoinColumn(name = "educator_id",  referencedColumnName = "id")
+    @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private Educator creator;
     @ElementCollection
     private Map<Team, Integer> ranking;
@@ -29,6 +29,8 @@ public class Battle {
     private Date openDate;
     private int phase;
     private String description;
+    @ManyToMany
+    private List<Student> subscribedStudents;
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Team> teams;
     @ManyToOne (cascade = CascadeType.MERGE)
@@ -62,6 +64,7 @@ public class Battle {
         this.openDate = openDate;
         this.language = language;
         teams = new ArrayList<Team>();
+        subscribedStudents = new ArrayList<Student>();
     }
 
     public String getName() {
@@ -94,6 +97,14 @@ public class Battle {
 
     public void addTeam(Team team){
         teams.add(team);
+    }
+
+    public void addStudent(Student student){
+        subscribedStudents.add(student);
+    }
+
+    public List<Student> getSubscribedStudents(){
+        return subscribedStudents;
     }
 
     public void setRanking(Team team, Integer position){
