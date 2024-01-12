@@ -15,7 +15,7 @@ public class Educator extends User{
     @OneToMany (mappedBy = "creator", cascade = CascadeType.ALL)
     private List<Battle> ownedBattles;
 
-    public Educator( String firstName, String lastName, String home_uni, String email, String password) {
+    public Educator( String firstName, String lastName, String email, String password, String home_uni) {
         super( firstName, lastName, email, password, true, home_uni);
         ownedTournaments = new ArrayList<Tournament>();
         ownedBattles = new ArrayList<Battle>();
