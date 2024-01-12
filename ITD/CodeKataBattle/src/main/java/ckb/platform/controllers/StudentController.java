@@ -1,13 +1,16 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.Student;
+import ckb.platform.entities.User;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.repositories.StudentRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 import java.util.stream.Collectors;

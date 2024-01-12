@@ -1,13 +1,16 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.Educator;
+import ckb.platform.entities.User;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.repositories.EducatorRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +55,6 @@ public class EducatorController {
     //
     //    return assembler.toModel(educator);
     //}
-
 
     //mapped to "Search for an EDU"
     @GetMapping("/educators/{query}")
