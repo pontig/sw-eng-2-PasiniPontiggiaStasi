@@ -1,4 +1,4 @@
-package ckb.platform.controllers;
+package ckb.platform.formParser;
 
 public class LoginRequest {
     private String email;
