@@ -63,7 +63,7 @@ window.onload = () => {
     var registerButton = document.getElementById('registerButton');
 
     regForm.addEventListener('submit', (e) => {
-        
+        e.preventDefault();
 
         // Get form value
         const name = document.getElementById('name').value;
@@ -78,7 +78,7 @@ window.onload = () => {
         console.log('Form data: ', {name, surname, email, uni, role, password, password2, terms});
 
         // Define url and data
-        const url = 'http://localhost:8080/ckb_platform/register';
+        const url = '/ckb_platform/register';
         const data = {name, surname, email, uni, role, password, password2, terms};
 
         // Prepare data to send to the Server
