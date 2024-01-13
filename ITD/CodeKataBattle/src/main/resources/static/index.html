@@ -7,9 +7,7 @@
     <link rel="shortcut icon" href="icons/logoCKB.png" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/login.css" />
-    <!-- <script src="js/main.js"></script> -->
     <script src="js/login.js"></script>
-    <!-- <script src="js/profile.js"></script> -->
     <title>CKB: Login</title>
 </head>
 
@@ -24,29 +22,173 @@
         <h6 id="errorLogIn"></h6>
         <a onclick="register()">Don't have an account yet? create one</a>
     </form>
-    <form action="/ckb_platform/register" method="post" id="register">
+
+    <form action="#" id="register">
         <div>
             <img src="icons/logoCKB.png" alt="">
             <h5>Create an account in <span>CKB platform!</span></h5>
         </div>
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="text" name="surname" placeholder="Surname" required>
-        <input type="email" name="email" placeholder="email" required>
-        <input type="text" name="uni" placeholder="Home university" required>
-        <select title="Role"  name="role" required>
+        <input type="text" name="name" id="name" placeholder="Name" required>
+        <input type="text" name="surname" id="surname" placeholder="Surname" required>
+        <input type="email" name="email" id="emailR" placeholder="email" required>
+        <input type="text" name="uni" id="uni" placeholder="Home university" required>
+        <select title="Role" id="role" name="role" required>
             <option value="EDU">Educator</option>
             <option value="STU">Student</option>
         </select>
-        <input type="password" name="password" placeholder="password" required>
-        <input type="password" name="password2" placeholder="confirm password" required>
+        <input type="password" name="password" id="passwordR" placeholder="password" required>
+        <input type="password" name="password2" id="password2" placeholder="confirm password" required>
         <div>
             <input type="checkbox" name="terms" id="terms" required>
             <label for="terms">I agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a></label>
         </div>
-        <input type="button" value="Create new">
+        <input type="button" id="registerButton" value="Create new">
+        <h6 id="errorRegister"></h6>
         <a onclick="login()">Already have an account? Log in</a>
     </form>
-
 </body>
+
+<!--Da spostare sul file di log in, a me se lo sposto sul file di login.js mi va solo in incognito altrimenti no -->
+<script>
+    var loginButton = document.getElementById('loginButton');
+
+    loginButton.addEventListener('click', function () {
+        console.log('LOGIN');
+
+        // Get form value
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        console.log('Form data: ', {email, password});
+
+        // Define url and data
+        const url = 'http://localhost:8080/ckb_platform/login';
+        const data = {email, password};
+
+        // Prepare data to send to the Server
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+        // Fetch data to url
+        fetch(url, options)
+            .then(response => {
+                // Analise server response code
+                switch (response.status) {
+                    case 200:
+                    case 302:
+                        response.text().then(result => {
+                            console.log(result);
+                            window.location.href = result + ".html";
+                        })
+                        break;
+
+                    case 400:
+                    case 404:
+                        response.text().then(result => {
+                            const errorBox = document.getElementById('errorLogIn');
+                            if (errorBox) {
+                                errorBox.textContent = result;
+                            }
+                        })
+                        break;
+
+                    default:
+                        const errorBox = document.getElementById('errorLogIn');
+                        if (errorBox) {
+                            errorBox.textContent = "Internal error";
+                        }
+                        break;
+                }
+            })
+            .catch(error => {
+                console.error('Error during Fetch: ', error);
+            });
+    })
+</script>
+
+<script>
+    var registerButton = document.getElementById('registerButton');
+
+    registerButton.addEventListener('click', function () {
+        console.log('REGISTER');
+
+        // Get form value
+        const name = document.getElementById('name').value;
+        const surname = document.getElementById('surname').value;
+        const email = document.getElementById('emailR').value;
+        const uni = document.getElementById('uni').value;
+        const role = document.getElementById('role').value;
+        const password = document.getElementById('passwordR').value;
+        const password2 = document.getElementById('password2').value;
+        const terms = document.getElementById('terms').checked;
+
+        console.log('Form data: ', {name, surname, email, uni, role, password, password2, terms});
+
+        // Define url and data
+        const url = 'http://localhost:8080/ckb_platform/register';
+        const data = {name, surname, email, uni, role, password, password2, terms};
+
+        // Prepare data to send to the Server
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+        // Fetch data to url
+        fetch(url, options)
+            .then(response => {
+                // Analise server response code
+                switch (response.status) {
+                    case 200:
+                        login();
+                        break;
+
+                    case 302:
+                        response.text().then(result => {
+                            console.log(result);
+                            window.location.href = result + ".html";
+                        })
+                        break;
+
+                    case 400:
+                        response.text().then(result => {
+                            const errorBox = document.getElementById('errorRegister');
+                            if (errorBox) {
+                                errorBox.textContent = result;
+                            }
+                        })
+                        break;
+
+                    case 409:
+                        response.text().then(result => {
+                            const errorBox = document.getElementById('errorRegister');
+                            if (errorBox) {
+                                errorBox.textContent = result;
+                            }
+                        })
+                        break;
+
+                    default:
+                        const errorBox = document.getElementById('errorRegister');
+                        if (errorBox) {
+                            errorBox.textContent = "Internal error";
+                        }
+                        break;
+                }
+
+            })
+            .catch(error => {
+                console.error('Error during Fetch: ', error);
+            });
+    })
+</script>
 
 </html>
