@@ -29,6 +29,10 @@ form h5 span {
 form input {
   box-shadow: 0px 4px 4px 0 rgba(23, 4, 47, 0.49);
 }
+form h6 {
+  font-size: xx-small;
+  color: red;
+}
 form img {
   width: 50%;
 }

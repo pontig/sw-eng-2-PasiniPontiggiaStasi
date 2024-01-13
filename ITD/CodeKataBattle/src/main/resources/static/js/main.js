@@ -184,7 +184,7 @@ async function changePage(page, id) {
 
                     document.getElementById("title").innerHTML = "Dashboard"
 
-                    getTournaments("https://pontiggiaelia.altervista.org/ckb/ownedTournaments.php?user=1")
+                    getTournaments("https://pontiggiaelia.altervista.org/ckb/ownedTournaments.php?user=1") // TODO: cambiare l'url
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
@@ -199,7 +199,7 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "flex"
 
-                    res = await fetch("tournaments/edu/" + id + "&1") // TODO qui va tolto &1
+                    res = await fetch("tournaments/edu/" + id ) 
                     data = await res.json()
                     console.log(data)
 
@@ -283,7 +283,7 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "none"
 
-                    res = await fetch("battles/edu/" + id + "&1") // TODO qui va tolto &1
+                    res = await fetch("battles/edu/" + id )
                     data = await res.json()
                     console.log(data)
 
@@ -506,11 +506,11 @@ async function changePage(page, id) {
 
                     document.getElementById("title").innerHTML = "Dashboard"
 
-                    getTournaments("tournaments/subscribed/" + 1) // TODO: cambiare l'url
+                    getTournaments("tournaments/subscribed/")
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
-                    res = await fetch("tournaments/unsuscribed/" + 1) // TODO: cambiare l'url
+                    res = await fetch("tournaments/unsuscribed/")
                     data = await res.json()
                     console.log(res.status)
 
@@ -542,7 +542,7 @@ async function changePage(page, id) {
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"
 
-                    res = await fetch("tournaments/stu/" + id + "&1") // TODO qui va tolto &1
+                    res = await fetch("tournaments/stu/" + id )
                     data = await res.json()
                     console.log(data)
 
@@ -618,7 +618,7 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "none"
 
-                    res = await fetch("battles/stu/" + id + "&1") // TODO qui va tolto &1
+                    res = await fetch("battles/stu/" + id)
                     data = await res.json()
                     console.log(data)
 
