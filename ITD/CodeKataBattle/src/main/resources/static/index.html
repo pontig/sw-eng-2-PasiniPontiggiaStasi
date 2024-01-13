@@ -19,7 +19,8 @@
         <h5>Welcome back to <span>CKB platform!</span></h5>
         <input type="email" name="email" id="email" placeholder="email">
         <input type="password" name="password" id="password" placeholder="password">
-        <input type="button" id="loginButton" value="Log in">
+        <input type="submit" id="loginButton" value="Log in">
+        <!-- <input type="button" id="loginButton" value="Log in"> -->
         <h6 id="errorLogIn"></h6>
         <a onclick="register()">Don't have an account yet? create one</a>
     </form>
@@ -47,70 +48,5 @@
     </form>
 
 </body>
-
-<!--Da spostare sul file di log in, a me se lo sposto sul file di login.js mi va solo in incognito altrimenti no -->
-<script>
-    var loginButton = document.getElementById('loginButton');
-
-    loginButton.addEventListener('click', function () {
-        console.log('Tentativo di login');
-
-        // Ottieni i valori della form
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        console.log('Dati inseriti: ', {email, password});
-
-        // Effettua la richiesta Fetch
-        const url = 'http://localhost:8080/ckb_platform/login'; // Assicurati di usare il tuo URL effettivo
-        const data = {email, password};
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-
-        fetch(url, options)
-            .then(response => {
-                //console.log('Dati ricevuti dal server:', data, response.body);
-
-                switch (response.status) {
-                    case 200:
-                    case 302:
-                        response.text().then(result => {
-                            console.log(result);
-                            window.location.href = result + ".html";
-                        })
-                        break;
-
-                    case 400:
-                    case 404:
-                        response.text().then(result => {
-                            console.log(result); // Questo sarà il risultato della Promise
-                            const errorBox = document.getElementById('errorLogIn');
-                            console.log(errorBox); // Aggiungi questo log per debug
-                            if (errorBox) {
-                                errorBox.textContent = result;
-                            }
-                        })
-                        break;
-
-                    default:
-                        const errorBox = document.getElementById('errorLogIn');
-                        if (errorBox) {
-                            errorBox.textContent = "Internal error";
-                        }
-                        break;
-                }
-
-            })
-            .catch(error => {
-                console.error('Errore durante la richiesta Fetch:', error);
-            });
-    })
-</script>
 
 </html>
