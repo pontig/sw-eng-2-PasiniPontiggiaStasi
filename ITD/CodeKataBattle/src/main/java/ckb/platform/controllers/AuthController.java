@@ -29,15 +29,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> processRegistration(@RequestBody RegisterRequest registerRequest, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if(user != null){
-            // User already in session
-            if(user.isEdu())
-                return ResponseEntity.status(HttpStatus.FOUND).body("indexEDU");
-            else
-                return ResponseEntity.status(HttpStatus.FOUND).body("indexSTU");
-        }
-
         if (registerRequest.getName().isEmpty() || registerRequest.getSurname().isEmpty() || registerRequest.getEmail().isEmpty() || registerRequest.getUni().isEmpty() || registerRequest.getRole().isEmpty() || registerRequest.getPassword().isEmpty() || registerRequest.getPassword2().isEmpty() || !registerRequest.isTerms() ||
             registerRequest.getName().isBlank() || registerRequest.getSurname().isBlank() || registerRequest.getEmail().isBlank() || registerRequest.getUni().isBlank() || registerRequest.getRole().isBlank() || registerRequest.getPassword().isBlank() || registerRequest.getPassword2().isBlank()) {
             // Check if any field is empty
@@ -81,16 +72,6 @@ public class AuthController {
 
         User user = (User) session.getAttribute("user");
 
-        if(user != null){
-            System.out.println("Login: " + user);
-
-            // User already in session
-            if(user.isEdu())
-                return ResponseEntity.status(HttpStatus.FOUND).body("indexEDU");
-            else
-                return ResponseEntity.status(HttpStatus.FOUND).body("indexSTU");
-        }
-
         if (email.isEmpty() || password.isEmpty() || email.isBlank() || password.isBlank()) {
             // Check if any field is empty
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
@@ -133,6 +114,19 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - User already logged out");
             }
         }
+    }
+
+    @GetMapping("/")
+    public RedirectView getPlatform(HttpSession session){
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            // User already in session
+            if(user.isEdu())
+                return new RedirectView("indexEDU.html");
+            else
+                return new RedirectView("indexSTU.html");
+        }
+        return new RedirectView("index.html");
     }
 
     // If a user try to make a get to the /login endpoint, it is redirected

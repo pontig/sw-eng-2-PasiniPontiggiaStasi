@@ -3,19 +3,27 @@ var regForm, logForm
 window.onload = () => {
     regForm = document.getElementById("register")
     logForm = document.getElementById("login")
+
+    const errorBox = document.getElementById('errorLogIn');
+    if (errorBox)
+        errorBox.style.display = 'none';
+
+    /* LOGIN */
     logForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        console.log('Tentativo di login');
-    
+        console.log('LOGIN');
+
+        // Get form value
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-    
-        // console.log('Dati inseriti: ', {email, password});
-    
-        const url = '/ckb_platform/login'; 
+
+        console.log('Form data: ', {email, password});
+
+        // Define url and data
+        const url = 'http://localhost:8080/ckb_platform/login';
         const data = {email, password};
-    
+
+        // Prepare data to send to the Server
         const options = {
             method: 'POST',
             headers: {
@@ -23,9 +31,11 @@ window.onload = () => {
             },
             body: JSON.stringify(data)
         };
-    
+
+        // Fetch data to url
         fetch(url, options)
             .then(response => {
+                // Analise server response code
                 switch (response.status) {
                     case 200:
                     case 302:
@@ -34,36 +44,33 @@ window.onload = () => {
                             window.location.href = result + ".html";
                         })
                         break;
-    
+
                     case 400:
                     case 404:
                         response.text().then(result => {
                             const errorBox = document.getElementById('errorLogIn');
-                            if (errorBox) {
+                            if (errorBox)
                                 errorBox.textContent = result;
-                            }
+                            errorBox.style.display = 'flex';
                         })
                         break;
-    
                     default:
                         const errorBox = document.getElementById('errorLogIn');
-                        if (errorBox) {
+                        if (errorBox)
                             errorBox.textContent = "Internal error";
-                        }
+                        errorBox.style.display = 'flex';
                         break;
                 }
             })
             .catch(error => {
-                console.error('Errore durante la richiesta Fetch:', error);
+                console.error('Error during Fetch: ', error);
             });
     })
 
-
-
-    var registerButton = document.getElementById('registerButton');
-
+    /* REGISTER */
     regForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('REGISTER');
 
         // Get form value
         const name = document.getElementById('name').value;
@@ -78,7 +85,7 @@ window.onload = () => {
         console.log('Form data: ', {name, surname, email, uni, role, password, password2, terms});
 
         // Define url and data
-        const url = '/ckb_platform/register';
+        const url = 'http://localhost:8080/ckb_platform/register';
         const data = {name, surname, email, uni, role, password, password2, terms};
 
         // Prepare data to send to the Server
@@ -109,26 +116,26 @@ window.onload = () => {
                     case 400:
                         response.text().then(result => {
                             const errorBox = document.getElementById('errorRegister');
-                            if (errorBox) {
+                            if (errorBox)
                                 errorBox.textContent = result;
-                            }
+                            errorBox.style.display = 'flex';
                         })
                         break;
 
                     case 409:
                         response.text().then(result => {
                             const errorBox = document.getElementById('errorRegister');
-                            if (errorBox) {
+                            if (errorBox)
                                 errorBox.textContent = result;
-                            }
+                            errorBox.style.display = 'flex';
                         })
                         break;
 
                     default:
                         const errorBox = document.getElementById('errorRegister');
-                        if (errorBox) {
+                        if (errorBox)
                             errorBox.textContent = "Internal error";
-                        }
+                        errorBox.style.display = 'flex';
                         break;
                 }
 
@@ -140,6 +147,10 @@ window.onload = () => {
 }
 
 function register() {
+    const errorBox = document.getElementById('errorRegister');
+    if (errorBox)
+        errorBox.style.display = 'none';
+
     logForm.style.opacity = "0"
     setTimeout(() => {
         logForm.style.display = "none"
@@ -151,6 +162,10 @@ function register() {
 }
 
 function login() {
+    const errorBox = document.getElementById('errorLogIn');
+    if (errorBox)
+        errorBox.style.display = 'none';
+
     regForm.style.opacity = "0"
     setTimeout(() => {
         regForm.style.display = "none"
@@ -160,6 +175,3 @@ function login() {
         }, 100)
     }, 400)
 }
-
-
-
