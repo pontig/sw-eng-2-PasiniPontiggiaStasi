@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Controller
 public class AuthController {
     @Autowired
@@ -86,11 +90,21 @@ public class AuthController {
 
         if (user != null) {
             session.setAttribute("user", user);
-            if (!user.isEdu())
-                return ResponseEntity.status(HttpStatus.OK).body("indexSTU");
-            else
-                return ResponseEntity.status(HttpStatus.OK).body("indexEDU");
+           // if (!user.isEdu())
+           //     return ResponseEntity.status(HttpStatus.OK).body("indexSTU");
+           // else
+           //     return ResponseEntity.status(HttpStatus.OK).body("indexEDU");
 
+            String res = "{";
+
+            res += "\"name\": \"" + user.getFirstName() + "\",";
+            res += "\"surname\": \"" + user.getLastName() + "\",";
+            res += "\"role\": \"" + (user.isEdu() ? "EDU" : "STU") + "\",";
+            res += "\"id\": \"" + user.getId() + "\"";
+
+            res += "}";
+
+            return ResponseEntity.status(HttpStatus.OK).body(res);
         } else {
             // User not in the DB
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error - user does not exist in the DB");

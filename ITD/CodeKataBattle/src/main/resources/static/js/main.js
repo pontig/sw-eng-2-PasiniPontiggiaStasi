@@ -1,7 +1,10 @@
 // Loading the page
 window.addEventListener("load", async () => {
 
+
+    if (sessionStorage.getItem("userId") == null) window.location.href = "index.html"
     changePage("dashboard", 0)
+    document.getElementById("profileName").innerHTML = sessionStorage.getItem("name") + " " + sessionStorage.getItem("surname")
     document.getElementById("importantButton").style.display = "none"
 
     document.getElementById("findSTUSearchBox").addEventListener("input", async () => {
@@ -199,7 +202,7 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "flex"
 
-                    res = await fetch("tournaments/edu/" + id ) 
+                    res = await fetch("tournaments/edu/" + id)
                     data = await res.json()
                     console.log(data)
 
@@ -230,7 +233,12 @@ async function changePage(page, id) {
                             let p1 = document.createElement("p")
                             p1.innerHTML = e.participants + " participants"
                             let p2 = document.createElement("p")
-                            p2.innerHTML = "time left: " + e.remaining
+                            if (e.phase == 1)
+                                p2.innerHTML = "closing in: " + e.remaining
+                            else if (e.phase == 2)
+                                p2.innerHTML = "time left to commit:" + e.remaining
+                            else if (e.phase == 3)
+                                p2.innerHTML = "waiting for manual evaluation"
 
                             div.appendChild(h3)
                             div.appendChild(p1)
@@ -283,7 +291,7 @@ async function changePage(page, id) {
                     document.getElementById("ranking").style.display = "block"
                     document.getElementById("share").style.display = "none"
 
-                    res = await fetch("battles/edu/" + id )
+                    res = await fetch("battles/edu/" + id)
                     data = await res.json()
                     console.log(data)
 
@@ -525,7 +533,7 @@ async function changePage(page, id) {
                         a.onclick = (() => { changePage("tournament", e.id) })
                         td1.appendChild(a)
                         let td2 = document.createElement("td")
-                        td2.innerHTML = e.daysLeft + "d"
+                        td2.innerHTML = e.daysLeft
                         tr.appendChild(td1)
                         tr.appendChild(td2)
                         container.appendChild(tr)
@@ -542,7 +550,7 @@ async function changePage(page, id) {
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"
 
-                    res = await fetch("tournaments/stu/" + id )
+                    res = await fetch("tournaments/stu/" + id)
                     data = await res.json()
                     console.log(data)
 
@@ -571,7 +579,13 @@ async function changePage(page, id) {
                             let h3 = document.createElement("h3")
                             h3.innerHTML = e.name + " • " + e.language
                             let p2 = document.createElement("p")
-                            p2.innerHTML = "time left: " + e.remaining
+                            p2.innerHTML = ""
+                            if (e.phase == 1)
+                                p2.innerHTML = "closing in: " + e.remaining
+                            else if (e.phase == 2 && e.subscribed)
+                                p2.innerHTML = "time left to commit: " + e.remaining
+                            else if (e.phase == 3 && e.subscribed)
+                                p2.innerHTML = "waiting for manual evaluation"
 
                             div.appendChild(h3)
                             if (e.subscribed) {
@@ -579,7 +593,7 @@ async function changePage(page, id) {
                                 p1.innerHTML = "Score: " + e.score + "pts"
                                 div.appendChild(p1)
                             }
-                            if (e.phase != 4) div.appendChild(p2)
+                            if (e.phase != 4 && (e.phase == 1 || e.phase == 2 && e.subscribed)) div.appendChild(p2)
                             container.appendChild(div)
                         })
 
@@ -707,7 +721,7 @@ async function changePage(page, id) {
                         })
                     }
 
-                    if (!data.minConstraintSatisfied) {
+                    if (data.subscribed && !data.minConstraintSatisfied && data.phase == 1) {
                         let spsp = document.createElement("span")
                         spsp.innerHTML = "⚠️"
                         spsp.id = "warningHover"
