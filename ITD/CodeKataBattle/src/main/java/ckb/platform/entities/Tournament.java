@@ -28,7 +28,7 @@ public class Tournament {
 
     @ElementCollection
     private Map<Student, Integer> ranking;
-    private Boolean active;
+    //private Boolean active;
 
     public Tournament(String name, Date subscriptionDeadline, Date endDate, Educator creator) {
         this.name = name;
@@ -41,6 +41,7 @@ public class Tournament {
         battles = new ArrayList<Battle>();
         badges = new ArrayList<Badge>();
         ranking = new LinkedHashMap<Student, Integer>();
+
     }
 
     public Tournament() {}
@@ -137,6 +138,6 @@ public class Tournament {
     }
 
     public Boolean isActive() {
-        return this.active;
+        return this.endDate == null;
     }
 }

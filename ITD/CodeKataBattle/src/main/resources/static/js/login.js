@@ -4,6 +4,8 @@ window.onload = () => {
     regForm = document.getElementById("register")
     logForm = document.getElementById("login")
 
+    sessionStorage.clear();
+
     const errorBox = document.getElementById('errorLogIn');
     if (errorBox)
         errorBox.style.display = 'none';
@@ -39,11 +41,14 @@ window.onload = () => {
                 switch (response.status) {
                     case 200:
                     case 302:
-                        response.text().then(result => {
+                        response.json().then(result => {
                             console.log(result);
-                            window.location.href = result + ".html";
+                            sessionStorage.setItem('name', result.name)
+                            sessionStorage.setItem('surname', result.surname)
+                            sessionStorage.setItem('userId', result.id)
+                            window.location.href = "index"+result.role+".html"
                         })
-                        break;
+                        break
 
                     case 400:
                     case 404:

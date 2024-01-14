@@ -21,7 +21,7 @@ class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    /*@Bean
+    @Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
@@ -52,10 +52,10 @@ class LoadDatabase {
 
             students.forEach(student -> log.info("Preloading " + stuRep.save(student)));
 
-            educators.add(new Educator("Dale", "Squirrel", "Mouseton Institute of Technology", "chipndalebutjustdale@mail.mit.com", "nervi"));
-            educators.add(new Educator("Chip", "Squirrel", "Mouseton Institute of Technology", "chipndalebutjustchip@mail.mit.com", "nervi"));
-            educators.add(new Educator("Donald", "Duck", "Duckburg University", "dduck@gmail.com", "nervi"));
-            educators.add(new Educator("Scrooge", "McDuck", "Duckburg University", "scrooge@coldmail.com", "nervi"));
+            educators.add(new Educator("Dale", "Squirrel", "chipndalebutjustdale@mail.mit.com", "nervi", "Mouseton Institute of Technology"));
+            educators.add(new Educator("Chip", "Squirrel", "chipndalebutjustchip@mail.mit.com", "nervi", "Mouseton Institute of Technology"));
+            educators.add(new Educator("Donald", "Duck", "dduck@gmail.com", "nervi", "Duckburg University"));
+            educators.add(new Educator("Scrooge", "McDuck", "scrooge@coldmail.com", "nervi", "Duckburg University"));
 
             educators.forEach(educator -> log.info("Preloading " + eduRep.save(educator)));
 
@@ -85,7 +85,7 @@ class LoadDatabase {
 
             battles.add(new Battle("The dawn of a new code", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "Python", false, 1, 1, educators.get(1 - 1), tournaments.get(1 - 1), false));
             battles.add(new Battle("CodeCraft Clash", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "C++", true, 3, 5, educators.get(1 - 1), tournaments.get(1 - 1), false));
-            battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false));
+            battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2024-02-16"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false));
             battles.add(new Battle("Opening battle", sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), sdf.parse("2024-02-20"), "Java", false, 1, 2, educators.get(1 - 1), tournaments.get(1 - 1), false));
 
             battles.get(0).addStudent(students.get(0));
@@ -93,106 +93,106 @@ class LoadDatabase {
             battles.forEach(battle -> log.info("Preloading " + batRep.save(battle)));
 
             teams.add(new Team("Team 01", battles.get(1 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(19 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(19 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 02", battles.get(1 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(18 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(18 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 03", battles.get(1 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(17 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(17 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 04", battles.get(1 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(16 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(16 - 5));
             log.info("added a player to a team");
 
             teams.add(new Team("Team 05", battles.get(2 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(19 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(19 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(17 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(17 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(16 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(16 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 06", battles.get(2 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(18 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(18 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(13 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(13 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(12 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(12 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(11 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(11 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(10 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(10 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 07", battles.get(2 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(9 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(9 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(8 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(8 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(7 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(7 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(6 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(6 - 5));
             log.info("added a player to a team");
 
             teams.add(new Team("Team 08", battles.get(3 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(6 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(6 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(8 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(8 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 09", battles.get(3 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(7 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(7 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(9 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(9 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(11 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(11 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(12 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(12 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 10", battles.get(3 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(13 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(13 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(14 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(14 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 11", battles.get(3 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(15 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(15 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(16 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(16 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 12", battles.get(3 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(17 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(17 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(18 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(18 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 13", battles.get(3 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(19 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(19 - 5));
             log.info("added a player to a team");
-            teams.get(teams.size()-1).addStudent(students.get(5 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(5 - 5));
             log.info("added a player to a team");
 
             teams.add(new Team("Team 14", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(5 - 5));
-            log.info("added a player to a team");
+            //teams.get(teams.size() - 1).addStudent(students.get(5 - 5));
+            //log.info("added a player to a team");
             teams.add(new Team("Team 15", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(6 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(6 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 16", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(7 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(7 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 17", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(8 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(8 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 18", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(9 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(9 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 19", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(10 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(10 - 5));
             log.info("added a player to a team");
             teams.add(new Team("Team 20", battles.get(4 - 1)));
-            teams.get(teams.size()-1).addStudent(students.get(11 - 5));
+            teams.get(teams.size() - 1).addStudent(students.get(11 - 5));
             log.info("added a player to a team");
 
             teams.forEach(team -> log.info("Preloading " + teamRep.save(team)));
         };
-    }*/
+    }
 
 
 }

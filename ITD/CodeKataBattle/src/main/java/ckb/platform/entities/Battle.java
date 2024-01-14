@@ -27,7 +27,7 @@ public class Battle {
     private Date registrationDeadline;
     private Date finalSubmissionDeadline;
     private Date openDate;
-    private int phase;
+    //private int phase;
     private String description;
     @ManyToMany
     private List<Student> subscribedStudents;
@@ -76,7 +76,15 @@ public class Battle {
     }
 
     public int getPhase() {
-        return phase;
+        if (new Date().before(registrationDeadline)) {
+            return 1;
+        } else if (new Date().before(finalSubmissionDeadline)) {
+            return 2;
+        } else if (manualEvaluation && !hasBeenEvaluated) {
+            return 3;
+        } else {
+            return 4;
+        }
     }
 
     public String getDescription() {
@@ -226,6 +234,8 @@ public class Battle {
         return "Battle{" + "id=" + this.id + ", creator='" + this.creator.getId() + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament.getId() + '\'' + '}';
         //return "Ciao michelangelo";
     }
+
+
 
 
 }

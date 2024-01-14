@@ -150,7 +150,7 @@ public class TournamentController {
 
         //check if the user is a student
         User user = (User) session.getAttribute("user");
-        if(user == null || user.isEdu()){
+        if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
         Student student = studentRepository.findById(user.getId())
@@ -160,7 +160,7 @@ public class TournamentController {
         response.put("id", tournament.getId());
         response.put("name", tournament.getName());
         response.put("active", tournament.isActive());
-        response.put("canSubscribe", tournament.getSubscriptionDeadline().compareTo(new Date()) > 0);
+        response.put("canSubscribe", tournament.getSubscriptionDeadline().compareTo(new Date()) > 0 && !tournament.getSubscribedStudents().contains(student));
         response.put("subscribed", tournament.getSubscribedStudents().contains(student));
         response.put("battles", tournament.getBattles().stream().map(battle -> {
             Map<String, Object> battleMap = new LinkedHashMap<>();
@@ -171,7 +171,20 @@ public class TournamentController {
             battleMap.put("subscribed", battle.getTeams().stream().anyMatch(team -> team.getStudents().contains(student)));
             battleMap.put("score", battle.getTeams().stream().filter(team -> team.getStudents().contains(student)).findFirst().map(Team::getScore).orElse(0));
             battleMap.put("phase", battle.getPhase());
-            //battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
+
+            String daysLeft;
+            Date nextStep = switch (battle.getPhase()) {
+                case 1 -> battle.getRegistrationDeadline();
+                case 2 -> battle.getFinalSubmissionDeadline();
+                default -> null;
+            };
+            if (nextStep != null) {
+                long diffInMills = (nextStep.getTime() - new Date().getTime());
+                long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
+                daysLeft = String.valueOf(diff) + "d";
+                battleMap.put("remaining", daysLeft);
+            }
+
             return battleMap;
         }));
         ArrayList<Map<String, Object>> rankings = new ArrayList<>();
@@ -195,7 +208,7 @@ public class TournamentController {
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
         //check if the id is an educator
         User user = (User) session.getAttribute("user");
-        if(user == null || !user.isEdu()){
+        if (user == null || !user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
         Educator educator = educatorRepository.findById(user.getId())
@@ -235,7 +248,7 @@ public class TournamentController {
     @GetMapping("/tournaments/subscribed/")
     List<Map<String, Object>> getSubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user == null || user.isEdu()){
+        if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
         Student student = studentRepository.findById(user.getId())
@@ -260,7 +273,7 @@ public class TournamentController {
     @GetMapping("/tournaments/unsuscribed/")
     List<Map<String, Object>> getUnsubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user == null || user.isEdu()){
+        if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
         Student student = studentRepository.findById(user.getId())
