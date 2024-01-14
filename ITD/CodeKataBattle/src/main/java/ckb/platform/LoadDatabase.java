@@ -85,7 +85,7 @@ class LoadDatabase {
 
             battles.add(new Battle("The dawn of a new code", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "Python", false, 1, 1, educators.get(1 - 1), tournaments.get(1 - 1), false));
             battles.add(new Battle("CodeCraft Clash", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "C++", true, 3, 5, educators.get(1 - 1), tournaments.get(1 - 1), false));
-            battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2024-02-16"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false));
+            battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2023-12-16"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false));
             battles.add(new Battle("Opening battle", sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), sdf.parse("2024-02-20"), "Java", false, 1, 2, educators.get(1 - 1), tournaments.get(1 - 1), false));
 
             //battles.get(0).addStudent(students.get(0));

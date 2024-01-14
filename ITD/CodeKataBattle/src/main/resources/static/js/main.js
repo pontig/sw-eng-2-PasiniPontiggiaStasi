@@ -187,7 +187,7 @@ async function changePage(page, id) {
 
                     document.getElementById("title").innerHTML = "Dashboard"
 
-                    getTournaments("https://pontiggiaelia.altervista.org/ckb/ownedTournaments.php?user=1") // TODO: cambiare l'url
+                    getTournaments("tournaments/owned/") // TODO: cambiare l'url
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 

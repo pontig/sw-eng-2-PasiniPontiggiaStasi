@@ -79,10 +79,12 @@ public class TournamentController {
     }
 
     //mapped to "Get owned Tournaments"
-    @GetMapping("/tournaments/owned/{edu_id}")
-    List<Map<String, Object>> getOwnedTournaments(@PathVariable Long edu_id) {
-        Educator educator = educatorRepository.findById(edu_id)
-                .orElseThrow(() -> new EducatorNotFoundException(edu_id));
+    @GetMapping("/tournaments/owned/")
+    List<Map<String, Object>> getOwnedTournaments(HttpSession session) {
+        Educator educator = (Educator) session.getAttribute("user");
+        if (educator == null) {
+            throw new EducatorNotFoundException(educator.getId());
+        }
 
         List<Map<String, Object>> response = new ArrayList<>();
 

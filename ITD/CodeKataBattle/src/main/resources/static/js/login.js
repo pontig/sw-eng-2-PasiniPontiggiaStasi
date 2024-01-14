@@ -22,7 +22,7 @@ window.onload = () => {
         console.log('Form data: ', {email, password});
 
         // Define url and data
-        const url = 'http://localhost:8080/ckb_platform/login';
+        const url = '/ckb_platform/login';
         const data = {email, password};
 
         // Prepare data to send to the Server
@@ -90,7 +90,7 @@ window.onload = () => {
         console.log('Form data: ', {name, surname, email, uni, role, password, password2, terms});
 
         // Define url and data
-        const url = 'http://localhost:8080/ckb_platform/register';
+        const url = '/ckb_platform/register';
         const data = {name, surname, email, uni, role, password, password2, terms};
 
         // Prepare data to send to the Server
