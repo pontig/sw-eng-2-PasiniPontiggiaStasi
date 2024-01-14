@@ -101,9 +101,11 @@
 
     <div id="formContainer">
         <h4>Title</h4>
-        <form action="" method="post" id="newTournament">
-            <input type="text" name="tournamentName" id="tournamentName" required placeholder="Tournament name"><br>
-            <input type="text" name="addBadges" id="" disabled placeholder="Add badges (WIP)"><br>
+        <form action="#" id="newTournament">
+            <input type="text" name="tournamentName" id="tournamentName" placeholder="Tournament name" required><br>
+            <input type="date" name="registrationDeadline" id="tournamentRegistrationDeadline" required><br>
+            <input type="text" name="addBadges" id="tournamentBadgesList" placeholder="Add badges (WIP)" disabled><br>
+            <h6 id="errorNewTournament"></h6>
             <input type="submit" value="Create" name="createNewTournament">
         </form>
         <form action="" method="post" id="newBattle">
@@ -132,6 +134,8 @@
             <input type="submit" value="Register" name="register">
         </form>
     </div>
+
+    <script src="js/educator.js"></script>
 </body>
 
 </html>

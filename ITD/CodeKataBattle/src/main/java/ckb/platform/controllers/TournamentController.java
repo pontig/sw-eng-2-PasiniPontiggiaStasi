@@ -4,6 +4,8 @@ import ckb.platform.entities.*;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TournamentNotFoundException;
+import ckb.platform.formParser.CreateTournamentRequest;
+import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.BattleRepository;
 import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
@@ -11,15 +13,15 @@ import ckb.platform.repositories.TournamentRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class TournamentController {
@@ -302,6 +304,53 @@ public class TournamentController {
         return response;
     }
 
+    @PostMapping("/tournament/create")
+    public ResponseEntity<String> createTournament(@RequestBody CreateTournamentRequest createTournament, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("index");
+
+        String name = createTournament.getTournamentName();
+        Date registerDeadline = createTournament.getRegisterDeadline();
+
+        if (name.isBlank() || name.isEmpty() || registerDeadline == null) {
+            // Check if any field is empty
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
+        }
+
+        Date currentDate = new Date();
+        if (registerDeadline.before(currentDate)) {
+            // Check if the deadline is past
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Registration deadline has passed");
+        }
+
+        long tournamentId;
+        String torunamentIdString;
+        if (user.isEdu()) {
+            Tournament newTournament = new Tournament(name, registerDeadline, null, (Educator) user);
+            tournamentRepository.save(newTournament);
+            tournamentId = tournamentRepository.getNewTournamentId(name, registerDeadline, (Educator) user);
+            torunamentIdString = Long.valueOf(tournamentId).toString();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+        }
+
+        // Get all students and inform them of an upcoming tournament via email
+        List<Student> students = studentRepository.getAllStudentInPlatform();
+
+        // Prepare Email to send
+        GmailAPI gmailSender = new GmailAPI();
+        String subject = name + " is an upcoming Tournament";
+        String bodyMsg = "Hi, as member of CKB platform we are pleased to inform you that\n" +
+                name + " tournament is now open\n" +
+                "Professor " + user.getFirstName() + " is waiting for you!\n\n" +
+                "You can register till " + registerDeadline + "\n" +
+                "Open CKB platform at the link: https://www.youtube.com/watch?v=Sagg08DrO5U";
+
+        // Send Email to each student in CKB
+        for (Student s : students)
+            gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+
+        return ResponseEntity.status(HttpStatus.OK).body(torunamentIdString);
+    }
 }
-
-
