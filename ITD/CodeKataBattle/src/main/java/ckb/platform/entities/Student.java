@@ -16,13 +16,13 @@ public class Student extends User{
     @ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
     List<Tournament> tournaments;
 
-    @ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
-    List<Battle> battles;
+    //@ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
+    //List<Battle> battles;
 
     public Student(String firstName, String lastName, String email, String password, String home_uni) {
         super(firstName, lastName, email, password, false, home_uni);
         this.tournaments = new ArrayList<>();
-        this.battles = new ArrayList<>();
+        //this.battles = new ArrayList<>();
         this.achieveBadges = new ArrayList<>();
     }
 
@@ -36,9 +36,9 @@ public class Student extends User{
         tournaments.add(tournament);
     }
 
-    public void addBattle(Battle battle){
-        battles.add(battle);
-    }
+    //public void addBattle(Battle battle){
+    //    battles.add(battle);
+    //}
 
     public List<Badge> getAchieveBadges(){
         return achieveBadges;
@@ -48,9 +48,9 @@ public class Student extends User{
         return tournaments;
     }
 
-    public List<Battle> getBattles(){
-        return battles;
-    }
+    //public List<Battle> getBattles(){
+    //    return battles;
+    //}
 
     public void setAchieveBadges(List<Badge> achieveBadges){
         this.achieveBadges = achieveBadges;
@@ -60,9 +60,9 @@ public class Student extends User{
         this.tournaments = tournaments;
     }
 
-    public void setBattles(List<Battle> battles){
-        this.battles = battles;
-    }
+    //public void setBattles(List<Battle> battles){
+    //    this.battles = battles;
+    //}
 
     @Override
     public String toString() {

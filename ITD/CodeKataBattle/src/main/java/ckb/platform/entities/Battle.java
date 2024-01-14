@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 
 import java.util.*;
 
-@Entity @Table(name = "Battle")
+@Entity
+@Table(name = "Battle")
 public class Battle {
 
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-    @ManyToOne (cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id",  referencedColumnName = "id")
+    private @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Educator creator;
     @ElementCollection
     private Map<Team, Integer> ranking;
@@ -29,28 +31,29 @@ public class Battle {
     private Date openDate;
     //private int phase;
     private String description;
-    @ManyToMany
-    private List<Student> subscribedStudents;
+    //@ManyToMany
+    //private List<Student> subscribedStudents;
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Team> teams;
-    @ManyToOne (cascade = CascadeType.MERGE)
-    @JoinColumn(name = "tournament_id",  referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
 
-    public Battle() {}
+    public Battle() {
+    }
 
     public Battle(
-                  String name,
-                  Date openDate,
-                  Date registrationDeadline,
-                  Date finalSubmissionDeadline,
-                  String language,
-                  Boolean manualEvaluation,
-                  int minStudents,
-                  int maxStudents,
-                  Educator creator,
-                  Tournament tournament,
-                  Boolean hasBeenEvaluated
+            String name,
+            Date openDate,
+            Date registrationDeadline,
+            Date finalSubmissionDeadline,
+            String language,
+            Boolean manualEvaluation,
+            int minStudents,
+            int maxStudents,
+            Educator creator,
+            Tournament tournament,
+            Boolean hasBeenEvaluated
     ) {
         this.creator = creator;
         this.manualEvaluation = manualEvaluation;
@@ -64,7 +67,7 @@ public class Battle {
         this.openDate = openDate;
         this.language = language;
         teams = new ArrayList<Team>();
-        subscribedStudents = new ArrayList<Student>();
+        //subscribedStudents = new ArrayList<Student>();
     }
 
     public String getName() {
@@ -99,112 +102,112 @@ public class Battle {
         return this.name;
     }
 
-    public Boolean isClosed(){
+    public Boolean isClosed() {
         return (new Date().after(finalSubmissionDeadline));
     }
 
-    public void addTeam(Team team){
+    public void addTeam(Team team) {
         teams.add(team);
     }
 
-    public void addStudent(Student student){
-        subscribedStudents.add(student);
-    }
+    //public void addStudent(Student student){
+    //    subscribedStudents.add(student);
+    //}
 
-    public List<Student> getSubscribedStudents(){
-        return subscribedStudents;
-    }
+    // public List<Student> getSubscribedStudents(){
+    //     return subscribedStudents;
+    // }
 
-    public void setRanking(Team team, Integer position){
+    public void setRanking(Team team, Integer position) {
         ranking.put(team, position);
     }
 
-    public void setManualEvaluation(Boolean manualEvaluation){
+    public void setManualEvaluation(Boolean manualEvaluation) {
         this.manualEvaluation = manualEvaluation;
     }
 
-    public void setHasBeenEvaluated(Boolean hasBeenEvaluated){
+    public void setHasBeenEvaluated(Boolean hasBeenEvaluated) {
         this.hasBeenEvaluated = hasBeenEvaluated;
     }
 
-    public void setMinStudents(int minStudents){
+    public void setMinStudents(int minStudents) {
         this.minStudents = minStudents;
     }
 
-    public void setMaxStudents(int maxStudents){
+    public void setMaxStudents(int maxStudents) {
         this.maxStudents = maxStudents;
     }
 
-    public void setRegistrationDeadline(Date registrationDeadline){
+    public void setRegistrationDeadline(Date registrationDeadline) {
         this.registrationDeadline = registrationDeadline;
     }
 
-    public void setFinalSubmissionDeadline(Date finalSubmissionDeadline){
+    public void setFinalSubmissionDeadline(Date finalSubmissionDeadline) {
         this.finalSubmissionDeadline = finalSubmissionDeadline;
     }
 
-    public void setTournament(Tournament tournament){
+    public void setTournament(Tournament tournament) {
         this.tournament = tournament;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public Educator getCreator(){
+    public Educator getCreator() {
         return creator;
     }
 
-    public Map<Team, Integer> getRanking(){
+    public Map<Team, Integer> getRanking() {
         return ranking;
     }
 
-    public Boolean getManualEvaluation(){
+    public Boolean getManualEvaluation() {
         return manualEvaluation;
     }
 
-    public Boolean getHasBeenEvaluated(){
+    public Boolean getHasBeenEvaluated() {
         return hasBeenEvaluated;
     }
 
-    public int getMinStudents(){
+    public int getMinStudents() {
         return minStudents;
     }
 
-    public int getMaxStudents(){
+    public int getMaxStudents() {
         return maxStudents;
     }
 
-    public Date getRegistrationDeadline(){
+    public Date getRegistrationDeadline() {
         return registrationDeadline;
     }
 
-    public Date getFinalSubmissionDeadline(){
+    public Date getFinalSubmissionDeadline() {
         return finalSubmissionDeadline;
     }
 
-    public List<Team> getTeams(){
+    public List<Team> getTeams() {
         return teams;
     }
 
-    public Tournament getTournament(){
+    public Tournament getTournament() {
         return tournament;
     }
 
-    public Boolean isSubscribed(Student student){
-        for(Team team : teams){
-            if(team.getStudents().contains(student)){
+    public Boolean isSubscribed(Student student) {
+        for (Team team : teams) {
+            if (team.getStudents().contains(student)) {
                 return true;
             }
         }
         return false;
     }
 
-    public Boolean satisfiesMinStudents(){
+    public Boolean satisfiesMinStudents() {
         return teams.size() >= minStudents;
     }
 
-    public Boolean satisfiesMaxStudents(){
+    public Boolean satisfiesMaxStudents() {
         return teams.size() <= maxStudents;
     }
 
@@ -234,8 +237,6 @@ public class Battle {
         return "Battle{" + "id=" + this.id + ", creator='" + this.creator.getId() + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament.getId() + '\'' + '}';
         //return "Ciao michelangelo";
     }
-
-
 
 
 }

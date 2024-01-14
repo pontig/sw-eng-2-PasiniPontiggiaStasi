@@ -21,7 +21,7 @@ class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    /*@Bean
+    @Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
@@ -88,7 +88,7 @@ class LoadDatabase {
             battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2024-02-16"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false));
             battles.add(new Battle("Opening battle", sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), sdf.parse("2024-02-20"), "Java", false, 1, 2, educators.get(1 - 1), tournaments.get(1 - 1), false));
 
-            battles.get(0).addStudent(students.get(0));
+            //battles.get(0).addStudent(students.get(0));
 
             battles.forEach(battle -> log.info("Preloading " + batRep.save(battle)));
 
@@ -192,5 +192,5 @@ class LoadDatabase {
 
             teams.forEach(team -> log.info("Preloading " + teamRep.save(team)));
         };
-    }*/
+    }
 }
