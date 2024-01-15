@@ -277,7 +277,7 @@ async function changePage(page, id) {
                             // Close tournament
                             document.getElementById("importantButton").style.display = "block"
                             document.getElementById("importantButton").innerHTML = "Close tournament"
-                            document.getElementById("importantButton").onclick = (() => { closeTournament(id) }) // TODO: implementare la chiusura del torneo
+                            //document.getElementById("importantButton").onclick = (() => { closeTournament(id) }) // TODO: implementare la chiusura del torneo
                         }
                     }
 
