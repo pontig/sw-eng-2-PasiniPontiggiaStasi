@@ -82,10 +82,9 @@ public class TournamentController {
     //mapped to "Get owned Tournaments"
     @GetMapping("/tournaments/owned/")
     List<Map<String, Object>> getOwnedTournaments(HttpSession session) {
-        Educator educator = (Educator) session.getAttribute("user");
-        if (educator == null) {
-            throw new EducatorNotFoundException(educator.getId());
-        }
+        User user = (User) session.getAttribute("user");
+        Educator educator = educatorRepository.findById(user.getId())
+                .orElseThrow(() -> new EducatorNotFoundException(user.getId()));
 
         List<Map<String, Object>> response = new ArrayList<>();
 
