@@ -156,6 +156,8 @@ function register() {
     if (errorBox)
         errorBox.style.display = 'none';
 
+    regForm.reset()
+
     logForm.style.opacity = "0"
     setTimeout(() => {
         logForm.style.display = "none"
@@ -170,6 +172,8 @@ function login() {
     const errorBox = document.getElementById('errorLogIn');
     if (errorBox)
         errorBox.style.display = 'none';
+
+    logForm.reset()
 
     regForm.style.opacity = "0"
     setTimeout(() => {

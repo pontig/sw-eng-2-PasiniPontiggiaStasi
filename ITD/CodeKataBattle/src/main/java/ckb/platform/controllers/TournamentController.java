@@ -4,6 +4,7 @@ import ckb.platform.entities.*;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TournamentNotFoundException;
+import ckb.platform.formParser.CloseTournamentRequest;
 import ckb.platform.formParser.CreateTournamentRequest;
 import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.BattleRepository;
@@ -354,5 +355,64 @@ public class TournamentController {
             gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
 
         return ResponseEntity.status(HttpStatus.OK).body(torunamentIdString);
+    }
+
+    @PostMapping("/tournament/close")
+    public ResponseEntity<String> closeTournament(@RequestBody CloseTournamentRequest closeTournament, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+        User user = (User) session.getAttribute("user");
+        boolean owner = false;
+
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
+
+        if (!user.isEdu()) {
+            // Check if user is an Educator
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+        }
+
+        if(tournamentRepository.isTournamentOwner(closeTournament.getId(), (Educator) user) == 1){
+            // Check if it is the creator
+            owner = true;
+        } else {
+            System.out.println("4 - Son nella POST");
+            // Check if it got permission
+            Educator grantedOwner = (Educator) user;
+            for (Tournament t : grantedOwner.getOwnedTournaments()) {
+                System.out.println("t_id: " + t.getId() + " == closeTournId: " + closeTournament);
+                if (t.getId().equals(closeTournament.getId())) {
+                    System.out.println("5 - Son nella POST");
+                    owner = true;
+                    break;
+                }
+            }
+        }
+
+        if(owner){
+            // User can close the tournament
+            // TODO: Compute the final ranking
+            // TODO: Check if the tournament is already closed
+            Date currentDate = new Date();
+            tournamentRepository.closeTournament(closeTournament.getId(), currentDate, (Educator) user);
+
+            // Get all students and inform them of an upcoming tournament via email
+            List<Student> students = studentRepository.getAllStudentInPlatform();
+            String tournamentName = tournamentRepository.getNameById(closeTournament.getId());
+
+            // Prepare Email to send
+            GmailAPI gmailSender = new GmailAPI();
+            String subject = "Tournament " + tournamentName + " is closed";
+            String bodyMsg = "Hi, the tournament " + tournamentName + " has been closed by " + user.getFirstName() + "\n" +
+                    "You can find now the final ranking with your score" +
+                    "Open CKB platform at the link: https://www.youtube.com/watch?v=Sagg08DrO5U";
+
+            // Send Email to each student in CKB
+            for (Student s : students)
+                gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+
+            return ResponseEntity.status(HttpStatus.OK).body("Tournament successfully closed " + user.getFirstName());
+        } else {
+            System.out.println("Error");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not own this tournament");
+        }
     }
 }
