@@ -114,7 +114,13 @@
         </form>
         <form action="" method="post" id="newBattle">
             <input type="text" name="battleName" required placeholder="Battle name"><br>
-            <input type="text" name="Language" id="" required placeholder="Language"><br>
+            <!-- <input type="text" name="Language" id="" required placeholder="Language"><br> -->
+            <select name="language" id="language" required>
+                <option value="Java">Java</option>
+                <option value="Python">Python</option>
+                <option value="C">C</option>
+                <option value="Cpp">C++</option>
+            </select><br>
             <input type="number" name="minSize" id="" required placeholder="Minimum group size" min="1"><br>
             <input type="number" name="maxSize" id="" required placeholder="Maximum group size" min="1"><br>
             <label for="codeKata">Upload you code Kata:</label><br>

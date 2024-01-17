@@ -94,6 +94,7 @@ public class TournamentController {
             Map<String, Object> tournament = new LinkedHashMap<>();
 
             tournament.put("id", t.getId());
+            tournament.put("name", t.getName());
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
@@ -431,7 +432,7 @@ public class TournamentController {
         User user = (User) session.getAttribute("user");
         boolean owner = false;
 
-        // TODO: id sono interi?
+        // TODO: id sono interi? si
 
         if (user == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
