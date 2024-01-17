@@ -74,26 +74,85 @@ async function showResult(listened, other, url) {
                     resultBox.style.display = "none"
                 } else if (listened.id == "findEDUSearchBox") {
                     if (confirm("Do you want to invite " + listened.value + " to your tournament?")) {
-                        let res2 = await fetch("https://pontiggiaelia.altervista.org/ckb/invite.php?user=" + e.id + "&tournament=" + sessionStorage.getItem("tournament"))
-                        let status = await res2.status
-                        switch (status) {
-                            case 200:
-                                alert("Invitation sent!")
-                                break
-                            case 400:
-                                alert("Invitation already sent!")
-                                break
-                            // case 403:
-                            //     alert("You are not the admin of this tournament!")
-                            //     break
-                            // case 404:
-                            //     alert("User not found!")
-                            //     break
-                            default:
-                                alert("Something went wrong!")
-                                break
+                        /* TODO: SHARE TOURNAMENT */
+                        console.log('SHARE TOURNAMENT');
 
-                        }
+                        // Get form value
+                        const id = sessionStorage.getItem("tournament")
+                        const educatorId = e.id;
+
+                        console.log('Form data: ', {id, educatorId});
+
+                        // Define url and data
+                        const url = 'http://localhost:8080/ckb_platform/tournament/share';
+                        const data = {id, educatorId};
+
+                        // Prepare data to send to the Server
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        };
+
+                        // Fetch data to url
+                        fetch(url, options)
+                            .then(response => {
+                                // Analise server response code
+                                switch (response.status) {
+                                    case 200:
+                                        response.text().then(result => {
+                                            Swal.fire({
+                                                title: "Tournament shared!",
+                                                text: result,
+                                                type: "success",
+                                                confirmButtonColor: '#CC208E'
+                                            }).then(() => {
+                                                setTimeout(() => {
+                                                    location.reload();
+                                                }, 500);
+                                            });
+                                        })
+                                        break;
+
+                                    case 400:
+                                    case 403:
+                                        response.text().then(result => {
+                                            Swal.fire({
+                                                title: "Tournament not shared!",
+                                                text: result,
+                                                type: "error",
+                                                confirmButtonColor: '#CC208E'
+                                            })
+                                        })
+                                        break;
+
+                                    case 401:
+                                        response.text().then(result => {
+                                            Swal.fire({
+                                                title: "Tournament not shared!",
+                                                text: result,
+                                                type: "error",
+                                                confirmButtonColor: '#CC208E'
+                                            }).then(() => {
+                                                setTimeout(() => {
+                                                    window.location.href = "index.html";
+                                                }, 500);
+                                            });
+                                        })
+
+                                    default:
+                                        const errorBox = document.getElementById('errorNewTournament');
+                                        if (errorBox)
+                                            errorBox.textContent = "Internal error";
+                                        errorBox.style.display = 'flex';
+                                        break;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error during Fetch: ', error);
+                            });
                     }
                 }
 

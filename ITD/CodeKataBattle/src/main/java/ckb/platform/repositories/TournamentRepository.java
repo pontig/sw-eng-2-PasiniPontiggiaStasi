@@ -17,10 +17,10 @@ public interface TournamentRepository extends JpaRepository<ckb.platform.entitie
     int isTournamentOwner(Long id, Educator creator);
 
     @Modifying
-    @Query("UPDATE Tournament t SET t.endDate = :endDate WHERE t.id = :id AND t.creator = :creator")
+    @Query("UPDATE Tournament t SET t.endDate = :endDate WHERE t.id = :id")
     @Transactional
-    void closeTournament(Long id, Date endDate, Educator creator);
+    void closeTournament(Long id, Date endDate);
 
-    @Query("SELECT t.name FROM Tournament t WHERE t.id = :id")
-    String getNameById(Long id);
+    @Query("SELECT t FROM Tournament t WHERE t.id = :id")
+    Tournament getTournamentById(Long id);
 }
