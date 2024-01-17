@@ -81,11 +81,11 @@ async function showResult(listened, other, url) {
                         const id = sessionStorage.getItem("tournament")
                         const educatorId = e.id;
 
-                        console.log('Form data: ', {id, educatorId});
+                        console.log('Form data: ', { id, educatorId });
 
                         // Define url and data
-                        const url = 'http://localhost:8080/ckb_platform/tournament/share';
-                        const data = {id, educatorId};
+                        const url = '/ckb_platform/tournament/share';
+                        const data = { id, educatorId };
 
                         // Prepare data to send to the Server
                         const options = {
@@ -246,7 +246,7 @@ async function changePage(page, id) {
 
                     document.getElementById("title").innerHTML = "Dashboard"
 
-                    getTournaments("tournaments/owned/") // TODO: cambiare l'url
+                    getTournaments("tournaments/owned/")
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
@@ -740,7 +740,7 @@ async function changePage(page, id) {
                         .sort((a, b) => b.points - a.points)
                         .forEach((e, i) => {
                             let li = document.createElement("li")
-                            li.innerHTML = e.name + " - " + e.score + "pts" // TODO: aggiungere il link al profilo
+                            li.innerHTML = e.name + " - " + e.score + "pts" 
                             if (i > 9) li.style.display = "none"
 
                             container.appendChild(li)
@@ -752,14 +752,6 @@ async function changePage(page, id) {
                         document.getElementById("importantButton").innerHTML = "Subscribe"
                         document.getElementById("importantButton").onclick = (() => {
                             showForm("Registration")
-                            document.getElementById("newRegistration").onsubmit = ((event) => {
-                                event.preventDefault()
-                                let res = document.getElementById("newRegistration").checkValidity()
-                                if (res) {
-                                    // TODO: fare la richiesta al server
-                                    document.getElementById("newRegistration").reset()
-                                }
-                            })
                         })
                     }
 
@@ -772,9 +764,47 @@ async function changePage(page, id) {
                                 event.preventDefault()
                                 let res = document.getElementById("newInvitation").checkValidity()
                                 if (res) {
-                                    // TODO: fare la richiesta al server
+                                    // Define url and data
+                                    let mail = document.getElementsByName("emailToInvite")[0].value
+                                    const url = '/ckb_platform/battles/invite/';
+                                    const data = {mail};
+
+                                    // Prepare data to send to the Server
+                                    const options = {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(data)
+                                    };
+
+                                    // Fetch data to url
+                                    fetch(url, options)
+                                        .then(response => {
+                                            // Analise server response code
+                                            switch (response.status) {
+                                                case 200:
+                                                case 401:
+                                                case 404:
+                                                    response.text().then(result => {
+                                                        Swal.fire({
+                                                            title: "Invitation sent!",
+                                                            text: result,
+                                                            type: "success",
+                                                            confirmButtonColor: '#CC208E'
+                                                        })
+                                                    })
+                                                    break;
+
+                                                default:
+                                                    alert("Error during invitation sending!")
+                                                    break;
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error during Fetch: ', error);
+                                        });
                                     document.getElementById("newInvitation").reset()
-                                    alert("Invitation sent!")
                                 }
                             })
                         })
@@ -833,4 +863,10 @@ function hideForm() {
     document.querySelectorAll("#formContainer form").forEach(e => e.style.display = "none")
     document.getElementById("formContainer").style.display = "none"
     document.getElementById("screen").style.display = "none"
+
+    let aaa = document.getElementById("othersChecbBox")
+    if (aaa) {
+        aaa.checked = false
+        document.querySelectorAll("input[name^='Emailothers']").forEach(e =>  e.parentNode.removeChild(e) )
+    }
 }

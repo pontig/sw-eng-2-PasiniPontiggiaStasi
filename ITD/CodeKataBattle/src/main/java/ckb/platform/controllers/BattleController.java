@@ -133,6 +133,10 @@ public class BattleController {
         boolean alreadyIn = battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())));
         battleMap.put("canSubscribe", after && !alreadyIn);
         //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
+        battleMap.put("canInviteOthers",
+                battle.getRegistrationDeadline().after(new Date()) &&
+                battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))) &&
+                battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).count() < battle.getMaxStudents());
         battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).count());
         battleMap.put("subscribed", battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))));
         battleMap.put("tournament_name", battle.getTournament().getName());
@@ -311,6 +315,39 @@ public class BattleController {
                 });
 
         return response;
+    }
+
+    @PostMapping("/battles/invite")
+    ResponseEntity<?> inviteStudent(@RequestBody Long battle_id, @RequestBody String email, HttpSession session) {
+        final User user = (User) session.getAttribute("user");
+        //final User user = studentRepository.findById(1L).orElseThrow(() -> new StudentNotFoundException(1L));
+        if(user == null || user.isEdu()){
+            throw new StudentNotFoundException(user.getId());
+        }
+
+        Battle battle = battleRepository.findById(battle_id)
+                .orElseThrow(() -> new BattleNotFoundException(battle_id));
+
+        Student studentToInvite = studentRepository.
+                getAllStudentInPlatform().
+                stream().
+                filter(s -> s.getEmail().equals(email))
+                .findFirst()
+                .orElseThrow(() -> new StudentNotFoundException(-1L));
+
+        Team team = battle
+                .getTeams()
+                .stream()
+                .filter(t -> t.getStudents().contains((Student) user)).findFirst().orElseThrow(() -> new TeamNotFoundException(-1L));
+
+        team.addStudent(studentToInvite);
+        teamRepository.save(team);
+
+        EntityModel<Battle> entityModel = assembler.toModel(battleRepository.save(battle));
+
+        return ResponseEntity
+                .created(entityModel.getRequiredLink("self").toUri())
+                .body(entityModel);
     }
 
 }

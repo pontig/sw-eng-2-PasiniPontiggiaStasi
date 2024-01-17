@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="icons/logoCKB.png" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/main.js"></script>
+    <script src="js/student.js"></script>
     <script src="js/profile.js"></script>
     <title>CKB: Dashboard</title>
     <script>var permissions = "STU"</script>
@@ -130,7 +131,8 @@
         </form>
         <form action="" method="post" id="newRegistration">
             <input type="text" name="teamName" id="" required placeholder="How do you wanna call your team?">
-            <input type="submit" value="Register" name="register">
+            <div><input type="checkbox" name="others" id="othersChecbBox" onchange="checkInviteOthers()"> <label for="others">I want to invite others, too</label></div>
+            <input type="submit" value="Register" name="register" id="subscribeButtonForm">
         </form>
     </div>
 </body>
