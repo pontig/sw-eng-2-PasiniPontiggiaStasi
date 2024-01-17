@@ -1,11 +1,11 @@
 var newTourForm, logoutForm
-var closeTour
+var closeTour, shareTour
 
 window.onload = () => {
     logoutForm = document.getElementById("logoutEDU")
     newTourForm = document.getElementById("newTournament")
     closeTour = document.getElementById("importantButton")
-
+    shareTour = document.getElementById("queryResult")
 
     const errorBox = document.getElementById('errorNewTournament');
     if (errorBox)
@@ -17,7 +17,7 @@ window.onload = () => {
         console.log('LOGOUT');
 
         // Define url and data
-        const url = 'http://localhost:8080/ckb_platform/logout';
+        const url = '/ckb_platform/logout';
 
         // Prepare data to send to the Server
         const options = {
@@ -76,7 +76,7 @@ window.onload = () => {
         console.log('Form data: ', {tournamentName, registerDeadline, badges});
 
         // Define url and data
-        const url = 'http://localhost:8080/ckb_platform/tournament/create';
+        const url = '/ckb_platform/tournament/create';
         const data = {tournamentName, registerDeadline, badges};
 
         // Prepare data to send to the Server
@@ -148,7 +148,7 @@ window.onload = () => {
         console.log('Form data: ', {id});
 
         // Define url and data
-        const url = 'http://localhost:8080/ckb_platform/tournament/close';
+        const url = '/tournament/close';
         const data = {id};
 
         // Prepare data to send to the Server
@@ -206,6 +206,7 @@ window.onload = () => {
                         break;
 
                     default:
+                        // TODO: Cambiare errorNewTorunement
                         const errorBox = document.getElementById('errorNewTournament');
                         if (errorBox)
                             errorBox.textContent = "Internal error";

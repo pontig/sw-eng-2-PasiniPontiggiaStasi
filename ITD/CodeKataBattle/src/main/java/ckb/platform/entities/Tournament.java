@@ -15,18 +15,18 @@ public class Tournament {
     @ManyToOne @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private Educator creator;
 
-    @ManyToMany (cascade = CascadeType.MERGE)
+    @ManyToMany (fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Educator> grantedEducators;
-    @ManyToMany
+    @ManyToMany (fetch=FetchType.EAGER)
     private List<Student> subscribedStudents;
 
-    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "tournament", cascade = CascadeType.ALL)
     private List<Battle> battles;
 
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     private List<Badge> badges;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<Student, Integer> ranking;
     //private Boolean active;
 
@@ -81,6 +81,8 @@ public class Tournament {
     public Date getSubscriptionDeadline() {
         return this.subscriptionDeadline;
     }
+
+    public Date getEndDate() { return this.endDate; }
 
     public Educator getCreator() {
         return this.creator;
