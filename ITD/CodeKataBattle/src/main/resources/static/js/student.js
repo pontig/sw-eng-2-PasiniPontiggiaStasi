@@ -3,7 +3,7 @@ function checkInviteOthers() {
     if (target.checked) {
         generateOghers(target.parentNode.parentNode, 1)
     } else {
-        document.querySelectorAll("input[name^='Emailothers']").forEach(e =>  e.parentNode.removeChild(e) )
+        document.querySelectorAll("input[name^='Emailothers']").forEach(e => e.parentNode.removeChild(e))
     }
 }
 
@@ -25,3 +25,20 @@ function generateOghers(parentForm, level) {
 
     parentForm.insertBefore(t, button)
 }
+
+window.addEventListener('load', () => {
+    // checkInviteOthers()
+    document.getElementById("newRegistration").addEventListener('submit', e => {
+        e.preventDefault()
+        let mails = []
+        Array.from(document.querySelectorAll("input[name^='Emailothers']")).filter(e => e.value != "").forEach(e => mails.push(e.value))
+        console.log(mails)
+
+        let teamName = document.getElementsByName("teamName")[0].value
+
+        // TODO: tommy da qui pensaci tu
+
+    })
+})
+
+// TODO: la funzione per iscriversi al torneo si chiama subscribeTournament
