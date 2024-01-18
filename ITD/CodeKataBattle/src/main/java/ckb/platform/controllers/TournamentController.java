@@ -85,6 +85,7 @@ public class TournamentController {
     @GetMapping("/tournaments/owned/")
     List<Map<String, Object>> getOwnedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
+        // TODO: if user == null return to index.html
         Educator educator = educatorRepository.findById(user.getId())
                 .orElseThrow(() -> new EducatorNotFoundException(user.getId()));
 
@@ -490,19 +491,14 @@ public class TournamentController {
                 if(t == sharedTournament)
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - " + invitedEDU.getFirstName() + ", already has permission for " + sharedTournament.getName() + " tournament");
             }
-            // Add educator after all the controls
-            // TODO: i don't understend how to update a bridge table
-            // Aggiungi il torneo alla lista
-            invitedEDU.addTournament(sharedTournament);
-            sharedTournament.addEducator(invitedEDU);
-            System.out.println("Tornei dell'educatore " + invitedEDU.getOwnedTournaments());
-            System.out.println("Educatori del torneo " + sharedTournament.getGrantedEducators());
 
-            //List<Tournament> ownedTournament = invitedEDU.getOwnedTournaments();
-            //System.out.println(ownedTournament);
-            //ownedTournament.add(sharedTournament);
-            //System.out.println(ownedTournament);
-            //educatorRepository.addOwnedTournament(invitedEDU.getId(), ownedTournament);
+            // Add tournament to the educator
+            invitedEDU.addTournament(sharedTournament);
+            educatorRepository.save(invitedEDU);
+
+            // Add educator to the tournament
+            sharedTournament.addEducator(invitedEDU);
+            tournamentRepository.save(sharedTournament);
 
             // Prepare Email to send
             GmailAPI gmailSender = new GmailAPI();

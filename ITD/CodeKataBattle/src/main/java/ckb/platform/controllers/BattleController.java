@@ -5,19 +5,22 @@ import ckb.platform.exceptions.BattleNotFoundException;
 import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
+import ckb.platform.formParser.CreateBattleRequest;
 import ckb.platform.repositories.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class BattleController {
@@ -350,4 +353,77 @@ public class BattleController {
                 .body(entityModel);
     }
 
+    @PostMapping("/battle/create")
+    public ResponseEntity<String> createBattle(@ModelAttribute CreateBattleRequest createBattleRequest, HttpSession session){
+        User user = (User) session.getAttribute("user");
+        boolean owner = false;
+
+        Long tournamentId = createBattleRequest.getTournamentId();
+        String battleName = createBattleRequest.getBattleName();
+        Date registerDeadline = createBattleRequest.getRegisterDeadline();
+        Date submissionDeadline = createBattleRequest.getSubmissionDeadline();
+        String language = createBattleRequest.getLanguage();
+        int minSize = createBattleRequest.getMinSize();
+        int maxSize = createBattleRequest.getMaxSize();
+        boolean manualEvaluation = createBattleRequest.isManualEvaluation();
+        MultipartFile ckbProblem = createBattleRequest.getCkbProblem();
+
+        if (user == null) {
+            // Check if user is not in session
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
+        }
+
+        if (!user.isEdu()) {
+            // Check if user is an Educator
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+        }
+
+        // TODO: Controlli da fare:
+        // Check if data are not null, empty or blank
+        // Check if the tournament exist
+        // Check if the deadlines are in future
+        // Check if submission is after registration
+        // Check if language is in the list of accepted one
+        // Check if minSize > 1, maxSize > minSize
+        // Check if maxSize = half size of CKB stu if tournament deadline still open || half size of stu in torunemant => At most 2 teams compete
+
+        if (!ckbProblem.getContentType().equalsIgnoreCase("application/pdf")) {
+            // Check if the file is a PDF
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + ckbProblem.getOriginalFilename() + " is not a PDF");
+        }
+
+        Educator creatorBattle = (Educator) user;
+
+        for (Tournament t : creatorBattle.getOwnedTournaments()) {
+            // Find out if the educator is a owner of the tournament
+            if (t.getId().equals(tournamentId)) {
+                owner = true;
+                break;
+            }
+        }
+
+        if(owner){
+            Tournament tournamentRelated = tournamentRepository.getTournamentById(tournamentId);
+            Battle newBattle = new Battle(battleName, new Date(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentRelated, false);
+            battleRepository.save(newBattle);
+
+            // Change file name with the battle id
+            String battleId = String.valueOf(battleRepository.getBattleId(newBattle.getName(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentRelated, false));
+            String newCkbProblem = battleId + ".pdf";
+
+            // Obtain path to store the file
+            Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
+            Path destinationPath = absolutePath.resolve("ckbProblemPDF").resolve(newCkbProblem);
+
+            try {
+                // Save file in the directory
+                Files.copy(ckbProblem.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                // TODO: rollback
+                throw new RuntimeException(e);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(battleId);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+    }
 }

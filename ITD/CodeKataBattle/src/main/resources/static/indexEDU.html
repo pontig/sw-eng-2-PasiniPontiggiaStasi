@@ -112,27 +112,28 @@
             <h6 id="errorNewTournament"></h6>
             <input type="submit" value="Create" name="createNewTournament">
         </form>
-        <form action="" method="post" id="newBattle">
-            <input type="text" name="battleName" required placeholder="Battle name"><br>
-            <!-- <input type="text" name="Language" id="" required placeholder="Language"><br> -->
+
+        <form action="#" id="newBattle">
+            <input type="text" name="battleName" id="battleName" required placeholder="Battle name"><br>
             <select name="language" id="language" required>
                 <option value="Java">Java</option>
                 <option value="Python">Python</option>
                 <option value="C">C</option>
                 <option value="Cpp">C++</option>
             </select><br>
-            <input type="number" name="minSize" id="" required placeholder="Minimum group size" min="1"><br>
-            <input type="number" name="maxSize" id="" required placeholder="Maximum group size" min="1"><br>
+            <input type="number" name="minSize" id="minSize" required placeholder="Minimum group size" min="1"><br>
+            <input type="number" name="maxSize" id="maxSize" required placeholder="Maximum group size" min="1"><br>
             <label for="codeKata">Upload you code Kata:</label><br>
-            <input type="file" name="codeKata" id=""><br>
+            <input type="file" name="codeKata" id="ckbProblem"><br>
             <label for="registrationDeadline">Registration deadline:</label>
-            <input type="date" name="registrationDeadline" id="" required><br>
+            <input type="date" name="registrationDeadline" id="battleRegistrationDeadline" required><br>
             <label for="submissionDeadline">Submission deadline:</label>
-            <input type="date" name="submissionDeadline" id="" required><br>
+            <input type="date" name="submissionDeadline" id="battleSubmissionDeadline" required><br>
             <!-- I haven't yet added controls for dates, I promise I will eventually -->
-            <div><input type="checkbox" name="manual" id="">
+            <div><input type="checkbox" name="manual" id="manualEvaluation">
                 <label for="manual">Manual approval</label>
             </div><br>
+            <h6 id="errorNewBattle"></h6>
             <input type="submit" value="Create" name="createNewBattle">
         </form>
         <form action="" method="post" id="newInvitation">
