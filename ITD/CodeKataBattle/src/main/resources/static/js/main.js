@@ -85,7 +85,7 @@ async function showResult(listened, other, url) {
 
                         // Define url and data
                         const url = '/ckb_platform/tournament/share';
-                        const data = { id, educatorId };
+                        const data = {id, educatorId};
 
                         // Prepare data to send to the Server
                         const options = {
@@ -118,13 +118,18 @@ async function showResult(listened, other, url) {
 
                                     case 400:
                                     case 403:
+                                    case 404:
                                         response.text().then(result => {
                                             Swal.fire({
                                                 title: "Tournament not shared!",
                                                 text: result,
                                                 type: "error",
                                                 confirmButtonColor: '#CC208E'
-                                            })
+                                            }).then(() => {
+                                                setTimeout(() => {
+                                                    location.reload();
+                                                }, 500);
+                                            });
                                         })
                                         break;
 
