@@ -384,9 +384,9 @@ async function changePage(page, id) {
                     p1.innerHTML = data.description
                     let p2 = document.createElement("p")
                     p2.innerHTML = "<b>Language: </b>" + data.language + "<br>"
-                    p2.innerHTML += "<b>Opening date: </b>" + data.opening + "<br>"
-                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration + "<br>"
-                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing + "<br>"
+                    p2.innerHTML += "<b>Opening date: </b>" + data.opening.substring(0,10) + "<br>"
+                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration.substring(0,10) + "<br>"
+                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing.substring(0,10) + "<br>"
                     p2.innerHTML += "<b>Group size: </b> from " + data.min_group_size + " to " + data.max_group_size + " students <br>"
                     let a = document.createElement("a")
                     a.href = data.link
@@ -725,9 +725,9 @@ async function changePage(page, id) {
                     p1.innerHTML = data.description
                     let p2 = document.createElement("p")
                     p2.innerHTML = "<b>Language: </b>" + data.language + "<br>"
-                    p2.innerHTML += "<b>Opening date: </b>" + data.opening + "<br>"
-                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration + "<br>"
-                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing + "<br>"
+                    p2.innerHTML += "<b>Opening date: </b>" + data.opening.substring(0,10) + "<br>"
+                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration.substring(0,10) + "<br>"
+                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing.substring(0,10) + "<br>"
                     p2.innerHTML += "<b>Group size: </b> from " + data.min_group_size + " to " + data.max_group_size + " students <br>"
                     let a = document.createElement("a")
                     a.href = data.link
