@@ -16,6 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,14 @@ import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 public class TournamentController {
 
     @Autowired
     private final TournamentRepository tournamentRepository;
-    private final TournamentModelAssembler assembler;
     @Autowired
     private final EducatorRepository educatorRepository;
     @Autowired
@@ -39,17 +42,66 @@ public class TournamentController {
     @Autowired
     private final BattleRepository battleRepository;
 
-    TournamentController(TournamentRepository tournamentRepository, TournamentModelAssembler assembler, EducatorRepository educatorRepository, StudentRepository studentRepository, BattleRepository battleRepository) {
+    TournamentController(TournamentRepository tournamentRepository, EducatorRepository educatorRepository, StudentRepository studentRepository, BattleRepository battleRepository) {
         this.tournamentRepository = tournamentRepository;
-        this.assembler = assembler;
         this.educatorRepository = educatorRepository;
         this.studentRepository = studentRepository;
         this.battleRepository = battleRepository;
     }
 
-    //Aggregate root
-    //tag::get-aggregate-root[]
-    //CollectionModel is another Spring HATEOAS container aimed at encapsulating collections of resources, instead of a single resource entity.
+    @GetMapping("/tournaments/{id}")
+    Map<String, Object> one(@PathVariable Long id) {
+        Tournament tournament = tournamentRepository.findById(id)
+                .orElseThrow(() -> new TournamentNotFoundException(id));
+
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("id", tournament.getId());
+        response.put("name", tournament.getName());
+        response.put("active", tournament.isActive());
+        response.put("battles", tournament.getBattles().stream().map(battle -> {
+            Map<String, Object> battleMap = new LinkedHashMap<>();
+            battleMap.put("id", battle.getId());
+            battleMap.put("name", battle.getName());
+            battleMap.put("language", battle.getLanguage());
+            battleMap.put("participants", battle.getTeams().stream().reduce(0, (sum, team) -> sum + team.getStudents().size(), Integer::sum));
+            battleMap.put("phase", battle.getPhase());
+
+            String daysLeft;
+            Date nextStep = switch (battle.getPhase()) {
+                case 1 -> battle.getRegistrationDeadline();
+                case 2 -> battle.getFinalSubmissionDeadline();
+                default -> null;
+            };
+            if (nextStep != null) {
+                long diffInMills = (nextStep.getTime() - new Date().getTime());
+                long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
+                daysLeft = String.valueOf(diff) + "d";
+                battleMap.put("remaining", daysLeft);
+            }
+
+            return battleMap;
+        }));
+
+        ArrayList<Map<String, Object>> rankings = new ArrayList<>();
+        tournament.getRanking().forEach((Student, score) -> {
+            Map<String, Object> rankingMap = new LinkedHashMap<>();
+            rankingMap.put("id", Student.getId());
+            rankingMap.put("firstname", Student.getFirstName());
+            rankingMap.put("lastname", Student.getLastName());
+            rankingMap.put("points", score);
+            rankings.add(rankingMap);
+        });
+        response.put("ranking", rankings);
+
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(TournamentController.class).one(tournament.getId())).withSelfRel());
+        links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+        response.put("_links_", links);
+
+        return response;
+    }
+
     //mapped to "Get all Tournaments"
     @GetMapping("/tournaments")
     List<Map<String, Object>> all() {
@@ -64,21 +116,14 @@ public class TournamentController {
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(TournamentController.class).one(t.getId())).withSelfRel());
+            links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+            tournament.put("_links_", links);
             response.add(tournament);
         });
 
         return response;
-    }
-
-    //end::get-aggregate-root[]
-
-    //Single item
-    @GetMapping("/tournaments/{id}")
-    EntityModel<Tournament> one(@PathVariable Long id) {
-        Tournament tournament = tournamentRepository.findById(id)
-                .orElseThrow(() -> new TournamentNotFoundException(id));
-
-        return assembler.toModel(tournament);
     }
 
     //mapped to "Get owned Tournaments"
@@ -99,55 +144,14 @@ public class TournamentController {
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(t.getId(), session)).withSelfRel());
+            links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+            tournament.put("_links_", links);
             response.add(tournament);
         });
 
         return response;
-    }
-
-    @PostMapping("/tournaments")
-    ResponseEntity<?> newTournament(@RequestBody Tournament newTournament) {
-        EntityModel<Tournament> entityModel = assembler.toModel(tournamentRepository.save(newTournament));
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink("self").toUri())
-                .body(entityModel);
-    }
-
-    @PostMapping("/tournaments/{t_id}/educators/{e_id}")
-    ResponseEntity<?> addGranted(@PathVariable Long t_id, @PathVariable Long e_id) {
-        Educator grantedEducator = educatorRepository.findById(e_id)
-                .orElseThrow(() -> new EducatorNotFoundException(e_id));
-
-        Tournament updatedTournament = tournamentRepository.findById(t_id)
-                .map(tournament -> {
-                    tournament.addEducator(grantedEducator);
-                    return tournamentRepository.save(tournament);
-                }).orElseThrow(() -> new TournamentNotFoundException(t_id));
-
-        EntityModel<Tournament> entityModel = assembler.toModel(updatedTournament);
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink("self").toUri())
-                .body(entityModel);
-    }
-
-    @PostMapping("/tournaments/{t_id}/students/{s_id}")
-    ResponseEntity<?> addStudent(@PathVariable Long t_id, @PathVariable Long s_id) {
-        Student newSubscriber = studentRepository.findById(s_id)
-                .orElseThrow(() -> new StudentNotFoundException(s_id));
-
-        Tournament updatedTournament = tournamentRepository.findById(t_id)
-                .map(tournament -> {
-                    tournament.addStudent(newSubscriber);
-                    return tournamentRepository.save(tournament);
-                }).orElseThrow(() -> new TournamentNotFoundException(t_id));
-
-        EntityModel<Tournament> entityModel = assembler.toModel(updatedTournament);
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink("self").toUri())
-                .body(entityModel);
     }
 
     //mapped to "Get tournament details " for a stu
@@ -205,6 +209,10 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         response.put("ranking", rankings);
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(tournament.getId(), session)).withSelfRel());
+        links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+        response.put("_links_", links);
         return response;
     }
 
@@ -249,6 +257,10 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         tournamentMap.put("ranking", rankings);
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(tournament.getId(), session)).withSelfRel());
+        links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+        tournamentMap.put("_links_", links);
         return tournamentMap;
     }
 
@@ -271,6 +283,10 @@ public class TournamentController {
             tournamentMap.put("first_name", t.getCreator().getFirstName());
             tournamentMap.put("last_name", t.getCreator().getLastName());
             tournamentMap.put("active", t.isActive());
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
+            links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+            tournamentMap.put("_links_", links);
             response.add(tournamentMap);
         });
 
@@ -278,7 +294,7 @@ public class TournamentController {
     }
 
     //mapped to "Get unsubscribed tournaments"
-    @GetMapping("/tournaments/unsuscribed/")
+    @GetMapping("/tournaments/unsubscribed/")
     List<Map<String, Object>> getUnsubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null || user.isEdu()) {
@@ -303,6 +319,10 @@ public class TournamentController {
                 tournamentMap.put("first_name", t.getCreator().getFirstName());
                 tournamentMap.put("last_name", t.getCreator().getLastName());
                 tournamentMap.put("daysLeft", daysLeft);
+                ArrayList<Link> links = new ArrayList<>();
+                links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
+                links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+                tournamentMap.put("_links_", links);
                 response.add(tournamentMap);
             }
         });

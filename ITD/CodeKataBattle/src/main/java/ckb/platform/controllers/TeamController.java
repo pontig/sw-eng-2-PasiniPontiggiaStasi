@@ -6,10 +6,11 @@ import ckb.platform.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -20,66 +21,60 @@ public class TeamController {
 
     @Autowired
     private final TeamRepository repository;
-    private final TeamModelAssembler assembler;
 
-    TeamController(TeamRepository repository, TeamModelAssembler assembler) {
+    TeamController(TeamRepository repository) {
         this.repository = repository;
-        this.assembler = assembler;
     }
 
     // Aggregate root
     // tag::get-aggregate-root[]
+    @GetMapping("/teams/{t_id}")
+    public Map<String, Object> one(Long t_id) {
+        Team t = repository.findById(t_id)
+                .orElseThrow(() -> new TeamNotFoundException(t_id));
+        HashMap<String, Object> team = new HashMap<>();
+        team.put("id", t.getId());
+        team.put("name", t.getName());
+        team.put("score", t.getBattle().getRanking().get(t));
+        List<Map<String, Object>> students = new ArrayList<>();
+        t.getStudents().forEach(s -> {
+            Map<String, Object> student = new LinkedHashMap<>();
+            student.put("id", s.getId());
+            student.put("firstName", s.getFirstName());
+            student.put("lastName", s.getLastName());
+            students.add(student);
+        });
+        team.put("students", students);
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(TeamController.class).one(t_id)).withSelfRel());
+        links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
+        return team;
+    }
+
     @GetMapping("/teams")
-    CollectionModel<EntityModel<Team>> all() {
-        List<EntityModel<Team>> teams = repository.findAll().stream()
-            .map(assembler::toModel)
-            .collect(Collectors.toList());
-
-        return CollectionModel.of(teams, linkTo(methodOn(TeamController.class).all()).withSelfRel());
+    public List<Map<String, Object>> all() {
+        List<Team> teams = repository.findAll();
+        List<Map<String, Object>> response = new ArrayList<>();
+        teams.forEach(t -> {
+            Map<String, Object> team = new LinkedHashMap<>();
+            team.put("id", t.getId());
+            team.put("name", t.getName());
+            team.put("score", t.getBattle().getRanking().get(t));
+            List<Map<String, Object>> students = new ArrayList<>();
+            t.getStudents().forEach(s -> {
+                Map<String, Object> student = new LinkedHashMap<>();
+                student.put("id", s.getId());
+                student.put("firstName", s.getFirstName());
+                student.put("lastName", s.getLastName());
+                students.add(student);
+            });
+            team.put("students", students);
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(TeamController.class).one(t.getId())).withSelfRel());
+            links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
+            team.put("_links_", links);
+            response.add(team);
+        });
+        return response;
     }
-
-    // end::get-aggregate-root[]
-
-    // Single item
-    @GetMapping("/teams/{id}")
-    EntityModel<Team> one(Long id) {
-        Team team = repository.findById(id)
-            .orElseThrow(() -> new TeamNotFoundException(id));
-
-        return assembler.toModel(team);
-    }
-
-    @PostMapping("/teams")
-    ResponseEntity<?> newTeam(@RequestBody Team newTeam) {
-        EntityModel<Team> entityModel = assembler.toModel(repository.save(newTeam));
-
-        return ResponseEntity
-            .created(entityModel.getRequiredLink("self").toUri())
-            .body(entityModel);
-    }
-
-    @PutMapping("/teams/{id}")
-    ResponseEntity<?> replaceTeam(@RequestBody Team newTeam, @PathVariable Long id) {
-        Team updatedTeam = repository.findById(id)
-            .map(team -> {
-                team.setBattle(newTeam.getBattle());
-                team.setStudents(newTeam.getStudents());
-                return repository.save(team);
-            }).orElseThrow(() -> new TeamNotFoundException(id));
-
-        EntityModel<Team> entityModel = assembler.toModel(updatedTeam);
-
-        return ResponseEntity
-            .created(entityModel.getRequiredLink("self").toUri())
-            .body(entityModel);
-    }
-
-    @DeleteMapping("/teams/{id}")
-    ResponseEntity<?> deleteTeam(@PathVariable Long id) {
-        repository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-
 }

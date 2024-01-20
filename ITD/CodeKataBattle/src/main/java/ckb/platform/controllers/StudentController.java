@@ -1,19 +1,14 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.Student;
-import ckb.platform.entities.User;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.repositories.StudentRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
-
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -22,11 +17,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class StudentController {
     @Autowired
     private final StudentRepository repository;
-    private final StudentModelAssembler assembler;
 
-    StudentController(StudentRepository repository, StudentModelAssembler assembler) {
+    StudentController(StudentRepository repository) {
         this.repository = repository;
-        this.assembler = assembler;
     }
 
     // Aggregate root
@@ -44,6 +37,10 @@ public class StudentController {
             student.put("id", s.getId());
             student.put("firstName", s.getFirstName());
             student.put("surname", s.getLastName());
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(StudentController.class).one(s.getId())).withSelfRel());
+            links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
+            student.put("_links_", links);
             response.add(student);
         });
 
@@ -62,6 +59,10 @@ public class StudentController {
             student.put("id", s.getId());
             student.put("name", s.getFirstName());
             student.put("surname", s.getLastName());
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(StudentController.class).one(s.getId())).withSelfRel());
+            links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
+            student.put("_links_", links);
             response.add(student);
         });
 
@@ -101,25 +102,12 @@ public class StudentController {
             //TODO;
             badges.add(badge);
         });
-
         response.put("badges", badges);
-
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(StudentController.class).one(id)).withSelfRel());
+        links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
+        response.put("_links_", links);
         return response;
     }
 
-    @PostMapping("/students")
-    ResponseEntity<?> newStudent(@RequestBody Student newStudent) {
-        EntityModel<Student> entityModel = assembler.toModel(repository.save(newStudent));
-
-        return ResponseEntity
-            .created(entityModel.getRequiredLink("self").toUri())
-            .body(entityModel);
-    }
-
-    @DeleteMapping("/students/{id}")
-    ResponseEntity<?> deleteStudent(@PathVariable Long id) {
-        repository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
-    }
 }

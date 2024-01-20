@@ -10,6 +10,7 @@ import ckb.platform.repositories.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 public class BattleController {
 
@@ -33,13 +37,11 @@ public class BattleController {
     private final StudentRepository studentRepository;
     @Autowired
     private final EducatorRepository educatorRepository;
-    private final BattleModelAssembler assembler;
     @Autowired
     private final TeamRepository teamRepository;
 
-    BattleController(BattleRepository battleRepository, BattleModelAssembler assembler, TournamentRepository tournamentRepository, StudentRepository studentRepository, EducatorRepository educatorRepository, TeamRepository teamRepository) {
+    BattleController(BattleRepository battleRepository, TournamentRepository tournamentRepository, StudentRepository studentRepository, EducatorRepository educatorRepository, TeamRepository teamRepository) {
         this.battleRepository = battleRepository;
-        this.assembler = assembler;
         this.tournamentRepository = tournamentRepository;
         this.studentRepository = studentRepository;
         this.educatorRepository = educatorRepository;
@@ -67,8 +69,14 @@ public class BattleController {
             battleMap.put("phase", battle.getPhase());
             battleMap.put("tournament_name", battle.getTournament().getName());
             battleMap.put("tournament_id", battle.getTournament().getId());
+
+            ArrayList<Link> links = new ArrayList<>();
+            links.add(linkTo(methodOn(BattleController.class).one(battle.getId())).withSelfRel());
+            links.add(linkTo(methodOn(BattleController.class).all()).withRel("all"));
+            battleMap.put("_links_", links);
             response.add(battleMap);
         }
+
         return response;
     }
 
@@ -104,6 +112,11 @@ public class BattleController {
         });
 
         battleMap.put("ranking", rankings);
+
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(BattleController.class).one(id)).withSelfRel());
+        links.add(linkTo(methodOn(BattleController.class).all()).withRel("all"));
+        battleMap.put("_links_", links);
 
         return battleMap;
         }
@@ -155,7 +168,10 @@ public class BattleController {
         });
 
         battleMap.put("ranking", rankings);
-
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(BattleController.class).getBattleDetailsSTU(battle.getId(), session)).withSelfRel());
+        links.add(linkTo(methodOn(BattleController.class).all()).withRel("battles"));
+        battleMap.put("_links_", links);
         return battleMap;
     }
 
@@ -202,6 +218,11 @@ public class BattleController {
 
         battleMap.put("ranking", rankings);
 
+        ArrayList<Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(BattleController.class).getBattleDetailsEDU(battle.getId(), session)).withSelfRel());
+        links.add(linkTo(methodOn(BattleController.class).all()).withRel("battles"));
+        battleMap.put("_links_" , links);
+
         return battleMap;
     }
 
@@ -226,11 +247,9 @@ public class BattleController {
                 .orElseThrow(() -> new TeamNotFoundException(t_id));
         //check if user passed is edu
         User user = (User) session.getAttribute("user");
-        if(user == null || !user.isEdu()){
+        if(user == null || !user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
-        Educator educator = educatorRepository.findById(user.getId())
-                .orElseThrow( () -> new EducatorNotFoundException(user.getId()));
 
         Map<String, Object> response= new LinkedHashMap<>();
         response.put("group_id", team.getId());
@@ -239,58 +258,13 @@ public class BattleController {
         response.put("name", team.getName());
         response.put("score", battle.getRanking().get(team));
         response.put("code", team.getCode());
+
+        ArrayList <Link> links = new ArrayList<>();
+        links.add(linkTo(methodOn(TeamController.class).one(t_id)).withRel("team"));
+        links.add(linkTo(methodOn(BattleController.class).getStudents(b_id)).withRel("all_teams"));
+
+        response.put("_links_", links);
         return response;
-    }
-
-    @PostMapping("/battles/{t_id}")
-    ResponseEntity<?> newBattle(@PathVariable Long t_id, @RequestBody Battle newBattle) {
-        Tournament tournament = tournamentRepository.findById(t_id)
-                .orElseThrow(() -> new BattleNotFoundException(t_id));
-
-        tournament.addBattle(newBattle);
-        tournamentRepository.save(tournament);
-
-        EntityModel<Battle> entityModel = assembler.toModel(battleRepository.save(newBattle));
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink("self").toUri())
-                .body(entityModel);
-    }
-
-    // @PutMapping("/battles/{id}")
-
-    @DeleteMapping("/battles/{id}")
-    ResponseEntity<?> deleteBattle(@PathVariable Long id) {
-        battleRepository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-
-    /**
-     * Student joining battle alone
-     * @param id
-     * @param s_id
-     * @return
-     */
-    @PostMapping("/battles/{id}/students/{s_id}")
-    ResponseEntity<?> addStudent(@PathVariable Long id, @PathVariable Long s_id) {
-        Battle battle = battleRepository.findById(id)
-                .orElseThrow(() -> new BattleNotFoundException(id));
-
-        Student student = studentRepository.findById(s_id)
-                .orElseThrow(() -> new StudentNotFoundException(s_id));
-
-        Team team = new Team(battle , student);
-        battle.addTeam(team);
-
-        battleRepository.save(battle);
-
-        EntityModel<Battle> entityModel = assembler.toModel(battleRepository.save(battle));
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink("self").toUri())
-                .body(entityModel);
     }
 
     @GetMapping("/battles/{id}/students")
@@ -346,11 +320,11 @@ public class BattleController {
         team.addStudent(studentToInvite);
         teamRepository.save(team);
 
-        EntityModel<Battle> entityModel = assembler.toModel(battleRepository.save(battle));
+        battleRepository.save(battle);
 
         return ResponseEntity
-                .created(entityModel.getRequiredLink("self").toUri())
-                .body(entityModel);
+                .created(linkTo(methodOn(BattleController.class).getBattleDetailsEDU(battle.getId(), session)).withSelfRel().toUri())
+                .body("Student added to the team " + team.getName());
     }
 
     @PostMapping("/battle/create")
