@@ -12,10 +12,8 @@ import ckb.platform.repositories.BattleRepository;
 import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TournamentRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -453,7 +451,7 @@ public class TournamentController {
         User user = (User) session.getAttribute("user");
         boolean owner = false;
 
-        // TODO: id sono interi? si
+        // TODO: controllo su id, id sono interi
 
         if (user == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
