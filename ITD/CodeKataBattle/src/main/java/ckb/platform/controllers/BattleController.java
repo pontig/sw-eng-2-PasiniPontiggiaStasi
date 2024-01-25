@@ -7,9 +7,10 @@ import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.formParser.CreateBattleRequest;
 import ckb.platform.repositories.*;
+import ckb.platform.scheduler.RegistrationThread;
+import ckb.platform.scheduler.SubmissionThread;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -378,6 +379,7 @@ public class BattleController {
 
         if(owner){
             Tournament tournamentRelated = tournamentRepository.getTournamentById(tournamentId);
+
             Battle newBattle = new Battle(battleName, new Date(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentRelated, false);
             battleRepository.save(newBattle);
 
@@ -387,7 +389,7 @@ public class BattleController {
 
             // Obtain path to store the file
             Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
-            Path destinationPath = absolutePath.resolve("ckbProblemPDF").resolve(newCkbProblem);
+            Path destinationPath = absolutePath.resolve("CKBProblem").resolve(newCkbProblem);
 
             try {
                 // Save file in the directory
@@ -396,6 +398,11 @@ public class BattleController {
                 // TODO: rollback
                 throw new RuntimeException(e);
             }
+
+            // TODO: Email per upcoming battles?? Da guardare sulla specifica
+            new RegistrationThread(newBattle);
+            new SubmissionThread(newBattle);
+
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");

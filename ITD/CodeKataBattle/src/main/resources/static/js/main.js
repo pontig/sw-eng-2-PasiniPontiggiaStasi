@@ -582,7 +582,7 @@ async function changePage(page, id) {
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
-                    res = await fetch("tournaments/unsuscribed/")
+                    res = await fetch("tournaments/unsubscribed/")
                     data = await res.json()
                     console.log(res.status)
 
