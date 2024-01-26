@@ -74,7 +74,7 @@ async function showResult(listened, other, url) {
                     resultBox.style.display = "none"
                 } else if (listened.id == "findEDUSearchBox") {
                     if (confirm("Do you want to invite " + listened.value + " to your tournament?")) {
-                        /* TODO: SHARE TOURNAMENT */
+                        /* SHARE TOURNAMENT */
                         console.log('SHARE TOURNAMENT');
 
                         // Get form value

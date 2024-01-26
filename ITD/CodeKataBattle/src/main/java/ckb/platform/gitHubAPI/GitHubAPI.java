@@ -13,6 +13,7 @@ import ckb.platform.entities.Battle;
 import ckb.platform.formParser.RepoPullRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -20,7 +21,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.io.File;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -122,7 +123,38 @@ public class GitHubAPI {
         String repository = repoPullRequest.getRepository();
         String pusher = repoPullRequest.getPusher();
 
+        try {
+            // Create a get object to make the submission
+            HttpGet httpGet = new HttpGet("https://api.github.com/repos/" + pusher + "/" + repository + "/contents/Delivery" + "/2.pdf");
 
+            // Add the header to be authenticated
+            httpGet.addHeader("Authorization", "token " + accessToken);
+            httpGet.setHeader("Accept", "application/vnd.github+json");
+
+            // Execute the POST request and wait for response
+            HttpResponse response = this.httpClient.execute(httpGet);
+            System.out.println("Create Repository Response Code: " + response);
+
+            // Verificare che la risposta sia di successo (status code 200)
+            if (response.getStatusLine().getStatusCode() == 200) {
+                // Ottenere l'InputStream dal corpo della risposta
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    // Salvare l'InputStream in un file JAR locale
+                    try (OutputStream outputStream = new FileOutputStream("localfile.jar")) {
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+                    }
+                }
+                System.out.println("File JAR salvato con successo.");
+            } else {
+                System.out.println("Errore durante la richiesta. Response Code: " + response.getStatusLine().getStatusCode());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public static void main(String[] args) throws InterruptedException {
         GitHubAPI newRepo = new GitHubAPI();

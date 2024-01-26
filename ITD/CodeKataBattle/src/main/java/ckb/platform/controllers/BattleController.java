@@ -400,8 +400,8 @@ public class BattleController {
             }
 
             // TODO: Email per upcoming battles?? Da guardare sulla specifica
-            new RegistrationThread(newBattle);
-            new SubmissionThread(newBattle);
+            new RegistrationThread(newBattle).start();
+            new SubmissionThread(newBattle).start();
 
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
         }

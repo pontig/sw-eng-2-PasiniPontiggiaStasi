@@ -9,18 +9,23 @@ import ckb.platform.gmailAPI.GmailAPI;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class SubmissionThread extends Thread {
     private final Date targetDate;
     private final Battle battle;
 
     public SubmissionThread(Battle battle) {
-        this.targetDate = battle.getFinalSubmissionDeadline();
+        //this.targetDate = battle.getFinalSubmissionDeadline();
         this.battle = battle;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2024, Calendar.JANUARY, 26, 00, 57, 0);
+        this.targetDate = calendar.getTime();
     }
 
     @Override
@@ -28,9 +33,12 @@ public class SubmissionThread extends Thread {
         // Calculate the milliseconds till the end deadline
         long millisecondsDifference = targetDate.getTime() - System.currentTimeMillis();
 
+        System.out.println("Submission Tempo corrente: " + System.currentTimeMillis() + " Tempo finale: " + targetDate.getTime() + " Differenza: " + millisecondsDifference);
+        System.out.println("Submission Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
+
         // Sleep for the amount of time to wait
         try {
-            sleep(millisecondsDifference * TimeUnit.DAYS.toMillis(1));
+            sleep(millisecondsDifference);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
