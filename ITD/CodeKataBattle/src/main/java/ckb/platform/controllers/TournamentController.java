@@ -6,6 +6,7 @@ import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TournamentNotFoundException;
 import ckb.platform.formParser.CloseTournamentRequest;
 import ckb.platform.formParser.CreateTournamentRequest;
+import ckb.platform.formParser.JoinTournamentRequest;
 import ckb.platform.formParser.ShareTournamentRequest;
 import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.BattleRepository;
@@ -531,5 +532,44 @@ public class TournamentController {
             return ResponseEntity.status(HttpStatus.OK).body("Tournament successfully shared");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not own this tournament");
+    }
+
+    @PostMapping("/tournament/join")
+    public ResponseEntity<String> joinTournament(@RequestBody JoinTournamentRequest joinTournamentRequest, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+        User user = (User) session.getAttribute("user");
+
+        // TODO: controllo su id, id sono interi
+
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
+
+        if (user.isEdu()) {
+            // Check if user is an Educator
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+        }
+
+        if (!tournamentRepository.existsById(joinTournamentRequest.getTournamentId())){
+            // Check if user is an Educator
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
+        }
+
+        // Get tournament data
+        Tournament joinTournament = tournamentRepository.getTournamentById(joinTournamentRequest.getTournamentId());
+
+        if(joinTournament == null){
+           // If it does not exist return
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
+        }
+
+        Student addStudent = (Student) user;
+
+        // TODO: se è già nel torneo non aggiungo
+
+        addStudent.addTournament(joinTournament);
+        joinTournament.addStudent(addStudent);
+        studentRepository.save(addStudent);
+        tournamentRepository.save(joinTournament);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Tournament successfully joined");
     }
 }

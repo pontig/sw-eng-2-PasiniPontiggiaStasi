@@ -20,11 +20,12 @@ public class SubmissionThread extends Thread {
     private final Battle battle;
 
     public SubmissionThread(Battle battle) {
-        //this.targetDate = battle.getFinalSubmissionDeadline();
+        //this.targetDate = battle.getFinalSubmissionDeadline(); //TODO: uncomment this line
         this.battle = battle;
 
+        // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.JANUARY, 26, 00, 57, 0);
+        calendar.set(2024, Calendar.JANUARY, 27, 16, 50, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -32,9 +33,7 @@ public class SubmissionThread extends Thread {
     public void run() {
         // Calculate the milliseconds till the end deadline
         long millisecondsDifference = targetDate.getTime() - System.currentTimeMillis();
-
-        System.out.println("Submission Tempo corrente: " + System.currentTimeMillis() + " Tempo finale: " + targetDate.getTime() + " Differenza: " + millisecondsDifference);
-        System.out.println("Submission Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
+        System.out.println("Submission " + battle.getName() + " Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
 
         // Sleep for the amount of time to wait
         try {

@@ -13,7 +13,7 @@ public class Student extends User{
     @ManyToMany
     List<Badge> achieveBadges;
 
-    @ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
+    @ManyToMany (cascade = CascadeType.MERGE, fetch=FetchType.EAGER, mappedBy = "subscribedStudents")
     List<Tournament> tournaments;
 
     //@ManyToMany (cascade = CascadeType.MERGE, mappedBy = "subscribedStudents")
