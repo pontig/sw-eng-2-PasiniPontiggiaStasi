@@ -20,11 +20,12 @@ public class RegistrationThread extends Thread {
     private final Battle battle;
 
     public RegistrationThread(Battle battle) {
-        //this.targetDate = battle.getRegistrationDeadline();
+        //this.targetDate = battle.getRegistrationDeadline(); //TODO: uncomment this line
         this.battle = battle;
 
+        // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.JANUARY, 26, 00, 52, 0);
+        calendar.set(2024, Calendar.JANUARY, 27, 16, 45, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -32,9 +33,7 @@ public class RegistrationThread extends Thread {
     public void run() {
         // Calculate the milliseconds till the end deadline
         long millisecondsDifference = targetDate.getTime() - System.currentTimeMillis();
-
-        System.out.println("Registration Tempo corrente: " + System.currentTimeMillis() + " Tempo finale: " + targetDate.getTime() + " Differenza: " + millisecondsDifference);
-        System.out.println("Registration Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
+        System.out.println("Registration " + battle.getName() + " Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
 
         // Sleep for the amount of time to wait
         try {
@@ -43,7 +42,7 @@ public class RegistrationThread extends Thread {
             e.printStackTrace();
         }
 
-        System.out.println("Invio email");
+        System.out.println("Send email end registration");
 
         // Get first student for each team in the battle
         List<Team> teamsSubscribed = battle.getTeams();
@@ -53,8 +52,39 @@ public class RegistrationThread extends Thread {
         }
 
         // Create repository
+        int response;
         GitHubAPI gitHubAPI = new GitHubAPI();
-        gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline());
+        response = gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline());
+
+        if(response != 201)
+            System.out.println("Error in creating repo");
+
+        try {
+            response = gitHubAPI.createFolder(battle, "Rules", "README");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(response != 201)
+            System.out.println("Error in creating folder rules " );
+
+
+        try {
+            response = gitHubAPI.createFolder(battle, "CKBProblem", battle.getId().toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(response != 201)
+            System.out.println("Error in creating folder rules " );
+
+
+        try {
+            response = gitHubAPI.createFolder(battle, "Delivery", "ActionTemplate");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(response != 201)
+            System.out.println("Error in creating folder rules ");
+
 
         // Prepare Email to send
         GmailAPI gmailSender = null;
@@ -68,7 +98,7 @@ public class RegistrationThread extends Thread {
                 battle.getName() + " repository is now created\n\n" +
                 "Now you must fork it and start working\n\n" +
                 "You can find it at: \n" +
-                "https://github.com/CodeKataBattlePlatform/" + battle.getName();
+                "https://github.com/CodeKataBattlePlatform/" + battle.getName().replace(" ", "-");
 
         // Send Email to each first student in battle
         for (Student s : studentsToNotify) {
@@ -78,5 +108,15 @@ public class RegistrationThread extends Thread {
                 throw new RuntimeException(e);
             }
         }
+
+        // TODO: just to test
+        try {
+            gmailSender.sendEmail(subject,bodyMsg, battle.getCreator().getEmail());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

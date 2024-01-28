@@ -29,19 +29,25 @@ import java.util.Properties;
 import java.util.Set;
 
 /*
- * GMAIL Account credential
+ * GOOGLE ACCOUNT:
  * mail: codekatabattle.platform@gmail.com
  * password: CKB202430L!
  *
- * GMAIL API (Processo da testare)
- * La prima volta che fate partire localmente l'API vi chiede di andare su un sito
- * Aprite il link in schede in incognito e autenticatevi con le credenziali definite sopra
- * Accettate tutto e così l'API dovrebbe andarvi
- * Tutte le Run successive non dovrebbero aver questa necessità
+ * GOOGLE CLOUD CONSOLE:
+ * https://console.cloud.google.com/apis/credentials?authuser=1&project=ckbplatform
  *
- * RISORSE
+ * GMAIL API:
+ * The first time you use the application you need to get a token, run the main function in this class
+ * A lin will appear in the console, copy and open it in a Incognito Window
+ * Follow the command and hit all the continue and trust buttons, when the token is available an email is sent to CKB
+ *
+ * This procedure has to be followed even when the gmail error 404 start to appear, before doing it remember to delete folder tokens
+ * The 404 error appear because this application is not published yet and is in a test environment
+ *
+ * RESOURCES:
  * https://blog.sebastian-daschner.com/entries/sending-emails-gmail-api-java
  * https://developers.google.com/gmail/api/auth/scopes?hl=it
+ *
  */
 
 public class GmailAPI {
@@ -54,7 +60,7 @@ public class GmailAPI {
         GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
         service = new Gmail.Builder(httpTransport, jsonFactory, getCredentials(httpTransport, jsonFactory))
-                .setApplicationName("CodeKataBattle")
+                .setApplicationName("CodeKataBattle1")
                 .build();
     }
 
@@ -107,5 +113,10 @@ public class GmailAPI {
                 throw e;
             }
         }
+    }
+
+    public static void main(String[] args) throws GeneralSecurityException, IOException, MessagingException {
+        GmailAPI gmailAPI = new GmailAPI();
+        gmailAPI.sendEmail("GetTokenEmail", "Token received successfully", CKB_Email);
     }
 }

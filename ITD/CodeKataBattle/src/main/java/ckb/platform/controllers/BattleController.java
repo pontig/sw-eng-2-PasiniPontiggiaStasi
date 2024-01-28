@@ -6,6 +6,7 @@ import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.formParser.CreateBattleRequest;
+import ckb.platform.formParser.RepoPullRequest;
 import ckb.platform.repositories.*;
 import ckb.platform.scheduler.RegistrationThread;
 import ckb.platform.scheduler.SubmissionThread;
@@ -406,5 +407,18 @@ public class BattleController {
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+    }
+
+    @PostMapping("/battle/pulls")
+    public void closeTournament(@RequestBody RepoPullRequest repoPullRequest) {
+        String repository = repoPullRequest.getRepository();;
+        String pusher = repoPullRequest.getPusher();
+        String tournament = repoPullRequest.getTournament();
+
+        System.out.println("A push has been made by team: " + pusher + " for battle "+ repository.replace(pusher + "/", "") + " in tournament " + tournament);
+
+        // TODO: github pull specific file
+        // TODO: run test
+        // TODO: update score
     }
 }
