@@ -41,7 +41,9 @@ package ckb.platform.gitHubAPI;
  */
 
 import ckb.platform.entities.Battle;
+import ckb.platform.entities.Team;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -49,7 +51,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -131,38 +135,46 @@ public class GitHubAPI {
         }
     }
 
-    // TODO Pull specific file
-    /*
+    public void pullRepository(Battle battle, Team team, String repoName, String repoOwner) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // Create a get object to make the submission
-            HttpGet httpGet = new HttpGet("https://api.github.com/repos/" + pusher + "/" + repository + "/contents/Delivery" + "/2.pdf");
+            HttpGet httpGet = new HttpGet("https://api.github.com/repos/" + repoOwner + "/" + repoName.replace(" ", "-") + "/zipball/main");
 
             // Add the header to be authenticated
             httpGet.addHeader("Authorization", "Bearer " + accessToken);
-            httpGet.setHeader("Accept", "application/vnd.github+json");
 
-            // Execute the POST request and wait for response
+            // Execute the GET request and wait for response
             HttpResponse response = httpClient.execute(httpGet);
             System.out.println("Create Repository Response Code: " + response);
 
-            // Verificare che la risposta sia di successo (status code 200)
+            // Check if the request was successful (status code 200)
             if (response.getStatusLine().getStatusCode() == 200) {
-                // Ottenere l'InputStream dal corpo della risposta
-                try (InputStream inputStream = response.getEntity().getContent()) {
-                    // Salvare l'InputStream in un file JAR locale
-                    try (OutputStream outputStream = new FileOutputStream("localfile.jar")) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
+                Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
+                String pullsPath = absolutePath + "/PullFiles" +
+                                   "/" + battle.getId() +
+                                   "/" + team.getId() + "/";
+
+                Files.createDirectories(Path.of(pullsPath));
+
+                try (InputStream inputStream = response.getEntity().getContent();
+                     FileOutputStream outputStream = new FileOutputStream(pullsPath + "repo.zip")) {
+
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
                     }
+
+                    System.out.println("Repository downloaded successfully.");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                System.out.println("File JAR salvato con successo.");
             } else {
-                System.out.println("Errore durante la richiesta. Response Code: " + response.getStatusLine().getStatusCode());
+                // Handle the case where the request was not successful
+                System.err.println("Failed to download repository. Status code: " + response.getStatusLine().getStatusCode());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }*/
+        }
+    }
 }
