@@ -180,7 +180,7 @@ public class TournamentController {
             battleMap.put("language", battle.getLanguage());
             battleMap.put("participants", battle.getTeams().stream().reduce(0, (sum, team) -> sum + team.getStudents().size(), Integer::sum));
             battleMap.put("subscribed", battle.getTeams().stream().anyMatch(team -> team.getStudents().contains(student)));
-            battleMap.put("score", battle.getTeams().stream().filter(team -> team.getStudents().contains(student)).findFirst().map(Team::getAutomaticScore).orElse(0));
+            battleMap.put("score", battle.getTeams().stream().filter(team -> team.getStudents().contains(student)).findFirst().map(Team::getFinalScore).orElse(0));
             battleMap.put("phase", battle.getPhase());
 
             String daysLeft;

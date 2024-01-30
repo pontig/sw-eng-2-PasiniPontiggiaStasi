@@ -112,7 +112,7 @@ public class Tournament {
                 .flatMap(Collection::stream)
                 .map(e -> e.getStudents()
                         .stream()
-                        .map(s -> new pair<Student, Integer>(s, e.getScore())).collect(Collectors.toList()))
+                        .map(s -> new pair<Student, Integer>(s, e.getAutomaticScore())).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(e -> e.first, Collectors.summingInt(e -> e.second)));
     }
