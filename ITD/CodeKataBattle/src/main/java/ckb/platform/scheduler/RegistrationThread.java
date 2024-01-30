@@ -54,19 +54,10 @@ public class RegistrationThread extends Thread {
         // Create repository
         int response;
         GitHubAPI gitHubAPI = new GitHubAPI();
-        response = gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline());
+        response = gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline() + " for battle " + battle.getName() + " in tournament " + battle.getTournament().getName());
 
         if(response != 201)
             System.out.println("Error in creating repo");
-
-        try {
-            response = gitHubAPI.createFolder(battle, "Rules", "README");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if(response != 201)
-            System.out.println("Error in creating folder rules " );
-
 
         try {
             response = gitHubAPI.createFolder(battle, "CKBProblem", battle.getId().toString());
@@ -74,16 +65,15 @@ public class RegistrationThread extends Thread {
             throw new RuntimeException(e);
         }
         if(response != 201)
-            System.out.println("Error in creating folder rules " );
-
+            System.out.println("Error in creating folder CKB Problem");
 
         try {
-            response = gitHubAPI.createFolder(battle, "Delivery", "ActionTemplate");
+            response = gitHubAPI.createFolder(battle, "Rules", "README");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         if(response != 201)
-            System.out.println("Error in creating folder rules ");
+            System.out.println("Error in creating README");
 
 
         // Prepare Email to send
