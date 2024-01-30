@@ -21,7 +21,7 @@ class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    /*@Bean
+    @Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
@@ -189,6 +189,12 @@ class LoadDatabase {
             log.info("added a player to a team");
 
             teams.forEach(team -> log.info("Preloading " + teamRep.save(team)));
+
+            teams.stream().forEach(team -> {
+                team.getStudents().stream().forEach(student -> {
+                    team.getBattle().getTournament().addStudent(student);
+                });
+            });
         };
-    }*/
+    }
 }

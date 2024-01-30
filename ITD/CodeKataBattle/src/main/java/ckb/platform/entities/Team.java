@@ -20,18 +20,12 @@ public class Team {
     private int staticAnalysisScore = 0;
     private int timelinessScore = 0;
     private int testScore = 0;
-    private int automaticScore= 0;
-
-
-    private int manualScore = 0;
-    private int finalScore;
+    private Integer manualScore = null;
     @ManyToMany
     private List<Student> students;
     private String repo;
 
-    //TODO: Secondo me bisogna aggiungere anche Torneo
-
-    private Integer manualScore = null;
+    //TODO: Secondo me bisogna aggiungere anche Torneo --> no, perché se sai la battaglia sai anche il torneo
 
     public Team() {
     }
@@ -46,7 +40,6 @@ public class Team {
         this.name = name;
         this.battle = battle;
         students = new ArrayList<Student>();
-        this.automaticScore = 0;
     }
 
     public Long getId() {
@@ -55,10 +48,6 @@ public class Team {
 
     public String getName() {
         return name;
-    }
-
-    public int getAutomaticScore() {
-        return (testScore+ staticAnalysisScore + timelinessScore)/3;
     }
 
     public void addStudent(Student student) {
@@ -85,17 +74,6 @@ public class Team {
         this.name = name;
     }
 
-    public void setAutomaticScore(int score) {
-        this.automaticScore = score;
-    }
-
-    public void setManualScore(Integer manualScore) {
-        this.manualScore = manualScore;
-    }
-    public Integer getManualScore() {
-        return manualScore;
-    }
-
     @Override
     public String toString() {
         return "Team{" +
@@ -103,7 +81,6 @@ public class Team {
                 ", battle='" + battle.getId() +
                 ", students='" + students +
                 ", name='" + name + '\'' +
-                ", score='" + automaticScore + '\'' +
                 '}';
     }
 
@@ -127,20 +104,21 @@ public class Team {
         return repo;
     }
 
-    public int getManualScore() {
+    public Integer getManualScore() {
         return manualScore;
     }
 
-    public int getFinalScore() {
-        return (manualScore+ automaticScore) / 2;
+    public int getAutomaticScore() {
+        return (testScore + staticAnalysisScore + timelinessScore) / 3;
     }
-
+    public int getFinalScore() {
+        if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation())
+            return getAutomaticScore();
+        else
+            return (manualScore + getAutomaticScore()) / 2;
+    }
     public void setManualScore(int manualScore) {
         this.manualScore = manualScore;
-    }
-
-    public void setFinalScore(int finalScore) {
-        this.finalScore = finalScore;
     }
 
     public int getStaticAnalysisScore() {

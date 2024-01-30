@@ -90,7 +90,6 @@ public class BattleController {
 
     // end::get-aggregate-root[]
 
-
     @GetMapping("/battles/{id}")
     Map<String, Object> one(@PathVariable Long id) {
         Battle battle = battleRepository.findById(id)
@@ -505,7 +504,7 @@ public class BattleController {
             throw new CannotCloseBattleException(battle_id);
         });
 
-        battle.getTeams().forEach(t -> t.setScore(t.getManualScore() + t.getScore()));
+        //battle.getTeams().forEach(t -> t.setScore(t.getManualScore() + t.getScore()));
         battle.setHasBeenEvaluated();
 
         battleRepository.save(battle);
