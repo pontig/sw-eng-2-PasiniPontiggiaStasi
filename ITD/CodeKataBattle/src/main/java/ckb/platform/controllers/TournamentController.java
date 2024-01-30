@@ -242,7 +242,18 @@ public class TournamentController {
             battleMap.put("language", battle.getLanguage());
             battleMap.put("participants", battle.getTeams().stream().reduce(0, (sum, team) -> sum + team.getStudents().size(), Integer::sum));
             battleMap.put("phase", battle.getPhase());
-            // battleMap.put("remaining", battle.getRemainingTime().toString()); --> come si calcola?
+            String daysLeft;
+            Date nextStep = switch (battle.getPhase()) {
+                case 1 -> battle.getRegistrationDeadline();
+                case 2 -> battle.getFinalSubmissionDeadline();
+                default -> null;
+            };
+            if (nextStep != null) {
+                long diffInMills = (nextStep.getTime() - new Date().getTime());
+                long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
+                daysLeft = String.valueOf(diff) + "d";
+                battleMap.put("remaining", daysLeft);
+            }
             return battleMap;
         }));
 

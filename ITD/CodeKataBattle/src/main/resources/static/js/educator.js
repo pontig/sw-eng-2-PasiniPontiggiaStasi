@@ -139,8 +139,10 @@ window.onload = () => {
     })
 
     /* CLOSE TOURNAMENT */
-    closeTour.addEventListener('click', (e) => {
-        e.preventDefault();
+    function closeTournament(garbage) {
+        e = document.getElementById("importantButton")
+        e.target.disabled = true
+        e.target.textContent = "Closing..."
         console.log('CLOSE TOURNAMENT');
 
         // Get form value
@@ -219,7 +221,7 @@ window.onload = () => {
             .catch(error => {
                 console.error('Error during Fetch: ', error);
             });
-    })
+    }
 
     /* NEW BATTLE */
     newBattleForm.addEventListener('submit', (e) => {
