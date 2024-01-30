@@ -1,11 +1,9 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.*;
-import ckb.platform.exceptions.BattleNotFoundException;
-import ckb.platform.exceptions.EducatorNotFoundException;
-import ckb.platform.exceptions.StudentNotFoundException;
-import ckb.platform.exceptions.TeamNotFoundException;
+import ckb.platform.exceptions.*;
 import ckb.platform.formParser.CreateBattleRequest;
+import ckb.platform.formParser.ListGroupsForManualRequest;
 import ckb.platform.formParser.RepoPullRequest;
 import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.repositories.*;
@@ -230,13 +228,21 @@ public class BattleController {
     }
 
     //mapped to "Get the list of groups for the manual evaluation"
-    //TODO : MANCA LA PARTE DELLE EVALUATION, COME CAPISCO SE UN TEAM HA GIà LO SCORE O NO?
+    //TODO : MANCA LA PARTE DELLE EVALUATION, COME CAPISCO SE UN TEAM HA GIà LO SCORE O NO? --> getManualScore() == null
     @GetMapping("/battles/{b_id}/manualevalution")
     List<Map<String, Object>> manualEvalGroups(@PathVariable Long b_id) {
         Battle battle = battleRepository.findById(b_id)
                 .orElseThrow( () -> new BattleNotFoundException(b_id));
 
         List<Map<String, Object>> response= new ArrayList<>();
+
+        battle.getTeams().forEach(t -> {
+            Map<String, Object> team = new LinkedHashMap<>();
+            team.put("id", t.getId());
+            team.put("name", t.getName());
+            team.put("score", t.getManualScore());
+            response.add(team);
+        });
 
         return response;
     }
@@ -462,5 +468,30 @@ public class BattleController {
 
         // TODO: run test
         // TODO: update score
+    }
+
+    @PostMapping("/battle/manualEvaluation/partial")
+    public void evaluateSingleCode(@RequestBody ListGroupsForManualRequest data) {
+        Team team = teamRepository.findById(data.getTeam_id())
+                .orElseThrow(() -> new TeamNotFoundException(data.getTeam_id()));
+        team.setManualScore(data.getScore());
+        teamRepository.save(team);
+    }
+
+    @PostMapping("/battle/manualEvaluation/final")
+    public void endManualEvaluation(@RequestBody Long battle_id) throws CannotCloseBattleException {
+        Battle battle = battleRepository.findById(battle_id)
+                .orElseThrow(() -> new BattleNotFoundException(battle_id));
+
+        battle.getTeams().stream().filter(t -> t.getManualScore() == null).forEach(t -> {
+            throw new CannotCloseBattleException(battle_id);
+        });
+
+        battle.getTeams().forEach(t -> t.setScore(t.getManualScore() + t.getScore()));
+        battle.setHasBeenEvaluated();
+
+        battleRepository.save(battle);
+
+        // TODO: inviare le mail
     }
 }
