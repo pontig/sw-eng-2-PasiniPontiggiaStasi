@@ -1,7 +1,6 @@
 // Loading the page
 window.addEventListener("load", async () => {
 
-
     if (sessionStorage.getItem("userId") == null) window.location.href = "index.html"
     changePage("dashboard", 0)
     document.getElementById("profileName").innerHTML = sessionStorage.getItem("name") + " " + sessionStorage.getItem("surname")
@@ -74,7 +73,7 @@ async function showResult(listened, other, url) {
                     resultBox.style.display = "none"
                 } else if (listened.id == "findEDUSearchBox") {
                     if (confirm("Do you want to invite " + listened.value + " to your tournament?")) {
-                        /* TODO: SHARE TOURNAMENT */
+                        /* SHARE TOURNAMENT */
                         console.log('SHARE TOURNAMENT');
 
                         // Get form value
@@ -376,7 +375,6 @@ async function changePage(page, id) {
                     document.getElementById("path").appendChild(c2)
                     document.getElementById("path").appendChild(apathb)
 
-
                     document.getElementById("title").innerHTML = data.title
                     document.getElementById("description").innerHTML = ""
 
@@ -582,7 +580,7 @@ async function changePage(page, id) {
                     document.getElementById("path").innerHTML = ""
                     document.getElementById("path").appendChild(apath)
 
-                    res = await fetch("tournaments/unsuscribed/")
+                    res = await fetch("tournaments/unsubscribed/")
                     data = await res.json()
                     console.log(res.status)
 
@@ -683,7 +681,90 @@ async function changePage(page, id) {
                     if (data.active && !data.subscribed && data.canSubscribe) {
                         document.getElementById("importantButton").style.display = "block"
                         document.getElementById("importantButton").innerHTML = "Subscribe"
-                        document.getElementById("importantButton").onclick = (() => { subscribeTournament(id) })
+                        let subscribeTour = document.getElementById("importantButton");
+
+                        /* JOIN TOURNAMENT */
+                        subscribeTour.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            console.log('JOIN TOURNAMENT');
+
+                            // Get form value
+                            const tournamentId = sessionStorage.getItem("tournament")
+
+                            console.log('Form data: ', {id});
+
+                            // Define url and data
+                            const url = '/ckb_platform/tournament/join';
+                            const data = {tournamentId};
+
+                            // Prepare data to send to the Server
+                            const options = {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data)
+                            };
+
+                            // Fetch data to url
+                            fetch(url, options)
+                                .then(response => {
+                                    // Analise server response code
+                                    switch (response.status) {
+                                        case 200:
+                                            response.text().then(result => {
+                                                Swal.fire({
+                                                    title: "Tournament Joined!",
+                                                    text: result,
+                                                    type: "success",
+                                                    confirmButtonColor: '#CC208E'
+                                                }).then(() => {
+                                                    setTimeout(() => {
+                                                        location.reload();
+                                                    }, 500);
+                                                });
+                                            })
+                                            break;
+
+                                        case 401:
+                                            response.text().then(result => {
+                                                Swal.fire({
+                                                    title: "Tournament not Joined!",
+                                                    text: result,
+                                                    type: "error",
+                                                    confirmButtonColor: '#CC208E'
+                                                }).then(() => {
+                                                    setTimeout(() => {
+                                                        window.location.href = "index.html";
+                                                    }, 500);
+                                                });
+                                            })
+
+                                        case 403:
+                                        case 404:
+                                            response.text().then(result => {
+                                                Swal.fire({
+                                                    title: "Tournament not Joined!",
+                                                    text: result,
+                                                    type: "error",
+                                                    confirmButtonColor: '#CC208E'
+                                                });
+                                            })
+                                            break;
+
+                                        default:
+                                            // TODO: Cambiare errorSubscribeToBattle
+                                            const errorBox = document.getElementById('errorNewTournament');
+                                            if (errorBox)
+                                                errorBox.textContent = "Internal error";
+                                            errorBox.style.display = 'flex';
+                                            break;
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error during Fetch: ', error);
+                                });
+                        })
                     }
 
                     sessionStorage.setItem("tournament", id)
