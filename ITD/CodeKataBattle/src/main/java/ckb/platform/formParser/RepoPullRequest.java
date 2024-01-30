@@ -4,6 +4,7 @@ public class RepoPullRequest {
     private String repository;
     private String pusher;
     private String tournament;
+    private String team;
 
     public String getRepository() {
         return repository;
@@ -15,5 +16,9 @@ public class RepoPullRequest {
 
     public String getTournament() {
         return tournament;
+    }
+
+    public String getTeam() {
+        return team;
     }
 }
