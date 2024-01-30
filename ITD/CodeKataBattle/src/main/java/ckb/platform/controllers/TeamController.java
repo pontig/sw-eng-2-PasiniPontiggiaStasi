@@ -77,4 +77,14 @@ public class TeamController {
         });
         return response;
     }
+
+    @PostMapping("/teams/score/staticAnalysis/{t_id}")
+    public ResponseEntity<?> updateStaticAnalysisScore(@PathVariable Long t_id, @RequestBody Map<String, Object> payload) {
+        Team t = repository.findById(t_id)
+                .orElseThrow(() -> new TeamNotFoundException(t_id));
+        t.setStaticAnalysisScore((int) payload.get("score"));
+        repository.save(t);
+        return ResponseEntity.ok().build();
+    }
+    //TODO SCORES
 }

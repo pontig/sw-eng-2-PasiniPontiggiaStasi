@@ -17,8 +17,14 @@ public class Team {
     private Battle battle;
 
     private String name;
-    private int score;
+    private int staticAnalysisScore = 0;
+    private int timelinessScore = 0;
+    private int testScore = 0;
+    private int automaticScore= 0;
 
+
+    private int manualScore = 0;
+    private int finalScore;
     @ManyToMany
     private List<Student> students;
     private String repo;
@@ -40,7 +46,7 @@ public class Team {
         this.name = name;
         this.battle = battle;
         students = new ArrayList<Student>();
-        this.score = 0;
+        this.automaticScore = 0;
     }
 
     public Long getId() {
@@ -51,8 +57,8 @@ public class Team {
         return name;
     }
 
-    public int getScore() {
-        return score;
+    public int getAutomaticScore() {
+        return (testScore+ staticAnalysisScore + timelinessScore)/3;
     }
 
     public void addStudent(Student student) {
@@ -79,8 +85,8 @@ public class Team {
         this.name = name;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setAutomaticScore(int score) {
+        this.automaticScore = score;
     }
 
     public void setManualScore(Integer manualScore) {
@@ -97,7 +103,7 @@ public class Team {
                 ", battle='" + battle.getId() +
                 ", students='" + students +
                 ", name='" + name + '\'' +
-                ", score='" + score + '\'' +
+                ", score='" + automaticScore + '\'' +
                 '}';
     }
 
@@ -121,4 +127,43 @@ public class Team {
         return repo;
     }
 
+    public int getManualScore() {
+        return manualScore;
+    }
+
+    public int getFinalScore() {
+        return (manualScore+ automaticScore) / 2;
+    }
+
+    public void setManualScore(int manualScore) {
+        this.manualScore = manualScore;
+    }
+
+    public void setFinalScore(int finalScore) {
+        this.finalScore = finalScore;
+    }
+
+    public int getStaticAnalysisScore() {
+        return staticAnalysisScore;
+    }
+
+    public int getTimelinessScore() {
+        return timelinessScore;
+    }
+
+    public int getTestScore() {
+        return testScore;
+    }
+
+    public void setStaticAnalysisScore(int staticAnalysisScore) {
+        this.staticAnalysisScore = staticAnalysisScore;
+    }
+
+    public void setTimelinessScore(int timelinessScore) {
+        this.timelinessScore = timelinessScore;
+    }
+
+    public void setTestScore(int testScore) {
+        this.testScore = testScore;
+    }
 }
