@@ -169,8 +169,6 @@ class LoadDatabase {
             log.info("added a player to a team");
 
             teams.add(new Team("Team 14", battles.get(4 - 1)));
-            //teams.get(teams.size() - 1).addStudent(students.get(5 - 5));
-            //log.info("added a player to a team");
             teams.add(new Team("Team 15", battles.get(4 - 1)));
             teams.get(teams.size() - 1).addStudent(students.get(6 - 5));
             log.info("added a player to a team");

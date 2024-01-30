@@ -3,6 +3,7 @@ package ckb.platform.entities;
 import jakarta.persistence.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity @Table(name = "Tournament")
 public class Tournament {
@@ -26,8 +27,8 @@ public class Tournament {
     @ManyToMany(fetch=FetchType.EAGER)
     private List<Badge> badges;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Map<Student, Integer> ranking;
+    //@ElementCollection(fetch = FetchType.EAGER)
+    //private Map<Student, Integer> ranking;
     //private Boolean active;
 
     public Tournament(String name, Date subscriptionDeadline, Date endDate, Educator creator) {
@@ -40,7 +41,7 @@ public class Tournament {
         subscribedStudents = new ArrayList<Student>();
         battles = new ArrayList<Battle>();
         badges = new ArrayList<Badge>();
-        ranking = new LinkedHashMap<Student, Integer>();
+        //ranking = new LinkedHashMap<Student, Integer>();
 
     }
 
@@ -62,13 +63,13 @@ public class Tournament {
         badges.add(badge);
     }
 
-    public void setRankingPerStudent(Student student, Integer position){
-        ranking.put(student, position);
-    }
+    //public void setRankingPerStudent(Student student, Integer position){
+    //    ranking.put(student, position);
+    //}
 
-    public void setRanking(Map<Student, Integer> ranking){
-        this.ranking = ranking;
-    }
+    //public void setRanking(Map<Student, Integer> ranking){
+    //    this.ranking = ranking;
+    //}
 
     public Long getId() {
         return this.id;
@@ -105,7 +106,25 @@ public class Tournament {
     }
 
     public Map<Student, Integer> getRanking() {
-        return this.ranking;
+        return this.battles
+                .stream()
+                .map(Battle::getTeams)
+                .flatMap(Collection::stream)
+                .map(e -> e.getStudents()
+                        .stream()
+                        .map(s -> new pair<Student, Integer>(s, e.getScore())).collect(Collectors.toList()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(e -> e.first, Collectors.summingInt(e -> e.second)));
+    }
+
+    private class pair<A,B> {
+        public final A first;
+        public final B second;
+
+        public pair(A first, B second) {
+            this.first = first;
+            this.second = second;
+        }
     }
 
     @Override
@@ -119,7 +138,7 @@ public class Tournament {
                 ", subscribedStudents=" + subscribedStudents +
                 ", battles=" + battles +
                 ", badges=" + badges +
-                ", ranking=" + ranking +
+                //", ranking=" + ranking +
                 '}';
     }
 
@@ -131,7 +150,7 @@ public class Tournament {
             return false;
         }
         Tournament tournament = (Tournament) o;
-        return Objects.equals(id, tournament.id) && Objects.equals(name, tournament.name) && Objects.equals(subscriptionDeadline, tournament.subscriptionDeadline) && Objects.equals(creator, tournament.creator) && Objects.equals(grantedEducators, tournament.grantedEducators) && Objects.equals(subscribedStudents, tournament.subscribedStudents) && Objects.equals(battles, tournament.battles) && Objects.equals(badges, tournament.badges) && Objects.equals(ranking, tournament.ranking);
+        return Objects.equals(id, tournament.id) && Objects.equals(name, tournament.name) && Objects.equals(subscriptionDeadline, tournament.subscriptionDeadline) && Objects.equals(creator, tournament.creator) && Objects.equals(grantedEducators, tournament.grantedEducators) && Objects.equals(subscribedStudents, tournament.subscribedStudents) && Objects.equals(battles, tournament.battles) && Objects.equals(badges, tournament.badges) /*&& Objects.equals(ranking, tournament.ranking)*/;
     }
 
     @Override
