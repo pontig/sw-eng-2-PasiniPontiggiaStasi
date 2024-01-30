@@ -299,7 +299,7 @@ async function changePage(page, id) {
                             if (e.phase == 1)
                                 p2.innerHTML = "closing in: " + e.remaining
                             else if (e.phase == 2)
-                                p2.innerHTML = "time left to commit:" + e.remaining
+                                p2.innerHTML = "time left to commit: " + e.remaining
                             else if (e.phase == 3)
                                 p2.innerHTML = "waiting for manual evaluation"
 
@@ -319,7 +319,7 @@ async function changePage(page, id) {
                             let li = document.createElement("li")
                             let aaa = document.createElement("a")
                             aaa.onclick = function () { changePage("profile", e.id) }
-                            aaa.innerHTML = e.name + " - " + e.points + "pts"
+                            aaa.innerHTML = e.firstname + " - " + e.points + "pts"
 
                             if (i > 9) li.style.display = "none"
 
@@ -340,7 +340,7 @@ async function changePage(page, id) {
                             // Close tournament
                             document.getElementById("importantButton").style.display = "block"
                             document.getElementById("importantButton").innerHTML = "Close tournament"
-                            //document.getElementById("importantButton").onclick = (() => { closeTournament(id) }) // TODO: implementare la chiusura del torneo
+                            document.getElementById("importantButton").onclick = (() => { closeTournament(id) })
                         }
                     }
 
@@ -668,7 +668,7 @@ async function changePage(page, id) {
                             let li = document.createElement("li")
                             let aaa = document.createElement("a")
                             aaa.onclick = function () { changePage("profile", e.id) }
-                            aaa.innerHTML = e.name + " - " + e.points + "pts"
+                            aaa.innerHTML = e.firstname + " - " + e.points + "pts"
 
                             if (i > 9) li.style.display = "none"
 
