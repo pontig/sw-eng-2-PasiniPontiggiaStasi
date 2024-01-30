@@ -6,10 +6,13 @@ import ckb.platform.exceptions.EducatorNotFoundException;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.formParser.CreateBattleRequest;
+import ckb.platform.formParser.RepoPullRequest;
+import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.repositories.*;
+import ckb.platform.scheduler.RegistrationThread;
+import ckb.platform.scheduler.SubmissionThread;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -378,6 +381,7 @@ public class BattleController {
 
         if(owner){
             Tournament tournamentRelated = tournamentRepository.getTournamentById(tournamentId);
+
             Battle newBattle = new Battle(battleName, new Date(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentRelated, false);
             battleRepository.save(newBattle);
 
@@ -387,7 +391,7 @@ public class BattleController {
 
             // Obtain path to store the file
             Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
-            Path destinationPath = absolutePath.resolve("ckbProblemPDF").resolve(newCkbProblem);
+            Path destinationPath = absolutePath.resolve("CKBProblem").resolve(newCkbProblem);
 
             try {
                 // Save file in the directory
@@ -396,8 +400,67 @@ public class BattleController {
                 // TODO: rollback
                 throw new RuntimeException(e);
             }
+
+            // TODO: Email per upcoming battles?? Da guardare sulla specifica
+            new RegistrationThread(newBattle).start();
+            new SubmissionThread(newBattle).start();
+
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+    }
+
+    @PostMapping("/battle/pulls")
+    public void pullRequest(@RequestBody RepoPullRequest repoPullRequest) throws IOException {
+        String repository = repoPullRequest.getRepository();
+        String pusher = repoPullRequest.getPusher();
+        String tournament = repoPullRequest.getTournament();
+        String team = repoPullRequest.getTeam();
+        String repoName = repository.replace(pusher + "/", "").replace("-", " ");
+
+        System.out.println("A push has been made by: " + pusher + " in team id: " + team + " for battle " + repoName + " in tournament " + tournament);
+
+        // Get all the battles with the name of the repository
+        List<Battle> battles = battleRepository.getBattlesByName(repoName);
+
+        Battle battleToPull = null;
+        List<Battle> battlesInTournament = null;
+
+        // TODO: clean this code
+        if (battles.size() == 1){
+            // If only one battle has that name it can stop
+            battleToPull = battles.getFirst();
+        } else if (battles.size() > 1) {
+            // If more than one battle has that name it makes other controls
+            for (Battle b : battles){
+                // For all the battles found it looks for the one that is in the tournament
+                if(b.getTournament().getName().equals(tournament))
+                    battlesInTournament.add(b);
+            }
+
+            if (battlesInTournament.size() == 1){
+                // If only one battle with that name is in the tournament that it can stop
+                battleToPull = battles.getFirst();
+            } else if (battlesInTournament.size() > 1) {
+                // If more than one battle has that name in the tournament
+                for (Battle b : battlesInTournament){
+                    // For each of them it looks for the one that has the team that pushed the code
+                    for (Team t : b.getTeams()) {
+                        if(t.getId().equals(Long.valueOf(team)))
+                            battleToPull = battlesInTournament.getFirst();
+                    }
+                }
+            } else {
+                System.out.println("No battles with that name found in the given tournament");
+            }
+        } else {
+            System.out.println("No battle fount with the given name");
+        }
+
+        Team t = teamRepository.getReferenceById(Long.valueOf(team));
+        new GitHubAPI().pullRepository(battleToPull, t, repoName, pusher);
+
+        // TODO: run test
+        // TODO: update score
     }
 }
