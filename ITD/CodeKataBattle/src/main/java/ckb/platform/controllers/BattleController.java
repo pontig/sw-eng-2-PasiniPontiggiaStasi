@@ -11,6 +11,8 @@ import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.repositories.*;
 import ckb.platform.scheduler.RegistrationThread;
 import ckb.platform.scheduler.SubmissionThread;
+import ckb.platform.utils.ParameterStringBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -19,7 +21,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -461,6 +468,17 @@ public class BattleController {
         new GitHubAPI().pullRepository(battleToPull, t, repoName, pusher);
 
         // TODO: run test
+
+        //STATIC ANALYSIS
+        Analyzer analyzer = new Analyzer("CKBplatform-" + team, "CKBplatform-" + team,"admin", "admin01");
+        //create the project on our static analysis tool
+        analyzer.createProjectSonarQube();
+        //run the analysis from the command line using ./fileStorage as source directory
+        analyzer.runAnalysisSonarQube(battleToPull.getLanguage());
+        //delete the project on our static analysis tool
+        analyzer.deleteProjectSonarQube();
+        //TODO : TIMELINESS
+        //TODO : automatic scripts
         // TODO: update score
     }
 }
