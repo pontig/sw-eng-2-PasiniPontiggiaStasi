@@ -200,18 +200,6 @@ function requestAllTournaments() {
     getTournaments("tournaments")
 }
 
-// Sends the score of a manual evaluation to the server, it automatically retrieves the inofs from the html
-function sendScore() {
-    let res = document.getElementsByName("core")[0]
-    let battle_id = document.getElementsByName("battle_id")[0].value
-    let group = document.getElementsByName("group_id")[0].value
-    if (res.checkValidity()) {
-        // TODO: fare la richiesta al server
-        changePage("manualEvaluation", battle_id)
-        res.value = ""
-    }
-}
-
 // Page orchestrator, it changes the page and shows the right elements
 // @param page: the page to show
 // @param id: the id of the infos to ask to the server
@@ -424,6 +412,7 @@ async function changePage(page, id) {
                     document.getElementById("toBeReviewed").style.display = "block"
 
                     res = await fetch("battles/" + sessionStorage.getItem("battle") + "/manualevalution")
+                    // res = await fetch("https://pontiggiaelia.altervista.org/ckb/manualEval.php");
                     data = await res.json()
                     console.log(data)
 
@@ -436,7 +425,7 @@ async function changePage(page, id) {
                         let td1 = document.createElement("td")
                         td1.innerHTML = i + 1
                         let td2 = document.createElement("td")
-                        td2.innerHTML = e.team
+                        td2.innerHTML = e.name
                         let td3 = document.createElement("td")
                         td3.innerHTML = e.score == null ? "N/D" : e.score
                         let td4 = document.createElement("td")
@@ -455,7 +444,7 @@ async function changePage(page, id) {
                     })
 
                     let finalRow = document.createElement("tr")
-                    finalRow.innerHTML = '<td colspan="3"></td><td><b><a>&gt&gtConfirm</a></b></td>' // TODO: implementare la conferma
+                    finalRow.innerHTML = '<td colspan="3"></td><td><b><a onclick="confirmManual()">&gt&gtConfirm</a></b></td>' // TODO: implementare la conferma
 
                     if (CanConfirm) container.appendChild(finalRow)
                     break
@@ -468,14 +457,14 @@ async function changePage(page, id) {
                     res = await fetch("https://pontiggiaelia.altervista.org/ckb/code.php?id=" + id) // TODO: cambiare l'url
                     data = await res.json()
                     console.log(data)
-                    data = data
 
                     document.getElementById("title").innerHTML = data.name + "'s code"
 
                     data.code.replace(/</g, "&lt").replace(/>/g, "&gt")
-                    console.log(data.code)
                     container.innerHTML = data.code
                     document.getElementById("scoreEvaluated").value = data.score == null ? null : data.score
+
+                    sessionStorage.setItem("teamCodeInspecting", data.group_id)
                     break
 
                 case "profile":
@@ -607,7 +596,6 @@ async function changePage(page, id) {
                     break
 
                 case "tournament":
-                    // manca la richiesta al server
                     document.getElementById("list").style.display = "block"
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"

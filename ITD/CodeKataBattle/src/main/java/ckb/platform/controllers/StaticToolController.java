@@ -1,7 +1,6 @@
 package ckb.platform.controllers;
 
 import ckb.platform.formParser.CreateTournamentRequest;
-import ckb.platform.formParser.StaticAnalysisResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.json.Json;
 import org.apache.http.client.methods.HttpGet;
@@ -27,7 +26,7 @@ public class StaticToolController {
     //this endpoint is activated when the user clicks on the "Get Static Analysis Results" button and the analysis is finished
     //in fact, the webhook of sonarqube will call this endpoint
     @PostMapping("/static_analysis/results")
-    public ResponseEntity<String> getStaticAnalysisResults(@RequestBody StaticAnalysisResult request) {
+    public ResponseEntity<String> getStaticAnalysisResults() {
         String token = "sqp_cf3249fc8f00d0fc259b388f93ea4de4f8c6b224";
         try {
             // Specify the URL you want to connect to

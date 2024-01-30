@@ -126,8 +126,8 @@ public class Battle {
         this.manualEvaluation = manualEvaluation;
     }
 
-    public void setHasBeenEvaluated(Boolean hasBeenEvaluated) {
-        this.hasBeenEvaluated = hasBeenEvaluated;
+    public void setHasBeenEvaluated() {
+        this.hasBeenEvaluated = true;
     }
 
     public void setMinStudents(int minStudents) {

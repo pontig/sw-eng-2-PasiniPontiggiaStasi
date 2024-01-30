@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity @Table(name = "Team")
+@Entity
+@Table(name = "Team")
 public class Team {
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    private @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-    @ManyToOne @JoinColumn(name = "battle_id")
+    @ManyToOne
+    @JoinColumn(name = "battle_id")
     private Battle battle;
 
     private String name;
@@ -22,6 +25,7 @@ public class Team {
 
     //TODO: Secondo me bisogna aggiungere anche Torneo
 
+    private Integer manualScore = null;
 
     public Team() {
     }
@@ -32,7 +36,7 @@ public class Team {
         students.add(student);
     }
 
-    public Team( String name, Battle battle) {
+    public Team(String name, Battle battle) {
         this.name = name;
         this.battle = battle;
         students = new ArrayList<Student>();
@@ -51,23 +55,23 @@ public class Team {
         return score;
     }
 
-    public void addStudent(Student student){
+    public void addStudent(Student student) {
         students.add(student);
     }
 
-    public void removeStudent(Student student){
+    public void removeStudent(Student student) {
         students.remove(student);
     }
 
-    public void setBattle(Battle battle){
+    public void setBattle(Battle battle) {
         this.battle = battle;
     }
 
-    public Battle getBattle(){
+    public Battle getBattle() {
         return battle;
     }
 
-    public List<Student> getStudents(){
+    public List<Student> getStudents() {
         return students;
     }
 
@@ -77,6 +81,13 @@ public class Team {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setManualScore(Integer manualScore) {
+        this.manualScore = manualScore;
+    }
+    public Integer getManualScore() {
+        return manualScore;
     }
 
     @Override
@@ -93,7 +104,7 @@ public class Team {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Team )) return false;
+        if (!(o instanceof Team)) return false;
         return id != null && id.equals(((Team) o).id);
     }
 
@@ -105,7 +116,6 @@ public class Team {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
-
 
     public Object getCode() {
         return repo;
