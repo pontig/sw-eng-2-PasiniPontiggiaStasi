@@ -429,10 +429,12 @@ public class BattleController {
         System.out.println("A push has been made by: " + pusher + " in team id: " + teamName + " for battle " + repoName);
 
         // Get battle from name
-        Battle battle = battleRepository.getBattleByName(repoName);
+        Battle battle = battleRepository.getBattleByName("BATTAGLIA 0");
         Team team = teamRepository.getTeamByName(teamName);
 
         if (battle != null && team != null) {
+            team.setRepo(repository);
+            teamRepository.save(team);
             new GitHubAPI().pullRepository(battle, team, repoName, pusher);
 
             // TODO: run test
@@ -498,6 +500,7 @@ public class BattleController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
 
         // TODO: all the controls
+        // Check if the student is subscribed to the tournament, if the window is still open then it can register to the battle and indirectly to the tournament
         // Check if the battle is still in registration period
         // Check if the student boundaries are respected
         // Check if all the students are in the database
