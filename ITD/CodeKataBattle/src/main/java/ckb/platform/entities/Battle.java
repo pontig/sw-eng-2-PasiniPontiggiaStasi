@@ -1,6 +1,7 @@
 package ckb.platform.entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.*;
 
@@ -13,8 +14,8 @@ public class Battle {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Educator creator;
-    @ElementCollection
-    private Map<Team, Integer> ranking;
+    //@ElementCollection
+    //private Map<Team, Integer> ranking;
     private Boolean manualEvaluation;
     private String name;
     private Boolean hasBeenEvaluated;
@@ -118,9 +119,9 @@ public class Battle {
     //     return subscribedStudents;
     // }
 
-    public void setRanking(Team team, Integer position) {
-        ranking.put(team, position);
-    }
+    //public void setRanking(Team team, Integer position) {
+    //    ranking.put(team, position);
+    //}
 
     public void setManualEvaluation(Boolean manualEvaluation) {
         this.manualEvaluation = manualEvaluation;
@@ -159,7 +160,14 @@ public class Battle {
     }
 
     public Map<Team, Integer> getRanking() {
-        return ranking;
+        return this.teams
+                .stream()
+                .map(team -> {
+                    Map<Team, Integer> ranking = new HashMap<>();
+                    ranking.put(team, team.getFinalScore());
+                    return ranking;
+                })
+                .collect(HashMap::new, HashMap::putAll, HashMap::putAll);
     }
 
     public Boolean getManualEvaluation() {
@@ -220,7 +228,7 @@ public class Battle {
             return false;
         Battle battle = (Battle) o;
         return Objects.equals(this.id, battle.id) && Objects.equals(this.creator, battle.creator)
-                && Objects.equals(this.ranking, battle.ranking) && Objects.equals(this.manualEvaluation, battle.manualEvaluation)
+                //&& Objects.equals(this.ranking, battle.ranking) && Objects.equals(this.manualEvaluation, battle.manualEvaluation)
                 && Objects.equals(this.hasBeenEvaluated, battle.hasBeenEvaluated)
                 && Objects.equals(this.minStudents, battle.minStudents) && Objects.equals(this.maxStudents, battle.maxStudents)
                 && Objects.equals(this.registrationDeadline, battle.registrationDeadline) && Objects.equals(this.finalSubmissionDeadline, battle.finalSubmissionDeadline)
@@ -234,7 +242,7 @@ public class Battle {
 
     @Override
     public String toString() {
-        return "Battle{" + "id=" + this.id + ", creator='" + this.creator.getId() + '\'' + ", ranking='" + this.ranking + '\'' + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament.getId() + '\'' + '}';
+        return "Battle{" + "id=" + this.id + ", creator='" + this.creator.getId() + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament.getId() + '\'' + '}';
         //return "Ciao michelangelo";
     }
 

@@ -106,14 +106,14 @@ public class BattleController {
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
-        List<Map<String, Object>> rankings = new ArrayList<>();
-        battle.getRanking().forEach((team, score) -> {
+        List<Map<String, Object>> rankings = battle.getRanking().entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(ArrayList::new, (list, entry) -> {
             Map<String, Object> rankingMap = new LinkedHashMap<>();
-            rankingMap.put("id", team.getId());
-            rankingMap.put("name", team.getName());
-            rankingMap.put("score", score);
-            rankings.add(rankingMap);
-        });
+            rankingMap.put("id", entry.getKey().getId());
+            rankingMap.put("name", entry.getKey().getName());
+            rankingMap.put("score", entry.getValue());
+            list.add(rankingMap);
+        }, ArrayList::addAll);
+
 
         battleMap.put("ranking", rankings);
 
@@ -162,14 +162,13 @@ public class BattleController {
         battleMap.put("tournament_name", battle.getTournament().getName());
         battleMap.put("tournament_id", battle.getTournament().getId());
 
-        List<Map<String, Object>> rankings = new ArrayList<>();
-        battle.getRanking().forEach((team, score) -> {
+        List<Map<String, Object>> rankings = battle.getRanking().entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(ArrayList::new, (list, entry) -> {
             Map<String, Object> rankingMap = new LinkedHashMap<>();
-            rankingMap.put("id", team.getId());
-            rankingMap.put("name", team.getName());
-            rankingMap.put("score", score);
-            rankings.add(rankingMap);
-        });
+            rankingMap.put("id", entry.getKey().getId());
+            rankingMap.put("name", entry.getKey().getName());
+            rankingMap.put("score", entry.getValue());
+            list.add(rankingMap);
+        }, ArrayList::addAll);
 
         battleMap.put("ranking", rankings);
         ArrayList<Link> links = new ArrayList<>();
@@ -211,14 +210,13 @@ public class BattleController {
         battleMap.put("admin", battle.getTournament().getGrantedEducators().contains(educator));
         battleMap.put("manual", battle.getManualEvaluation());
 
-        List<Map<String, Object>> rankings = new ArrayList<>();
-        battle.getRanking().forEach((team, score) -> {
+        List<Map<String, Object>> rankings = battle.getRanking().entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(ArrayList::new, (list, entry) -> {
             Map<String, Object> rankingMap = new LinkedHashMap<>();
-            rankingMap.put("id", team.getId());
-            rankingMap.put("name", team.getName());
-            rankingMap.put("score", score);
-            rankings.add(rankingMap);
-        });
+            rankingMap.put("id", entry.getKey().getId());
+            rankingMap.put("name", entry.getKey().getName());
+            rankingMap.put("score", entry.getValue());
+            list.add(rankingMap);
+        }, ArrayList::addAll);
 
         battleMap.put("ranking", rankings);
 
