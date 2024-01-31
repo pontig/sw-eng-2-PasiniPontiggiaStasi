@@ -84,7 +84,7 @@ async function showResult(listened, other, url) {
 
                         // Define url and data
                         const url = '/ckb_platform/tournament/share';
-                        const data = {id, educatorId};
+                        const data = { id, educatorId };
 
                         // Prepare data to send to the Server
                         const options = {
@@ -370,9 +370,9 @@ async function changePage(page, id) {
                     p1.innerHTML = data.description
                     let p2 = document.createElement("p")
                     p2.innerHTML = "<b>Language: </b>" + data.language + "<br>"
-                    p2.innerHTML += "<b>Opening date: </b>" + data.opening.substring(0,10) + "<br>"
-                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration.substring(0,10) + "<br>"
-                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing.substring(0,10) + "<br>"
+                    p2.innerHTML += "<b>Opening date: </b>" + data.opening.substring(0, 10) + "<br>"
+                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration.substring(0, 10) + "<br>"
+                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing.substring(0, 10) + "<br>"
                     p2.innerHTML += "<b>Group size: </b> from " + data.min_group_size + " to " + data.max_group_size + " students <br>"
                     let a = document.createElement("a")
                     a.href = data.link
@@ -417,36 +417,65 @@ async function changePage(page, id) {
                     console.log(data)
 
                     container = document.querySelector("#toBeReviewed > table")
-                    container.innerHTML = "<tr><th>#</th><th>Team name</th><th>Score</th><th>Action</th></tr>"
+                    // container.innerHTML = "<tr><th>#</th><th>Team name</th><th>Score</th><th>Action</th></tr>"
+                    container.innerHTML = "<tr><th>#</th><th>Team name</th><th>Score</th><th>Link to the repo</th></tr>"
                     let CanConfirm = true
 
                     data.forEach((e, i) => {
+                        /* TODO: QUESTO LO TENIAMO SE RIUSCIAMO A FARE VEDERE IL CODICE PRENDENDOLO DA QUALCHE PARTE */
+                        // let tr = document.createElement("tr")
+                        // let td1 = document.createElement("td")
+                        // td1.innerHTML = i + 1
+                        // let td2 = document.createElement("td")
+                        // td2.innerHTML = e.name
+                        // let td3 = document.createElement("td")
+                        // td3.innerHTML = e.score == null ? "N/D" : e.score
+                        // let td4 = document.createElement("td")
+                        // let a = document.createElement("a")
+                        // a.innerHTML = e.score == null ? "Evaluate" : "Review"
+                        // a.onclick = (() => { changePage("codeToReview", e.id) })
+                        // if (e.score == null) CanConfirm = false
+
+                        // td4.appendChild(a)
+                        // tr.appendChild(td1)
+                        // tr.appendChild(td2)
+                        // tr.appendChild(td3)
+                        // tr.appendChild(td4)
+                        // document.querySelector("#toBeReviewed > table").appendChild(tr)
+
                         let tr = document.createElement("tr")
                         let td1 = document.createElement("td")
                         td1.innerHTML = i + 1
                         let td2 = document.createElement("td")
                         td2.innerHTML = e.name
                         let td3 = document.createElement("td")
-                        td3.innerHTML = e.score == null ? "N/D" : e.score
+                        let input = document.createElement("input")
+                        input.type = "number"
+                        input.min = 0
+                        input.max = 100
+                        input.onchange = () => sendScoreSecond(e.id, input.value)
+                        input.value = e.score == 0 ? null : e.score
+                        if (e.score == 0) CanConfirm = false
                         let td4 = document.createElement("td")
                         let a = document.createElement("a")
-                        a.innerHTML = e.score == null ? "Evaluate" : "Review"
-                        a.onclick = (() => { changePage("codeToReview", e.id) })
-                        if (e.score == null) CanConfirm = false
+                        a.target = "_blank"
+                        a.innerHTML = "View repo"
+                        a.href = "https://github.com/" + e.link
 
-                        td4.appendChild(a)
+                        td3.appendChild(input)
                         tr.appendChild(td1)
                         tr.appendChild(td2)
                         tr.appendChild(td3)
+                        td4.appendChild(a)
                         tr.appendChild(td4)
                         document.querySelector("#toBeReviewed > table").appendChild(tr)
 
                     })
 
                     let finalRow = document.createElement("tr")
-                    finalRow.innerHTML = '<td colspan="3"></td><td><b><a onclick="confirmManual()">&gt&gtConfirm</a></b></td>' // TODO: implementare la conferma
-
-                    if (CanConfirm) container.appendChild(finalRow)
+                    finalRow.innerHTML = '<td colspan="3"></td><td><b><a onclick="confirmManual()">&gt&gtConfirm</a></b></td>'
+                    // if (CanConfirm)
+                    container.appendChild(finalRow)
                     break
 
                 case "codeToReview":
@@ -679,11 +708,11 @@ async function changePage(page, id) {
                             // Get form value
                             const tournamentId = sessionStorage.getItem("tournament")
 
-                            console.log('Form data: ', {id});
+                            console.log('Form data: ', { id });
 
                             // Define url and data
                             const url = '/ckb_platform/tournament/join';
-                            const data = {tournamentId};
+                            const data = { tournamentId };
 
                             // Prepare data to send to the Server
                             const options = {
@@ -794,9 +823,9 @@ async function changePage(page, id) {
                     p1.innerHTML = data.description
                     let p2 = document.createElement("p")
                     p2.innerHTML = "<b>Language: </b>" + data.language + "<br>"
-                    p2.innerHTML += "<b>Opening date: </b>" + data.opening.substring(0,10) + "<br>"
-                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration.substring(0,10) + "<br>"
-                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing.substring(0,10) + "<br>"
+                    p2.innerHTML += "<b>Opening date: </b>" + data.opening.substring(0, 10) + "<br>"
+                    p2.innerHTML += "<b>Registration deadline: </b>" + data.registration.substring(0, 10) + "<br>"
+                    p2.innerHTML += "<b>Submission deadline: </b>" + data.closing.substring(0, 10) + "<br>"
                     p2.innerHTML += "<b>Group size: </b> from " + data.min_group_size + " to " + data.max_group_size + " students <br>"
                     let a = document.createElement("a")
                     a.href = data.link
@@ -814,7 +843,7 @@ async function changePage(page, id) {
                         .sort((a, b) => b.points - a.points)
                         .forEach((e, i) => {
                             let li = document.createElement("li")
-                            li.innerHTML = e.name + " - " + e.score + "pts" 
+                            li.innerHTML = e.name + " - " + e.score + "pts"
                             if (i > 9) li.style.display = "none"
 
                             container.appendChild(li)
@@ -841,7 +870,7 @@ async function changePage(page, id) {
                                     // Define url and data
                                     let mail = document.getElementsByName("emailToInvite")[0].value
                                     const url = '/ckb_platform/battles/invite/';
-                                    const data = {mail};
+                                    const data = { mail };
 
                                     // Prepare data to send to the Server
                                     const options = {
@@ -941,6 +970,6 @@ function hideForm() {
     let aaa = document.getElementById("othersChecbBox")
     if (aaa) {
         aaa.checked = false
-        document.querySelectorAll("input[name^='Emailothers']").forEach(e =>  e.parentNode.removeChild(e) )
+        document.querySelectorAll("input[name^='Emailothers']").forEach(e => e.parentNode.removeChild(e))
     }
 }

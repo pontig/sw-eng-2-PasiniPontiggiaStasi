@@ -230,93 +230,93 @@ window.onload = () => {
             });
     })
 
-
-
-    /* CLOSE TOURNAMENT */
-    function closeTournament(garbage) {
-        e = document.getElementById("importantButton")
-        e.target.disabled = true
-        e.target.textContent = "Closing..."
-        console.log('CLOSE TOURNAMENT');
-
-        // Get form value
-        const id = sessionStorage.getItem("tournament")
-
-        console.log('Form data: ', { id });
-
-        // Define url and data
-        const url = '/ckb_platform/tournament/close';
-        const data = { id };
-
-        // Prepare data to send to the Server
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-
-        // Fetch data to url
-        fetch(url, options)
-            .then(response => {
-                // Analise server response code
-                switch (response.status) {
-                    case 200:
-                        response.text().then(result => {
-                            Swal.fire({
-                                title: "Tournament closed!",
-                                text: result,
-                                type: "success",
-                                confirmButtonColor: '#CC208E'
-                            }).then(() => {
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 500);
-                            });
-                        })
-                        break;
-
-                    case 401:
-                        response.text().then(result => {
-                            Swal.fire({
-                                title: "Tournament not closed!",
-                                text: result,
-                                type: "error",
-                                confirmButtonColor: '#CC208E'
-                            }).then(() => {
-                                setTimeout(() => {
-                                    window.location.href = "index.html";
-                                }, 500);
-                            });
-                        })
-
-                    case 403:
-                    case 404:
-                        response.text().then(result => {
-                            Swal.fire({
-                                title: "Tournament not closed!",
-                                text: result,
-                                type: "error",
-                                confirmButtonColor: '#CC208E'
-                            })
-                        })
-                        break;
-
-                    default:
-                        // TODO: Cambiare errorNewTorunement
-                        const errorBox = document.getElementById('errorNewTournament');
-                        if (errorBox)
-                            errorBox.textContent = "Internal error";
-                        errorBox.style.display = 'flex';
-                        break;
-                }
-            })
-            .catch(error => {
-                console.error('Error during Fetch: ', error);
-            });
-    }
 }
+
+/* CLOSE TOURNAMENT */
+function closeTournament(garbage) {
+    e = document.getElementById("importantButton")
+    e.disabled = true
+    e.textContent = "Closing..."
+    console.log('CLOSE TOURNAMENT');
+
+    // Get form value
+    const id = sessionStorage.getItem("tournament")
+
+    console.log('Form data: ', { id });
+
+    // Define url and data
+    const url = '/ckb_platform/tournament/close';
+    const data = { id };
+
+    // Prepare data to send to the Server
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    // Fetch data to url
+    fetch(url, options)
+        .then(response => {
+            // Analise server response code
+            switch (response.status) {
+                case 200:
+                    response.text().then(result => {
+                        Swal.fire({
+                            title: "Tournament closed!",
+                            text: result,
+                            type: "success",
+                            confirmButtonColor: '#CC208E'
+                        }).then(() => {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        });
+                    })
+                    break;
+
+                case 401:
+                    response.text().then(result => {
+                        Swal.fire({
+                            title: "Tournament not closed!",
+                            text: result,
+                            type: "error",
+                            confirmButtonColor: '#CC208E'
+                        }).then(() => {
+                            setTimeout(() => {
+                                window.location.href = "index.html";
+                            }, 500);
+                        });
+                    })
+
+                case 403:
+                case 404:
+                    response.text().then(result => {
+                        Swal.fire({
+                            title: "Tournament not closed!",
+                            text: result,
+                            type: "error",
+                            confirmButtonColor: '#CC208E'
+                        })
+                    })
+                    break;
+
+                default:
+                    // TODO: Cambiare errorNewTorunement
+                    const errorBox = document.getElementById('errorNewTournament');
+                    if (errorBox)
+                        errorBox.textContent = "Internal error";
+                    errorBox.style.display = 'flex';
+                    break;
+            }
+        })
+        .catch(error => {
+            console.error('Error during Fetch: ', error);
+        });
+}
+
 
 // Sends the score of a manual evaluation to the server, it automatically retrieves the inofs from the html
 function sendScore() {
@@ -402,8 +402,84 @@ function sendScore() {
     }
 }
 
+function sendScoreSecond(team_id, score) {
+
+    let data = { team_id, score }
+    let url = "/ckb_platform/battle/manualEvaluation/partial"
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    // Fetch data to url
+    fetch(url, options)
+        .then(response => {
+            // Analise server response code
+            switch (response.status) {
+                case 200:
+                    // response.text().then(result => {
+                    //     Swal.fire({
+                    //         title: "Score assigned",
+                    //         text: result,
+                    //         type: "success",
+                    //         confirmButtonColor: '#CC208E'
+                    //     }).then(() => {
+                    //         setTimeout(() => {
+                    //             changePage("manualEvaluation", battle_id)
+                    //             res.value = ""
+                    //         }, 500);
+                    //     });
+                    // })
+                    break;
+
+                case 401:
+                    response.text().then(result => {
+                        Swal.fire({
+                            title: "Something went wrong",
+                            text: result,
+                            type: "error",
+                            confirmButtonColor: '#CC208E'
+                        }).then(() => {
+                            setTimeout(() => {
+                                window.location.href = "index.html";
+                            }, 500);
+                        });
+                    })
+
+                case 403:
+                case 404:
+                    response.text().then(result => {
+                        Swal.fire({
+                            title: "Something went wrong",
+                            text: result,
+                            type: "error",
+                            confirmButtonColor: '#CC208E'
+                        })
+                    })
+                    break;
+
+                default:
+                    // TODO: Cambiare errorNewTorunement
+                    const errorBox = document.getElementById('errorNewTournament');
+                    if (errorBox)
+                        errorBox.textContent = "Internal error";
+                    errorBox.style.display = 'flex';
+                    break;
+            }
+        })
+        .catch(error => {
+            console.error('Error during Fetch: ', error);
+        });
+}
+
 function confirmManual() {
-    if (confirm("Sure sure sure?")) {
+    let inputs = document.querySelectorAll("table input[type=number]")
+    let allCompiled = Array.from(inputs).every(i => i.value != "")
+    if (allCompiled && confirm("Sure sure sure?")) {
 
         let bid = parseInt(sessionStorage.getItem("battle"))
         let data = { bid }
