@@ -25,7 +25,7 @@ public class RegistrationThread extends Thread {
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.JANUARY, 31, 1, 40, 0);
+        calendar.set(2024, Calendar.JANUARY, 31, 9, 40, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -48,6 +48,7 @@ public class RegistrationThread extends Thread {
         List<Team> teamsSubscribed = battle.getTeams();
         List<Student> studentsToNotify = new ArrayList<>();
         for (Team t : teamsSubscribed) {
+            System.out.println(t + " \n" + t.getStudents().get(0));
             studentsToNotify.add(t.getStudents().get(0));
         }
 
@@ -93,20 +94,10 @@ public class RegistrationThread extends Thread {
         // Send Email to each first student in battle
         for (Student s : studentsToNotify) {
             try {
-                gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+                gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
             } catch (IOException | MessagingException e) {
                 throw new RuntimeException(e);
             }
         }
-
-        // TODO: just to test
-        try {
-            gmailSender.sendEmail(subject,bodyMsg, battle.getCreator().getEmail());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 }

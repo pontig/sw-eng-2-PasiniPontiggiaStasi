@@ -144,4 +144,8 @@ public class Team {
     public void setTestScore(int testScore) {
         this.testScore = testScore;
     }
+
+    public void setRepo(String repo) {
+        this.repo = repo;
+    }
 }
