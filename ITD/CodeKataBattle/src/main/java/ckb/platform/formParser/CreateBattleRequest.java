@@ -17,6 +17,8 @@ public class CreateBattleRequest {
     private int maxSize;
     private boolean manualEvaluation;
     private MultipartFile ckbProblem;
+    private String description;
+    private boolean reliability, maintainability, security;
 
     // Getter and Setter methods
 
@@ -87,5 +89,21 @@ public class CreateBattleRequest {
     }
     public void setCkbProblem(MultipartFile ckbProblem) {
         this.ckbProblem = ckbProblem;
+    }
+
+    public boolean isSecurity() {
+        return security;
+    }
+
+    public boolean isReliability() {
+        return reliability;
+    }
+
+    public boolean isMaintainability() {
+        return maintainability;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

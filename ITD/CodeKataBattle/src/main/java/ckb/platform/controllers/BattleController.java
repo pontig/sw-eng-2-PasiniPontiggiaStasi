@@ -351,6 +351,10 @@ public class BattleController {
         int maxSize = createBattleRequest.getMaxSize();
         boolean manualEvaluation = createBattleRequest.isManualEvaluation();
         MultipartFile ckbProblem = createBattleRequest.getCkbProblem();
+        String description = createBattleRequest.getDescription();
+        Boolean reliability = createBattleRequest.isReliability();
+        Boolean maintainability = createBattleRequest.isMaintainability();
+        Boolean security = createBattleRequest.isSecurity();
 
         if (user == null) {
             // Check if user is not in session
@@ -389,7 +393,21 @@ public class BattleController {
         if (owner) {
             Tournament tournamentRelated = tournamentRepository.getTournamentById(tournamentId);
 
-            Battle newBattle = new Battle(battleName, new Date(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentRelated, false);
+            Battle newBattle = new Battle(
+                    battleName,
+                    new Date(),
+                    registerDeadline,
+                    submissionDeadline,
+                    language,
+                    manualEvaluation,
+                    minSize, maxSize,
+                    creatorBattle,
+                    tournamentRelated,
+                    false,
+                    description,
+                    reliability,
+                    maintainability,
+                    security);
             battleRepository.save(newBattle);
 
             // Change file name with the battle id

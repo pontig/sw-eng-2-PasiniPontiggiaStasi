@@ -20,11 +20,6 @@ public class Battle {
     private String name;
     private Boolean hasBeenEvaluated;
     private String language;
-    /*
-    private Enum language;
-    private String Description;
-    private TestCase[] testCases;
-    * */
     private int minStudents;
     private int maxStudents;
     private Date registrationDeadline;
@@ -39,6 +34,7 @@ public class Battle {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
+    private boolean reliability, maintainability, security;
 
     public Battle() {
     }
@@ -54,7 +50,11 @@ public class Battle {
             int maxStudents,
             Educator creator,
             Tournament tournament,
-            Boolean hasBeenEvaluated
+            Boolean hasBeenEvaluated,
+            String description,
+            boolean reliability,
+            boolean maintainability,
+            boolean security
     ) {
         this.creator = creator;
         this.manualEvaluation = manualEvaluation;
@@ -67,6 +67,10 @@ public class Battle {
         this.name = name;
         this.openDate = openDate;
         this.language = language;
+        this.description = description;
+        this.reliability = reliability;
+        this.maintainability = maintainability;
+        this.security = security;
         teams = new ArrayList<Team>();
         //subscribedStudents = new ArrayList<Student>();
     }
@@ -246,5 +250,15 @@ public class Battle {
         //return "Ciao michelangelo";
     }
 
+    public boolean isMaintainability() {
+        return maintainability;
+    }
 
+    public boolean isReliability() {
+        return reliability;
+    }
+
+    public boolean isSecurity() {
+        return security;
+    }
 }

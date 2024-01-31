@@ -123,6 +123,7 @@
             </select><br>
             <input type="number" name="minSize" id="minSize" required placeholder="Minimum group size" min="1"><br>
             <input type="number" name="maxSize" id="maxSize" required placeholder="Maximum group size" min="1"><br>
+            <textarea name="description" id="" cols="30" rows="10" placeholder="description" required></textarea>
             <label for="codeKata">Upload you code Kata:</label><br>
             <input type="file" name="codeKata" id="ckbProblem"><br>
             <label for="registrationDeadline">Registration deadline:</label>
@@ -132,6 +133,15 @@
             <!-- I haven't yet added controls for dates, I promise I will eventually -->
             <div><input type="checkbox" name="manual" id="manualEvaluation">
                 <label for="manual">Manual approval</label>
+            </div><br>
+            <div><input type="checkbox" name="reliability" id="reliability">
+                <label for="reliability">Check for Reliability</label>
+            </div><br>
+            <div><input type="checkbox" name="maintainability" id="maintainability">
+                <label for="maintainability">Check for Maintainability</label>
+            </div><br>
+            <div><input type="checkbox" name="security" id="security">
+                <label for="security">Check for Security</label>
             </div><br>
             <h6 id="errorNewBattle"></h6>
             <input type="submit" value="Create" name="createNewBattle">

@@ -44,7 +44,7 @@ a:hover {
   cursor: pointer;
 }
 
-input[type=text], input[type=date], input[type=number], input[type=password], input[type=email], select {
+input[type=text], textarea, input[type=date], input[type=number], input[type=password], input[type=email], select {
   height: 3rem;
   width: 70%;
   border-radius: 15px;
@@ -54,6 +54,11 @@ input[type=text], input[type=date], input[type=number], input[type=password], in
   padding: 0 1rem;
   color: #17042F;
   font-family: "Roboto Mono", sans-serif;
+}
+
+textarea {
+  padding: 1rem;
+  height: 4rem;
 }
 
 button, input[type=submit], input[type=button] {
@@ -129,7 +134,7 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
   padding: 2rem;
   display: none;
 }
-#formContainer form input[type=text], #formContainer form input[type=date], #formContainer form input[type=number], #formContainer form select, #formContainer form input[type=password], #formContainer form input[type=email] {
+#formContainer form input[type=text], #formContainer form textarea, #formContainer form input[type=date], #formContainer form input[type=number], #formContainer form select, #formContainer form input[type=password], #formContainer form input[type=email] {
   box-shadow: 0px 4px 4px 0 rgba(23, 4, 47, 0.49);
 }
 

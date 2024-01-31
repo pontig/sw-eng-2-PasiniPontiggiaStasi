@@ -48,7 +48,7 @@ a
         text-decoration: underline
         cursor: pointer
 
-input[type="text"], input[type="date"], input[type="number"], input[type="password"], input[type="email"], select
+input[type="text"], textarea,, input[type="date"], input[type="number"], input[type="password"], input[type="email"], select
     height: 3rem
     width: 70%
     border-radius: 15px
@@ -58,6 +58,10 @@ input[type="text"], input[type="date"], input[type="number"], input[type="passwo
     padding: 0 1rem
     color: $black
     font-family: 'Roboto Mono', sans-serif
+
+textarea
+    padding: 1rem
+    height: 4rem
 
 button, input[type="submit"], input[type="button"]
     border-radius: 15px
@@ -129,7 +133,7 @@ button:hover, input[type="submit"]:hover, input[type="button"]:hover
         padding: 2rem
         display: none
 
-        input[type="text"], input[type="date"], input[type="number"], select, input[type="password"], input[type="email"]
+        input[type="text"], textarea,, input[type="date"], input[type="number"], select, input[type="password"], input[type="email"]
             box-shadow: 0px 4px 4px 0 rgba($black, 0.49)
 
 // ============================================================= 
