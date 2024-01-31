@@ -374,18 +374,30 @@ public class TournamentController {
         // Get all students and inform them of an upcoming tournament via email
         List<Student> students = studentRepository.getAllStudentInPlatform();
 
-        // Prepare Email to send
-        GmailAPI gmailSender = new GmailAPI();
-        String subject = name + " is an upcoming Tournament";
-        String bodyMsg = "Hi, as member of CKB platform we are pleased to inform you that\n" +
-                name + " tournament is now open\n" +
-                "Professor " + user.getFirstName() + " is waiting for you!\n\n" +
-                "You can register till " + registerDeadline + "\n" +
-                "Open CKB platform at the link: https://www.youtube.com/watch?v=Sagg08DrO5U";
+        new Thread(() -> {
+            // Prepare Email to send
+            GmailAPI gmailSender = null;
+            try {
+                gmailSender = new GmailAPI();
+            } catch (GeneralSecurityException | IOException e) {
+                throw new RuntimeException(e);
+            }
+            String subject = "UPCOMING TOURNAMENT " + name;
 
-        // Send Email to each student in CKB
-        for (Student s : students)
-            gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+            // Send Email to each student in CKB
+            for (Student s : students) {
+                String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
+                                 "as CKB Platform member I want to inform you about an upcoming tournament\n" +
+                                 "Educator " + user.getFirstName() + " has created the tournament " + name + " and is waiting for you\n" +
+                                 "The registration deadline is on " + registerDeadline + ", subscribe before it expires\n" +
+                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform";
+                try {
+                    gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+                } catch (IOException | MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
 
         return ResponseEntity.status(HttpStatus.OK).body(torunamentIdString);
     }

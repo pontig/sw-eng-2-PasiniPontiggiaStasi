@@ -14,11 +14,9 @@ package ckb.platform.gitHubAPI;
  * |-- CKBProblem
  * |   |-- <BattleId>.pdf
  * |   |-- ...
- * |-- Delivery
- * |   |-- ActionTemplate.pdf
  * |-- PullFiles
  * |   |-- <BattleId>
- * |   |   |-- <TeamId>.extension
+ * |   |   |-- <TeamId>.zip
  * |   |   |-- ...
  * |   |-- ...
  * |-- Rules
@@ -69,7 +67,6 @@ public class GitHubAPI {
 
     public int createRepository(Battle battle, String description) {
         // Repo name same as battle name
-        // TODO: La repo deve avere un nome diverso quindi se esiste già una repo con il nome append dell'id
         String repoName = battle.getName();
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {

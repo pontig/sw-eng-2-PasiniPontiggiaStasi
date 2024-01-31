@@ -368,6 +368,10 @@ public class BattleController {
         }
 
         // TODO: Controlli da fare:
+        // Check if the
+
+        // Check if the battle name is allowed
+
         // Check if data are not null, empty or blank
         // Check if the tournament exist
         // Check if the deadlines are in future
@@ -446,7 +450,7 @@ public class BattleController {
         System.out.println("A push has been made by: " + pusher + " in team id: " + teamName + " for battle " + repoName);
 
         // Get battle from name
-        Battle battle = battleRepository.getBattleByName("BATTAGLIA 0");
+        Battle battle = battleRepository.getBattleByName(repoName);
         Team team = teamRepository.getTeamByName(teamName);
 
         if (battle != null && team != null) {
