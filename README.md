@@ -16,9 +16,8 @@ This repository houses the CodeKataBattle (CKB) platform, a tool designed to hel
 - `ITD/`: this folder contains the code of the implementation of the CKB platform and the relative documentation.
 - `RASD/`: this folder contains all the latex files for the Requirement Analysis and Specification Document of the CKB platform.
 
-
 ## Contributors
 
-* [Tommaso Pasini](https://github.com/TommiPasi) - Email: tommaso1.pasini@mail.polimi.it
-* [Elia Pontiggia](https://github.com/pontig) - Email: elia.pontiggia@mail.polimi.it
-* [Michelangelo Stasi](https://github.com/MyKe01) - Email: michelangelo.stasi@mail.polimi.it
+- [Tommaso Pasini](https://github.com/TommiPasi) - Email: tommaso1.pasini@mail.polimi.it
+- [Elia Pontiggia](https://github.com/pontig) - Email: elia.pontiggia@mail.polimi.it
+- [Michelangelo Stasi](https://github.com/MyKe01) - Email: michelangelo.stasi@mail.polimi.it
