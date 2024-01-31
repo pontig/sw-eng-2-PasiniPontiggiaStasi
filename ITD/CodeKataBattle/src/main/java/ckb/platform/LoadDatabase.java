@@ -1,13 +1,27 @@
 package ckb.platform;
 
+import ckb.platform.entities.*;
+import ckb.platform.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 @Configuration // indicates that this class can be used by the Spring IoC container as a source of bean definitions
 class LoadDatabase {
-/*
+
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    @Bean
+    /*@Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
@@ -45,7 +59,7 @@ class LoadDatabase {
 
             educators.forEach(educator -> log.info("Preloading " + eduRep.save(educator)));
 
-            tournaments.add(new Tournament("IoT Innovators Clash", sdf.parse("2024-06-15"), sdf.parse("2024-07-15"), educators.get(2 - 1)));
+            tournaments.add(new Tournament("IoT Innovators Clash", sdf.parse("2024-06-15"), null, educators.get(2 - 1)));
             tournaments.add(new Tournament("CodeMasters Championship", sdf.parse("2024-04-05"), null, educators.get(3 - 1)));
             tournaments.add(new Tournament("Blockchain Battles", sdf.parse("2023-01-10"), sdf.parse("2023-02-10"), educators.get(3 - 1)));
             tournaments.add(new Tournament("CodeInnovate Invitational", sdf.parse("2024-04-25"), null, educators.get(3 - 1)));
@@ -69,10 +83,10 @@ class LoadDatabase {
 
             tournaments.forEach(tournament -> log.info("Preloading " + tourRep.save(tournament)));
 
-            battles.add(new Battle("The dawn of a new code", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "Python", false, 1, 1, educators.get(1 - 1), tournaments.get(1 - 1), false));
-            battles.add(new Battle("CodeCraft Clash", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "C++", true, 3, 5, educators.get(1 - 1), tournaments.get(1 - 1), false));
-            battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2023-12-16"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false));
-            battles.add(new Battle("Opening battle", sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), sdf.parse("2024-02-20"), "Java", false, 1, 2, educators.get(1 - 1), tournaments.get(1 - 1), false));
+            battles.add(new Battle("The dawn of a new code", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "Python", false, 1, 1, educators.get(1 - 1), tournaments.get(1 - 1), false, "ciao", true, true, true));
+            battles.add(new Battle("CodeCraft Clash", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "C++", true, 3, 5, educators.get(1 - 1), tournaments.get(1 - 1), false, "ciao", true, true, true));
+            battles.add(new Battle("Whitespace Warriors", sdf.parse("2023-12-15"), sdf.parse("2023-12-16"), sdf.parse("2024-02-15"), "C", false, 2, 6, educators.get(1 - 1), tournaments.get(1 - 1), false, "ciao", true, true, true));
+            battles.add(new Battle("Opening battle", sdf.parse("2024-02-10"), sdf.parse("2024-02-15"), sdf.parse("2024-02-20"), "Java", false, 1, 2, educators.get(1 - 1), tournaments.get(1 - 1), false, "ciao", true, true, true));
 
             //battles.get(0).addStudent(students.get(0));
 
