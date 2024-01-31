@@ -109,14 +109,20 @@ public class Team {
     }
 
     public int getAutomaticScore() {
-        return (testScore + staticAnalysisScore + timelinessScore) / 3;
+        int n = 0;
+        if (battle.isMaintainability()) n++;
+        if (battle.isSecurity()) n++;
+        if (battle.isReliability()) n++;
+        return (testScore + staticAnalysisScore + timelinessScore) / n;
     }
+
     public int getFinalScore() {
         if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation())
             return getAutomaticScore();
         else
             return (manualScore + getAutomaticScore()) / 2;
     }
+
     public void setManualScore(int manualScore) {
         this.manualScore = manualScore;
     }

@@ -193,6 +193,7 @@ class LoadDatabase {
             teams.stream().forEach(team -> {
                 team.getStudents().stream().forEach(student -> {
                     team.getBattle().getTournament().addStudent(student);
+                    tourRep.save(team.getBattle().getTournament());
                 });
             });
         };

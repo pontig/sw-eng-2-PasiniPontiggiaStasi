@@ -242,6 +242,7 @@ public class BattleController {
             team.put("id", t.getId());
             team.put("name", t.getName());
             team.put("score", t.getManualScore());
+            team.put("link", t.getCode());
             response.add(team);
         });
 
