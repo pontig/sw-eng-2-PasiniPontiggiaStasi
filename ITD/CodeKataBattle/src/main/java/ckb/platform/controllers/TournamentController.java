@@ -341,7 +341,7 @@ public class TournamentController {
     }
 
     @PostMapping("/tournament/create")
-    public ResponseEntity<String> createTournament(@RequestBody CreateTournamentRequest createTournament, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+    public ResponseEntity<String> createTournament(@RequestBody CreateTournamentRequest createTournament, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("index");
@@ -349,16 +349,14 @@ public class TournamentController {
         String name = createTournament.getTournamentName();
         Date registerDeadline = createTournament.getRegisterDeadline();
 
-        if (name.isBlank() || name.isEmpty() || registerDeadline == null) {
+        if (name.isBlank() || name.isEmpty() || registerDeadline == null)
             // Check if any field is empty
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
-        }
 
         Date currentDate = new Date();
-        if (registerDeadline.before(currentDate)) {
+        if (registerDeadline.before(currentDate))
             // Check if the deadline is past
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Registration deadline has passed");
-        }
 
         long tournamentId;
         String torunamentIdString;
@@ -367,16 +365,15 @@ public class TournamentController {
             tournamentRepository.save(newTournament);
             tournamentId = tournamentRepository.getNewTournamentId(name, registerDeadline, (Educator) user);
             torunamentIdString = Long.valueOf(tournamentId).toString();
-        } else {
+        } else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
-        }
 
         // Get all students and inform them of an upcoming tournament via email
         List<Student> students = studentRepository.getAllStudentInPlatform();
 
         new Thread(() -> {
             // Prepare Email to send
-            GmailAPI gmailSender = null;
+            GmailAPI gmailSender;
             try {
                 gmailSender = new GmailAPI();
             } catch (GeneralSecurityException | IOException e) {
@@ -390,7 +387,8 @@ public class TournamentController {
                                  "as CKB Platform member I want to inform you about an upcoming tournament\n" +
                                  "Educator " + user.getFirstName() + " has created the tournament " + name + " and is waiting for you\n" +
                                  "The registration deadline is on " + registerDeadline + ", subscribe before it expires\n" +
-                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform";
+                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                 "Best regards,\n CKB Team";
                 try {
                     gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
                 } catch (IOException | MessagingException e) {
@@ -403,28 +401,28 @@ public class TournamentController {
     }
 
     @PostMapping("/tournament/close")
-    public ResponseEntity<String> closeTournament(@RequestBody CloseTournamentRequest closeTournamentRequest, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+    public ResponseEntity<String> closeTournament(@RequestBody CloseTournamentRequest closeTournamentRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
+
+        Long tournamentId = closeTournamentRequest.getId();
         boolean owner = false;
 
-        // TODO: id è un intero?
-
         if (user == null)
+            // Check if the user is not logged in
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
 
-        if (!user.isEdu()) {
-            // Check if user is an Educator
+        if (!user.isEdu())
+            // Check if user is not an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
-        }
 
-        if(tournamentRepository.isTournamentOwner(closeTournamentRequest.getId(), (Educator) user) == 1){
+        if(tournamentRepository.isTournamentOwner(tournamentId, (Educator) user) == 1){
             // Check if it is the creator
             owner = true;
         } else {
             // Check if it got permission
             Educator grantedOwner = (Educator) user;
             for (Tournament t : grantedOwner.getOwnedTournaments()) {
-                if (t.getId().equals(closeTournamentRequest.getId())) {
+                if (t.getId().equals(tournamentId)) {
                     owner = true;
                     break;
                 }
@@ -433,57 +431,74 @@ public class TournamentController {
 
         if(owner){
             // User can close the tournament
-            // TODO: Check if all the Battles are ended
-            // TODO: Compute the final ranking
+            Tournament closedTournament = tournamentRepository.getTournamentById(tournamentId);
 
-            Tournament closedTournament = tournamentRepository.getTournamentById(closeTournamentRequest.getId());
-
-            if(closedTournament == null){
+            if(closedTournament == null)
                 // If it does not exist return
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + closeTournamentRequest.getId() + " does not exist");
-            }
 
-            if(closedTournament.getEndDate() != null){
+            if(closedTournament.getEndDate() != null)
                 // If is closed it can not be shared
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Tournament " + closedTournament.getName() + " is closed");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Tournament " + closedTournament.getName() + " is already closed");
+
+            for(Battle b : closedTournament.getBattles()){
+                // Check if all the battles are closed
+                if(b.getFinalSubmissionDeadline().after(new Date()))
+                    // Check if the submission deadline is gone
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Some battles in tournament " + closedTournament.getName() + " are not ended yet");
+
+                if(b.getManualEvaluation() && !b.getHasBeenEvaluated())
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Some battles in tournament " + closedTournament.getName() + " are not evaluated yet");
             }
 
             Date currentDate = new Date();
-            tournamentRepository.closeTournament(closedTournament.getId(), currentDate);
+            tournamentRepository.closeTournament(tournamentId, currentDate);
 
             // Get all students and inform them of an upcoming tournament via email
             List<Student> students = studentRepository.getAllStudentInPlatform();
 
-            // Prepare Email to send
-            GmailAPI gmailSender = new GmailAPI();
-            String subject = "Tournament " + closedTournament.getName() + " is closed";
-            String bodyMsg = "Hi, the tournament " + closedTournament.getName() + " has been closed by " + user.getFirstName() + "\n" +
-                    "You can find now the final ranking with your score\n" +
-                    "Open CKB platform at the link: https://www.youtube.com/watch?v=Sagg08DrO5U";
+            new Thread(() -> {
+                // Prepare Email to send
+                GmailAPI gmailSender;
+                try {
+                    gmailSender = new GmailAPI();
+                } catch (GeneralSecurityException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+                String subject = "CLOSE TOURNAMENT " + closedTournament.getName();
 
-            // Send Email to each student in CKB
-            for (Student s : students)
-                gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+                // Send Email to each student in CKB
+                for (Student s : students) {
+                    String bodyMsg = "Hi " + s.getFirstName() + ", \n\n" +
+                                     "Tournament " + closedTournament.getName() + " has been closed by " + user.getFirstName() + "\n" +
+                                     "You can now find the final ranking with your total personal score\n" +
+                                     "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                     "Best regards,\n CKB Team";
+                    try {
+                        gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
+                    } catch (IOException | MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
 
-            return ResponseEntity.status(HttpStatus.OK).body("Tournament successfully closed " + user.getFirstName());
+            return ResponseEntity.status(HttpStatus.OK).body(user.getFirstName() + "\nTournament " + closedTournament.getName() + " successfully closed");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not own this tournament");
     }
 
     @PostMapping("/tournament/share")
-    public ResponseEntity<String> shareTournament(@RequestBody ShareTournamentRequest shareTournamentRequest, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+    public ResponseEntity<String> shareTournament(@RequestBody ShareTournamentRequest shareTournamentRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
         boolean owner = false;
 
-        // TODO: controllo su id, id sono interi
-
         if (user == null)
+            // Check if the user is not logged in
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
 
-        if (!user.isEdu()) {
+        if (!user.isEdu())
             // Check if user is an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
-        }
 
         if(tournamentRepository.isTournamentOwner(shareTournamentRequest.getId(), (Educator) user) == 1){
             // Check if it is the creator
@@ -505,29 +520,26 @@ public class TournamentController {
             // Get tournament data
             Tournament sharedTournament = tournamentRepository.getTournamentById(shareTournamentRequest.getId());
 
-            if(sharedTournament == null){
+            if(sharedTournament == null)
                 // If it does not exist return
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + shareTournamentRequest.getId() + " does not exist");
-            }
 
-            if(sharedTournament.getEndDate() != null){
+            if(sharedTournament.getEndDate() != null)
                 // If is closed it can not be shared
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Tournament " + sharedTournament.getName() + " is closed");
-            }
 
             // Get educators data
             Educator ownerEDU = educatorRepository.getEducatorDataById(user.getId());
             Educator invitedEDU = educatorRepository.getEducatorDataById(shareTournamentRequest.getEducatorId());
 
-            if (!invitedEDU.isEdu()) {
-                // Check if the invited user is an EDU
+            if (!invitedEDU.isEdu())
+                // Check if the invited user is not an EDU
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You are not inviting an educator");
-            }
 
-            if(ownerEDU == invitedEDU){
+            if(ownerEDU == invitedEDU)
                 // Owner can not invite itself
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - " + ownerEDU.getFirstName() + ", you can not invite yourself");
-            }
+
 
             for (Tournament t : invitedEDU.getOwnedTournaments()) {
                 if(t == sharedTournament)
@@ -542,46 +554,61 @@ public class TournamentController {
             sharedTournament.addEducator(invitedEDU);
             tournamentRepository.save(sharedTournament);
 
-            // Prepare Email to send
-            GmailAPI gmailSender = new GmailAPI();
-            String subject = "Tournament " + sharedTournament.getName() + " is hared with you";
-            String bodyMsg = "Hi " + invitedEDU.getFirstName() + ", " + ownerEDU.getFirstName() + " shared tournament " + sharedTournament.getName() + " with you\n" +
-                            "You can now create battles, invite other Educator or close it\n" +
-                            "Open CKB platform at the link: https://www.youtube.com/watch?v=Sagg08DrO5U";
+            new Thread(() -> {
+                // Prepare Email to send
+                GmailAPI gmailSender;
+                try {
+                    gmailSender = new GmailAPI();
+                } catch (GeneralSecurityException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+                String subject = "SHARED TOURNAMENT " + sharedTournament.getName();
+                String bodyMsg = "Hi " + invitedEDU.getFirstName() + ",\n\n" +
+                                 ownerEDU.getFirstName() + " shared tournament " + sharedTournament.getName() + " with you\n" +
+                                 "You can now perform the following action inside it:\n" +
+                                 "  - Create battles\n" +
+                                 "  - Invite other Educator, which become owner as you\n" +
+                                 "  - Close the tournement\n" +
+                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                 "Best regards,\n CKB Team";
 
-            // Send Email to each student in CKB
-            gmailSender.sendEmail(subject,bodyMsg, invitedEDU.getEmail());
+                // Send Email to each Educator
+                try {
+                    gmailSender.sendEmail(subject,bodyMsg, invitedEDU.getEmail());
+                } catch (IOException | MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
 
-            return ResponseEntity.status(HttpStatus.OK).body("Tournament successfully shared");
+            return ResponseEntity.status(HttpStatus.OK).body("Tournament " + sharedTournament.getName() + " successfully shared with " + invitedEDU.getFirstName());
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not own this tournament");
     }
 
     @PostMapping("/tournament/join")
-    public ResponseEntity<String> joinTournament(@RequestBody JoinTournamentRequest joinTournamentRequest, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+    public ResponseEntity<String> joinTournament(@RequestBody JoinTournamentRequest joinTournamentRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
 
-        // TODO: controllo su id, id sono interi
-
         if (user == null)
+            // Check if the user is not logged in
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
 
-        if (user.isEdu()) {
+        if (user.isEdu())
             // Check if user is an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
-        }
 
         // Get tournament data
         Tournament joinTournament = tournamentRepository.getTournamentById(joinTournamentRequest.getTournamentId());
 
-        if(joinTournament == null){
+        if(joinTournament == null)
            // If it does not exist return
            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
-        }
 
         Student addStudent = (Student) user;
 
-        // TODO: se è già nel torneo non aggiungo
+        if(addStudent.getTournaments().contains(joinTournament) && joinTournament.getSubscribedStudents().contains(addStudent))
+            // Check if the student is already in the tournament
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You are already part of tournament: " + joinTournament);
 
         addStudent.addTournament(joinTournament);
         joinTournament.addStudent(addStudent);

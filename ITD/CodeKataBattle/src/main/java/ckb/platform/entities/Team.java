@@ -25,8 +25,6 @@ public class Team {
     private List<Student> students;
     private String repo;
 
-    //TODO: Secondo me bisogna aggiungere anche Torneo --> no, perché se sai la battaglia sai anche il torneo
-
     public Team() {
     }
 

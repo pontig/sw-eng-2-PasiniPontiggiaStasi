@@ -708,7 +708,7 @@ async function changePage(page, id) {
                             // Get form value
                             const tournamentId = sessionStorage.getItem("tournament")
 
-                            console.log('Form data: ', { id });
+                            console.log('Form data: ', { tournamentId });
 
                             // Define url and data
                             const url = '/ckb_platform/tournament/join';
@@ -770,8 +770,7 @@ async function changePage(page, id) {
                                             break;
 
                                         default:
-                                            // TODO: Cambiare errorSubscribeToBattle
-                                            const errorBox = document.getElementById('errorNewTournament');
+                                            const errorBox = document.getElementById('errorSubscribeToBattle');
                                             if (errorBox)
                                                 errorBox.textContent = "Internal error";
                                             errorBox.style.display = 'flex';

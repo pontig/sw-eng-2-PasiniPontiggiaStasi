@@ -42,7 +42,7 @@ public class SubmissionThread extends Thread {
             e.printStackTrace();
         }
 
-        System.out.println("Invio email");
+        System.out.println("Send email");
 
         // Get educator that created the battle
         Educator battleOwner = battle.getCreator();
@@ -50,46 +50,49 @@ public class SubmissionThread extends Thread {
         // Get the students in the battle
         List<Team> teamsSubscribed = battle.getTeams();
         List<Student> studentsToNotify = new ArrayList<>();
-        for (Team t : teamsSubscribed) {
+        for (Team t : teamsSubscribed)
             studentsToNotify.addAll(t.getStudents());
-        }
 
-        // Prepare Email to send
-        GmailAPI gmailSender = null;
-        try {
-            gmailSender = new GmailAPI();
-        } catch (GeneralSecurityException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        if(battle.getManualEvaluation()){
-            String subject = battle.getName() + " is ready for manual evaluation";
-            String bodyMsg = "Hi " + battleOwner.getFirstName() + " the battle " + battle.getName() +
-                    " is ready for manual evaluation\n" +
-                    "You can find the manual evaluation at : \n" +
-                    "https://www.youtube.com";
-
-            // Send Email to the educator
+        new Thread(() -> {
+            // Prepare Email to send
+            GmailAPI gmailSender;
             try {
-                gmailSender.sendEmail(subject,bodyMsg, battleOwner.getEmail());
-            } catch (IOException | MessagingException e) {
+                gmailSender = new GmailAPI();
+            } catch (GeneralSecurityException | IOException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            String subject = battle.getName() + " is closed and the final ranking is available";
-            String bodyMsg = "Hi, we are pleased to inform you that\n" +
-                    battle.getName() + " battle is now closed\n\n" +
-                    "You can find the final ranking at : \n" +
-                    "https://www.youtube.com";
 
-            // Send Email to each student in battle
-            for (Student s : studentsToNotify) {
+            if(battle.getManualEvaluation()){
+                String subject = "MANUAL EVALUATION available for battle " + battle.getName();
+                String bodyMsg = "Hi " + battleOwner.getFirstName() + ",\n\n" +
+                                 "the battle you created " + battle.getName() + " is waiting for you to perform manual evaluation.\n" +
+                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                 "Best regards,\n CKB Team";
+
+                // Send Email to the educator
                 try {
-                    gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+                    gmailSender.sendEmail(subject, bodyMsg, battleOwner.getEmail());
                 } catch (IOException | MessagingException e) {
                     throw new RuntimeException(e);
                 }
+            } else {
+                String subject = "CLOSE BATTLE " + battle.getName();
+
+                // Send Email to each student in battle
+                for (Student s : studentsToNotify) {
+                    String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
+                                     "Battle " + battle.getName() + " has been closed\n" +
+                                     "You can now find the final ranking\n" +
+                                     "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                     "Best regards,\n CKB Team";
+
+                    try {
+                        gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+                    } catch (IOException | MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
-        }
+        }).start();
     }
 }
