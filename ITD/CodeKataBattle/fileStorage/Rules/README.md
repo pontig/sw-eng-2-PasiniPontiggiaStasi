@@ -26,8 +26,7 @@ jobs:
       - name: Notify Endpoint
         run: |
             team_name=" "
-            tournament_name=" "
-            payload="{\"pusher\": \"${{ github.actor }}\", \"team\": \"$team_name\", \"tournament\": \"$tournament_name\", \"repository\": \"${{ github.repository }}\" }"
+            payload="{\"pusher\": \"${{ github.actor }}\", \"team\": \"$team_name\", \"repository\": \"${{ github.repository }}\" }"
             curl -X POST -H "Content-Type: application/json" -d "$payload" <<NGROK URL>>/ckb_platform/battle/pulls
 ```
 

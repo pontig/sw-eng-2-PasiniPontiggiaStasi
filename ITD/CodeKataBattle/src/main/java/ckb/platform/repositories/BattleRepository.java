@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
-import java.util.List;
 
 public interface BattleRepository extends JpaRepository<Battle, Long> {
     @Query("SELECT b.id FROM Battle b WHERE b.name=:name AND b.registrationDeadline=:registrationDeadline " +
@@ -16,5 +15,5 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
     Long getBattleId(String name, Date registrationDeadline, Date finalSubmissionDeadline, String language, boolean manualEvaluation, int minStudents, int maxStudents, Educator creator, Tournament tournament, boolean hasBeenEvaluated);
 
     @Query("SELECT b FROM Battle b WHERE b.name=:name")
-    List<Battle> getBattlesByName(String name);
+    Battle getBattleByName(String name);
 }

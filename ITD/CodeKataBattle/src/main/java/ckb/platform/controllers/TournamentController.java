@@ -559,11 +559,6 @@ public class TournamentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
         }
 
-        if (!tournamentRepository.existsById(joinTournamentRequest.getTournamentId())){
-            // Check if user is an Educator
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
-        }
-
         // Get tournament data
         Tournament joinTournament = tournamentRepository.getTournamentById(joinTournamentRequest.getTournamentId());
 
