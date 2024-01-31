@@ -25,7 +25,7 @@ public class RegistrationThread extends Thread {
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.JANUARY, 27, 16, 45, 0);
+        calendar.set(2024, Calendar.JANUARY, 31, 1, 40, 0);
         this.targetDate = calendar.getTime();
     }
 

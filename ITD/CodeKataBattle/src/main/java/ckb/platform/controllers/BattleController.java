@@ -3,14 +3,14 @@ package ckb.platform.controllers;
 import ckb.platform.entities.*;
 import ckb.platform.exceptions.*;
 import ckb.platform.formParser.CreateBattleRequest;
+import ckb.platform.formParser.JoinBattleRequest;
 import ckb.platform.formParser.ListGroupsForManualRequest;
 import ckb.platform.formParser.RepoPullRequest;
 import ckb.platform.gitHubAPI.GitHubAPI;
+import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.*;
 import ckb.platform.scheduler.RegistrationThread;
 import ckb.platform.scheduler.SubmissionThread;
-import ckb.platform.utils.ParameterStringBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -19,16 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import javax.mail.MessagingException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.GeneralSecurityException;
 import java.util.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -126,17 +123,17 @@ public class BattleController {
         battleMap.put("_links_", links);
 
         return battleMap;
-        }
+    }
 
     //mapped to "Get Battle Details"
     @GetMapping("/battles/stu/{id}")
-    Map<String,Object> getBattleDetailsSTU(@PathVariable Long id, HttpSession session){
+    Map<String, Object> getBattleDetailsSTU(@PathVariable Long id, HttpSession session) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
 
         //check user passed is a stu
         User user = (User) session.getAttribute("user");
-        if(user == null || user.isEdu()){
+        if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
 
@@ -158,8 +155,8 @@ public class BattleController {
         //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
         battleMap.put("canInviteOthers",
                 battle.getRegistrationDeadline().after(new Date()) &&
-                battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))) &&
-                battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).count() < battle.getMaxStudents());
+                        battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))) &&
+                        battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).count() < battle.getMaxStudents());
         battleMap.put("minConstraintSatisfied", battle.getMinStudents() <= battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).count());
         battleMap.put("subscribed", battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))));
         battleMap.put("tournament_name", battle.getTournament().getName());
@@ -192,11 +189,11 @@ public class BattleController {
 
         //check if user passed is edu
         User user = (User) session.getAttribute("user");
-        if(user == null || !user.isEdu()){
+        if (user == null || !user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
         Educator educator = educatorRepository.findById(user.getId())
-                .orElseThrow( () -> new EducatorNotFoundException(user.getId()));
+                .orElseThrow(() -> new EducatorNotFoundException(user.getId()));
 
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
@@ -228,7 +225,7 @@ public class BattleController {
         ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(BattleController.class).getBattleDetailsEDU(battle.getId(), session)).withSelfRel());
         links.add(linkTo(methodOn(BattleController.class).all()).withRel("battles"));
-        battleMap.put("_links_" , links);
+        battleMap.put("_links_", links);
 
         return battleMap;
     }
@@ -238,9 +235,9 @@ public class BattleController {
     @GetMapping("/battles/{b_id}/manualevalution")
     List<Map<String, Object>> manualEvalGroups(@PathVariable Long b_id) {
         Battle battle = battleRepository.findById(b_id)
-                .orElseThrow( () -> new BattleNotFoundException(b_id));
+                .orElseThrow(() -> new BattleNotFoundException(b_id));
 
-        List<Map<String, Object>> response= new ArrayList<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
         battle.getTeams().forEach(t -> {
             Map<String, Object> team = new LinkedHashMap<>();
@@ -262,11 +259,11 @@ public class BattleController {
                 .orElseThrow(() -> new TeamNotFoundException(t_id));
         //check if user passed is edu
         User user = (User) session.getAttribute("user");
-        if(user == null || !user.isEdu()) {
+        if (user == null || !user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
 
-        Map<String, Object> response= new LinkedHashMap<>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("group_id", team.getId());
         response.put("battle_id", battle.getId());
         response.put("language", battle.getLanguage());
@@ -274,7 +271,7 @@ public class BattleController {
         response.put("score", battle.getRanking().get(team));
         response.put("code", team.getCode());
 
-        ArrayList <Link> links = new ArrayList<>();
+        ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(TeamController.class).one(t_id)).withRel("team"));
         links.add(linkTo(methodOn(BattleController.class).getStudents(b_id)).withRel("all_teams"));
 
@@ -313,7 +310,7 @@ public class BattleController {
     ResponseEntity<?> inviteStudent(@RequestBody Long battle_id, @RequestBody String email, HttpSession session) {
         final User user = (User) session.getAttribute("user");
         //final User user = studentRepository.findById(1L).orElseThrow(() -> new StudentNotFoundException(1L));
-        if(user == null || user.isEdu()){
+        if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
 
@@ -343,7 +340,7 @@ public class BattleController {
     }
 
     @PostMapping("/battle/create")
-    public ResponseEntity<String> createBattle(@ModelAttribute CreateBattleRequest createBattleRequest, HttpSession session){
+    public ResponseEntity<String> createBattle(@ModelAttribute CreateBattleRequest createBattleRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
         boolean owner = false;
 
@@ -391,7 +388,7 @@ public class BattleController {
             }
         }
 
-        if(owner){
+        if (owner) {
             Tournament tournamentRelated = tournamentRepository.getTournamentById(tournamentId);
 
             Battle newBattle = new Battle(battleName, new Date(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentRelated, false);
@@ -426,65 +423,33 @@ public class BattleController {
     public void pullRequest(@RequestBody RepoPullRequest repoPullRequest) throws IOException {
         String repository = repoPullRequest.getRepository();
         String pusher = repoPullRequest.getPusher();
-        String tournament = repoPullRequest.getTournament();
-        String team = repoPullRequest.getTeam();
+        String teamName = repoPullRequest.getTeam();
         String repoName = repository.replace(pusher + "/", "").replace("-", " ");
 
-        System.out.println("A push has been made by: " + pusher + " in team id: " + team + " for battle " + repoName + " in tournament " + tournament);
+        System.out.println("A push has been made by: " + pusher + " in team id: " + teamName + " for battle " + repoName);
 
-        // Get all the battles with the name of the repository
-        List<Battle> battles = battleRepository.getBattlesByName(repoName);
+        // Get battle from name
+        Battle battle = battleRepository.getBattleByName(repoName);
+        Team team = teamRepository.getTeamByName(teamName);
 
-        Battle battleToPull = null;
-        List<Battle> battlesInTournament = null;
+        if (battle != null && team != null) {
+            new GitHubAPI().pullRepository(battle, team, repoName, pusher);
 
-        // TODO: clean this code
-        if (battles.size() == 1){
-            // If only one battle has that name it can stop
-            battleToPull = battles.getFirst();
-        } else if (battles.size() > 1) {
-            // If more than one battle has that name it makes other controls
-            for (Battle b : battles){
-                // For all the battles found it looks for the one that is in the tournament
-                if(b.getTournament().getName().equals(tournament))
-                    battlesInTournament.add(b);
-            }
+            // TODO: run test
 
-            if (battlesInTournament.size() == 1){
-                // If only one battle with that name is in the tournament that it can stop
-                battleToPull = battles.getFirst();
-            } else if (battlesInTournament.size() > 1) {
-                // If more than one battle has that name in the tournament
-                for (Battle b : battlesInTournament){
-                    // For each of them it looks for the one that has the team that pushed the code
-                    for (Team t : b.getTeams()) {
-                        if(t.getId().equals(Long.valueOf(team)))
-                            battleToPull = battlesInTournament.getFirst();
-                    }
-                }
-            } else {
-                System.out.println("No battles with that name found in the given tournament");
-            }
-        } else {
-            System.out.println("No battle fount with the given name");
-        }
-
-        Team t = teamRepository.getReferenceById(Long.valueOf(team));
-        new GitHubAPI().pullRepository(battleToPull, t, repoName, pusher);
-
-        // TODO: run test
-
-        //STATIC ANALYSIS
-        Analyzer analyzer = new Analyzer("CKBplatform-" + team, "CKBplatform-" + team,"admin", "admin01");
-        //create the project on our static analysis tool
-        analyzer.createProjectSonarQube();
-        //run the analysis from the command line using ./fileStorage as source directory
-        analyzer.runAnalysisSonarQube(battleToPull.getLanguage());
-        //delete the project on our static analysis tool
-        analyzer.deleteProjectSonarQube();
-        //TODO : TIMELINESS
-        //TODO : automatic scripts
-        // TODO: update score
+            //STATIC ANALYSIS
+            Analyzer analyzer = new Analyzer("CKBplatform-" + team.getId(), "CKBplatform-" + team.getId(), "admin", "admin01");
+            //create the project on our static analysis tool
+            analyzer.createProjectSonarQube();
+            //run the analysis from the command line using ./fileStorage as source directory
+            analyzer.runAnalysisSonarQube(battle.getLanguage());
+            //delete the project on our static analysis tool
+            analyzer.deleteProjectSonarQube();
+            //TODO : TIMELINESS
+            //TODO : automatic scripts
+            // TODO: update score
+        } else
+            System.out.println("ERROR");
     }
 
     @PostMapping("/battle/manualEvaluation/partial")
@@ -493,6 +458,7 @@ public class BattleController {
                 .orElseThrow(() -> new TeamNotFoundException(data.getTeam_id()));
         team.setManualScore(data.getScore());
         teamRepository.save(team);
+        // Todo: ritornare codici errore / ok
     }
 
     @PostMapping("/battle/manualEvaluation/final")
@@ -510,5 +476,64 @@ public class BattleController {
         battleRepository.save(battle);
 
         // TODO: inviare le mail
+        // Todo: ritornare codici errore / ok
     }
+
+    @PostMapping("/battle/join")
+    public ResponseEntity<String> joinBattle(@RequestBody JoinBattleRequest joinBattleRequest, HttpSession session) throws GeneralSecurityException, IOException, MessagingException {
+        User user = (User) session.getAttribute("user");
+
+        String teamName = joinBattleRequest.getName();
+        Long battleId = joinBattleRequest.getBattleId();
+        List<String> studentEmails = joinBattleRequest.getStudentsEmail();
+
+        // TODO: controllo su id, id sono interi
+        // Check if team name is not empty
+
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - You are not logged in CKB");
+
+        if (user.isEdu())
+            // Check if user is an Educator
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+
+        // TODO: all the controls
+        // Check if the battle is still in registration period
+        // Check if the student boundaries are respected
+        // Check if all the students are in the database
+        // Check if all are students and no auto invitation
+        // Check if all the students are in the tournament or if it allows other registration
+
+        List<Student> students = new ArrayList<>();
+        for (String email : studentEmails)
+            students.add(studentRepository.getStudentByEmail(email));
+
+        Battle battle = battleRepository.getReferenceById(battleId);
+
+        Student teamOwner = (Student) user;
+        Team newTeam = new Team(teamName, battle);
+        teamRepository.save(newTeam);
+        newTeam.addStudent(teamOwner);
+        teamRepository.save(newTeam);
+
+        String subject = teamOwner.getFirstName() + " invited you to join its team!";
+
+        if (!students.isEmpty()) {
+            for (Student s : students) {
+                String body = "Hi, " + s.getFirstName() + "\n" +
+                        teamOwner.getFirstName() + " invited you to join its team " + newTeam.getName() + "\n" +
+                        "You will compete in battle " + battle.getName() + " together if you want!\n\n" +
+                        "To join your mate in this adventure click the link below before it is too late: " +
+                        "https://localhost:8080/ckb_platform/joinTeam?student=" + s.getId() + "team=" + newTeam.getId() + "\n" +
+                        "The battle registration window will close on: " + battle.getRegistrationDeadline();
+
+                new GmailAPI().sendEmail(subject, body, s.getEmail());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Team has been created and invitation has been sent to your mates");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("Team has been created");
+        }
+    }
+
+    // TODO: invite as before
 }
