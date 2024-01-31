@@ -48,10 +48,11 @@ public class RegistrationThread extends Thread {
         List<Team> teamsSubscribed = battle.getTeams();
         List<Student> studentsToNotify = new ArrayList<>();
         for (Team t : teamsSubscribed) {
-            System.out.println(t + " \n" + t.getStudents().get(0));
-            studentsToNotify.add(t.getStudents().get(0));
+            System.out.println(t + " \n" + t.getStudents().getFirst());
+            studentsToNotify.add(t.getStudents().getFirst());
         }
 
+        // TODO: talk about the repo organization
         // Create repository
         int response;
         GitHubAPI gitHubAPI = new GitHubAPI();
@@ -76,28 +77,30 @@ public class RegistrationThread extends Thread {
         if(response != 201)
             System.out.println("Error in creating README");
 
-
-        // Prepare Email to send
-        GmailAPI gmailSender = null;
-        try {
-            gmailSender = new GmailAPI();
-        } catch (GeneralSecurityException | IOException e) {
-            throw new RuntimeException(e);
-        }
-        String subject = battle.getName() + " repository is created";
-        String bodyMsg = "Hi, we are pleased to inform you that\n" +
-                battle.getName() + " repository is now created\n\n" +
-                "Now you must fork it and start working\n\n" +
-                "You can find it at: \n" +
-                "https://github.com/CodeKataBattlePlatform/" + battle.getName().replace(" ", "-");
-
-        // Send Email to each first student in battle
-        for (Student s : studentsToNotify) {
+        new Thread(() -> {
+            // Prepare Email to send
+            GmailAPI gmailSender;
             try {
-                gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
-            } catch (IOException | MessagingException e) {
+                gmailSender = new GmailAPI();
+            } catch (GeneralSecurityException | IOException e) {
                 throw new RuntimeException(e);
             }
-        }
+            String subject = "REPOSITORY CREATED " + battle.getName().replace(" ", "-");
+
+            // Send Email to each first student in battle
+            for (Student s : studentsToNotify) {
+                String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
+                                 "we are pleased to inform you that the repository for " + battle.getName() + " is now available.\n" +
+                                 "From now follow the instructions on the repo, fork it and invite your team members\n" +
+                                 "You can find the repository at the following link: https://github.com/CodeKataBattlePlatform/" + battle.getName().replace(" ", "-") + "\n\n" +
+                                 "Best regards,\n CKB Team";
+
+                try {
+                    gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
+                } catch (IOException | MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
     }
 }
