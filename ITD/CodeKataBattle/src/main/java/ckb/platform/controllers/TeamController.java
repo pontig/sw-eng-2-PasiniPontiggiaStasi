@@ -106,6 +106,11 @@ public class TeamController {
         // Team è al completo? Si errore altrimenti
         // -> Iscrivo stu a torneo se iscritto a false altrimenti nulla
         // -> Iscrivo stu a battaglia se iscritto a false altrimenti
-                                                    - Se sono da solo elimino il mio team
+                                                    // - Ottengo team a cui sono iscritto, tolgo la referenza
+                                                    // - Vecchio team lo lascio rimuovo alla registration deadline
+
+        // Join team
+        teamToJoin.addStudent(stuToJoin);
+        repository.save(teamToJoin);
     }
 }

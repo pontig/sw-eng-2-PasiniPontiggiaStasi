@@ -44,6 +44,8 @@ public class RegistrationThread extends Thread {
 
         System.out.println("Send email end registration");
 
+        // TODO: remove students and team that do not respect the boundaries
+
         // Get first student for each team in the battle
         List<Team> teamsSubscribed = battle.getTeams();
         List<Student> studentsToNotify = new ArrayList<>();
