@@ -364,7 +364,7 @@ public class BattleController {
             // Check if user is an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
 
-        if(battleName.isEmpty() || battleName.isBlank() || language.isEmpty() || language.isBlank() || description.isBlank() || description.isEmpty())
+        if(battleName.isEmpty() || battleName.isBlank() || language.isEmpty() || language.isBlank() /*|| description.isBlank() || description.isEmpty()*/)
             // Check if any string field is empty or blank
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
 
@@ -603,7 +603,7 @@ public class BattleController {
             }
         }
 
-        if(battleToJoin.getRegistrationDeadline().after(new Date()))
+        if(battleToJoin.getRegistrationDeadline().before(new Date()))
             // Check if the battle is not in registration period
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Battle registration deadline is closed");
 
