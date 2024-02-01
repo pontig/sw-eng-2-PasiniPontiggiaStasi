@@ -5,6 +5,7 @@ import ckb.platform.entities.Student;
 import ckb.platform.entities.Team;
 import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.gmailAPI.GmailAPI;
+import ckb.platform.repositories.TeamRepository;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -16,16 +17,18 @@ import java.util.Date;
 import java.util.List;
 
 public class RegistrationThread extends Thread {
+    private final TeamRepository teamRepository;
     private final Date targetDate;
     private final Battle battle;
 
-    public RegistrationThread(Battle battle) {
+    public RegistrationThread(TeamRepository teamRepository, Battle battle) {
+        this.teamRepository = teamRepository;
         //this.targetDate = battle.getRegistrationDeadline(); //TODO: uncomment this line
         this.battle = battle;
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 1, 15, 00, 0);
+        calendar.set(2024, Calendar.FEBRUARY, 2, 0, 35, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -44,41 +47,49 @@ public class RegistrationThread extends Thread {
 
         System.out.println("Send email end registration");
 
-        // TODO: remove students and team that do not respect the boundaries
+        // Remove team that do not respect the boundaries
+        List<Team> teamsSubscribed = teamRepository.getTeamInBattle(battle);
+        for(Team t : teamsSubscribed){
+            if(t.getStudents().size() < t.getBattle().getMinStudents() || t.getStudents().size() > t.getBattle().getMaxStudents()){
+                teamRepository.delete(t);
+            }
+        }
 
-        // TODO: not working Get first student for each team in the battle
-        List<Team> teamsSubscribed = battle.getTeams();
-        System.out.println(teamsSubscribed);
+        // Get first student for each team in the battle
         List<Student> studentsToNotify = new ArrayList<>();
         for (Team t : teamsSubscribed) {
-            System.out.println(t + " \n" + t.getStudents().getFirst());
-            studentsToNotify.add(t.getStudents().getFirst());
+            if(t.getStudents() != null){
+                System.out.println(t.getStudents().getFirst().getEmail());
+                studentsToNotify.add(t.getStudents().getFirst());
+            }
         }
 
-        // TODO: talk about the repo organization
-        // Create repository
-        int response;
-        GitHubAPI gitHubAPI = new GitHubAPI();
-        response = gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline() + " for battle " + battle.getName() + " in tournament " + battle.getTournament().getName());
+        // TODO: Modify respect to language of battle
+        new Thread(() -> {
+            // Create repository
+            int response;
+            GitHubAPI gitHubAPI = new GitHubAPI();
+            response = gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline() + " for battle " + battle.getName() + " in tournament " + battle.getTournament().getName());
 
-        if(response != 201)
-            System.out.println("Error in creating repo");
+            if(response != 201)
+                System.out.println("Error in creating repo");
 
-        try {
-            response = gitHubAPI.createFolder(battle, "CKBProblem", battle.getId().toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if(response != 201)
-            System.out.println("Error in creating folder CKB Problem");
+            try {
+                response = gitHubAPI.createFolder(battle, "CKBProblem", battle.getId().toString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if(response != 201)
+                System.out.println("Error in creating folder CKB Problem");
 
-        try {
-            response = gitHubAPI.createFolder(battle, "Rules", "README");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if(response != 201)
-            System.out.println("Error in creating README");
+            try {
+                response = gitHubAPI.createFolder(battle, "Rules", "README");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if(response != 201)
+                System.out.println("Error in creating README");
+        }).start();
 
         new Thread(() -> {
             // Prepare Email to send

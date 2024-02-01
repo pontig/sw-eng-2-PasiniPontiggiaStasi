@@ -506,7 +506,7 @@ public class BattleController {
                 }
             }).start();
 
-            new RegistrationThread(newBattle).start();
+            new RegistrationThread(teamRepository, newBattle).start();
             new SubmissionThread(newBattle).start();
 
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
@@ -528,6 +528,10 @@ public class BattleController {
         Team team = teamRepository.getTeamByName(teamName);
 
         if (battle != null && team != null) {
+            // If the battle is closed no more pull are performed for it
+            if(battle.getFinalSubmissionDeadline().before(new Date()))
+                return;
+
             team.setRepo(repository);
             teamRepository.save(team);
             new GitHubAPI().pullRepository(battle, team, repoName, pusher);
