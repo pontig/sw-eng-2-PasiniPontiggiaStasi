@@ -251,7 +251,6 @@ async function changePage(page, id) {
                     document.getElementById("list").style.display = "block"
                     document.querySelector("#list h2").innerHTML = "Battles"
                     document.getElementById("ranking").style.display = "block"
-                    document.getElementById("share").style.display = "flex"
 
                     res = await fetch("tournaments/edu/" + id)
                     data = await res.json()
@@ -317,6 +316,7 @@ async function changePage(page, id) {
                         })
 
                     if (data.active && data.admin) {
+                        document.getElementById("share").style.display = "flex"
                         let btn = document.createElement("button")
                         btn.innerHTML = "New..."
                         btn.onclick = (() => { showForm("Battle") })
@@ -868,7 +868,7 @@ async function changePage(page, id) {
                                 if (res) {
                                     // Define url and data
                                     let mail = document.getElementsByName("emailToInvite")[0].value
-                                    const url = '/ckb_platform/battles/invite/';
+                                    const url = '/ckb_platform/battles/invite';
                                     const data = { mail };
 
                                     // Prepare data to send to the Server
@@ -922,7 +922,7 @@ async function changePage(page, id) {
                         spsp.appendChild(document.createElement("br"))
                         spsp.appendChild(dividiv)
                         document.getElementById("title").appendChild(spsp)
-                    } 
+                    }
                     if (!data.subscribed && data.phase == 1) {
                         let divdiv = document.createElement("h6")
                         divdiv.id = "warning"

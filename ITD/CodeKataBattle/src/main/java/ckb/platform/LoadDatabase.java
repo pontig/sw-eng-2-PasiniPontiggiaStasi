@@ -78,9 +78,6 @@ class LoadDatabase {
             tournaments.add(new Tournament("BugMaster League", sdf.parse("2019-01-01"), sdf.parse("2019-02-28"), educators.get(1 - 1)));
             tournaments.add(new Tournament("Codebash Championship", sdf.parse("2019-01-01"), sdf.parse("2019-01-31"), educators.get(1 - 1)));
 
-            tournaments.get(0).addStudent(students.get(0));
-            tournaments.get(4).addStudent(students.get(1));
-
             tournaments.forEach(tournament -> log.info("Preloading " + tourRep.save(tournament)));
 
             battles.add(new Battle("The dawn of a new code", sdf.parse("2023-12-15"), sdf.parse("2023-12-20"), sdf.parse("2023-12-25"), "Python", false, 1, 1, educators.get(1 - 1), tournaments.get(1 - 1), false, "ciao", true, true, true));
@@ -192,8 +189,10 @@ class LoadDatabase {
 
             teams.stream().forEach(team -> {
                 team.getStudents().stream().forEach(student -> {
-                    team.getBattle().getTournament().addStudent(student);
-                    tourRep.save(team.getBattle().getTournament());
+                    if (!team.getBattle().getTournament().getSubscribedStudents().contains(student)) {
+                        team.getBattle().getTournament().addStudent(student);
+                        tourRep.save(team.getBattle().getTournament());
+                    }
                 });
             });
         };

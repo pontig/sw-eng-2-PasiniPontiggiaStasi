@@ -15,7 +15,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         log.info("SessionInterceptor:" + request.getRequestURI());
         //if (!(request.getRequestURI().contains("login") || request.getRequestURI().contains("index.html")) && session.getAttribute("user") == null) {
         if (!(request.getRequestURI().contains("login") || request.getRequestURI().contains("index.html")) && request.getRequestURI().contains("html") && session.getAttribute("user") == null) {
-            log.info("SessionInterceptor: redirect to login");
+            log.info("SessionInterceptor: ----redirect to login----");
             response.sendRedirect("login");
             return false;
         }
