@@ -332,6 +332,33 @@ public class BattleController {
 
         battleRepository.save(battle);
 
+        new Thread(() -> {
+            // Prepare Email to send
+            GmailAPI gmailSender;
+
+            try {
+                gmailSender = new GmailAPI();
+            } catch (IOException | GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            }
+
+            String subject = "JOIN TEAM " + team.getName() + " for battle " + battle.getName();
+
+            String body = "Hi " + studentToInvite.getFirstName() + ",\n\n" +
+                           user.getFirstName() + " invited you to join its team " + team.getName() + "\n" +
+                           "You can compete in battle " + battle.getName() + " together with the team members!\n\n" +
+                           "To join your mates in this adventure click the link below before it is too late: " +
+                           "https://localhost:8080/ckb_platform/team/" + team.getId() + "/join/" + studentToInvite.getId() + "\n" +
+                           "The battle registration window will close on: " + battle.getRegistrationDeadline() + "\n\n" +
+                           "Best regards,\n CKB Team";
+
+            try {
+                gmailSender.sendEmail(subject, body, studentToInvite.getEmail());
+            } catch (IOException | MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
         return ResponseEntity
                 .created(linkTo(methodOn(BattleController.class).getBattleDetailsEDU(battle.getId(), session)).withSelfRel().toUri())
                 .body("Student added to the team " + team.getName());
@@ -453,7 +480,33 @@ public class BattleController {
                 throw new RuntimeException(e);
             }
 
-            // TODO: Email per upcoming battles?
+            new Thread(() -> {
+                // Prepare Email to send
+                GmailAPI gmailSender;
+                try {
+                    gmailSender = new GmailAPI();
+                } catch (GeneralSecurityException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+                String subject = "NEW BATTLE CREATED " + battleName;
+
+                // Send Email to each first student in battle
+                for (Student s : newBattle.getTournament().getSubscribedStudents()) {
+                    String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
+                                     "as " + newBattle.getTournament().getName() + " member I want to inform you about an upcoming battle\n" +
+                                     "Educator " + user.getFirstName() + " has created the battle " + battleName + " and is waiting for you\n" +
+                                     "The registration deadline is on " + registerDeadline + ", subscribe before it expires\n" +
+                                     "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                     "Best regards,\n CKB Team";
+
+                    try {
+                        gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
+                    } catch (IOException | MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+
             new RegistrationThread(newBattle).start();
             new SubmissionThread(newBattle).start();
 
@@ -545,10 +598,10 @@ public class BattleController {
             // Send Email to each student in battle
             for (Student s : studentsToNotify) {
                 String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
-                        "Battle " + battle.getName() + " has been closed\n" +
-                        "You can now find the final ranking\n" +
-                        "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
-                        "Best regards,\n CKB Team";
+                                 "Battle " + battle.getName() + " has been closed\n" +
+                                 "You can now find the final ranking\n" +
+                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                                 "Best regards,\n CKB Team";
 
                 try {
                     gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
