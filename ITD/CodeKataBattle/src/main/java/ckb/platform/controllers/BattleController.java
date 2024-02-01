@@ -332,6 +332,33 @@ public class BattleController {
 
         battleRepository.save(battle);
 
+        new Thread(() -> {
+            // Prepare Email to send
+            GmailAPI gmailSender;
+
+            try {
+                gmailSender = new GmailAPI();
+            } catch (IOException | GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            }
+
+            String subject = "JOIN TEAM " + team.getName() + " for battle " + battle.getName();
+
+            String body = "Hi " + studentToInvite.getFirstName() + ",\n\n" +
+                           user.getFirstName() + " invited you to join its team " + team.getName() + "\n" +
+                           "You can compete in battle " + battle.getName() + " together with the team members!\n\n" +
+                           "To join your mates in this adventure click the link below before it is too late: " +
+                           "https://localhost:8080/ckb_platform/team/" + team.getId() + "/join/" + studentToInvite.getId() + "\n" +
+                           "The battle registration window will close on: " + battle.getRegistrationDeadline() + "\n\n" +
+                           "Best regards,\n CKB Team";
+
+            try {
+                gmailSender.sendEmail(subject, body, studentToInvite.getEmail());
+            } catch (IOException | MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
         return ResponseEntity
                 .created(linkTo(methodOn(BattleController.class).getBattleDetailsEDU(battle.getId(), session)).withSelfRel().toUri())
                 .body("Student added to the team " + team.getName());
