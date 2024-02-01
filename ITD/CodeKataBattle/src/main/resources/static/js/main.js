@@ -272,7 +272,7 @@ async function changePage(page, id) {
                     container.innerHTML = ""
 
                     data.battles
-                        .sort((a, b) => a.phase - b.phase) // penso che si possa togliere, che le ordini il db
+                        .sort((a, b) => a.phase - b.phase)
                         .forEach(e => {
                             let div = document.createElement("div")
                             div.classList.add("selectable")
@@ -922,6 +922,12 @@ async function changePage(page, id) {
                         spsp.appendChild(document.createElement("br"))
                         spsp.appendChild(dividiv)
                         document.getElementById("title").appendChild(spsp)
+                    } 
+                    if (!data.subscribed && data.phase == 1) {
+                        let divdiv = document.createElement("h6")
+                        divdiv.id = "warning"
+
+                        document.getElementById("title").appendChild(divdiv)
                     }
 
                     sessionStorage.setItem("battle", id)
