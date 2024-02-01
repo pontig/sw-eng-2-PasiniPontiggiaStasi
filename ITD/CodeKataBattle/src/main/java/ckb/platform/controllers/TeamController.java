@@ -1,17 +1,18 @@
 package ckb.platform.controllers;
 
+import ckb.platform.entities.Student;
 import ckb.platform.entities.Team;
+import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
+import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TeamRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -21,9 +22,12 @@ public class TeamController {
 
     @Autowired
     private final TeamRepository repository;
+    @Autowired
+    private final StudentRepository studentRepository;
 
-    TeamController(TeamRepository repository) {
+    TeamController(TeamRepository repository, StudentRepository studentRepository) {
         this.repository = repository;
+        this.studentRepository = studentRepository;
     }
 
     // Aggregate root
@@ -87,4 +91,21 @@ public class TeamController {
         return ResponseEntity.ok().build();
     }
     //TODO SCORES
+
+    @PostMapping("/team/{t_id}/join/{s_id}")
+    public void joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {
+        Team teamToJoin = repository.findById(t_id).orElseThrow(() -> new TeamNotFoundException(t_id));
+        Student stuToJoin =  studentRepository.findById(s_id).orElseThrow(() -> new StudentNotFoundException(s_id));
+
+        boolean inTournament = true;
+        boolean inBattle = true;
+
+        // TODO controlli
+        // Stu iscritto al torneo? No -> Controllo deadline regitration -> Se terminata errore altrimenti iscritto a false
+        // Stu iscritto alla battaglia? No -> Controllo deadline registration -> Se terminata errore altrimenti iscritto a false
+        // Team è al completo? Si errore altrimenti
+        // -> Iscrivo stu a torneo se iscritto a false altrimenti nulla
+        // -> Iscrivo stu a battaglia se iscritto a false altrimenti
+                                                    - Se sono da solo elimino il mio team
+    }
 }
