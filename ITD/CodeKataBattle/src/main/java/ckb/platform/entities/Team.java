@@ -111,10 +111,14 @@ public class Team {
         if (battle.isMaintainability()) n++;
         if (battle.isSecurity()) n++;
         if (battle.isReliability()) n++;
-        return (testScore + staticAnalysisScore + timelinessScore) / n;
+        if(n != 0)
+            return (testScore + staticAnalysisScore + timelinessScore) / n;
+        else
+            return 0;
     }
 
     public int getFinalScore() {
+        // TODO: sistemare ritorno punteggi
         if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation())
             return getAutomaticScore();
         else

@@ -25,7 +25,7 @@ public class SubmissionThread extends Thread {
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 1, 13, 45, 0);
+        calendar.set(2024, Calendar.FEBRUARY, 1, 17, 00, 0);
         this.targetDate = calendar.getTime();
     }
 

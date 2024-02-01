@@ -25,7 +25,6 @@ import java.nio.file.StandardCopyOption;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
-import static java.lang.Long.parseLong;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -653,6 +652,9 @@ public class BattleController {
                 Tournament tour = battleToJoin.getTournament();
                 tour.addStudent(stu);
                 tournamentRepository.save(tour);
+
+                stu.addTournament(tour);
+                studentRepository.save(stu);
             }
         }
 
@@ -679,9 +681,13 @@ public class BattleController {
                 students.add(stuInvited);
         }
 
-        if(students.size()+1 > battleToJoin.getMaxStudents() || students.size()+1 < battleToJoin.getMinStudents())
+        if(students.size()+1 > battleToJoin.getMaxStudents())
             // Check if the student boundaries are respected
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Too many students in the team");
+
+        if(students.size()+1 < battleToJoin.getMinStudents())
+            // Check if the student boundaries are respected
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Too less students in the team");
 
         Battle battle = battleRepository.getReferenceById(battleId);
 
@@ -689,6 +695,7 @@ public class BattleController {
         Student teamOwner = (Student) user;
         Team newTeam = new Team(teamName, battle);
         teamRepository.save(newTeam);
+
         newTeam.addStudent(teamOwner);
         teamRepository.save(newTeam);
 

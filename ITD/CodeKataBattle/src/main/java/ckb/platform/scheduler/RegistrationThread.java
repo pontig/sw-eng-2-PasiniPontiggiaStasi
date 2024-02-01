@@ -25,7 +25,7 @@ public class RegistrationThread extends Thread {
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 1, 13, 30, 0);
+        calendar.set(2024, Calendar.FEBRUARY, 1, 15, 00, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -46,8 +46,9 @@ public class RegistrationThread extends Thread {
 
         // TODO: remove students and team that do not respect the boundaries
 
-        // Get first student for each team in the battle
+        // TODO: not working Get first student for each team in the battle
         List<Team> teamsSubscribed = battle.getTeams();
+        System.out.println(teamsSubscribed);
         List<Student> studentsToNotify = new ArrayList<>();
         for (Team t : teamsSubscribed) {
             System.out.println(t + " \n" + t.getStudents().getFirst());
