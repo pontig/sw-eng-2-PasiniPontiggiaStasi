@@ -2,10 +2,7 @@ package ckb.platform.controllers;
 
 import ckb.platform.entities.*;
 import ckb.platform.exceptions.*;
-import ckb.platform.formParser.CreateBattleRequest;
-import ckb.platform.formParser.JoinBattleRequest;
-import ckb.platform.formParser.ListGroupsForManualRequest;
-import ckb.platform.formParser.RepoPullRequest;
+import ckb.platform.formParser.*;
 import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.*;
@@ -28,6 +25,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
+import static java.lang.Long.parseLong;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -305,12 +303,19 @@ public class BattleController {
     }
 
     @PostMapping("/battles/invite")
-    ResponseEntity<?> inviteStudent(@RequestBody Long battle_id, @RequestBody String email, HttpSession session) {
+    ResponseEntity<?> inviteStudent(@ModelAttribute InviteSinglePersonRequest request , HttpSession session) {
         final User user = (User) session.getAttribute("user");
         //final User user = studentRepository.findById(1L).orElseThrow(() -> new StudentNotFoundException(1L));
         if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
+
+        String email = request.getEmail();
+        Long team_id = request.getTeamId();
+
+        Team team = teamRepository.findById(team_id)
+                .orElseThrow(() -> new TeamNotFoundException(team_id));
+        Long battle_id = team.getBattle().getId();
 
         Battle battle = battleRepository.findById(battle_id)
                 .orElseThrow(() -> new BattleNotFoundException(battle_id));
@@ -321,12 +326,7 @@ public class BattleController {
                 filter(s -> s.getEmail().equals(email))
                 .findFirst()
                 .orElseThrow(() -> new StudentNotFoundException(-1L));
-
-        Team team = battle
-                .getTeams()
-                .stream()
-                .filter(t -> t.getStudents().contains((Student) user)).findFirst().orElseThrow(() -> new TeamNotFoundException(-1L));
-
+        
         team.addStudent(studentToInvite);
         teamRepository.save(team);
 
