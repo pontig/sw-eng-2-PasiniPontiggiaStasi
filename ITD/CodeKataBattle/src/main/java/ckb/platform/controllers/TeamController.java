@@ -1,16 +1,17 @@
 package ckb.platform.controllers;
 
-import ckb.platform.entities.Student;
-import ckb.platform.entities.Team;
+import ckb.platform.entities.*;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TeamRepository;
+import ckb.platform.repositories.TournamentRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
@@ -24,10 +25,13 @@ public class TeamController {
     private final TeamRepository repository;
     @Autowired
     private final StudentRepository studentRepository;
+    @Autowired
+    private final TournamentRepository tournamentRepository;
 
-    TeamController(TeamRepository repository, StudentRepository studentRepository) {
+    TeamController(TeamRepository repository, StudentRepository studentRepository, TournamentRepository tournamentRepository) {
         this.repository = repository;
         this.studentRepository = studentRepository;
+        this.tournamentRepository = tournamentRepository;
     }
 
     // Aggregate root
@@ -92,25 +96,75 @@ public class TeamController {
     }
     //TODO SCORES
 
-    @PostMapping("/team/{t_id}/join/{s_id}")
-    public void joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {
+    @GetMapping("/team/{t_id}/join/{s_id}")
+    public ModelAndView joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {
         Team teamToJoin = repository.findById(t_id).orElseThrow(() -> new TeamNotFoundException(t_id));
         Student stuToJoin =  studentRepository.findById(s_id).orElseThrow(() -> new StudentNotFoundException(s_id));
+        Tournament t = teamToJoin.getBattle().getTournament();
+        Battle b = teamToJoin.getBattle();
 
         boolean inTournament = true;
-        boolean inBattle = true;
+        boolean inBattle = false;
 
-        // TODO controlli
-        // Stu iscritto al torneo? No -> Controllo deadline regitration -> Se terminata errore altrimenti iscritto a false
-        // Stu iscritto alla battaglia? No -> Controllo deadline registration -> Se terminata errore altrimenti iscritto a false
-        // Team è al completo? Si errore altrimenti
-        // -> Iscrivo stu a torneo se iscritto a false altrimenti nulla
-        // -> Iscrivo stu a battaglia se iscritto a false altrimenti
-                                                    // - Ottengo team a cui sono iscritto, tolgo la referenza
-                                                    // - Vecchio team lo lascio rimuovo alla registration deadline
+        if(!stuToJoin.getTournaments().contains(t) && !t.getSubscribedStudents().contains(stuToJoin)){
+            // Check if the student is not in the tournament
+            if(t.getSubscriptionDeadline().after(new Date())) {
+                // Check if the tournament registration windows is open
+                inTournament = false;
+            } else
+                return new ModelAndView("index");
+        }
+
+        Team oldTeam = null;
+        for(Team team: b.getTeams()){
+            // Check if the student is already in the battle and so in a team
+            if(team.getStudents().contains(stuToJoin)) {
+                // Check if the student is in a team
+                oldTeam = team;
+
+                if(oldTeam == teamToJoin)
+                    // Check if it is already in the team
+                    return new ModelAndView("index");
+
+                inBattle = true;
+                break;
+            }
+        }
+
+        if(teamToJoin.getStudents().size() == b.getMaxStudents())
+            // Check if the team is complete
+            return new ModelAndView("index");
+
+        if(!inTournament) {
+            // Add to tournament
+            t.addStudent(stuToJoin);
+            stuToJoin.addTournament(t);
+            studentRepository.save(stuToJoin);
+            tournamentRepository.save(t);
+        }
+
+        if(b.getRegistrationDeadline().before(new Date()))
+            // Can not register due end deadline
+            return new ModelAndView("index");
+
+        if(inBattle){
+            oldTeam.removeStudent(stuToJoin);
+            repository.save(oldTeam);
+        }
 
         // Join team
         teamToJoin.addStudent(stuToJoin);
         repository.save(teamToJoin);
+
+        User user = (User) session.getAttribute("user");
+        ModelAndView modelAndView = new ModelAndView();
+
+        if(user == null) {
+            modelAndView.setViewName("index");
+        } else {
+            modelAndView.setViewName("indexSTU");
+        }
+
+        return modelAndView;
     }
 }
