@@ -21,7 +21,7 @@ public class Team {
     private int timelinessScore = 0;
     private int testScore = 0;
     private Integer manualScore = null;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Student> students;
     private String repo;
 

@@ -38,14 +38,11 @@ public class TournamentController {
     private final EducatorRepository educatorRepository;
     @Autowired
     private final StudentRepository studentRepository;
-    @Autowired
-    private final BattleRepository battleRepository;
 
     TournamentController(TournamentRepository tournamentRepository, EducatorRepository educatorRepository, StudentRepository studentRepository, BattleRepository battleRepository) {
         this.tournamentRepository = tournamentRepository;
         this.educatorRepository = educatorRepository;
         this.studentRepository = studentRepository;
-        this.battleRepository = battleRepository;
     }
 
     @GetMapping("/tournaments/{id}")
@@ -600,20 +597,25 @@ public class TournamentController {
         // Get tournament data
         Tournament joinTournament = tournamentRepository.getTournamentById(joinTournamentRequest.getTournamentId());
 
-        if(joinTournament == null)
-           // If it does not exist return
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
+        if (joinTournament == null)
+            // If it does not exist return
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
 
         Student addStudent = (Student) user;
 
-        if(addStudent.getTournaments().contains(joinTournament) && joinTournament.getSubscribedStudents().contains(addStudent))
+        if (addStudent.getTournaments().contains(joinTournament) && joinTournament.getSubscribedStudents().contains(addStudent))
             // Check if the student is already in the tournament
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You are already part of tournament: " + joinTournament);
 
-        addStudent.addTournament(joinTournament);
-        joinTournament.addStudent(addStudent);
-        studentRepository.save(addStudent);
-        tournamentRepository.save(joinTournament);
+        if (!joinTournament.getSubscribedStudents().contains(addStudent)) {
+            joinTournament.addStudent(addStudent);
+            tournamentRepository.save(joinTournament);
+        }
+
+        if (!addStudent.getTournaments().contains(joinTournament)){
+            addStudent.addTournament(joinTournament);
+            studentRepository.save(addStudent);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body("Tournament successfully joined");
     }
