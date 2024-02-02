@@ -609,7 +609,6 @@ public class TournamentController {
 
         if (!joinTournament.getSubscribedStudents().contains(addStudent)) {
             joinTournament.addStudent(addStudent);
-            tournamentRepository.save(joinTournament);
         }
 
         if (!addStudent.getTournaments().contains(joinTournament)){
