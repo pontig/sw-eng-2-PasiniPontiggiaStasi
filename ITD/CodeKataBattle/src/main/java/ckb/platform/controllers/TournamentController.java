@@ -542,14 +542,12 @@ public class TournamentController {
                 if(t == sharedTournament)
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - " + invitedEDU.getFirstName() + ", already has permission for " + sharedTournament.getName() + " tournament");
             }
-
+            sharedTournament.addEducator(invitedEDU);
             // Add tournament to the educator
             invitedEDU.addTournament(sharedTournament);
             educatorRepository.save(invitedEDU);
 
             // Add educator to the tournament
-            sharedTournament.addEducator(invitedEDU);
-            tournamentRepository.save(sharedTournament);
 
             new Thread(() -> {
                 // Prepare Email to send

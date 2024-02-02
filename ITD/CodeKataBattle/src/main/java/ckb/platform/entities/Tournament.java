@@ -16,7 +16,7 @@ public class Tournament {
     @ManyToOne @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private Educator creator;
 
-    @ManyToMany (fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany (fetch=FetchType.EAGER)
     private List<Educator> grantedEducators;
     @ManyToMany (fetch=FetchType.EAGER)
     private List<Student> subscribedStudents;

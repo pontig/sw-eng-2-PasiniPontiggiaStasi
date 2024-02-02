@@ -140,7 +140,6 @@ public class TeamController {
             t.addStudent(stuToJoin);
             stuToJoin.addTournament(t);
             studentRepository.save(stuToJoin);
-            tournamentRepository.save(t);
         }
 
         if(b.getRegistrationDeadline().before(new Date()))
