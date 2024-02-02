@@ -655,7 +655,6 @@ public class BattleController {
                 // Subscribe student to tournament
                 Tournament tour = battleToJoin.getTournament();
                 tour.addStudent(stu);
-                tournamentRepository.save(tour);
 
                 stu.addTournament(tour);
                 studentRepository.save(stu);
@@ -698,8 +697,6 @@ public class BattleController {
         // Save the team and the owner
         Student teamOwner = (Student) user;
         Team newTeam = new Team(teamName, battle);
-        teamRepository.save(newTeam);
-
         newTeam.addStudent(teamOwner);
         teamRepository.save(newTeam);
 
