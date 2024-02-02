@@ -31,7 +31,7 @@ public class Battle {
     //private List<Student> subscribedStudents;
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Team> teams;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
     private boolean reliability, maintainability, security;
