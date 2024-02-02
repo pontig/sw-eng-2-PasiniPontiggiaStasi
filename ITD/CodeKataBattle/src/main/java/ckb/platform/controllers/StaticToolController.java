@@ -1,26 +1,14 @@
 package ckb.platform.controllers;
 
-import ckb.platform.entities.Analyzer;
-import ckb.platform.formParser.CreateTournamentRequest;
 import ckb.platform.utils.ParameterStringBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.json.Json;
-import org.apache.http.client.methods.HttpGet;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.management.ObjectName;
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -75,7 +63,7 @@ public class StaticToolController {
             String[] parts = projectName.split("CKBplatform-");
 
             // Access the last part, assuming "ID" appears in the string
-            String team = null;
+            String team;
             if (parts.length > 1) {
                 team = parts[parts.length - 1];
                 System.out.println(team);
@@ -100,17 +88,17 @@ public class StaticToolController {
         int securityScore = 0;
         for (Map<String, Object> measure : measures) {
             String metric = (String) measure.get("metric");
-            if (metric.equals("new_maintainability_rating")) {
-                maintainabilityScore =6 - Integer.parseInt((String)((Map<String,Object>) measure.get("period")).get("value"));
-            } else if (metric.equals("reliability_rating")) {
-                reliabilityScore = 6 - Integer.parseInt((String) measure.get("value"));
-            } else if (metric.equals("security_rating")) {
-                securityScore = 6 - Integer.parseInt((String) measure.get("value"));
+            switch (metric) {
+                case "new_maintainability_rating" ->
+                        maintainabilityScore = 6 - Integer.parseInt((String) ((Map<String, Object>) measure.get("period")).get("value"));
+                case "reliability_rating" -> reliabilityScore = 6 - Integer.parseInt((String) measure.get("value"));
+                case "security_rating" -> securityScore = 6 - Integer.parseInt((String) measure.get("value"));
             }
         }
         // computing automatic score
-        int x = (maintainabilityScore + reliabilityScore + securityScore) / 3;
-        int score = x * 100 / 15;
+        maintainabilityScore = maintainabilityScore * 100 / 5;
+        reliabilityScore = reliabilityScore * 100 / 5;
+        securityScore = securityScore * 100 / 5;
 
         // Specify the URL you want to connect to
         try{
@@ -125,7 +113,9 @@ public class StaticToolController {
             connection.setRequestMethod("POST");
 
             Map<String, String> parameters = new HashMap<>();
-            parameters.put("score", Integer.toString(score));
+            parameters.put("maintainabilityScore", Integer.toString(maintainabilityScore));
+            parameters.put("reliabilityScore", Integer.toString(reliabilityScore));
+            parameters.put("securityScore", Integer.toString(securityScore));
 
             connection.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
@@ -144,10 +134,6 @@ public class StaticToolController {
             // Get the response code
             int responseCode = connection.getResponseCode();
             System.out.println("Response Code: " + responseCode);
-
-            // Read the response from the server
-            // Use Jackson ObjectMapper to parse JSON response
-            ObjectMapper objectMapper = new ObjectMapper();
 
             // Close the connection
             connection.disconnect();

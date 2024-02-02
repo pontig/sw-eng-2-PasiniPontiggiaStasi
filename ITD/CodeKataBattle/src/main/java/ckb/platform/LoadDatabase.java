@@ -21,7 +21,7 @@ class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    /*@Bean
+    @Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
@@ -189,12 +189,14 @@ class LoadDatabase {
 
             teams.stream().forEach(team -> {
                 team.getStudents().stream().forEach(student -> {
-                    if (!team.getBattle().getTournament().getSubscribedStudents().contains(student)) {
-                        team.getBattle().getTournament().addStudent(student);
-                        tourRep.save(team.getBattle().getTournament());
+                    Tournament tournament = tourRep.getTournamentById(team.getBattle().getTournament().getId());
+                    if (!tournament.getSubscribedStudents().contains(student)) {
+                        tournament.addStudent(student);
+                        student.addTournament(tournament);
+                        stuRep.save(student);
                     }
                 });
             });
         };
-    }*/
+    }
 }
