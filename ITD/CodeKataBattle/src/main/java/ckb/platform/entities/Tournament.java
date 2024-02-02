@@ -1,5 +1,6 @@
 package ckb.platform.entities;
 
+import ckb.platform.Pair;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -112,20 +113,11 @@ public class Tournament {
                 .flatMap(Collection::stream)
                 .map(e -> e.getStudents()
                         .stream()
-                        .map(s -> new pair<Student, Integer>(s, e.getAutomaticScore())).collect(Collectors.toList()))
+                        .map(s -> new Pair<Student, Integer>(s, e.getFinalScore())).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(e -> e.first, Collectors.summingInt(e -> e.second)));
     }
 
-    private class pair<A,B> {
-        public final A first;
-        public final B second;
-
-        public pair(A first, B second) {
-            this.first = first;
-            this.second = second;
-        }
-    }
 
     @Override
     public String toString() {

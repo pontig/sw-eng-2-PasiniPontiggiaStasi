@@ -632,7 +632,7 @@ public class BattleController {
             // Check if user is an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
 
-        if(teamName.isBlank() || teamName.isEmpty())
+        if(teamName.trim().isBlank() || teamName.isEmpty())
             // Check if team name is defined
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - Team name is empty or blank");
 
