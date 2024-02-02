@@ -59,8 +59,8 @@ public class RegistrationThread extends Thread {
         List<Student> studentsToNotify = new ArrayList<>();
         for (Team t : teamsSubscribed) {
             if(t.getStudents() != null){
-                System.out.println(t.getStudents().getFirst().getEmail());
-                studentsToNotify.add(t.getStudents().getFirst());
+                System.out.println(t.getStudents().get(0).getEmail());
+                studentsToNotify.add(t.getStudents().get(0));
             }
         }
 
