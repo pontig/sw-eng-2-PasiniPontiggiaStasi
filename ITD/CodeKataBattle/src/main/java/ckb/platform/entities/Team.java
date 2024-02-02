@@ -17,10 +17,16 @@ public class Team {
     private Battle battle;
 
     private String name;
+    private int reliabilityScore = 0;
+    private int maintainabilityScore = 0;
+    private int securityScore = 0;
     private int staticAnalysisScore = 0;
     private int timelinessScore = 0;
     private int testScore = 0;
     private Integer manualScore = null;
+
+    @Column(columnDefinition = "integer default 0")
+    private int score;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Student> students;
     private String repo;
@@ -108,21 +114,36 @@ public class Team {
 
     public int getAutomaticScore() {
         int n = 0;
-        if (battle.isMaintainability()) n++;
-        if (battle.isSecurity()) n++;
-        if (battle.isReliability()) n++;
+        int temp = 0;
+        if (battle.isMaintainability()){
+            n++;
+            temp += maintainabilityScore;
+        }
+        if (battle.isSecurity()) {
+            n++;
+            temp += securityScore;
+        }
+        if (battle.isReliability()){
+            n++;
+            temp += reliabilityScore;
+        }
         if(n != 0)
-            return (testScore + staticAnalysisScore + timelinessScore) / n;
+            setStaticAnalysisScore(temp / n);
         else
-            return 0;
+            setStaticAnalysisScore(0);
+
+        return (testScore + staticAnalysisScore + timelinessScore) / 3;
     }
 
     public int getFinalScore() {
         // TODO: sistemare ritorno punteggi
-        if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation())
-            return getAutomaticScore();
-        else
-            return (manualScore + getAutomaticScore()) / 2;
+        if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation()) {
+            score = getAutomaticScore();
+            return score;
+        }else {
+            score = (manualScore + getAutomaticScore()) / 2;
+            return score;
+        }
     }
 
     public void setManualScore(int manualScore) {
@@ -155,5 +176,29 @@ public class Team {
 
     public void setRepo(String repo) {
         this.repo = repo;
+    }
+
+    public int getReliabilityScore() {
+        return reliabilityScore;
+    }
+
+    public int getMaintainabilityScore() {
+        return maintainabilityScore;
+    }
+
+    public int getSecurityScore() {
+        return securityScore;
+    }
+
+    public void setReliabilityScore(int reliabilityScore) {
+        this.reliabilityScore = reliabilityScore;
+    }
+
+    public void setMaintainabilityScore(int maintainabilityScore) {
+        this.maintainabilityScore = maintainabilityScore;
+    }
+
+    public void setSecurityScore(int securityScore) {
+        this.securityScore = securityScore;
     }
 }
