@@ -174,4 +174,6 @@ public class GitHubAPI {
             throw new RuntimeException(e);
         }
     }
+
+    // TODO: get last commit and calculate the time
 }
