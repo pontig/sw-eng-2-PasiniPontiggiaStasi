@@ -28,7 +28,7 @@ public class RegistrationThread extends Thread {
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 2, 0, 35, 0);
+        calendar.set(2024, Calendar.FEBRUARY, 3, 19, 20, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -51,6 +51,31 @@ public class RegistrationThread extends Thread {
         List<Team> teamsSubscribed = teamRepository.getTeamInBattle(battle);
         for(Team t : teamsSubscribed){
             if(t.getStudents().size() < t.getBattle().getMinStudents() || t.getStudents().size() > t.getBattle().getMaxStudents()){
+                new Thread(() -> {
+                    // Prepare Email to send
+                    GmailAPI gmailSender;
+                    try {
+                        gmailSender = new GmailAPI();
+                    } catch (GeneralSecurityException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String subject = "DELETE TEAM " + t.getName() + " from battle " + t.getBattle().getName();
+
+                    // Send Email to each first student in battle
+                    for (Student s : t.getStudents()) {
+                        String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
+                                "we are sorry but your team " + t.getName() + " has been deleted.\n" +
+                                "Battle " + t.getBattle().getName() + "required a number of students between " + t.getBattle().getMinStudents() + " and  " + t.getBattle().getMaxStudents() + "\n" +
+                                "Your team was of " + t.getStudents().size() + ", so it has been deleted\n\n" +
+                                "See you next time,\n CKB Team";
+                        try {
+                            gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
+                        } catch (IOException | MessagingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }).start();
+
                 teamRepository.delete(t);
             }
         }
@@ -64,7 +89,6 @@ public class RegistrationThread extends Thread {
             }
         }
 
-        // TODO: Modify respect to language of battle
         new Thread(() -> {
             // Create repository
             int response;
@@ -75,7 +99,7 @@ public class RegistrationThread extends Thread {
                 System.out.println("Error in creating repo");
 
             try {
-                response = gitHubAPI.createFolder(battle, "CKBProblem", battle.getId().toString());
+                response = gitHubAPI.createFolder(battle, "CKBProblem");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -83,12 +107,28 @@ public class RegistrationThread extends Thread {
                 System.out.println("Error in creating folder CKB Problem");
 
             try {
-                response = gitHubAPI.createFolder(battle, "Rules", "README");
+                response = gitHubAPI.createFolder(battle, "Rules");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             if(response != 201)
                 System.out.println("Error in creating README");
+
+            try {
+                response = gitHubAPI.createFolder(battle, "main");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if(response != 201)
+                System.out.println("Error in creating main");
+
+            try {
+                response = gitHubAPI.createFolder(battle, "test");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if(response != 201)
+                System.out.println("Error in creating test");
         }).start();
 
         new Thread(() -> {

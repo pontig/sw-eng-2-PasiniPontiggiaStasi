@@ -43,12 +43,15 @@ BATTLE NAME
 |   |-- Problem.pdf
 |-- Language-Project
 |   |-- src
-|   |   |-- main.language
-|   |-- build.gradle
+|   |   |-- main
+|   |   |   |-- language
+|   |   |   |   |-- main.language
+|   |   |-- main
+|   |-- buildScript.extension
 |-- README.md
 ```
 You are allowed to modify only the README.md file,
-moreover you can add other .language file in the folder _'src'_.
+moreover you can add other .language file in the folder _'language'_.
 
 Whoever will not follow the rules will receive a grade equals to 0
 

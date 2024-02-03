@@ -375,7 +375,11 @@ public class BattleController {
         int minSize = createBattleRequest.getMinSize();
         int maxSize = createBattleRequest.getMaxSize();
         boolean manualEvaluation = createBattleRequest.isManualEvaluation();
+
         MultipartFile ckbProblem = createBattleRequest.getCkbProblem();
+        MultipartFile buildScript = createBattleRequest.getBuildScript();
+        // TODO: lista file test
+
         String description = createBattleRequest.getDescription();
         boolean reliability = createBattleRequest.isReliability();
         boolean maintainability = createBattleRequest.isMaintainability();
@@ -433,10 +437,20 @@ public class BattleController {
             // Check if max is lower than min
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - MaxSize can not be lower than MinSize");
 
-        // TODO: decidere il tipo di file --> Description potrebbe essere il problema descritto dal prof, il file da caricare il build automation script
         if (!ckbProblem.getContentType().equalsIgnoreCase("application/pdf"))
             // Check if the file is a PDF
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + ckbProblem.getOriginalFilename() + " is not a PDF");
+
+        if(language.equals("Java")){
+            if (!buildScript.getContentType().equalsIgnoreCase("text/xml") )
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a XML file");
+        } else if(language.equals("Python")) {
+            if (!buildScript.getContentType().equalsIgnoreCase("text/x-python"))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a PY file");
+        } else {
+            if (!buildScript.getContentType().equalsIgnoreCase("application/json"))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a JSON file");
+        }
 
         Educator creatorBattle = (Educator) user;
 
@@ -468,16 +482,30 @@ public class BattleController {
             battleRepository.save(newBattle);
 
             // Change file name with the battle id
-            String battleId = String.valueOf(battleRepository.getBattleId(newBattle.getName(), registerDeadline, submissionDeadline, language, manualEvaluation, minSize, maxSize, creatorBattle, tournamentForBattle, false));
-            String newCkbProblem = battleId + ".pdf";
+            String battleId = String.valueOf(battleRepository.getBattleIdByName(newBattle.getName()));
+
+            String newCkbProblem = "ProblemDescription.pdf";
+            String newBuildScript;
+
+            switch (language) {
+                case "Java" -> newBuildScript = "pom.xml";
+                case "JavaScript" -> newBuildScript = "package.json";
+                case "Python" -> newBuildScript = "setup.py";
+                default -> newBuildScript = null;
+            }
 
             // Obtain path to store the file
             Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
-            Path destinationPath = absolutePath.resolve("CKBProblem").resolve(newCkbProblem);
-
+            Path destinationCKBProblemPath = absolutePath.resolve("CKBProblem").resolve(battleId).resolve(newCkbProblem);
+            Path destinationBuildScriptPath = absolutePath.resolve("BuildScript").resolve(battleId).resolve(newBuildScript);
             try {
+                // Ensure that destination directories exist, creating them if necessary
+                Files.createDirectories(destinationCKBProblemPath.getParent());
+                Files.createDirectories(destinationBuildScriptPath.getParent());
+
                 // Save file in the directory
-                Files.copy(ckbProblem.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(ckbProblem.getInputStream(), destinationCKBProblemPath, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(buildScript.getInputStream(), destinationBuildScriptPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -536,7 +564,9 @@ public class BattleController {
                 return;
 
             // Add score for last commit
+            System.out.println(battle + "\nscore = " + (battle.getFinalSubmissionDeadline().getTime() - new Date().getTime()) + " * 100 / " + (battle.getFinalSubmissionDeadline().getTime() - battle.getRegistrationDeadline().getTime()));
             long score = ((battle.getFinalSubmissionDeadline().getTime() - new Date().getTime()) * 100) / (battle.getFinalSubmissionDeadline().getTime() - battle.getRegistrationDeadline().getTime());
+            System.out.println(" = " + score);
             team.setTimelinessScore((int) score);
             if(team.getRepo() == null)
                 team.setRepo(repository);

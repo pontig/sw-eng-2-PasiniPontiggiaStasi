@@ -90,29 +90,64 @@ public class GitHubAPI {
         }
     }
 
-    public int createFolder(Battle battle, String folder, String fileName) throws IOException {
+    public int createFolder(Battle battle, String folder) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpPut httpPut;
+            String fileName = null;
+            String path = null;
             String repoName = battle.getName().replace(" ", "-");
-
-            if(folder.equals("Rules")) {
-                fileName = "/" + fileName + ".md";
-                // Create a PUT object to make the submission
-                httpPut = new HttpPut("https://api.github.com/repos/" + username + "/" + repoName + "/contents" + fileName);
+            Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
+            
+            switch (folder) {
+                case "CKBProblem" -> {
+                    fileName = "/ProblemDescription.pdf";
+                    path = absolutePath + "/" + folder + "/" + battle.getId() + fileName;
+                }
+                case "Rules" -> {
+                    fileName = "/README.md";
+                    path = absolutePath + "/" + folder + fileName;
+                    folder = "";
+                }
+                case "main" -> {
+                    if(battle.getLanguage().equals("Java")){
+                        folder = "JavaProject/src/main/java/org/problem";
+                        fileName = "/Main.java";
+                        path = absolutePath + "/ProjectOrganization/JavaProject/src/main/java/org/problem/Main.java";
+                    } else if(battle.getLanguage().equals("JavaScript")){
+                        folder = "JavaScriptProject/src/main/js";
+                        fileName = "/main.js";
+                        path = absolutePath + "/ProjectOrganization/JavaScriptProject/src/main/js/main.js";
+                    } else {
+                        folder = "PythonProject/src/main/python";
+                        fileName = "/main.py";
+                        path = absolutePath + "/ProjectOrganization/PythonProject/src/main/python/main.py";
+                    }
+                }
+                case "test" -> {
+                    if(battle.getLanguage().equals("Java")){
+                        folder = "JavaProject/src/test/java/org/problem";
+                        fileName = "/MainTest.java";
+                        path = absolutePath + "/ProjectOrganization/JavaProject/src/test/java/org/problem/MainTest.java";
+                    } else if(battle.getLanguage().equals("JavaScript")){
+                        folder = "JavaScriptProject/src/test/js";
+                        fileName = "/main.test.js";
+                        path = absolutePath + "/ProjectOrganization/JavaScriptProject/src/test/js/main.test.js";
+                    } else {
+                        folder = "PythonProject/tests";
+                        fileName = "/main_test.py";
+                        path = absolutePath + "/ProjectOrganization/PythonProject/tests/main_test.py";
+                    }
+                }
             }
-            else {
-                fileName = "/" + fileName + ".pdf";
-                // Create a PUT object to make the submission
-                httpPut = new HttpPut("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + folder + fileName);
-            }
+            
+            // Create a PUT object to make the submission
+            httpPut = new HttpPut("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + folder + fileName);
+            System.out.println(httpPut);
 
             // Add the header to be authenticated
             httpPut.addHeader("Authorization", "token " + accessToken);
-
+            
             // Encode content for the folder in base64
-            Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
-            String path = absolutePath + "/" + folder + fileName;
-
             File pdfFile = new File(path);
             byte[] fileContent = Files.readAllBytes(pdfFile.toPath());
             String base64Encoded = Base64.getEncoder().encodeToString(fileContent);
