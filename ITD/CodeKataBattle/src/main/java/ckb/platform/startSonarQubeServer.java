@@ -8,21 +8,31 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Properties;
+
 @Configuration
 public class startSonarQubeServer {
-/*
+
     private static final Logger log = LoggerFactory.getLogger(startSonarQubeServer.class);
     private Process sonarQubeServerProcess;
     private Thread sonarServerThread;
 
+    private Properties properties = new Properties();
+
     @Bean
     AsyncTaskExecutor startingServer() {
+        try {
+            properties.load(new FileInputStream("src/main/resources/application.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         sonarServerThread = new Thread(() -> {
             log.info("Starting SonarQube Server...");
             // Start SonarQube Server
-            ProcessBuilder processBuilder = new ProcessBuilder("C:\\sonarqube\\bin\\windows-x86-64\\StartSonar.bat");
+            ProcessBuilder processBuilder = new ProcessBuilder(properties.getProperty("SonarQubeServerDir"));
             // Start the process
             try {
                 sonarQubeServerProcess = processBuilder.start();
@@ -62,5 +72,5 @@ public class startSonarQubeServer {
         if (sonarServerThread != null) {
             sonarServerThread.interrupt();
         }
-    }*/
+    }
 }
