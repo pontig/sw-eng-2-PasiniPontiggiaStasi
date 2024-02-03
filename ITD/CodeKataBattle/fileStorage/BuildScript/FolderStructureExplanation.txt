@@ -1,0 +1,10 @@
+BuildScript contains the build script files uploaded by the educator to build the project:
+
+BuildScript:
+|-- BattleId-1
+|   |-- buildscript.extension
+|
+|-- ...
+|
+|-- BattleId-N
+|   |-- buildscript.extension

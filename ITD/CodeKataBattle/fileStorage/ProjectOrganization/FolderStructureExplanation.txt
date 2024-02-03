@@ -1,0 +1,14 @@
+ProjectOrganization contains the structure for the project based on the programming language:
+
+ProjectOrganization:
+|-- LanguageProject
+|   |-- src
+|   |   |-- main
+|   |   |   |-- language
+|   |   |   |   |-- main.language
+|   |   |-- test
+|   |   |   |-- language
+|   |   |   |   |-- mainTest.language
+
+main.language contains a simple template structure to be modified by the student
+The structure do not hava a build file because the educator will provide it

@@ -176,6 +176,9 @@ public class Team {
     public void setRepo(String repo) {
         this.repo = repo;
     }
+    public String getRepo() {
+        return repo;
+    }
 
     public int getReliabilityScore() {
         return reliabilityScore;
@@ -200,4 +203,5 @@ public class Team {
     public void setSecurityScore(int securityScore) {
         this.securityScore = securityScore;
     }
+
 }

@@ -1,0 +1,10 @@
+CKBProblem contains the PDF file that describe the problem for the battle:
+
+CKBProblem:
+|-- BattleId-1
+|   |-- ProblemDescription.pdf
+|
+|-- ...
+|
+|-- BattleId-N
+|   |-- ProblemDescription.pdf

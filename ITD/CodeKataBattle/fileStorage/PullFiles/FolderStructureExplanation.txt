@@ -1,0 +1,36 @@
+PullFiles contains the repository pulled from GitHub:
+
+PullFiles:
+|-- BattleId-1
+|   |-- TeamId-1
+|   |   |-- Repository
+|   |
+|   |-- ...
+|   |
+|   |-- TeamId-N
+|   |   |-- Repository
+|
+|-- ...
+|
+|-- BattleId-N
+|   |-- TeamId-1
+|   |   |-- Repository
+|   |
+|   |-- ...
+|   |
+|   |-- TeamId-N
+|   |   |-- Repository
+
+Each repository must have the following organization:
+RepositoryName:
+|-- CKBProblem
+|   |-- ProblemDescription.pdf
+|
+|-- LanguageProject
+|   |-- src
+|   |   |-- main
+|   |   |   |-- language
+|   |   |   |   |-- main.language
+|   |-- buildscript.extension
+|
+|-- README.md

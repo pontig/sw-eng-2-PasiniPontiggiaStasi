@@ -1,22 +1,32 @@
-# Variabile che contiene il compilatore da usare
+# 'make' builds everything
+all: main test
+
+# Define the C++ compiler to use
 CXX = g++
 
-# Variabile che contiene le opzioni del compilatore
-CXXFLAGS = -Wall -g
+# Define any directories containing header files
+INCLUDES = -I./project/src/main/cpp -I./project/src/test/cpp
 
-# Nome del file eseguibile
-TARGET = main
+# Define the C++ source files
+MAIN_SRC = ./project/src/main/cpp/main.cpp
+TEST_SRC = ./project/src/test/cpp/main_test.cpp
 
-# Lista dei file sorgente
-SRCS = src/main/cpp/main.cpp
+# Define the C++ object files
+MAIN_OBJ = $(MAIN_SRC:.cpp=.o)
+TEST_OBJ = $(TEST_SRC:.cpp=.o)
 
-# Regola predefinita eseguita da 'make'
-all: $(TARGET)
+# The executable file that will be created
+MAIN_EXEC = main
+TEST_EXEC = test
 
-# Regola per costruire l'eseguibile
-$(TARGET): $(SRCS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS)
+# 'make main'
+main: $(MAIN_OBJ)
+	$(CXX) $(INCLUDES) -o $(MAIN_EXEC) $(MAIN_OBJ)
 
-# Regola per pulire i file generati
+# 'make test'
+test: $(TEST_OBJ)
+	$(CXX) $(INCLUDES) -o $(TEST_EXEC) $(TEST_OBJ) -lgtest -lgtest_main -pthread
+
+# 'make clean'
 clean:
-	rm -f $(TARGET)
+	$(RM) $(MAIN_EXEC) $(TEST_EXEC) *.o *~
