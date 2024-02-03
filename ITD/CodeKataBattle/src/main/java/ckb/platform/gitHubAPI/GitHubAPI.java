@@ -177,4 +177,6 @@ public class GitHubAPI {
         }
         return Path.of(pullsPath).toString();
     }
+
+    // TODO: get last commit and calculate the time
 }

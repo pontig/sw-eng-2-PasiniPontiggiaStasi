@@ -16,6 +16,60 @@ window.addEventListener("load", async () => {
         document.getElementById("queryResult").style.left = "10vw"
         document.getElementById("queryResult").style.right = "unset"
     })
+
+    logoutForm = document.getElementById("logout")
+
+    /* LOGOUT */
+    logoutForm.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('LOGOUT');
+
+        // Define url and data
+        const url = '/ckb_platform/logout';
+
+        // Prepare data to send to the Server
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        };
+
+        // Fetch data to url
+        fetch(url, options)
+            .then(response => {
+                // Analise server response code
+                switch (response.status) {
+                    case 200:
+                    case 401:
+                    case 404:
+                        response.text().then(result => {
+                            Swal.fire({
+                                title: "Good bye!",
+                                text: result,
+                                type: "success",
+                                confirmButtonColor: '#CC208E'
+                            }).then(() => {
+                                setTimeout(() => {
+                                    window.location.href = "index.html";
+                                }, 500);
+                            });
+                        })
+                        break;
+
+                    default:
+                        // TODO: cambiare errorLogIn
+                        const errorBox = document.getElementById('errorLogIn');
+                        if (errorBox)
+                            errorBox.textContent = "Internal error";
+                        errorBox.style.display = 'flex';
+                        break;
+                }
+            })
+            .catch(error => {
+                console.error('Error during Fetch: ', error);
+            });
+    })
 })
 
 // Hide the fotms in a more user friendly way: pushing the esc key
@@ -497,83 +551,7 @@ async function changePage(page, id) {
                     break
 
                 case "profile":
-                    document.getElementById("path").innerHTML = ""
-                    document.getElementById("path").appendChild(apath)
-                    apathb = document.createElement("a")
-                    apathb.innerHTML = "Profile inspection"
-                    c2 = document.createElement("span")
-                    c2.innerHTML = " > "
-                    document.getElementById("path").appendChild(c2)
-                    document.getElementById("path").appendChild(apathb)
-
-                    document.head.appendChild(link)
-                    document.getElementById("prof1").style.display = "flex"
-                    document.getElementById("prof2").style.display = "flex"
-
-                    res = await fetch("students/" + id + "/profile")
-                    data = await res.json()
-
-                    document.getElementById("title").innerHTML = data.name + " " + data.surname + "'s profile"
-
-                    container = document.querySelector("#prof1 > ul")
-                    data.tournaments.forEach(e => {
-                        let li = document.createElement("li")
-                        let a = document.createElement("a")
-                        a.innerHTML = e.name
-                        a.onclick = (() => { changePage("tournament", e.id) })
-                        li.appendChild(a)
-                        container.appendChild(li)
-                    })
-
-                    container = document.querySelector("#prof2")
-                    container.innerHTML = "<h2>Collected badges</h2>"
-
-                    data.badges.forEach(e => {
-                        let div = document.createElement("div")
-                        div.classList.add("expandable")
-                        let span1, span2, span3
-                        span1 = document.createElement("span")
-                        span1.innerHTML = "&#9679;"
-                        span1.classList.add("badge")
-                        span1.classList.add("grade" + e.rank)
-                        span2 = document.createElement("span")
-                        span2.innerHTML = e.name + " | tot earned: " + e.obtained.length
-                        span3 = document.createElement("span")
-                        span3.innerHTML = "►"
-                        span3.classList.add("togglable")
-
-                        let innercontainer = document.createElement("ul")
-                        innercontainer.classList.add("surprise")
-                        innercontainer.classList.add("hidden")
-
-                        e.obtained.forEach(f => {
-                            let li = document.createElement("li")
-                            let aa = document.createElement("a")
-                            aa.innerHTML = f.battle + ", " + f.date
-                            aa.onclick = (() => { changePage("battle", f.id) })
-                            li.appendChild(aa)
-                            innercontainer.appendChild(li)
-
-                        })
-
-                        div.appendChild(span1)
-                        div.appendChild(span2)
-                        div.appendChild(span3)
-                        div.appendChild(innercontainer)
-                        container.appendChild(div)
-
-                    })
-
-                    document.querySelectorAll(".togglable").forEach(e => {
-                        e.parentNode.addEventListener("click", () => {
-                            e.nextElementSibling.classList.toggle("hidden")
-                            e.innerHTML = e.innerHTML == "►" ? "▼" : "►"
-                        })
-                    })
-
-                    sessionStorage.setItem("battle", null)
-                    sessionStorage.setItem("tournament", null)
-
+                    showProfile(id)
                     break
 
 
@@ -936,7 +914,7 @@ async function changePage(page, id) {
                     break
 
                 case "profile":
-                    // TODO: è la stessa cosa di EDU
+                    showProfile(id)
                     break
 
                 default:
@@ -977,4 +955,110 @@ function hideForm() {
         aaa.checked = false
         document.querySelectorAll("input[name^='Emailothers']").forEach(e => e.parentNode.removeChild(e))
     }
+}
+
+// Shows the profile of a user
+// @param id: the id of the user
+async function showProfile(id) {
+    // Eventually, remove the css refernce for the profile
+    let link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "css/profile.css"
+    link.type = "text/css"
+    if (document.querySelector("link[href='css/profile.css']"))
+        document.head.removeChild(document.querySelector("link[href='css/profile.css']"))
+
+    // Initialization of the path
+    let apath = document.createElement("a")
+    apath.onclick = (() => { changePage("dashboard", 0) })
+    apath.innerHTML = "Dashboard"
+    let apatht, apathb, c, c2 // Other variables for the path
+    let res, data, container // Other variables for the page
+
+    document.getElementById("path").innerHTML = ""
+    document.getElementById("path").appendChild(apath)
+    apathb = document.createElement("a")
+    apathb.innerHTML = "Profile inspection"
+    c2 = document.createElement("span")
+    c2.innerHTML = " > "
+    document.getElementById("path").appendChild(c2)
+    document.getElementById("path").appendChild(apathb)
+
+    document.head.appendChild(link)
+    document.getElementById("prof1").style.display = "flex"
+    document.getElementById("prof2").style.display = "flex"
+
+    res = await fetch("students/" + id + "/profile")
+    data = await res.json()
+    console.log(data)
+
+    document.getElementById("title").innerHTML = data.name + " " + data.surname + "'s profile"
+
+    container = document.querySelector("#prof1 > ul")
+    container.innerHTML = ""
+    data.subscribedTournaments.forEach(e => {
+        let li = document.createElement("li")
+        // let a = document.createElement("a")
+        li.innerHTML = e
+        // a.onclick = (() => { changePage("tournament", e.id) })
+        // li.appendChild(a)
+        container.appendChild(li)
+    })
+
+    container = document.querySelector("#prof2")
+    container.innerHTML = "<h2>His/Her teams:</h2>"
+
+    data.subscribedTeams.forEach(e => {
+        let div = document.createElement("div")
+        div.innerHTML = e
+
+        container.appendChild(div)
+    })
+
+    /* USED JUST TO SHOW THE (NOT IMPLEMENTED) BADGES */
+    // data.badges.forEach(e => {
+    //     let div = document.createElement("div")
+    //     div.classList.add("expandable")
+    //     let span1, span2, span3
+    //     span1 = document.createElement("span")
+    //     span1.innerHTML = "&#9679;"
+    //     span1.classList.add("badge")
+    //     span1.classList.add("grade" + e.rank)
+    //     span2 = document.createElement("span")
+    //     span2.innerHTML = e.name + " | tot earned: " + e.obtained.length
+    //     span3 = document.createElement("span")
+    //     span3.innerHTML = "►"
+    //     span3.classList.add("togglable")
+
+    //     let innercontainer = document.createElement("ul")
+    //     innercontainer.classList.add("surprise")
+    //     innercontainer.classList.add("hidden")
+
+    //     e.obtained.forEach(f => {
+    //         let li = document.createElement("li")
+    //         let aa = document.createElement("a")
+    //         aa.innerHTML = f.battle + ", " + f.date
+    //         aa.onclick = (() => { changePage("battle", f.id) })
+    //         li.appendChild(aa)
+    //         innercontainer.appendChild(li)
+
+    //     })
+
+    //     div.appendChild(span1)
+    //     div.appendChild(span2)
+    //     div.appendChild(span3)
+    //     div.appendChild(innercontainer)
+    //     container.appendChild(div)
+
+    // })
+
+    // document.querySelectorAll(".togglable").forEach(e => {
+    //     e.parentNode.addEventListener("click", () => {
+    //         e.nextElementSibling.classList.toggle("hidden")
+    //         e.innerHTML = e.innerHTML == "►" ? "▼" : "►"
+    //     })
+    // })
+
+    sessionStorage.setItem("battle", null)
+    sessionStorage.setItem("tournament", null)
 }

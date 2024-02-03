@@ -1,13 +1,20 @@
 package ckb.platform.controllers;
 
+import ckb.platform.Pair;
+import ckb.platform.Triplet;
+import ckb.platform.entities.Battle;
 import ckb.platform.entities.Student;
+import ckb.platform.entities.Team;
+import ckb.platform.entities.Tournament;
 import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.repositories.StudentRepository;
+import ckb.platform.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -17,9 +24,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class StudentController {
     @Autowired
     private final StudentRepository repository;
+    @Autowired
+            private final TeamRepository teamRepository;
 
-    StudentController(StudentRepository repository) {
+    StudentController(StudentRepository repository, TeamRepository teamRepository) {
         this.repository = repository;
+        this.teamRepository = teamRepository;
     }
 
     // Aggregate root
@@ -84,25 +94,16 @@ public class StudentController {
         response.put("name", student.getFirstName());
         response.put("surname", student.getLastName());
 
-        List<Map<String, Object>> tournaments = new ArrayList<>();
-        student.getTournaments().forEach(t -> {
-            Map<String, Object> tournament = new LinkedHashMap<>();
-            tournament.put("id", t.getId());
-            tournament.put("name", t.getName());
-            tournaments.add(tournament);
-        });
+        response.put("subscribedTournaments", student.getTournaments().stream().map(Tournament::getName).collect(Collectors.toList()));
+        response.put("subscribedTeams", student.getTournaments().stream()
+                .map(Tournament::getBattles)
+                .flatMap(Collection::stream)
+                .map(Battle::getTeams)
+                .flatMap(Collection::stream)
+                .filter(t -> t.getStudents().contains(student))
+                .map(t -> t.getBattle().getTournament().getName() + " > " + t.getName() + " in " +  t.getBattle().getName())
+                .collect(Collectors.toList()));
 
-        response.put("tournaments", tournaments);
-
-        List<Map<String, Object>> badges = new ArrayList<>();
-        student.getAchieveBadges().forEach(b -> {
-            Map<String, Object> badge = new LinkedHashMap<>();
-            badge.put("id", b.getId());
-            //badge.put("name", b.getName());
-            //TODO;
-            badges.add(badge);
-        });
-        response.put("badges", badges);
         ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(StudentController.class).one(id)).withSelfRel());
         links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));

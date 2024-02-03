@@ -346,7 +346,7 @@ public class TournamentController {
         String name = createTournament.getTournamentName();
         Date registerDeadline = createTournament.getRegisterDeadline();
 
-        if (name.isBlank() || name.isEmpty() || registerDeadline == null)
+        if (/*name.isBlank() ||*/ name.isEmpty() || registerDeadline == null)
             // Check if any field is empty
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
 
