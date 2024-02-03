@@ -17,6 +17,7 @@ public class CreateBattleRequest {
     private int maxSize;
     private boolean manualEvaluation;
     private MultipartFile ckbProblem;
+    private MultipartFile buildScript;
     private String description;
     private boolean reliability, maintainability, security;
 
@@ -105,5 +106,12 @@ public class CreateBattleRequest {
 
     public String getDescription() {
         return description;
+    }
+
+    public MultipartFile getBuildScript() {
+        return buildScript;
+    }
+    public void setBuildScript(MultipartFile buildScript) {
+        this.buildScript = buildScript;
     }
 }

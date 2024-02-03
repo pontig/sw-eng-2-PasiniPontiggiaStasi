@@ -101,6 +101,7 @@ window.onload = () => {
         const minSize = document.getElementById('minSize').value;
         const maxSize = document.getElementById('maxSize').value;
         const fileCKBProblem = document.getElementById('ckbProblem');
+        const fileBuildAutomationScript = document.getElementById('buildScript');
         const manualEvaluation = document.getElementById('manualEvaluation').checked;
 
         console.log('Form data: ', { tournamentId, battleName, registerDeadline, submissionDeadline, language, minSize, maxSize, manualEvaluation });
@@ -120,8 +121,8 @@ window.onload = () => {
         formData.append('maxSize', maxSize);
         formData.append('manualEvaluation', manualEvaluation);
         formData.append('ckbProblem', fileCKBProblem.files[0]);
+        formData.append('buildScript', fileBuildAutomationScript.files[0]);
 
-        // Prepare data to send to the Server
         // Prepare data to send to the Server
         const options = {
             method: 'POST',

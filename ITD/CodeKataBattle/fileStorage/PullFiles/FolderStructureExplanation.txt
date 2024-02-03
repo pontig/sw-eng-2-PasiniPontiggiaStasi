@@ -31,6 +31,7 @@ RepositoryName:
 |   |   |-- main
 |   |   |   |-- language
 |   |   |   |   |-- main.language
+|   |   |-- test
 |   |-- buildscript.extension
 |
 |-- README.md
