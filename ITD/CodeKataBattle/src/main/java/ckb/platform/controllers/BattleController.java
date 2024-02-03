@@ -225,7 +225,6 @@ public class BattleController {
     }
 
     //mapped to "Get the list of groups for the manual evaluation"
-    //TODO : MANCA LA PARTE DELLE EVALUATION, COME CAPISCO SE UN TEAM HA GIà LO SCORE O NO? --> getManualScore() == null
     @GetMapping("/battles/{b_id}/manualevalution")
     List<Map<String, Object>> manualEvalGroups(@PathVariable Long b_id) {
         Battle battle = battleRepository.findById(b_id)
@@ -534,18 +533,30 @@ public class BattleController {
 
             team.setRepo(repository);
             teamRepository.save(team);
-            new GitHubAPI().pullRepository(battle, team, repoName, pusher);
+            String repoPath = new GitHubAPI().pullRepository(battle, team, repoName, pusher);
+
 
             // TODO: build code
 
             //STATIC ANALYSIS
-            Analyzer analyzer = new Analyzer("CKBplatform-" + team.getId(), "CKBplatform-" + team.getId(), "admin", "admin01");
-            //create the project on our static analysis tool
-            analyzer.createProjectSonarQube();
-            //run the analysis from the command line using ./fileStorage as source directory
-            analyzer.runAnalysisSonarQube(battle.getLanguage());
-            //delete the project on our static analysis tool
-            analyzer.deleteProjectSonarQube();
+            if (repoPath != null) {
+                Analyzer analyzer = new Analyzer("CKBplatform-" + team.getId(), "CKBplatform-" + team.getId(), "admin", "admin01");
+
+                int projectExists = analyzer.projectExists();
+
+                if (projectExists == 0) {
+                    //create the project on our static analysis tool
+                    analyzer.createProjectSonarQube();
+                    //create the webhook on our static analysis tool
+                    analyzer.createWebHook();
+                }else if (projectExists == -1) {
+                    System.out.println("Error in the connection with the SonarQube server");
+                    return;
+                }
+                //run the analysis from the command line using repoPath as source directory
+                analyzer.runAnalysisSonarQube( battle.getLanguage() ,repoPath);
+            }
+
             //TODO : TIMELINESS
             //TODO : automatic scripts
             //TODO: update score

@@ -136,7 +136,6 @@ public class Team {
     }
 
     public int getFinalScore() {
-        // TODO: sistemare ritorno punteggi
         if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation()) {
             score = getAutomaticScore();
             return score;

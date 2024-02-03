@@ -24,17 +24,4 @@ public class BadgeController {
         this.repository = repository;
     }
 
-    // Aggregate root
-    // tag::get-aggregate-root[]
-   /*@GetMapping("/badges")
-    CollectionModel<EntityModel<Badge>> all() {
-    }*/
-
-    // end::get-aggregate-root[]
-
-    // Single item
-    /*@GetMapping("/badges/{id}")
-    EntityModel<Badge> one(Long id) {
-    }*/
-    //todo : add badge, delete badge, update badge, get badge
 }

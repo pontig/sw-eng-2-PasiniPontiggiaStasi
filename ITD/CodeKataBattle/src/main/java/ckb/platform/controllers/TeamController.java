@@ -96,7 +96,6 @@ public class TeamController {
         repository.save(t);
         return ResponseEntity.ok().build();
     }
-    //TODO SCORES
 
     @GetMapping("/team/{t_id}/join/{s_id}")
     public ModelAndView joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {

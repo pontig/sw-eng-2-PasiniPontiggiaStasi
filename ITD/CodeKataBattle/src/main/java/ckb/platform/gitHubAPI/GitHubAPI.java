@@ -132,7 +132,8 @@ public class GitHubAPI {
         }
     }
 
-    public void pullRepository(Battle battle, Team team, String repoName, String repoOwner) throws IOException {
+    public String pullRepository(Battle battle, Team team, String repoName, String repoOwner) throws IOException {
+        String pullsPath = null;
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // Create a get object to make the submission
             HttpGet httpGet = new HttpGet("https://api.github.com/repos/" + repoOwner + "/" + repoName.replace(" ", "-") + "/zipball/main");
@@ -147,9 +148,9 @@ public class GitHubAPI {
             // Check if the request was successful (status code 200)
             if (response.getStatusLine().getStatusCode() == 200) {
                 Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
-                String pullsPath = absolutePath + "/PullFiles" +
-                                   "/" + battle.getId() +
-                                   "/" + team.getId() + "/";
+                pullsPath = absolutePath + "/PullFiles" +
+                        "/" + battle.getId() +
+                        "/" + team.getId() + "/";
 
                 Files.createDirectories(Path.of(pullsPath));
 
@@ -170,8 +171,10 @@ public class GitHubAPI {
                 // Handle the case where the request was not successful
                 System.err.println("Failed to download repository. Status code: " + response.getStatusLine().getStatusCode());
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return Path.of(pullsPath).toString();
     }
 }
