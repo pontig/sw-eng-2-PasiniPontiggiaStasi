@@ -417,9 +417,13 @@ public class BattleController {
             // Check if submission is not after registration
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Submission deadline is before registration deadline");
 
-        if(!language.equals("Java") && !language.equals("Cpp") && !language.equals("Python") && !language.equals("C"))
+        if(!language.equals("Java") && !language.equals("Cpp") && !language.equals("Python") && !language.equals("C") && !language.equals("JavaScript"))
             // Check if language is not in the list of accepted one
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Language defined not supported");
+
+        if(language.equals("C") || language.equals("Cpp"))
+            // TODO: remove if we can build it in future
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - We are sorry but it is not possible to build it now");
 
         if(minSize <= 0 || maxSize <= 0)
             // Check if boundaries defined are allowed
@@ -531,7 +535,11 @@ public class BattleController {
             if(battle.getFinalSubmissionDeadline().before(new Date()))
                 return;
 
-            team.setRepo(repository);
+            // Add score for last commit
+            long score = ((battle.getFinalSubmissionDeadline().getTime() - new Date().getTime()) * 100) / (battle.getFinalSubmissionDeadline().getTime() - battle.getRegistrationDeadline().getTime());
+            team.setTimelinessScore((int) score);
+            if(team.getRepo() == null)
+                team.setRepo(repository);
             teamRepository.save(team);
             String repoPath = new GitHubAPI().pullRepository(battle, team, repoName, pusher);
 

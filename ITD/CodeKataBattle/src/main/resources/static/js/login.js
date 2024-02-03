@@ -184,3 +184,28 @@ function login() {
         }, 100)
     }, 400)
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the error parameter from the URL for joining a team
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    const joined = urlParams.get('joined');
+
+    if(error){
+        Swal.fire({
+            title: "Error joining team",
+            text: error,
+            type: "error",
+            confirmButtonColor: '#CC208E'
+        })
+    }
+
+    if(joined){
+        Swal.fire({
+            title: "Team joined",
+            text: joined,
+            type: "success",
+            confirmButtonColor: '#CC208E'
+        })
+    }
+});

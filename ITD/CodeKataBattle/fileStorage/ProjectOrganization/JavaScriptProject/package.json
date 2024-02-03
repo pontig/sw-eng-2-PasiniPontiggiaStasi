@@ -4,6 +4,10 @@
   "description": "Descrizione del mio progetto",
   "main": "src/main/js/main.js",
   "scripts": {
-    "start": "node src/main/js/main.js"
+    "start": "node src/main/js/main.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.2.4"
   }
 }

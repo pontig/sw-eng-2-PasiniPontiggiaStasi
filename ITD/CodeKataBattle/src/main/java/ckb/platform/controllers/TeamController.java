@@ -1,7 +1,6 @@
 package ckb.platform.controllers;
 
 import ckb.platform.entities.*;
-import ckb.platform.exceptions.StudentNotFoundException;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TeamRepository;
@@ -99,8 +98,20 @@ public class TeamController {
 
     @GetMapping("/team/{t_id}/join/{s_id}")
     public ModelAndView joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {
-        Team teamToJoin = repository.findById(t_id).orElseThrow(() -> new TeamNotFoundException(t_id));
-        Student stuToJoin =  studentRepository.findById(s_id).orElseThrow(() -> new StudentNotFoundException(s_id));
+        Optional<Team> teamOpt = repository.findById(t_id);
+        Team teamToJoin = null;
+        if(teamOpt.isEmpty())
+            return new ModelAndView("redirect:/index.html?error=Team do not exist");
+        else
+            teamToJoin = teamOpt.get();
+
+        Optional<Student> stuOpt =  studentRepository.findById(s_id);
+        Student stuToJoin;
+        if(stuOpt.isEmpty())
+            return new ModelAndView("redirect:/index.html?error=Student do not exist");
+        else
+            stuToJoin = stuOpt.get();
+
         Tournament t = teamToJoin.getBattle().getTournament();
         Battle b = teamToJoin.getBattle();
 
@@ -113,7 +124,7 @@ public class TeamController {
                 // Check if the tournament registration windows is open
                 inTournament = false;
             } else
-                return new ModelAndView("index");
+                return new ModelAndView("redirect:/index.html?error=You are not registered to the tournament which is closed");
         }
 
         Team oldTeam = null;
@@ -125,7 +136,7 @@ public class TeamController {
 
                 if(oldTeam == teamToJoin)
                     // Check if it is already in the team
-                    return new ModelAndView("index");
+                    return new ModelAndView("redirect:/index.html?error=You are already in the team");
 
                 inBattle = true;
                 break;
@@ -134,7 +145,7 @@ public class TeamController {
 
         if(teamToJoin.getStudents().size() == b.getMaxStudents())
             // Check if the team is complete
-            return new ModelAndView("index");
+            return new ModelAndView("redirect:/index.html?error=The team you are trying to join is full");
 
         if(!inTournament) {
             // Add to tournament
@@ -145,7 +156,7 @@ public class TeamController {
 
         if(b.getRegistrationDeadline().before(new Date()))
             // Can not register due end deadline
-            return new ModelAndView("index");
+            return new ModelAndView("redirect:/index.html?error=The battle registration deadline is expired you can not join the team");
 
         if(inBattle){
             oldTeam.removeStudent(stuToJoin);
@@ -157,14 +168,11 @@ public class TeamController {
         repository.save(teamToJoin);
 
         User user = (User) session.getAttribute("user");
-        ModelAndView modelAndView = new ModelAndView();
 
-        if(user == null) {
-            modelAndView.setViewName("index");
-        } else {
-            modelAndView.setViewName("indexSTU");
-        }
+        if(user == null)
+            return new ModelAndView("redirect:/index.html?joined=You joined the team now log in");
+        else
+            return new ModelAndView("redirect:/indexSTU.html?joined=You joined the team");
 
-        return modelAndView;
     }
 }

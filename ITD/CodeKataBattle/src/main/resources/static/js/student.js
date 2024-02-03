@@ -115,4 +115,19 @@ window.addEventListener('load', () => {
     })
 })
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the error parameter from the URL for joining a team
+    const urlParams = new URLSearchParams(window.location.search);
+    const joined = urlParams.get('joined');
+
+    if(joined){
+        Swal.fire({
+            title: "Team joined",
+            text: joined,
+            type: "success",
+            confirmButtonColor: '#CC208E'
+        })
+    }
+});
+
 // TODO: la funzione per iscriversi al torneo si chiama subscribeTournament
