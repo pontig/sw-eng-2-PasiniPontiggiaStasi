@@ -1,6 +1,6 @@
-projectKey=CKB-platform
+projectKey=CKB-platform-1
 serverUrl=http://localhost:9000
 serverVersion=10.3.0.82913
-dashboardUrl=http://localhost:9000/dashboard?id=CKB-platform
-ceTaskId=AY1bM4h5XiR-2jbVRcRd
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AY1bM4h5XiR-2jbVRcRd
+dashboardUrl=http://localhost:9000/dashboard?id=CKB-platform-1
+ceTaskId=AY1qzeydrUfdmKYvXFnL
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AY1qzeydrUfdmKYvXFnL

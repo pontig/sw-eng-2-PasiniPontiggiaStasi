@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -20,10 +22,10 @@ public class StaticToolController {
     //in fact, the webhook of sonarqube will call this endpoint
     @PostMapping("/static_analysis/results")
     public ResponseEntity<String> getStaticAnalysisResults(@RequestBody Map<String, Object> payload) {
-        String projectName = (String) ((Map<String,Object>) payload.get("project")).get("name");
+        String projectKey = (String) ((Map<String,Object>) payload.get("project")).get("key");
         try {
             // Specify the URL you want to connect to
-            String url = "http://localhost:9000/api/measures/component?metrics&component=" + projectName + "&metricKeys=%2Creliability_rating%2Csecurity_rating%2Cnew_maintainability_rating";
+            String url = "http://localhost:9000/api/measures/component?metrics&component=" + projectKey + "&metricKeys=%2Creliability_rating%2Csecurity_rating%2Cnew_maintainability_rating";
 
             // Create a URL object
             URL urlObj = new URL(url);
@@ -60,7 +62,7 @@ public class StaticToolController {
 
 
             // Split the string based on the pattern "CKBplatform-" and get the last part
-            String[] parts = projectName.split("CKBplatform-");
+            String[] parts = projectKey.split("CKBplatform-");
 
             // Access the last part, assuming "ID" appears in the string
             String team;
@@ -90,9 +92,9 @@ public class StaticToolController {
             String metric = (String) measure.get("metric");
             switch (metric) {
                 case "new_maintainability_rating" ->
-                        maintainabilityScore = 6 - Integer.parseInt((String) ((Map<String, Object>) measure.get("period")).get("value"));
-                case "reliability_rating" -> reliabilityScore = 6 - Integer.parseInt((String) measure.get("value"));
-                case "security_rating" -> securityScore = 6 - Integer.parseInt((String) measure.get("value"));
+                        maintainabilityScore = 6 - Math.round(Float.parseFloat((String) ((Map<String, Object>) measure.get("period")).get("value")));
+                case "reliability_rating" -> reliabilityScore = 6 - Math.round(Float.parseFloat((String) measure.get("value")));
+                case "security_rating" -> securityScore = 6 - Math.round(Float.parseFloat((String) measure.get("value")));
             }
         }
         // computing automatic score
@@ -102,7 +104,7 @@ public class StaticToolController {
 
         // Specify the URL you want to connect to
         try{
-            String url = "http://localhost:8080/ckb_platform/teams/score/staticAnalysis" + team;
+            String url = "http://localhost:8080/ckb_platform/teams/score/staticAnalysis/" + team;
             // Create a URL object
             URL urlObj = new URL(url);
 
@@ -111,30 +113,25 @@ public class StaticToolController {
 
             // Set the request method to GET
             connection.setRequestMethod("POST");
-
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("maintainabilityScore", Integer.toString(maintainabilityScore));
-            parameters.put("reliabilityScore", Integer.toString(reliabilityScore));
-            parameters.put("securityScore", Integer.toString(securityScore));
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
 
             connection.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-            out.writeBytes(ParameterStringBuilder.getParamsString(parameters));
-            out.flush();
-            out.close();
 
-            // Add authentication header (Basic Auth example)
-            //TODO authentication
-            String username = "chipndalebutjustdale@mail.mit.com";
-            String password = "nervi";
-            String authString = username + ":" + password;
-            String authHeader = "Basic " + Base64.getEncoder().encodeToString(authString.getBytes());
-            connection.setRequestProperty("Authorization", authHeader);
+            String jsonInputString = "{\"maintainabilityScore\": " + maintainabilityScore + ", \"reliabilityScore\": " + reliabilityScore + ", \"securityScore\": " + securityScore + "}";
+            OutputStream os = connection.getOutputStream();
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            os.flush();
+            os.close();
 
-            // Get the response code
-            int responseCode = connection.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
-
+            BufferedReader br = new BufferedReader(new java.io.InputStreamReader(connection.getInputStream(), "utf-8"));
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
             // Close the connection
             connection.disconnect();
         }catch(Exception e){

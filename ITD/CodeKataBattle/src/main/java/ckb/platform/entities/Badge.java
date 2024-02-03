@@ -17,5 +17,4 @@ public class Badge {
     public Long getId() {
         return id;
     }
-    //TODO: Add badge properties
 }

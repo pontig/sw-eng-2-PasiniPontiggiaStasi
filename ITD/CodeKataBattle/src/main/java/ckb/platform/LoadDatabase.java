@@ -21,7 +21,7 @@ class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    @Bean
+    /*@Bean
     CommandLineRunner initDatabase1(StudentRepository stuRep, EducatorRepository eduRep, TournamentRepository tourRep, BattleRepository batRep, TeamRepository teamRep) {
 
 
@@ -198,5 +198,5 @@ class LoadDatabase {
                 });
             });
         };
-    }
+    }*/
 }
