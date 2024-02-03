@@ -1,6 +1,7 @@
 package ckb.platform;
 
 import ckb.platform.entities.Analyzer;
+import ckb.platform.gitHubAPI.GitHubAPI;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -35,5 +36,13 @@ public class StaticAnalysis {
         }
         //run the analysis from the command line using repoPath as source directory
         analyzer.runAnalysisSonarQube("", pullsPath);
+    }
+
+    @Test
+    void unzip(){
+        String zipFilePath = "fileStorage/PullFiles/1/1/Progetto.zip";
+        String destDir = "fileStorage/PullFiles/1/1/";
+        GitHubAPI gitHubAPI = new GitHubAPI();
+        gitHubAPI.unzip(zipFilePath, destDir);
     }
 }

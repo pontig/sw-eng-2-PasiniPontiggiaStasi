@@ -48,14 +48,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class GitHubAPI {
     // Define Access Token for GitHub authentication
@@ -197,7 +196,7 @@ public class GitHubAPI {
                     while ((bytesRead = inputStream.read(buffer)) != -1) {
                         outputStream.write(buffer, 0, bytesRead);
                     }
-
+                    unzip(pullsPath + "repo.zip", pullsPath);
                     System.out.println("Repository downloaded successfully.");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -211,6 +210,56 @@ public class GitHubAPI {
             throw new RuntimeException(e);
         }
         return Path.of(pullsPath).toString();
+    }
+
+    public void unzip(String zipFilePath, String destDir) {
+        try{
+            byte[] buffer = new byte[1024];
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath));
+            ZipEntry zipEntry = zis.getNextEntry();
+            while (zipEntry != null) {
+                File newFile = newFile(new File(destDir), zipEntry);
+                if (zipEntry.isDirectory()) {
+                    if (!newFile.isDirectory() && !newFile.mkdirs()) {
+                        throw new IOException("Failed to create directory " + newFile);
+                    }
+                } else {
+                    // fix for Windows-created archives
+                    File parent = newFile.getParentFile();
+                    if (!parent.isDirectory() && !parent.mkdirs()) {
+                        throw new IOException("Failed to create directory " + parent);
+                    }
+
+                    // write file content
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.close();
+                }
+                zipEntry = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private File newFile(File destinationDir, ZipEntry zipEntry) throws IOException{
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
     }
 
     // TODO: get last commit and calculate the time
