@@ -1,14 +1,22 @@
 package ckb.platform.formParser;
 
 public class InviteSinglePersonRequest {
-    private String email;
-    private Long teamId;
+    private String mail;
+    private Long team_id;
 
-    public String getEmail() {
-        return email;
+    public String getMail() {
+        return mail;
     }
 
-    public Long getTeamId() {
-        return teamId;
+    public Long getTeam_id() {
+        return team_id;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setTeam_id(Long team_id) {
+        this.team_id = team_id;
     }
 }
