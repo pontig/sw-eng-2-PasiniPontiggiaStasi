@@ -25,7 +25,7 @@ public class StudentController {
     @Autowired
     private final StudentRepository repository;
     @Autowired
-            private final TeamRepository teamRepository;
+    private final TeamRepository teamRepository;
 
     StudentController(StudentRepository repository, TeamRepository teamRepository) {
         this.repository = repository;

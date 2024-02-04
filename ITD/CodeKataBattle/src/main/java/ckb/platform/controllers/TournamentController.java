@@ -90,10 +90,10 @@ public class TournamentController {
         });
         response.put("ranking", rankings);
 
-        ArrayList<Link> links = new ArrayList<>();
-        links.add(linkTo(methodOn(TournamentController.class).one(tournament.getId())).withSelfRel());
-        links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-        response.put("_links_", links);
+        //ArrayList<Link> links = new ArrayList<>();
+        //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).one(tournament.getId())).withSelfRel());
+        //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).all()).withRel("tournaments"));
+        //response.put("_links_", links);
 
         return response;
     }
@@ -112,10 +112,10 @@ public class TournamentController {
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
-            ArrayList<Link> links = new ArrayList<>();
-            links.add(linkTo(methodOn(TournamentController.class).one(t.getId())).withSelfRel());
-            links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-            tournament.put("_links_", links);
+            //ArrayList<Link> links = new ArrayList<>();
+            //links.add(linkTo(methodOn(TournamentController.class).one(t.getId())).withSelfRel());
+            //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+            //tournament.put("_links_", links);
             response.add(tournament);
         });
 
@@ -140,10 +140,10 @@ public class TournamentController {
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
-            ArrayList<Link> links = new ArrayList<>();
-            links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(t.getId(), session)).withSelfRel());
-            links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-            tournament.put("_links_", links);
+            //ArrayList<Link> links = new ArrayList<>();
+            //links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(t.getId(), session)).withSelfRel());
+            //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+            //tournament.put("_links_", links);
             response.add(tournament);
         });
 
@@ -205,10 +205,10 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         response.put("ranking", rankings);
-        ArrayList<Link> links = new ArrayList<>();
-        links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(tournament.getId(), session)).withSelfRel());
-        links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-        response.put("_links_", links);
+        //ArrayList<Link> links = new ArrayList<>();
+        //links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(tournament.getId(), session)).withSelfRel());
+        //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+        //response.put("_links_", links);
         return response;
     }
 
@@ -264,10 +264,10 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         tournamentMap.put("ranking", rankings);
-        ArrayList<Link> links = new ArrayList<>();
-        links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(tournament.getId(), session)).withSelfRel());
-        links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-        tournamentMap.put("_links_", links);
+        //ArrayList<Link> links = new ArrayList<>();
+        //links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(tournament.getId(), session)).withSelfRel());
+        //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
+        //tournamentMap.put("_links_", links);
         return tournamentMap;
     }
 
@@ -290,10 +290,10 @@ public class TournamentController {
             tournamentMap.put("first_name", t.getCreator().getFirstName());
             tournamentMap.put("last_name", t.getCreator().getLastName());
             tournamentMap.put("active", t.isActive());
-            ArrayList<Link> links = new ArrayList<>();
-            links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
-            links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-            tournamentMap.put("_links_", links);
+            //ArrayList<Link> links = new ArrayList<>();
+            //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
+            //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).all()).withRel("tournaments"));
+            //tournamentMap.put("_links_", links);
             response.add(tournamentMap);
         });
 
@@ -326,10 +326,10 @@ public class TournamentController {
                 tournamentMap.put("first_name", t.getCreator().getFirstName());
                 tournamentMap.put("last_name", t.getCreator().getLastName());
                 tournamentMap.put("daysLeft", daysLeft);
-                ArrayList<Link> links = new ArrayList<>();
-                links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
-                links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-                tournamentMap.put("_links_", links);
+                /*ArrayList<Link> links = new ArrayList<>();
+                links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
+                links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).all()).withRel("tournaments"));
+                tournamentMap.put("_links_", links);*/
                 response.add(tournamentMap);
             }
         });

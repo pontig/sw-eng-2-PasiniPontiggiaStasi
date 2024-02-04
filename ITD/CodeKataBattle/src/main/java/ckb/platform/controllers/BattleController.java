@@ -28,6 +28,7 @@ import java.util.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+
 @RestController
 public class BattleController {
     @Autowired
@@ -71,10 +72,10 @@ public class BattleController {
             battleMap.put("tournament_name", battle.getTournament().getName());
             battleMap.put("tournament_id", battle.getTournament().getId());
 
-            ArrayList<Link> links = new ArrayList<>();
+            /*ArrayList<Link> links = new ArrayList<>();
             links.add(linkTo(methodOn(BattleController.class).one(battle.getId())).withSelfRel());
             links.add(linkTo(methodOn(BattleController.class).all()).withRel("all"));
-            battleMap.put("_links_", links);
+            battleMap.put("_links_", links);*/
             response.add(battleMap);
         }
 
@@ -113,10 +114,10 @@ public class BattleController {
 
         battleMap.put("ranking", rankings);
 
-        ArrayList<Link> links = new ArrayList<>();
+        /*ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(BattleController.class).one(id)).withSelfRel());
         links.add(linkTo(methodOn(BattleController.class).all()).withRel("all"));
-        battleMap.put("_links_", links);
+        battleMap.put("_links_", links);*/
 
         return battleMap;
     }
@@ -167,10 +168,10 @@ public class BattleController {
         }, ArrayList::addAll);
 
         battleMap.put("ranking", rankings);
-        ArrayList<Link> links = new ArrayList<>();
+        /*ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(BattleController.class).getBattleDetailsSTU(battle.getId(), session)).withSelfRel());
         links.add(linkTo(methodOn(BattleController.class).all()).withRel("battles"));
-        battleMap.put("_links_", links);
+        battleMap.put("_links_", links);*/
         return battleMap;
     }
 
@@ -216,10 +217,10 @@ public class BattleController {
 
         battleMap.put("ranking", rankings);
 
-        ArrayList<Link> links = new ArrayList<>();
+        /*ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(BattleController.class).getBattleDetailsEDU(battle.getId(), session)).withSelfRel());
         links.add(linkTo(methodOn(BattleController.class).all()).withRel("battles"));
-        battleMap.put("_links_", links);
+        battleMap.put("_links_", links);*/
 
         return battleMap;
     }
@@ -265,11 +266,11 @@ public class BattleController {
         response.put("score", battle.getRanking().get(team));
         response.put("code", team.getCode());
 
-        ArrayList<Link> links = new ArrayList<>();
+       /* ArrayList<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(TeamController.class).one(t_id)).withRel("team"));
         links.add(linkTo(methodOn(BattleController.class).getStudents(b_id)).withRel("all_teams"));
 
-        response.put("_links_", links);
+        response.put("_links_", links);*/
         return response;
     }
 
