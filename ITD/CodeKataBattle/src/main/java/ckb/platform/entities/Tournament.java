@@ -28,21 +28,17 @@ public class Tournament {
     @ManyToMany(fetch=FetchType.EAGER)
     private List<Badge> badges;
 
-    //@ElementCollection(fetch = FetchType.EAGER)
-    //private Map<Student, Integer> ranking;
-    //private Boolean active;
 
     public Tournament(String name, Date subscriptionDeadline, Date endDate, Educator creator) {
         this.name = name;
         this.subscriptionDeadline = subscriptionDeadline;
         this.endDate = endDate;
         this.creator = creator;
-        grantedEducators = new ArrayList<Educator>();
+        grantedEducators = new ArrayList<>();
         grantedEducators.add(creator);
-        subscribedStudents = new ArrayList<Student>();
-        battles = new ArrayList<Battle>();
-        badges = new ArrayList<Badge>();
-        //ranking = new LinkedHashMap<Student, Integer>();
+        subscribedStudents = new ArrayList<>();
+        battles = new ArrayList<>();
+        badges = new ArrayList<>();
 
     }
 
@@ -63,14 +59,6 @@ public class Tournament {
     public void addBadge(Badge badge){
         badges.add(badge);
     }
-
-    //public void setRankingPerStudent(Student student, Integer position){
-    //    ranking.put(student, position);
-    //}
-
-    //public void setRanking(Map<Student, Integer> ranking){
-    //    this.ranking = ranking;
-    //}
 
     public Long getId() {
         return this.id;
@@ -113,7 +101,7 @@ public class Tournament {
                 .flatMap(Collection::stream)
                 .map(e -> e.getStudents()
                         .stream()
-                        .map(s -> new Pair<Student, Integer>(s, e.getFinalScore())).collect(Collectors.toList()))
+                        .map(s -> new Pair<>(s, e.getFinalScore())).toList())
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(e -> e.first, Collectors.summingInt(e -> e.second)));
     }

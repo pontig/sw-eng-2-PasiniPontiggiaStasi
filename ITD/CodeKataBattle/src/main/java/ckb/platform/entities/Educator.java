@@ -17,8 +17,8 @@ public class Educator extends User{
 
     public Educator( String firstName, String lastName, String email, String password, String home_uni) {
         super( firstName, lastName, email, password, true, home_uni);
-        ownedTournaments = new ArrayList<Tournament>();
-        ownedBattles = new ArrayList<Battle>();
+        ownedTournaments = new ArrayList<>();
+        ownedBattles = new ArrayList<>();
     }
 
     public Educator() {}
@@ -55,5 +55,18 @@ public class Educator extends User{
                 ", lastName='" + super.getLastName()+
                 ", email='" + super.getEmail() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Educator)) return false;
+        Educator educator = (Educator) o;
+        return super.getId().equals(educator.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.getId().hashCode();
     }
 }

@@ -7,10 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Properties;
 
 @Configuration
@@ -24,8 +21,8 @@ public class startSonarQubeServer {
 
     @Bean
     AsyncTaskExecutor startingServer() {
-        try {
-            properties.load(new FileInputStream("src/main/resources/application.properties"));
+        try(InputStream input = new FileInputStream("src/main/resources/application.properties")) {
+            properties.load(input);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -6,7 +6,7 @@ package ckb.platform.gitHubAPI;
  * password: CKB202430l!
  *
  * GITHUB API TOKEN:
- * Auth token: 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
+ * Auth token:
  * Expiration: Sat, Jan 18 2025
  *
  * FILES ORGANIZATION:
@@ -47,6 +47,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -54,16 +56,27 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Comparator;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class GitHubAPI {
+
+    private static final Logger log = LoggerFactory.getLogger(GitHubAPI.class);
+
+    Properties properties = new Properties();
     // Define Access Token for GitHub authentication
-    private final String accessToken = "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";
+    private final String accessToken = properties.getProperty("github.auth.token");
 
     // Define username
     private final String username = "CodeKataBattlePlatform";
-    public GitHubAPI(){}
+    public GitHubAPI(){
+        try {
+            properties.load(new FileInputStream("src/main/resources/application.properties"));
+        } catch (IOException e) {
+            log.error("Error loading properties file", e);
+        }
+    }
 
     public int createRepository(Battle battle, String description) {
         // Repo name same as battle name
@@ -83,7 +96,7 @@ public class GitHubAPI {
 
             // Execute the POST request and wait for response
             HttpResponse response = httpClient.execute(httpPost);
-            System.out.println("Create Repository Response Code: " + response);
+            log.info("Create Repository Response Code: " + response);
             return response.getStatusLine().getStatusCode();
         } catch (Exception e) {
             return 500;
@@ -127,7 +140,6 @@ public class GitHubAPI {
                     }
                 }
                 case "Test" -> {
-                    // TODO: change to right folder
                     if(battle.getLanguage().equals("Java")){
                         fileName = "/MainTest.java";
                         path = absolutePath + "/" + folder + "/" + battle.getId() + fileName;
@@ -180,11 +192,11 @@ public class GitHubAPI {
             StringEntity entity = new StringEntity("{\"message\":\"Create " + folder + " folder\",\"content\":\"" + base64Encoded + "\"}");
             httpPut.setEntity(entity);
             httpPut.setHeader("Accept", "application/vnd.github+json");
-            System.out.println("File path: " + path + "\nPost path: " + httpPut);
+            log.info("File path: " + path + "\nPost path: " + httpPut);
 
             // Execute the PUT request and wait for response
             HttpResponse response = httpClient.execute(httpPut);
-            System.out.println("Create Folder Response Code for " + folder + ": " + response);
+            log.info("Create Folder Response Code for " + folder + ": " + response);
             return response.getStatusLine().getStatusCode();
         } catch (Exception e) {
             return 500;
@@ -202,7 +214,7 @@ public class GitHubAPI {
 
             // Execute the GET request and wait for response
             HttpResponse response = httpClient.execute(httpGet);
-            System.out.println("Create Repository Response Code: " + response);
+            log.info("Create Repository Response Code: " + response);
 
             // Check if the request was successful (status code 200)
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -231,13 +243,13 @@ public class GitHubAPI {
                         outputStream.write(buffer, 0, bytesRead);
                     }
                     pullsPath = unzip(pullsPath + "repo.zip", pullsPath);
-                    System.out.println("Repository downloaded successfully.");
+                    log.info("Repository downloaded successfully.");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error("Failed to download repository", e);
                 }
             } else {
                 // Handle the case where the request was not successful
-                System.err.println("Failed to download repository. Status code: " + response.getStatusLine().getStatusCode());
+                log.error("Failed to download repository. Status code: " + response.getStatusLine().getStatusCode());
             }
 
         } catch (IOException e) {
@@ -247,9 +259,11 @@ public class GitHubAPI {
     }
 
     public String unzip(String zipFilePath, String destDir) {
+        ZipInputStream zis=null;
+        FileOutputStream fos=null;
         try {
             byte[] buffer = new byte[1024];
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath));
+            zis = new ZipInputStream(new FileInputStream(zipFilePath));
             ZipEntry zipEntry = zis.getNextEntry();
             int i = 0;
             String dirName = null;
@@ -271,7 +285,7 @@ public class GitHubAPI {
                     }
 
                     // write file content
-                    FileOutputStream fos = new FileOutputStream(newFile);
+                    fos = new FileOutputStream(newFile);
                     int len;
                     while ((len = zis.read(buffer)) > 0) {
                         fos.write(buffer, 0, len);
@@ -285,7 +299,14 @@ public class GitHubAPI {
             zis.close();
             return destDir.concat(dirName);
         }catch (IOException e){
-            e.printStackTrace();
+            log.error("Failed to unzip file", e);
+        }finally {
+            try {
+                zis.close();
+                fos.close();
+            } catch (IOException e) {
+                log.error("Failed to close zip input stream", e);
+            }
         }
         return null;
     }
@@ -302,6 +323,4 @@ public class GitHubAPI {
 
         return destFile;
     }
-
-    // TODO: get last commit and calculate the time
 }

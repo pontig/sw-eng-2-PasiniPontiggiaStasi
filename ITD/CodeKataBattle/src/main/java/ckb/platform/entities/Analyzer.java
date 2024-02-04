@@ -2,6 +2,8 @@ package ckb.platform.entities;
 
 import ckb.platform.utils.ParameterStringBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -9,20 +11,28 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class Analyzer {
-
-    private String projectName;
-    private String projectKey;
-    private String token;
+    private static final Logger log = LoggerFactory.getLogger(Analyzer.class);
+    public static final String AUTH_TYPE = "Basic ";
+    Properties prop = new Properties();
+    private final String projectName;
+    private final String projectKey;
     private String login;
     private String password;
 
-    public Analyzer(String projectName, String projectKey, String login, String password) {
+    public Analyzer(String projectName, String projectKey) {
         this.projectName = projectName;
         this.projectKey = projectKey;
-        this.login = login;
-        this.password = password;
+        try(FileInputStream input = new FileInputStream("src/main/resources/application.properties")) {
+            prop.load(input);
+            this.login = prop.getProperty("sonarqube.login");
+            this.password = prop.getProperty("sonarqube.password");
+        } catch (IOException e) {
+            log.error("Error while reading application.properties: " + e.getMessage());
+        }
+
     }
 
     public int projectExists(){
@@ -42,12 +52,12 @@ public class Analyzer {
 
             // Add authentication header (Basic Auth example)
             String authString = this.login + ":" + this.password;
-            String authHeader = "Basic " + Base64.getEncoder().encodeToString(authString.getBytes());
+            String authHeader = AUTH_TYPE + Base64.getEncoder().encodeToString(authString.getBytes());
             connection.setRequestProperty("Authorization", authHeader);
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code for project existence: " + responseCode);
+            log.info("Response Code for project existence: " + responseCode);
 
 
             // Close the connection
@@ -59,7 +69,7 @@ public class Analyzer {
             else
                 return -1;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error while checking project existence: " + e.getMessage());
             return -1;
         }
     }
@@ -80,7 +90,7 @@ public class Analyzer {
 
             // Add authentication header (Basic Auth example)
             String authString = this.login + ":" + this.password;
-            String authHeader = "Basic " + Base64.getEncoder().encodeToString(authString.getBytes());
+            String authHeader = AUTH_TYPE + Base64.getEncoder().encodeToString(authString.getBytes());
             connection.setRequestProperty("Authorization", authHeader);
 
             Map<String, String> parameters = new HashMap<>();
@@ -96,8 +106,8 @@ public class Analyzer {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code for creating SonarQube Project: " + responseCode);
-            System.out.println("name: " + projectName + " projectKey: " + projectKey);
+            log.info("Response Code for creating SonarQube Project: " + responseCode);
+            log.info("name: " + projectName + " projectKey: " + projectKey);
 
             // Read the response from the server
             // Use Jackson ObjectMapper to parse JSON response
@@ -106,19 +116,19 @@ public class Analyzer {
             // Read the response from the server
             Map<String, Object> responseMap = objectMapper.readValue(connection.getInputStream(), Map.class);
             // Print the parsed response
-            System.out.println("Parsed Response Map: " + responseMap);
+            log.info("Parsed Response Map: " + responseMap);
 
             // Close the connection
             connection.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error creating SonarQube Project: " + e.getMessage());
         }
     }
 
-    public int runAnalysisSonarQube(String language, String path){
-        this.token = getToken();
+    public int runAnalysisSonarQube(String language, String path) {
+        String token = getToken();
         if (token == null){
-            System.out.println("Token not found");
+            log.info("Token not found");
             return 0;
         }
         try {
@@ -129,7 +139,6 @@ public class Analyzer {
 
             language = language.toLowerCase();
             if(language.equals("java")){
-                //todo change the path to the path of the project
                 command += " -D sonar.java.binaries=./target/classes";
             }
             // Create ProcessBuilder with the command and set the working directory
@@ -141,19 +150,22 @@ public class Analyzer {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
+                    log.info(line);
                 }
             } catch (IOException e) {
-                System.out.println("Error reading process output" + e.getMessage());
+                log.info("Error reading process output" + e.getMessage());
             }
             // Wait for the process to finish
             int exitCode = process.waitFor();
 
 
-            System.out.println("Command exited with code: " + exitCode);
+            log.info("Command exited with code: " + exitCode);
             return 1;
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        }catch (IOException e){
+            log.error("IOException running sonar-scanner: " + e.getMessage());
+        }catch (InterruptedException e) {
+            log.error("InterruptedException running sonar-scanner: " + e.getMessage());
+            Thread.currentThread().interrupt();
         }
         return 0;
     }
@@ -172,15 +184,14 @@ public class Analyzer {
             // Set the request method to GET
             connection.setRequestMethod("GET");
             // Add authentication header (Basic Auth example)
-            String username = "admin";
-            String password = "admin01";
-            String authString = username + ":" + password;
-            String authHeader = "Basic " + Base64.getEncoder().encodeToString(authString.getBytes());
+
+            String authString = this.login + ":" + this.password;
+            String authHeader = AUTH_TYPE + Base64.getEncoder().encodeToString(authString.getBytes());
             connection.setRequestProperty("Authorization", authHeader);
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code for getting the token: " + responseCode);
+            log.info("Response Code for getting the token: " + responseCode);
 
             // Read the response from the server
             // Use Jackson ObjectMapper to parse JSON response
@@ -189,13 +200,13 @@ public class Analyzer {
             // Read the response from the server
             Map<String, Object> responseMap = objectMapper.readValue(connection.getInputStream(), Map.class);
             // Print the parsed response
-            System.out.println("Parsed Response Map: " + responseMap);
+            log.info("Parsed Response Map: " + responseMap);
 
             // Close the connection
             connection.disconnect();
             return responseMap.get("token").toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error getting token: " + e.getMessage());
         }
         return null;
     }
@@ -215,7 +226,7 @@ public class Analyzer {
 
             // Add authentication header (Basic Auth example)
             String authString = this.login + ":" + this.password;
-            String authHeader = "Basic " + Base64.getEncoder().encodeToString(authString.getBytes());
+            String authHeader = AUTH_TYPE + Base64.getEncoder().encodeToString(authString.getBytes());
             connection.setRequestProperty("Authorization", authHeader);
 
             Map<String, String> parameters = new HashMap<>();
@@ -231,7 +242,7 @@ public class Analyzer {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code for generating a webhook: " + responseCode);
+            log.info("Response Code for generating a webhook: " + responseCode);
 
             // Read the response from the server
             // Use Jackson ObjectMapper to parse JSON response
@@ -240,12 +251,12 @@ public class Analyzer {
             // Read the response from the server
             Map<String, Object> responseMap = objectMapper.readValue(connection.getInputStream(), Map.class);
             // Print the parsed response
-            System.out.println("Parsed Response Map: " + responseMap);
+            log.info("Parsed Response Map: " + responseMap);
 
             // Close the connection
             connection.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error creating webhook: " + e.getMessage());
         }
     }
 }

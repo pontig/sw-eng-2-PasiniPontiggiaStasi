@@ -22,7 +22,7 @@ public class StaticAnalysis {
         GitHubAPI gitHubAPI = new GitHubAPI();
         pullsPath = gitHubAPI.unzip(pullsPath+ "repo.zip", pullsPath);
 
-        Analyzer analyzer = new Analyzer("CKBplatform-" + 1, "CKBplatform-" + 1, "admin", "admin01");
+        Analyzer analyzer = new Analyzer("CKBplatform-" + 1, "CKBplatform-" + 1);
 
         int projectExists = analyzer.projectExists();
 
@@ -37,6 +37,7 @@ public class StaticAnalysis {
         }
         //run the analysis from the command line using repoPath as source directory
         analyzer.runAnalysisSonarQube("", pullsPath);
+
     }
 
     @Test

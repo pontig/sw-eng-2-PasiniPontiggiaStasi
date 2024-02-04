@@ -1,7 +1,6 @@
 package ckb.platform.entities;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.*;
 
@@ -14,8 +13,6 @@ public class Battle {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Educator creator;
-    //@ElementCollection
-    //private Map<Team, Integer> ranking;
     private Boolean manualEvaluation;
     private String name;
     private Boolean hasBeenEvaluated;
@@ -25,16 +22,15 @@ public class Battle {
     private Date registrationDeadline;
     private Date finalSubmissionDeadline;
     private Date openDate;
-    //private int phase;
     private String description;
-    //@ManyToMany
-    //private List<Student> subscribedStudents;
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Team> teams;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
-    private boolean reliability, maintainability, security;
+    private boolean reliability;
+    private boolean maintainability;
+    private boolean security;
 
     public Battle() {
     }
@@ -71,8 +67,7 @@ public class Battle {
         this.reliability = reliability;
         this.maintainability = maintainability;
         this.security = security;
-        teams = new ArrayList<Team>();
-        //subscribedStudents = new ArrayList<Student>();
+        teams = new ArrayList<>();
     }
 
     public String getName() {
@@ -88,7 +83,7 @@ public class Battle {
             return 1;
         } else if (new Date().before(finalSubmissionDeadline)) {
             return 2;
-        } else if (manualEvaluation && !hasBeenEvaluated) {
+        } else if (Boolean.TRUE.equals(manualEvaluation) && Boolean.TRUE.equals(!hasBeenEvaluated)) {
             return 3;
         } else {
             return 4;
@@ -114,18 +109,6 @@ public class Battle {
     public void addTeam(Team team) {
         teams.add(team);
     }
-
-    //public void addStudent(Student student){
-    //    subscribedStudents.add(student);
-    //}
-
-    // public List<Student> getSubscribedStudents(){
-    //     return subscribedStudents;
-    // }
-
-    //public void setRanking(Team team, Integer position) {
-    //    ranking.put(team, position);
-    //}
 
     public void setManualEvaluation(Boolean manualEvaluation) {
         this.manualEvaluation = manualEvaluation;
@@ -247,7 +230,6 @@ public class Battle {
     @Override
     public String toString() {
         return "Battle{" + "id=" + this.id + ", creator='" + this.creator.getId() + ", manualEvaluation='" + this.manualEvaluation + '\'' + ", hasBeenEvaluated='" + this.hasBeenEvaluated + '\'' + ", minStudents='" + this.minStudents + '\'' + ", maxStudents='" + this.maxStudents + '\'' + ", registrationDeadline='" + this.registrationDeadline + '\'' + ", finalSubmissionDeadline='" + this.finalSubmissionDeadline + '\'' + ", teams='" + this.teams + '\'' + ", tournament='" + this.tournament.getId() + '\'' + '}';
-        //return "Ciao michelangelo";
     }
 
     public boolean isMaintainability() {

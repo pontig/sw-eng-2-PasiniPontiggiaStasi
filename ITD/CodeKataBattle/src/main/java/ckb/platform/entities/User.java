@@ -73,6 +73,10 @@ public abstract class User {
         return this.is_Edu;
     }
 
+    public String getHome_uni() {
+        return this.home_uni;
+    }
+
     @Override
     public boolean equals(Object o) {
 

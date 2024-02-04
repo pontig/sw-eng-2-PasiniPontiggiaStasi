@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,7 +34,7 @@ public class TestRepository {
                 // pip install --upgrade --force-reinstall pytest e poi il warning imposable a path
                 command = "pytest -v tests";
                 break;
-            // TODO: non implemented
+            // not implemented
             case "C":
             case "Cpp":
             default:
@@ -111,6 +112,14 @@ public class TestRepository {
 
         // Read the XML report file
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+        factory.setExpandEntityReferences(false);
+
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(fileResultJest);
 
@@ -166,7 +175,7 @@ public class TestRepository {
         return (passedTest*100)/run;
     }
 
-    // TODO: For testing purpose only
+    // For testing purpose only
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         String language = "Python"; // Modify this field to build
 

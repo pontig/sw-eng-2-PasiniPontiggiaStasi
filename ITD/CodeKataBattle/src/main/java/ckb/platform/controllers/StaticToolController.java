@@ -1,23 +1,27 @@
 package ckb.platform.controllers;
 
-import ckb.platform.utils.ParameterStringBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
+
 import java.util.Map;
+import java.util.Properties;
 
 @RestController
 public class StaticToolController {
+    private static final Logger log = LoggerFactory.getLogger(StaticToolController.class);
     //this endpoint is activated when the user clicks on the "Get Static Analysis Results" button and the analysis is finished
     //in fact, the webhook of sonarqube will call this endpoint
     @PostMapping("/static_analysis/results")
@@ -37,15 +41,15 @@ public class StaticToolController {
             connection.setRequestMethod("GET");
 
             // Add authentication header (Basic Auth example)
-            String username = "admin";
-            String password = "admin01";
-            String authString = username + ":" + password;
+            Properties properties = new Properties();
+            properties.load(new FileInputStream("src/main/resources/application.properties"));
+            String authString = properties.getProperty("sonarqube.login") + ":" + properties.getProperty("sonarqube.password");
             String authHeader = "Basic " + Base64.getEncoder().encodeToString(authString.getBytes());
             connection.setRequestProperty("Authorization", authHeader);
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
+            log.info("Response Code: " + responseCode);
 
             // Read the response from the server
             // Use Jackson ObjectMapper to parse JSON response
@@ -55,7 +59,7 @@ public class StaticToolController {
             Map<String, Object> responseMap = objectMapper.readValue(connection.getInputStream(), Map.class);
             ArrayList<Map<String, Object>> measures = (ArrayList<Map<String, Object>>) ((Map<String, Object>) responseMap.get("component")).get("measures");
             // Print the parsed response
-            System.out.println("Parsed Response Map: " + measures);
+            log.info("Parsed Response Map: " + measures);
 
             // Close the connection
             connection.disconnect();
@@ -68,16 +72,16 @@ public class StaticToolController {
             String team;
             if (parts.length > 1) {
                 team = parts[parts.length - 1];
-                System.out.println(team);
+                log.info(team);
                 // Send the results to the CKB platform
                 updateStaticAnalysisResults(team, measures);
             } else {
-                System.out.println("Pattern not found");
+                log.error("Pattern not found");
             }
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error in processing request", e);
         }
 
         return ResponseEntity.ok("OK");
@@ -120,22 +124,22 @@ public class StaticToolController {
 
             String jsonInputString = "{\"maintainabilityScore\": " + maintainabilityScore + ", \"reliabilityScore\": " + reliabilityScore + ", \"securityScore\": " + securityScore + "}";
             OutputStream os = connection.getOutputStream();
-            byte[] input = jsonInputString.getBytes("utf-8");
+            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
             os.flush();
             os.close();
 
-            BufferedReader br = new BufferedReader(new java.io.InputStreamReader(connection.getInputStream(), "utf-8"));
+            BufferedReader br = new BufferedReader(new java.io.InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
             StringBuilder response = new StringBuilder();
-            String responseLine = null;
+            String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println(response.toString());
+            log.info(response.toString());
             // Close the connection
             connection.disconnect();
         }catch(Exception e){
-            e.printStackTrace();
+            log.error("Error in processing request", e);
         }
     }
 

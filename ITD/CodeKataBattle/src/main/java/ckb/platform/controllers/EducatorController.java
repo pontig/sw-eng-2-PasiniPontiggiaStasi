@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class EducatorController {
@@ -32,10 +28,9 @@ public class EducatorController {
                     educatorMap.put("id", educator.getId());
                     educatorMap.put("name", educator.getFirstName());
                     educatorMap.put("surname", educator.getLastName());
-                    //educatorMap.put("_links_", linkTo(methodOn(EducatorController.class).search(educator.getId().toString())).withSelfRel());
                     return educatorMap;
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

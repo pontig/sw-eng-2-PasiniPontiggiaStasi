@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 @Controller
 public class AuthController {
+    public static final String INDEX_EDU_HTML = "indexEDU.html";
+    public static final String INDEX_STU_HTML = "indexSTU.html";
+    public static final String INDEX_HTML = "index.html";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -73,9 +72,6 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
-
-        User user = (User) session.getAttribute("user");
-
         if (email.isEmpty() || password.isEmpty() || email.isBlank() || password.isBlank()) {
             // Check if any field is empty
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
@@ -86,15 +82,10 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - E-mail incorrect format");
         }
 
-        user = userRepository.findUserByEmailAndPassword(email, password);
+        User user = userRepository.findUserByEmailAndPassword(email, password);
 
         if (user != null) {
             session.setAttribute("user", user);
-           // if (!user.isEdu())
-           //     return ResponseEntity.status(HttpStatus.OK).body("indexSTU");
-           // else
-           //     return ResponseEntity.status(HttpStatus.OK).body("indexEDU");
-
             String res = "{";
 
             res += "\"name\": \"" + user.getFirstName() + "\",";
@@ -119,14 +110,8 @@ public class AuthController {
             session.invalidate();
             return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out");
         } else {
-            user = userRepository.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
-            if (user == null) {
-                // User not in the DB
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error - user does not exist in the DB");
-            } else {
-                // User
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - User already logged out");
-            }
+            // User
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized - User already logged out");
         }
     }
 
@@ -136,11 +121,11 @@ public class AuthController {
         if(user != null){
             // User already in session
             if(user.isEdu())
-                return new RedirectView("indexEDU.html");
+                return new RedirectView(INDEX_EDU_HTML);
             else
-                return new RedirectView("indexSTU.html");
+                return new RedirectView(INDEX_STU_HTML);
         }
-        return new RedirectView("index.html");
+        return new RedirectView(INDEX_HTML);
     }
 
     // If a user try to make a get to the /login endpoint, it is redirected
@@ -150,11 +135,11 @@ public class AuthController {
         if(user != null){
             // User already in session
             if(user.isEdu())
-                return new RedirectView("indexEDU.html");
+                return new RedirectView(INDEX_EDU_HTML);
             else
-                return new RedirectView("indexSTU.html");
+                return new RedirectView(INDEX_STU_HTML);
         }
-        return new RedirectView("index.html");
+        return new RedirectView(INDEX_HTML);
     }
 
     // If a user try to make a get to the /register endpoint, it is redirected
@@ -164,11 +149,11 @@ public class AuthController {
         if(user != null){
             // User already in session
             if(user.isEdu())
-                return new RedirectView("indexEDU.html");
+                return new RedirectView(INDEX_EDU_HTML);
             else
-                return new RedirectView("indexSTU.html");
+                return new RedirectView(INDEX_STU_HTML);
         }
-        return new RedirectView("index.html");
+        return new RedirectView(INDEX_HTML);
     }
 
     // If a user try to make a get to the /logout endpoint, it is redirected
@@ -178,6 +163,6 @@ public class AuthController {
         if(user != null){
             session.invalidate();
         }
-        return new RedirectView("index.html");
+        return new RedirectView(INDEX_HTML);
     }
 }

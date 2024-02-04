@@ -34,16 +34,10 @@ public class Team {
     public Team() {
     }
 
-    public Team(Battle battle, Student student) {
-        this.battle = battle;
-        students = new ArrayList<Student>();
-        students.add(student);
-    }
-
     public Team(String name, Battle battle) {
         this.name = name;
         this.battle = battle;
-        students = new ArrayList<Student>();
+        students = new ArrayList<>();
     }
 
     public Long getId() {
@@ -136,13 +130,12 @@ public class Team {
     }
 
     public int getFinalScore() {
-        if (!battle.getHasBeenEvaluated() || !battle.getManualEvaluation()) {
+        if (Boolean.TRUE.equals(!battle.getHasBeenEvaluated()) || Boolean.TRUE.equals(!battle.getManualEvaluation())) {
             score = getAutomaticScore();
-            return score;
         }else {
             score = (manualScore + getAutomaticScore()) / 2;
-            return score;
         }
+        return score;
     }
 
     public void setManualScore(int manualScore) {

@@ -6,6 +6,8 @@ import ckb.platform.entities.Team;
 import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.TeamRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -17,35 +19,37 @@ import java.util.Date;
 import java.util.List;
 
 public class RegistrationThread extends Thread {
+
+    private static final Logger log = LoggerFactory.getLogger(RegistrationThread.class);
     private final TeamRepository teamRepository;
     private final Date targetDate;
     private final Battle battle;
 
     public RegistrationThread(TeamRepository teamRepository, Battle battle) {
         this.teamRepository = teamRepository;
-        //this.targetDate = battle.getRegistrationDeadline(); //TODO: uncomment this line
+        this.targetDate = battle.getRegistrationDeadline();
         this.battle = battle;
 
-        // TODO: Remember to remove the following, which is for testing purpose only
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 4, 17, 17, 0);
-        this.targetDate = calendar.getTime();
+        //Remember to remove the following, which is for testing purpose only
+        //Calendar calendar = Calendar.getInstance();
+        //calendar.set(2024, Calendar.FEBRUARY, 4, 17, 17, 0);
+        //this.targetDate = calendar.getTime();
     }
 
     @Override
     public void run() {
         // Calculate the milliseconds till the end deadline
         long millisecondsDifference = targetDate.getTime() - System.currentTimeMillis();
-        System.out.println("Registration " + battle.getName() + " Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
+        log.info("Registration " + battle.getName() + " Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
 
         // Sleep for the amount of time to wait
         try {
             sleep(millisecondsDifference);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("Error while waiting for registration deadline", e);
         }
 
-        System.out.println("Send email end registration");
+        log.info("Send email end registration");
 
         // Remove team that do not respect the boundaries
         List<Team> teamsSubscribed = teamRepository.getTeamInBattle(battle);
@@ -84,7 +88,7 @@ public class RegistrationThread extends Thread {
         List<Student> studentsToNotify = new ArrayList<>();
         for (Team t : teamsSubscribed) {
             if(t.getStudents() != null){
-                System.out.println(t.getStudents().get(0).getEmail());
+                log.info(t.getStudents().get(0).getEmail());
                 studentsToNotify.add(t.getStudents().get(0));
             }
         }
@@ -96,7 +100,7 @@ public class RegistrationThread extends Thread {
             response = gitHubAPI.createRepository(battle, "Submission deadline on: " + battle.getFinalSubmissionDeadline() + " for battle " + battle.getName() + " in tournament " + battle.getTournament().getName());
 
             if(response != 201)
-                System.out.println("Error in creating repo");
+                log.error("Error in creating repo - response: " + response);
 
             try {
                 gitHubAPI.createFolder(battle, "CKBProblem");                   // CKB Problem PDF description
@@ -109,11 +113,11 @@ public class RegistrationThread extends Thread {
                     gitHubAPI.createFolder(battle, "i_t");
                 response = gitHubAPI.createFolder(battle, "BuildScript");             // Build script
             } catch (IOException e) {
-                System.out.println(e);
+                log.error("An error occurred in folder creation", e);
                 throw new RuntimeException(e);
             }
             if(response != 201)
-                System.out.println("An error occurred in folder creation");
+                log.error("An error occurred in folder creation - response: " + response);
 
         }).start();
 

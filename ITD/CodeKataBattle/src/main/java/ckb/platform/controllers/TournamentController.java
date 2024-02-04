@@ -9,7 +9,6 @@ import ckb.platform.formParser.CreateTournamentRequest;
 import ckb.platform.formParser.JoinTournamentRequest;
 import ckb.platform.formParser.ShareTournamentRequest;
 import ckb.platform.gmailAPI.GmailAPI;
-import ckb.platform.repositories.BattleRepository;
 import ckb.platform.repositories.EducatorRepository;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TournamentRepository;
@@ -35,7 +34,7 @@ public class TournamentController {
     @Autowired
     private final StudentRepository studentRepository;
 
-    TournamentController(TournamentRepository tournamentRepository, EducatorRepository educatorRepository, StudentRepository studentRepository, BattleRepository battleRepository) {
+    TournamentController(TournamentRepository tournamentRepository, EducatorRepository educatorRepository, StudentRepository studentRepository) {
         this.tournamentRepository = tournamentRepository;
         this.educatorRepository = educatorRepository;
         this.studentRepository = studentRepository;
@@ -68,7 +67,7 @@ public class TournamentController {
             if (nextStep != null) {
                 long diffInMills = (nextStep.getTime() - new Date().getTime());
                 long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
-                daysLeft = String.valueOf(diff) + "d";
+                daysLeft = diff + "d";
                 battleMap.put("remaining", daysLeft);
             }
 
@@ -85,12 +84,6 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         response.put("ranking", rankings);
-
-        //ArrayList<Link> links = new ArrayList<>();
-        //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).one(tournament.getId())).withSelfRel());
-        //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).all()).withRel("tournaments"));
-        //response.put("_links_", links);
-
         return response;
     }
 
@@ -108,10 +101,6 @@ public class TournamentController {
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
-            //ArrayList<Link> links = new ArrayList<>();
-            //links.add(linkTo(methodOn(TournamentController.class).one(t.getId())).withSelfRel());
-            //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-            //tournament.put("_links_", links);
             response.add(tournament);
         });
 
@@ -122,7 +111,6 @@ public class TournamentController {
     @GetMapping("/tournaments/owned/")
     List<Map<String, Object>> getOwnedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        // TODO: if user == null return to index.html
         Educator educator = educatorRepository.findById(user.getId())
                 .orElseThrow(() -> new EducatorNotFoundException(user.getId()));
 
@@ -136,10 +124,6 @@ public class TournamentController {
             tournament.put("first_name", t.getCreator().getFirstName());
             tournament.put("last_name", t.getCreator().getLastName());
             tournament.put("active", t.isActive());
-            //ArrayList<Link> links = new ArrayList<>();
-            //links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(t.getId(), session)).withSelfRel());
-            //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-            //tournament.put("_links_", links);
             response.add(tournament);
         });
 
@@ -154,7 +138,7 @@ public class TournamentController {
 
         //check if the user is a student
         User user = (User) session.getAttribute("user");
-        if (user == null || user.isEdu()) {
+        if ( user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
         Student student = studentRepository.findById(user.getId())
@@ -185,7 +169,7 @@ public class TournamentController {
             if (nextStep != null) {
                 long diffInMills = (nextStep.getTime() - new Date().getTime());
                 long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
-                daysLeft = String.valueOf(diff) + "d";
+                daysLeft = diff + "d";
                 battleMap.put("remaining", daysLeft);
             }
 
@@ -201,10 +185,6 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         response.put("ranking", rankings);
-        //ArrayList<Link> links = new ArrayList<>();
-        //links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsSTU(tournament.getId(), session)).withSelfRel());
-        //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-        //response.put("_links_", links);
         return response;
     }
 
@@ -216,7 +196,7 @@ public class TournamentController {
                 .orElseThrow(() -> new TournamentNotFoundException(t_id));
         //check if the id is an educator
         User user = (User) session.getAttribute("user");
-        if (user == null || !user.isEdu()) {
+        if ( !user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
         Educator educator = educatorRepository.findById(user.getId())
@@ -244,7 +224,7 @@ public class TournamentController {
             if (nextStep != null) {
                 long diffInMills = (nextStep.getTime() - new Date().getTime());
                 long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
-                daysLeft = String.valueOf(diff) + "d";
+                daysLeft = diff + "d";
                 battleMap.put("remaining", daysLeft);
             }
             return battleMap;
@@ -260,10 +240,6 @@ public class TournamentController {
             rankings.add(rankingMap);
         });
         tournamentMap.put("ranking", rankings);
-        //ArrayList<Link> links = new ArrayList<>();
-        //links.add(linkTo(methodOn(TournamentController.class).tournamentDetailsEDU(tournament.getId(), session)).withSelfRel());
-        //links.add(linkTo(methodOn(TournamentController.class).all()).withRel("tournaments"));
-        //tournamentMap.put("_links_", links);
         return tournamentMap;
     }
 
@@ -271,7 +247,7 @@ public class TournamentController {
     @GetMapping("/tournaments/subscribed/")
     List<Map<String, Object>> getSubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if (user == null || user.isEdu()) {
+        if (user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
         Student student = studentRepository.findById(user.getId())
@@ -286,10 +262,6 @@ public class TournamentController {
             tournamentMap.put("first_name", t.getCreator().getFirstName());
             tournamentMap.put("last_name", t.getCreator().getLastName());
             tournamentMap.put("active", t.isActive());
-            //ArrayList<Link> links = new ArrayList<>();
-            //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
-            //links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).all()).withRel("tournaments"));
-            //tournamentMap.put("_links_", links);
             response.add(tournamentMap);
         });
 
@@ -300,7 +272,7 @@ public class TournamentController {
     @GetMapping("/tournaments/unsubscribed/")
     List<Map<String, Object>> getUnsubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if (user == null || user.isEdu()) {
+        if (user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
         Student student = studentRepository.findById(user.getId())
@@ -315,17 +287,13 @@ public class TournamentController {
                 String daysLeft;
                 long diffInMills = (t.getSubscriptionDeadline().getTime() - new Date().getTime());
                 long diff = TimeUnit.DAYS.convert(diffInMills, TimeUnit.MILLISECONDS);
-                daysLeft = String.valueOf(diff) + "d";
+                daysLeft = diff + "d";
 
                 tournamentMap.put("id", t.getId());
                 tournamentMap.put("name", t.getName());
                 tournamentMap.put("first_name", t.getCreator().getFirstName());
                 tournamentMap.put("last_name", t.getCreator().getLastName());
                 tournamentMap.put("daysLeft", daysLeft);
-                /*ArrayList<Link> links = new ArrayList<>();
-                links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).tournamentDetailsSTU(t.getId(), session)).withSelfRel());
-                links.add(linkTo(methodOn(ckb.platform.controllers.TournamentController.class).all()).withRel("tournaments"));
-                tournamentMap.put("_links_", links);*/
                 response.add(tournamentMap);
             }
         });
@@ -357,12 +325,12 @@ public class TournamentController {
         }
 
         long tournamentId;
-        String torunamentIdString;
+        String tournamentIdString;
         if (user.isEdu()) {
             Tournament newTournament = new Tournament(name, registerDeadline, null, (Educator) user);
             tournamentRepository.save(newTournament);
             tournamentId = tournamentRepository.getNewTournamentId(name, registerDeadline, (Educator) user);
-            torunamentIdString = Long.valueOf(tournamentId).toString();
+            tournamentIdString = Long.toString(tournamentId);
         } else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
 
@@ -395,7 +363,7 @@ public class TournamentController {
             }
         }).start();
 
-        return ResponseEntity.status(HttpStatus.OK).body(torunamentIdString);
+        return ResponseEntity.status(HttpStatus.OK).body(tournamentIdString);
     }
 
     @PostMapping("/tournament/close")
@@ -445,7 +413,7 @@ public class TournamentController {
                     // Check if the submission deadline is gone
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Some battles in tournament " + closedTournament.getName() + " are not ended yet");
 
-                if(b.getManualEvaluation() && !b.getHasBeenEvaluated())
+                if(Boolean.TRUE.equals(b.getManualEvaluation()) && Boolean.TRUE.equals(!b.getHasBeenEvaluated()))
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Some battles in tournament " + closedTournament.getName() + " are not evaluated yet");
             }
 
@@ -564,7 +532,7 @@ public class TournamentController {
                                  "You can now perform the following action inside it:\n" +
                                  "  - Create battles\n" +
                                  "  - Invite other Educator, which become owner as you\n" +
-                                 "  - Close the tournement\n" +
+                                 "  - Close the tournament\n" +
                                  "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
                                  "Best regards,\n CKB Team";
 
@@ -600,7 +568,7 @@ public class TournamentController {
             // If it does not exist return
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
 
-        Student addStudent = (Student) studentRepository.getReferenceById(user.getId());
+        Student addStudent = studentRepository.getReferenceById(user.getId());
 
         if (addStudent.getTournaments().contains(joinTournament) && joinTournament.getSubscribedStudents().contains(addStudent))
             // Check if the student is already in the tournament

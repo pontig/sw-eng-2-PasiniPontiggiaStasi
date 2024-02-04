@@ -15,6 +15,8 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -51,6 +53,8 @@ import java.util.Set;
  */
 
 public class GmailAPI {
+
+    private static final Logger logger = LoggerFactory.getLogger(GmailAPI.class);
     private static final String CKB_Email = "codekatabattle.platform@gmail.com";
     private final Gmail service;
 
@@ -103,12 +107,12 @@ public class GmailAPI {
         // Send the gmail message
         try {
             message = service.users().messages().send("me", message).execute();
-            System.out.println("Message id: " + message.getId());
-            System.out.println(message.toPrettyString());
+            logger.info("Message id: " + message.getId());
+            logger.info(message.toPrettyString());
         } catch (GoogleJsonResponseException e) {
             GoogleJsonError error = e.getDetails();
             if (error.getCode() == 403) {
-                System.err.println("Unable to send message: " + e.getDetails());
+                logger.error("Unable to send message: " + e.getDetails());
             } else {
                 throw e;
             }

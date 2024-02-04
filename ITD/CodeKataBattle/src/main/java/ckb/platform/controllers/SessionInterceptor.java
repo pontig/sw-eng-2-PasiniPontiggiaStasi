@@ -13,7 +13,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         log.info("SessionInterceptor:" + request.getRequestURI());
-        //if (!(request.getRequestURI().contains("login") || request.getRequestURI().contains("index.html")) && session.getAttribute("user") == null) {
         if (!(request.getRequestURI().contains("login") || request.getRequestURI().contains("index.html")) && request.getRequestURI().contains("html") && session.getAttribute("user") == null) {
             log.info("SessionInterceptor: ----redirect to login----");
             response.sendRedirect("login");

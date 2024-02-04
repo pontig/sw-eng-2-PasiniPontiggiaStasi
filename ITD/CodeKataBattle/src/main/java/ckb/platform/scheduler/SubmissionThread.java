@@ -5,6 +5,8 @@ import ckb.platform.entities.Educator;
 import ckb.platform.entities.Student;
 import ckb.platform.entities.Team;
 import ckb.platform.gmailAPI.GmailAPI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -16,33 +18,35 @@ import java.util.Date;
 import java.util.List;
 
 public class SubmissionThread extends Thread {
+
+    private static final Logger log = LoggerFactory.getLogger(SubmissionThread.class);
     private final Date targetDate;
     private final Battle battle;
 
     public SubmissionThread(Battle battle) {
-        //this.targetDate = battle.getFinalSubmissionDeadline(); //TODO: uncomment this line
+        this.targetDate = battle.getFinalSubmissionDeadline();
         this.battle = battle;
 
-        // TODO: Remember to remove the following, which is for testing purpose only
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 3, 19, 25, 0);
-        this.targetDate = calendar.getTime();
+        // Remember to remove the following, which is for testing purpose only
+        //Calendar calendar = Calendar.getInstance();
+        //calendar.set(2024, Calendar.FEBRUARY, 3, 19, 25, 0);
+        //this.targetDate = calendar.getTime();
     }
 
     @Override
     public void run() {
         // Calculate the milliseconds till the end deadline
         long millisecondsDifference = targetDate.getTime() - System.currentTimeMillis();
-        System.out.println("Submission " + battle.getName() + " Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
+        log.info("Submission " + battle.getName() + " Tempo corrente: " + new Date() + " Tempo finale: " + targetDate + " Differenza: " + Duration.ofMillis(millisecondsDifference).toHours());
 
         // Sleep for the amount of time to wait
         try {
             sleep(millisecondsDifference);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("Error while waiting for submission deadline", e);
         }
 
-        System.out.println("Send email");
+        log.info("Send email");
 
         // Get educator that created the battle
         Educator battleOwner = battle.getCreator();
@@ -62,7 +66,7 @@ public class SubmissionThread extends Thread {
                 throw new RuntimeException(e);
             }
 
-            if(battle.getManualEvaluation()){
+            if(Boolean.TRUE.equals(battle.getManualEvaluation())){
                 String subject = "MANUAL EVALUATION available for battle " + battle.getName();
                 String bodyMsg = "Hi " + battleOwner.getFirstName() + ",\n\n" +
                                  "the battle you created " + battle.getName() + " is waiting for you to perform manual evaluation.\n" +

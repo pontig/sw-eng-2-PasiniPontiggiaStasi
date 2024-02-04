@@ -4,19 +4,13 @@ import ckb.platform.entities.*;
 import ckb.platform.exceptions.TeamNotFoundException;
 import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TeamRepository;
-import ckb.platform.repositories.TournamentRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 public class TeamController {
 
@@ -24,19 +18,16 @@ public class TeamController {
     private final TeamRepository repository;
     @Autowired
     private final StudentRepository studentRepository;
-    @Autowired
-    private final TournamentRepository tournamentRepository;
 
-    TeamController(TeamRepository repository, StudentRepository studentRepository, TournamentRepository tournamentRepository) {
+    TeamController(TeamRepository repository, StudentRepository studentRepository) {
         this.repository = repository;
         this.studentRepository = studentRepository;
-        this.tournamentRepository = tournamentRepository;
     }
 
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/teams/{t_id}")
-    public Map<String, Object> one(Long t_id) {
+    public Map<String, Object> one(@PathVariable Long t_id) {
         Team t = repository.findById(t_id)
                 .orElseThrow(() -> new TeamNotFoundException(t_id));
         HashMap<String, Object> team = new HashMap<>();
@@ -52,9 +43,6 @@ public class TeamController {
             students.add(student);
         });
         team.put("students", students);
-        //ArrayList<Link> links = new ArrayList<>();
-        //links.add(linkTo(methodOn(TeamController.class).one(t_id)).withSelfRel());
-        //links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
         return team;
     }
 
@@ -76,10 +64,6 @@ public class TeamController {
                 students.add(student);
             });
             team.put("students", students);
-            //ArrayList<Link> links = new ArrayList<>();
-            //links.add(linkTo(methodOn(TeamController.class).one(t.getId())).withSelfRel());
-            //links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
-            //team.put("_links_", links);
             response.add(team);
         });
         return response;
@@ -99,7 +83,7 @@ public class TeamController {
     @GetMapping("/team/{t_id}/join/{s_id}")
     public ModelAndView joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {
         Optional<Team> teamOpt = repository.findById(t_id);
-        Team teamToJoin = null;
+        Team teamToJoin;
         if(teamOpt.isEmpty())
             return new ModelAndView("redirect:/index.html?error=Team do not exist");
         else
