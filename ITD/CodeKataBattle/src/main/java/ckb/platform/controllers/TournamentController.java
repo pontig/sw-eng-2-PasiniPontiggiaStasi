@@ -15,7 +15,6 @@ import ckb.platform.repositories.StudentRepository;
 import ckb.platform.repositories.TournamentRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +24,6 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class TournamentController {
@@ -355,6 +351,11 @@ public class TournamentController {
             // Check if the deadline is past
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Registration deadline has passed");
 
+        for(Tournament t : tournamentRepository.findAll()){
+            if(name.equals(t.getName()))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - A tournament exist with this name");
+        }
+
         long tournamentId;
         String torunamentIdString;
         if (user.isEdu()) {
@@ -599,7 +600,7 @@ public class TournamentController {
             // If it does not exist return
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found - Tournament with id: " + joinTournamentRequest.getTournamentId() + " does not exist");
 
-        Student addStudent = (Student) user;
+        Student addStudent = (Student) studentRepository.getReferenceById(user.getId());
 
         if (addStudent.getTournaments().contains(joinTournament) && joinTournament.getSubscribedStudents().contains(addStudent))
             // Check if the student is already in the tournament

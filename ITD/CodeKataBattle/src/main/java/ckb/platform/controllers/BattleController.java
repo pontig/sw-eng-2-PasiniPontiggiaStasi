@@ -394,7 +394,7 @@ public class BattleController {
 
         if (!user.isEdu())
             // Check if user is an Educator
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights EDUERROZR");
 
         if (battleName.isEmpty() || battleName.isBlank() || language.isEmpty() || language.isBlank() /*|| description.isBlank() || description.isEmpty()*/)
             // Check if any string field is empty or blank
@@ -461,7 +461,7 @@ public class BattleController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a .js file");
         }
 
-        Educator creatorBattle = (Educator) user;
+        Educator creatorBattle = (Educator) educatorRepository.getEducatorDataById(user.getId());
 
         for (Tournament t : creatorBattle.getOwnedTournaments()) {
             // Check if the educator is an owner of the tournament
@@ -554,7 +554,7 @@ public class BattleController {
 
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights NOOWNER");
     }
 
     @PostMapping("/battle/pulls")
@@ -616,7 +616,7 @@ public class BattleController {
             }).start();
 
             //TODO: check path STATIC ANALYSIS
-            if (projectPath != null) {
+            if (repoPath != null) {
                 Analyzer analyzer = new Analyzer("CKBplatform-" + team.getId(), "CKBplatform-" + team.getId(), "admin", "admin01");
 
                 int projectExists = analyzer.projectExists();
@@ -729,7 +729,7 @@ public class BattleController {
             }
         }
 
-        Student stu = (Student) user;
+        Student stu = (Student) studentRepository.getReferenceById(user.getId());
         Battle battleToJoin = battleRepository.getReferenceById(battleId);
 
         if (!battleToJoin.getTournament().getSubscribedStudents().contains(stu)) {
@@ -781,7 +781,7 @@ public class BattleController {
         Battle battle = battleRepository.getReferenceById(battleId);
 
         // Save the team and the owner
-        Student teamOwner = (Student) user;
+        Student teamOwner = (Student) studentRepository.getReferenceById(user.getId());
         Team newTeam = new Team(teamName, battle);
         newTeam.addStudent(teamOwner);
         teamRepository.save(newTeam);
