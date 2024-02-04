@@ -99,6 +99,16 @@ window.addEventListener('load', () => {
                             })
                         })
                         break;
+                    case 400:
+                        response.text().then(result => {
+                            Swal.fire({
+                                title: "Battle not joined, the name is already taken!",
+                                text: result,
+                                type: "error",
+                                confirmButtonColor: '#CC208E'
+                            })
+                        })
+                        break;
 
                     default:
                         // TODO: Cambiare errorJoinBattle
