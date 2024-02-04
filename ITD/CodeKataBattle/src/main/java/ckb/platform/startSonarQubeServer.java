@@ -19,7 +19,7 @@ public class startSonarQubeServer {
 
     private Properties properties = new Properties();
 
-    /*@Bean
+    @Bean
     AsyncTaskExecutor startingServer() {
         try(InputStream input = new FileInputStream("src/main/resources/application.properties")) {
             properties.load(input);
@@ -48,7 +48,7 @@ public class startSonarQubeServer {
         taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
         taskExecutor.setAwaitTerminationSeconds(4);
         return taskExecutor;
-    }*/
+    }
 
     private void logProcessOutput(Process process) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
