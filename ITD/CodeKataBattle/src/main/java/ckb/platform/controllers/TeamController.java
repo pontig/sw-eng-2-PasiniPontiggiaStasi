@@ -52,9 +52,9 @@ public class TeamController {
             students.add(student);
         });
         team.put("students", students);
-        ArrayList<Link> links = new ArrayList<>();
-        links.add(linkTo(methodOn(TeamController.class).one(t_id)).withSelfRel());
-        links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
+        //ArrayList<Link> links = new ArrayList<>();
+        //links.add(linkTo(methodOn(TeamController.class).one(t_id)).withSelfRel());
+        //links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
         return team;
     }
 
@@ -76,10 +76,10 @@ public class TeamController {
                 students.add(student);
             });
             team.put("students", students);
-            ArrayList<Link> links = new ArrayList<>();
-            links.add(linkTo(methodOn(TeamController.class).one(t.getId())).withSelfRel());
-            links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
-            team.put("_links_", links);
+            //ArrayList<Link> links = new ArrayList<>();
+            //links.add(linkTo(methodOn(TeamController.class).one(t.getId())).withSelfRel());
+            //links.add(linkTo(methodOn(TeamController.class).all()).withRel("teams"));
+            //team.put("_links_", links);
             response.add(team);
         });
         return response;

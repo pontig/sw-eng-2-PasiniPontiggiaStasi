@@ -32,7 +32,7 @@ public class EducatorController {
                     educatorMap.put("id", educator.getId());
                     educatorMap.put("name", educator.getFirstName());
                     educatorMap.put("surname", educator.getLastName());
-                    educatorMap.put("_links_", linkTo(methodOn(EducatorController.class).search(educator.getId().toString())).withSelfRel());
+                    //educatorMap.put("_links_", linkTo(methodOn(EducatorController.class).search(educator.getId().toString())).withSelfRel());
                     return educatorMap;
                 })
                 .collect(Collectors.toList());

@@ -47,10 +47,10 @@ public class StudentController {
             student.put("id", s.getId());
             student.put("firstName", s.getFirstName());
             student.put("surname", s.getLastName());
-            ArrayList<Link> links = new ArrayList<>();
-            links.add(linkTo(methodOn(StudentController.class).one(s.getId())).withSelfRel());
-            links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
-            student.put("_links_", links);
+            //ArrayList<Link> links = new ArrayList<>();
+            //links.add(linkTo(methodOn(StudentController.class).one(s.getId())).withSelfRel());
+            //links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
+            //student.put("_links_", links);
             response.add(student);
         });
 
@@ -69,10 +69,10 @@ public class StudentController {
             student.put("id", s.getId());
             student.put("name", s.getFirstName());
             student.put("surname", s.getLastName());
-            ArrayList<Link> links = new ArrayList<>();
-            links.add(linkTo(methodOn(StudentController.class).one(s.getId())).withSelfRel());
-            links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
-            student.put("_links_", links);
+            //ArrayList<Link> links = new ArrayList<>();
+            //links.add(linkTo(methodOn(StudentController.class).one(s.getId())).withSelfRel());
+            //links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
+            //student.put("_links_", links);
             response.add(student);
         });
 
@@ -104,10 +104,10 @@ public class StudentController {
                 .map(t -> t.getBattle().getTournament().getName() + " > " + t.getName() + " in " +  t.getBattle().getName())
                 .collect(Collectors.toList()));
 
-        ArrayList<Link> links = new ArrayList<>();
-        links.add(linkTo(methodOn(StudentController.class).one(id)).withSelfRel());
-        links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
-        response.put("_links_", links);
+        //ArrayList<Link> links = new ArrayList<>();
+        //links.add(linkTo(methodOn(StudentController.class).one(id)).withSelfRel());
+        //links.add(linkTo(methodOn(StudentController.class).all()).withRel("students"));
+        //response.put("_links_", links);
         return response;
     }
 
