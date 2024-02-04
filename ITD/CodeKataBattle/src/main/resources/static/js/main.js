@@ -58,11 +58,7 @@ window.addEventListener("load", async () => {
                         break;
 
                     default:
-                        // TODO: cambiare errorLogIn
-                        const errorBox = document.getElementById('errorLogIn');
-                        if (errorBox)
-                            errorBox.textContent = "Internal error";
-                        errorBox.style.display = 'flex';
+                        alert("Error during logout!")
                         break;
                 }
             })
@@ -359,14 +355,25 @@ async function changePage(page, id) {
                         .forEach((e, i) => {
                             let li = document.createElement("li")
                             let aaa = document.createElement("a")
-                            aaa.onclick = function () { changePage("profile", e.id) }
+                            aaa.addEventListener('click', () => {
+                                console.log(e.id, e)
+                                changePage("profile", e.id)
+                            })
                             aaa.innerHTML = e.firstname + " - " + e.points + "pts"
-
-                            if (i > 9) li.style.display = "none"
+                            aaa.href = "#"
 
                             li.appendChild(aaa)
                             container.appendChild(li)
-                            if (i == 9) container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
+                            if (i == 9) {
+                                //container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
+                                let aaaaa = document.createElement("a")
+                                aaaaa.innerHTML = "Show all..."
+                                aaaaa.classList.add('more')
+                                aaaaa.onclick = (() => { showAllRanking(container.lastChild) })
+                                container.appendChild(aaaaa)
+
+                            }
+                            if (i > 9) li.style.display = "none"
                         })
 
                     if (data.active && data.admin) {
@@ -444,7 +451,7 @@ async function changePage(page, id) {
                         .sort((a, b) => b.points - a.points)
                         .forEach((e, i) => {
                             let li = document.createElement("li")
-                            li.innerHTML = e.name + " - " + e.score + "pts" // TODO: aggiungere il link al profilo
+                            li.innerHTML = e.name + " - " + e.score + "pts" 
                             if (i > 9) li.style.display = "none"
 
                             container.appendChild(li)
@@ -476,27 +483,7 @@ async function changePage(page, id) {
                     let CanConfirm = true
 
                     data.forEach((e, i) => {
-                        /* TODO: QUESTO LO TENIAMO SE RIUSCIAMO A FARE VEDERE IL CODICE PRENDENDOLO DA QUALCHE PARTE */
-                        // let tr = document.createElement("tr")
-                        // let td1 = document.createElement("td")
-                        // td1.innerHTML = i + 1
-                        // let td2 = document.createElement("td")
-                        // td2.innerHTML = e.name
-                        // let td3 = document.createElement("td")
-                        // td3.innerHTML = e.score == null ? "N/D" : e.score
-                        // let td4 = document.createElement("td")
-                        // let a = document.createElement("a")
-                        // a.innerHTML = e.score == null ? "Evaluate" : "Review"
-                        // a.onclick = (() => { changePage("codeToReview", e.id) })
-                        // if (e.score == null) CanConfirm = false
-
-                        // td4.appendChild(a)
-                        // tr.appendChild(td1)
-                        // tr.appendChild(td2)
-                        // tr.appendChild(td3)
-                        // tr.appendChild(td4)
-                        // document.querySelector("#toBeReviewed > table").appendChild(tr)
-
+                    
                         let tr = document.createElement("tr")
                         let td1 = document.createElement("td")
                         td1.innerHTML = i + 1
@@ -507,7 +494,10 @@ async function changePage(page, id) {
                         input.type = "number"
                         input.min = 0
                         input.max = 100
-                        input.onchange = () => sendScoreSecond(e.id, input.value)
+                        input.onchange = () => {
+                            if (input.checkValidity())
+                                sendScoreSecond(e.id, input.value)
+                        }
                         input.value = e.score == 0 ? null : e.score
                         if (e.score == 0) CanConfirm = false
                         let td4 = document.createElement("td")
@@ -530,24 +520,6 @@ async function changePage(page, id) {
                     finalRow.innerHTML = '<td colspan="3"></td><td><b><a onclick="confirmManual()">&gt&gtConfirm</a></b></td>'
                     // if (CanConfirm)
                     container.appendChild(finalRow)
-                    break
-
-                case "codeToReview":
-                    document.getElementById("codeToReview").style.display = "block"
-                    container = document.querySelector("#codeToReview > pre")
-                    container.innerHTML = ""
-
-                    res = await fetch("https://pontiggiaelia.altervista.org/ckb/code.php?id=" + id) // TODO: cambiare l'url
-                    data = await res.json()
-                    console.log(data)
-
-                    document.getElementById("title").innerHTML = data.name + "'s code"
-
-                    data.code.replace(/</g, "&lt").replace(/>/g, "&gt")
-                    container.innerHTML = data.code
-                    document.getElementById("scoreEvaluated").value = data.score == null ? null : data.score
-
-                    sessionStorage.setItem("teamCodeInspecting", data.group_id)
                     break
 
                 case "profile":
@@ -662,14 +634,25 @@ async function changePage(page, id) {
                         .forEach((e, i) => {
                             let li = document.createElement("li")
                             let aaa = document.createElement("a")
-                            aaa.onclick = function () { changePage("profile", e.id) }
+                            aaa.addEventListener('click', () => {
+                                console.log(e.id, e)
+                                changePage("profile", e.id)
+                            })
                             aaa.innerHTML = e.firstname + " - " + e.points + "pts"
-
-                            if (i > 9) li.style.display = "none"
+                            aaa.href = "#"
 
                             li.appendChild(aaa)
                             container.appendChild(li)
-                            if (i == 9) container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
+                            if (i == 9) {
+                                //container.innerHTML += '<a class="more" onclick="showAllRanking(this)">Show all...</a>'
+                                let aaaaa = document.createElement("a")
+                                aaaaa.innerHTML = "Show all..."
+                                aaaaa.classList.add('more')
+                                aaaaa.onclick = (() => { showAllRanking(container.lastChild) })
+                                container.appendChild(aaaaa)
+
+                            }
+                            if (i > 9) li.style.display = "none"
                         })
 
 
@@ -874,7 +857,7 @@ async function changePage(page, id) {
                                                         })
                                                     })
                                                     break;
-                                                    
+
                                                 default:
                                                     alert("Error during invitation sending!")
                                                     break;

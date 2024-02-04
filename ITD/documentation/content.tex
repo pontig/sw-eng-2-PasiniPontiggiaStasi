@@ -9,20 +9,22 @@ In the following list are provided the links to all the documents that are part 
 
 \begin{itemize}
     \item \href{https://github.com/pontig/sw-eng-2-PasiniPontiggiaStasi/tree/main/ITD/CodeKataBattle}{Source Code}
-    \item {\color{red}{executable ready to be run}}
+    \item \href{https://github.com/pontig/sw-eng-2-PasiniPontiggiaStasi/tree/main/ITD/CodeKataBattle/out/artifacts/CodeKataBattle_jar}{executable ready to be run}
 \end{itemize}
 
 \section{Implemented features}
 
-In the following, we list the features and the requirements that have been implemented in the system.
-
-Since the group that has implemented the system is composed of three people, as the assignment required, we have not implemented the features regarding the ganmification aspects of the system
+\input implemented
 
 \section{Adopted development framework}
 
+For a thorough exposition of the pros and cons associated with the languages in question, it is recommendend to search directly on the official websites of said languages, where such aspects are explicated in detail
+
 \subsubsection{Backend}
 The system has been developed using the \textbf{Spring Boot} framework, which is a framework that allows to create web applications in Java.\\
-The main reason for this choice is that it is a framework often used in this context since it allows to create a web application with REST APIs in a simple way.\\In addiction, there are a lot of libraries that can be used to integrate the framework with other technologies, such as the database, which is very useful.
+The main reason for this choice is that it is a framework often used in this context since it allows to create a web application with REST APIs in a simple way.\\In addiction, there are a lot of libraries that can be used to integrate the framework with other technologies, such as the database, which is very useful.\\
+
+In order to perform the static analysis of the code, we have used \textbf{SonarQube}, which is a tool that allows to perform a static analysis of the code and to find the bugs and the vulnerabilities.
 
 \subsubsection{Frontend}
 For the development of the frontend, we have implemented a single page application simply using \textbf{HTML, SCSS and JavaScript}.\\Even it is a dated approach, we have chosen this solution because it is the one that we are most familiar with and because it is the one that we have used in the previous projects.\\Moreover, since the application is very simple, we have not felt the need to use a more complex framework.
@@ -42,18 +44,94 @@ Its structure is the classical one of a Spring Boot application, which is the fo
               \item {\ttfamily{controllers/}}: contains the classes that are used to handle the requests and are the responsible of the communication between the APIs and the database
               \item {\ttfamily{entities/}}: contains the JPA classes that represent the entities of the database
               \item {\ttfamily{exceptions/}}: contains the classes that are used to handle the exceptions
+              \item {\ttfamily{formParser/}}: contains the java beans that are used to parse the forms of the POST requests
+              \item {\ttfamily{githubAPI/}}: contains the class that is used to communicate with the GitHub API
               \item {\ttfamily{repositories/}}: contains the interfaces that are used to communicate with the database
+              \item {\ttfamily{scheduler/}}: contains the classes that handle the additional threads that keeps the time updated and, whenever a deadline is reached, that send the emails to the interested users
+              \item {\ttfamily{testRepo/}} contains the class that is the responsible of the building of the code and the execution of the tests
           \end{itemize}
     \item {\ttfamily{src/main/resources/static/}}: contains the files of the frontend application, i.e. the HTML, SCSS and JavaScript files
 \end{itemize}
 
-{\color{red} \chapter{Performed test}}
+\chapter{Performed test}
+
+The software testing procedure has been performed mainly thorough unit testing; below are listed the most relevant tests that have been performed.\\
+Due to the limited time, we have focused on the backend system, since the frontend is very simple and the majority of the functionalities are implemented in the backend.\\
+
+\textbf{Note}: Regarding any kind of misuse of the system, the frontend already has some all the necessary checks to avoid any kind of misuse of the system (for instance, it is not possible to subscribe to a tournament that is already closed, it is not possible to subscribe to a battle that is already closed, but also all form is equipped with the necessary type checks and length checks).\\
+Furthermore, in the RASD we have already assumed from the domain that the user won't try to misuse the system.\\
+Nonetheless, the backend provides all the checks already implemented in the frontend, so that the system is safe from any kind of misuse, and returns the right error messages in case of misuse.
+
+\section{Tournament}
+
+\begin{enumerate}
+    \item an EDU creates a tournament, with a new name or a name that already exists
+    \item a STU subscribes to a tournament
+    \item an EDU closes a tournament
+\end{enumerate}
+
+\section{GitHub / Static Analysis / mail sending}
+
+\begin{enumerate}
+    \item the system sends an email to the right users when a deadline is reached or a significant event happens
+    \item the system creates a GitHub repository at the end of the registration phase of a battle
+    \item after a push, the system gets notified by GitHub, retrieves the code in the form of a zip file, unzips it, runs the tests and updates the score
+\end{enumerate}
+
+\section{Battle}
+
+\begin{enumerate}
+    \item an EDU creates a battle, selecting one or more options regarding static analysis and manual evaluation
+    \item a STU subscribes to a battle, both alone and inviting other STUs
+    \item a STU invites another STU to a battle after being subscribed
+    \item a STU joins a battle by an invite
+    \item a STU uploads the code on GitHub and sees his score updated, taking into account the tests, the timeliness and the eventual static analysis
+    \item an EDU performs the manual evaluation of the code of the teams in a battle
+\end{enumerate}
+
+\section{Profile}
+
+\begin{enumerate}
+    \item an user inspects the profile of a STU's profile showing the list of tournaments and battles the student is subscribed to
+\end{enumerate}
 
 \chapter{Installation instructions}
+
+\section{Java}
+In order to run the application, it is necessary to have Java installed on the machine.
+\begin{itemize}
+    \item \textbf{Java Runtime Environment}: \href{https://www.java.com/it/download/manual.jsp}{Download JDK}: at least version 21
+    \item \textbf{Java Development Kit}: \href{https://www.oracle.com/java/technologies/downloads/}{Download JRE}: at least version 17
+\end{itemize}
+
+Once the installation is completed, it is necessary to set the environment variables (the way to do this depends on the operating system).\\
+
+\section{MySQL}
+In order to run the application, it is necessary to have MySQL installed on the machine and to create a database.\\
+You can download it from the \href{https://dev.mysql.com/downloads/installer/}{official website}.\\
+Required modules to be installed:
+\begin{itemize}
+    \item MySQL Server
+    \item MySQL Workbench (optional, but recommended)
+    \item Connector/J
+\end{itemize}
+Once the installation is completed, it is necessary to create a schema called \textbf{`ckb-db`}, and create a user with all the privileges on this schema and with the following credentials:
+\begin{itemize}
+    \item username: \textbf{CKBPlatform}
+    \item password: \textbf{CKB202430L!}
+\end{itemize}
+
+In order to work as expected, the database must be running on the default port (3306).
+
 \section{Static Analysis Tool - SonarQube}
 In order to use this tool, we need to install SonarQube Community Edition at this \href[]{https://www.sonarqube.org/downloads/}{link}.\\
-The next step is to install a local instance of SonarQube by following these \href[]{https://docs.sonarsource.com/sonarqube/latest/try-out-sonarqube/#installing-a-local-instance-of-sonarqube}{instructions}.\\
+Then, install a local instance of SonarQube by following these \href[]{https://docs.sonarsource.com/sonarqube/latest/try-out-sonarqube/#installing-a-local-instance-of-sonarqube}{instructions}.\\
 In our case we simply run from the zip file, using Windows as a OS and we have installed it in the same directory of the instructions.\\
-\textbf{If you are installing it in a different location, you have to insert the correct directory when the application starts}.\\
+
+Notice that if you are installing it in a different location, you have to insert the correct directory when the application starts.\\
 \textbf{Java 17 is required to start the local instance of SonarQube}.\\
-Now we need to install the SonarScanner for CLI and we can find the download \href[]{https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/}{here}.\\
+Last thing, install the SonarScanner for CLI and we can find the download \href[]{https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/}{here}.
+
+\section{Running the application}
+Once all the previous steps are completed, it is possible to run the application.\\
+To run the application, just run the jar file that can be found in the link above and follow the instructions given by the application.

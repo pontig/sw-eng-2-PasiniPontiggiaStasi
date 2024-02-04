@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.GeneralSecurityException;
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @RestController
 public class BattleController {
@@ -43,6 +45,8 @@ public class BattleController {
     private final EducatorRepository educatorRepository;
     @Autowired
     private final TeamRepository teamRepository;
+
+    private static final Logger log = Logger.getLogger(BattleController.class.getName());
 
     BattleController(BattleRepository battleRepository, TournamentRepository tournamentRepository, StudentRepository studentRepository, EducatorRepository educatorRepository, TeamRepository teamRepository) {
         this.battleRepository = battleRepository;
@@ -131,7 +135,7 @@ public class BattleController {
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         battleMap.put("title", battle.getTitle());
-        battleMap.put("description", battle.getDescription());
+        battleMap.put("link", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
         battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
@@ -184,7 +188,7 @@ public class BattleController {
         Map<String, Object> battleMap = new LinkedHashMap<>();
         battleMap.put("id", battle.getId());
         battleMap.put("title", battle.getTitle());
-        battleMap.put("description", battle.getDescription());
+        battleMap.put("link", battle.getDescription());
         battleMap.put("language", battle.getLanguage());
         battleMap.put("opening", battle.getOpenDate());
         battleMap.put("registration", battle.getRegistrationDeadline().toString());
@@ -472,10 +476,22 @@ public class BattleController {
             String newTest;
 
             switch (language) {
-                case "Java" -> { newBuildScript = "pom.xml"; newTest = "MainTest.java"; }
-                case "JavaScript" -> { newBuildScript = "package.json"; newTest = "main.test.js";}
-                case "Python" -> { newBuildScript = "setup.py"; newTest = "main_test.py";}
-                default -> { newBuildScript = null; newTest = null; }
+                case "Java" -> {
+                    newBuildScript = "pom.xml";
+                    newTest = "MainTest.java";
+                }
+                case "JavaScript" -> {
+                    newBuildScript = "package.json";
+                    newTest = "main.test.js";
+                }
+                case "Python" -> {
+                    newBuildScript = "setup.py";
+                    newTest = "main_test.py";
+                }
+                default -> {
+                    newBuildScript = null;
+                    newTest = null;
+                }
             }
 
             // Obtain path to store the file
@@ -571,17 +587,17 @@ public class BattleController {
             TestRepository build = new TestRepository();
 
             new Thread(() -> {
-                if(language.equals("JavaScript")) {
+                if (language.equals("JavaScript")) {
                     build.buildAndTestRepo(battle, false, projectPath);
                     build.buildAndTestRepo(battle, true, projectPath);
                 } else build.buildAndTestRepo(battle, false, projectPath);
 
                 try {
-                    if(language.equals("Java"))
+                    if (language.equals("Java"))
                         team.setTestScore(build.getTestPassedJava(projectPath));
                     else if (language.equals("JavaScript")) {
 
-                            team.setTestScore(build.getTestPassedJavaScript(projectPath));
+                        team.setTestScore(build.getTestPassedJavaScript(projectPath));
 
                     } else {
                         team.setTestScore(build.getTestPassedPython(projectPath));
@@ -793,5 +809,31 @@ public class BattleController {
         }).start();
 
         return ResponseEntity.status(HttpStatus.OK).body("Team " + newTeam.getName() + " has been created");
+    }
+
+    @GetMapping("/edu/noticed")
+    List<Map<String, Object>> getNoticedBattlesEducator(HttpSession session) {
+        //check if user passed is edu
+        User user = (User) session.getAttribute("user");
+        if (user == null || !user.isEdu()) {
+            throw new EducatorNotFoundException(user.getId());
+        }
+        Educator educator = educatorRepository.findById(user.getId())
+                .orElseThrow(() -> new EducatorNotFoundException(user.getId()));
+
+        List<Map<String, Object>> response = battleRepository
+                .findAll()
+                .stream()
+                .filter(b-> b.getCreator().getId() == educator.getId() && b.getPhase() == 3)
+                .map(b -> {
+                    log.info("Battle: " + b.getPhase());
+                    Map<String, Object> battleMap = new LinkedHashMap<>();
+                    battleMap.put("battle_id", b.getId());
+                    battleMap.put("battle_name", b.getName());
+                    return battleMap;
+                })
+                .collect(Collectors.toList());
+
+        return response;
     }
 }

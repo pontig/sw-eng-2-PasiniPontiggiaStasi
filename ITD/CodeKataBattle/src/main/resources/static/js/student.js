@@ -99,13 +99,19 @@ window.addEventListener('load', () => {
                             })
                         })
                         break;
+                    case 400:
+                        response.text().then(result => {
+                            Swal.fire({
+                                title: "Battle not joined, the name is already taken!",
+                                text: result,
+                                type: "error",
+                                confirmButtonColor: '#CC208E'
+                            })
+                        })
+                        break;
 
                     default:
-                        // TODO: Cambiare errorJoinBattle
-                        const errorBox = document.getElementById('errorNewTournament');
-                        if (errorBox)
-                            errorBox.textContent = "Internal error";
-                        errorBox.style.display = 'flex';
+                        alert("Internal error")
                         break;
                 }
             })
@@ -129,5 +135,3 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 });
-
-// TODO: la funzione per iscriversi al torneo si chiama subscribeTournament
