@@ -142,7 +142,43 @@ Its structure is the classical one of a Spring Boot application, which is the fo
     \item {\ttfamily{src/main/resources/static/}}: contains the files of the frontend application, i.e. the HTML, SCSS and JavaScript files
 \end{itemize}
 
-{\color{red} \chapter{Performed test}}
+\chapter{Performed test}
+
+The software testing procedure has been performed mainly thorough unit testing; below are listed the most relevant tests that have been performed.\\
+Due to the limited time, we have focused on the backend system, since the frontend is very simple and the majority of the functionalities are implemented in the backend.
+
+
+\section{Tournament}
+
+\begin{enumerate}
+    \item an EDU creates a tournament, with a new name or a name that already exists
+    \item a STU subscribes to a tournament
+    \item an EDU closes a tournament
+\end{enumerate}
+
+\section{GitHub / Static Analysis / mail sending}
+
+\begin{enumerate}
+    \item the system sends an email to the right users when a deadline is reached or a significant event happens
+    \item the system creates a GitHub repository at the end of the registration phase of a battle
+    \item after a push, the system gets notified by GitHub, retrieves the code in the form of a zip file, unzips it, runs the tests and updates the score
+
+\section{Battle}
+
+\begin{enumerate}
+    \item an EDU creates a battle, selecting one or more options regarding static analysis and manual evaluation
+    \item a STU subscribes to a battle, both alone and inviting other STUs
+    \item a STU invites another STU to a battle after being subscribed
+    \item a STU joins a battle by an invite
+    \item a STU uploads the code on GitHub and sees his score updated, taking into account the tests, the timeliness and the eventual static analysis
+    \item an EDU performs the manual evaluation of the code of the teams in a battle
+\end{enumerate}
+
+\section{Profile}
+
+\begin{enumerate}
+    \item an user inspects the profile of a STU's profile showing the list of tournaments and battles the student is subscribed to
+\end{enumerate}
 
 \chapter{Installation instructions}
 \section{Static Analysis Tool - SonarQube}
