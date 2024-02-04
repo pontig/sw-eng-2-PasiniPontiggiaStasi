@@ -537,7 +537,7 @@ public class BattleController {
                 }
             }).start();
 
-            new RegistrationThread(teamRepository, newBattle).start();
+            new RegistrationThread(battleRepository, teamRepository, newBattle).start();
             new SubmissionThread(newBattle).start();
 
             return ResponseEntity.status(HttpStatus.OK).body(battleId);
