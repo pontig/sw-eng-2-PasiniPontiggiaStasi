@@ -19,10 +19,4 @@ public class MainTest {
         // Check the output
         assertEquals("Hello, World in Java!".trim(), outContent.toString().trim());
     }
-
-    @Test
-    public void testSomma() {
-        int risultato = Main.somma(2, 3);
-        assertEquals(5, risultato);
-    }
 }

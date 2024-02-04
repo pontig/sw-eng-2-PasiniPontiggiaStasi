@@ -8,15 +8,17 @@ import ckb.platform.gmailAPI.GmailAPI;
 import ckb.platform.repositories.*;
 import ckb.platform.scheduler.RegistrationThread;
 import ckb.platform.scheduler.SubmissionThread;
+import ckb.platform.testRepo.TestRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import javax.mail.MessagingException;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -379,12 +381,12 @@ public class BattleController {
 
         MultipartFile ckbProblem = createBattleRequest.getCkbProblem();
         MultipartFile buildScript = createBattleRequest.getBuildScript();
-        // TODO: lista file test
+        MultipartFile test = createBattleRequest.getTest();
 
         String description = createBattleRequest.getDescription();
-        boolean reliability = createBattleRequest.isReliability();
-        boolean maintainability = createBattleRequest.isMaintainability();
-        boolean security = createBattleRequest.isSecurity();
+        boolean reliability = createBattleRequest.getReliability();
+        boolean maintainability = createBattleRequest.getMaintainability();
+        boolean security = createBattleRequest.getSecurity();
 
         if (user == null)
             // Check if user is not in session
@@ -445,12 +447,18 @@ public class BattleController {
         if (language.equals("Java")) {
             if (!buildScript.getContentType().equalsIgnoreCase("text/xml"))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a XML file");
+            if (!test.getOriginalFilename().toLowerCase().endsWith(".java"))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a .java file");
         } else if (language.equals("Python")) {
             if (!buildScript.getContentType().equalsIgnoreCase("text/x-python"))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a PY file");
+            if (!test.getOriginalFilename().toLowerCase().endsWith(".py"))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a .py file");
         } else {
             if (!buildScript.getContentType().equalsIgnoreCase("application/json"))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a JSON file");
+            if (!test.getOriginalFilename().toLowerCase().endsWith(".js")) // .js
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a .js file");
         }
 
         Educator creatorBattle = (Educator) user;
@@ -486,27 +494,30 @@ public class BattleController {
             String battleId = String.valueOf(battleRepository.getBattleIdByName(newBattle.getName()));
 
             String newCkbProblem = "ProblemDescription.pdf";
-            String newBuildScript;
+            String newBuildScript, newTest;
 
             switch (language) {
-                case "Java" -> newBuildScript = "pom.xml";
-                case "JavaScript" -> newBuildScript = "package.json";
-                case "Python" -> newBuildScript = "setup.py";
-                default -> newBuildScript = null;
+                case "Java" -> { newBuildScript = "pom.xml"; newTest = "MainTest.java"; }
+                case "JavaScript" -> { newBuildScript = "package.json"; newTest = "main.test.js";}
+                case "Python" -> { newBuildScript = "setup.py"; newTest = "main_test.py";}
+                default -> { newBuildScript = null; newTest = null; }
             }
 
             // Obtain path to store the file
             Path absolutePath = Paths.get("fileStorage").toAbsolutePath();
             Path destinationCKBProblemPath = absolutePath.resolve("CKBProblem").resolve(battleId).resolve(newCkbProblem);
             Path destinationBuildScriptPath = absolutePath.resolve("BuildScript").resolve(battleId).resolve(newBuildScript);
+            Path destinationTestPath = absolutePath.resolve("Test").resolve(battleId).resolve(newTest);
             try {
                 // Ensure that destination directories exist, creating them if necessary
                 Files.createDirectories(destinationCKBProblemPath.getParent());
                 Files.createDirectories(destinationBuildScriptPath.getParent());
+                Files.createDirectories(destinationTestPath.getParent());
 
                 // Save file in the directory
                 Files.copy(ckbProblem.getInputStream(), destinationCKBProblemPath, StandardCopyOption.REPLACE_EXISTING);
                 Files.copy(buildScript.getInputStream(), destinationBuildScriptPath, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(test.getInputStream(), destinationTestPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -547,7 +558,7 @@ public class BattleController {
     }
 
     @PostMapping("/battle/pulls")
-    public void pullRequest(@RequestBody RepoPullRequest repoPullRequest) throws IOException {
+    public void pullRequest(@RequestBody RepoPullRequest repoPullRequest) throws IOException, ParserConfigurationException, SAXException {
         String repository = repoPullRequest.getRepository();
         String pusher = repoPullRequest.getPusher();
         String teamName = repoPullRequest.getTeam();
@@ -559,13 +570,15 @@ public class BattleController {
         Battle battle = battleRepository.getBattleByName(repoName);
         Team team = teamRepository.getTeamByName(teamName);
 
+        // TODO: check if the team is part of the battle else return;
+
         if (battle != null && team != null) {
             // If the battle is closed no more pull are performed for it
             if (battle.getFinalSubmissionDeadline().before(new Date()))
                 return;
 
             // Add score for last commit
-            System.out.println(battle + "\nscore = " + (battle.getFinalSubmissionDeadline().getTime() - new Date().getTime()) + " * 100 / " + (battle.getFinalSubmissionDeadline().getTime() - battle.getRegistrationDeadline().getTime()));
+            System.out.println("score = " + (battle.getFinalSubmissionDeadline().getTime() + " - " + new Date().getTime()) + " * 100 / " + (battle.getFinalSubmissionDeadline().getTime() + " - " + battle.getRegistrationDeadline().getTime()));
             long score = ((battle.getFinalSubmissionDeadline().getTime() - new Date().getTime()) * 100) / (battle.getFinalSubmissionDeadline().getTime() - battle.getRegistrationDeadline().getTime());
             System.out.println(" = " + score);
             team.setTimelinessScore((int) score);
@@ -573,12 +586,37 @@ public class BattleController {
                 team.setRepo(repository);
             teamRepository.save(team);
             String repoPath = new GitHubAPI().pullRepository(battle, team, repoName, pusher);
+            System.out.println(repoPath);
 
+            // Add score for script tested
+            String language = battle.getLanguage();
+            String projectPath = repoPath + "/" + language + "Project";
+            TestRepository build = new TestRepository();
 
-            // TODO: build code
+            new Thread(() -> {
+                if(language.equals("JavaScript")) {
+                    build.buildAndTestRepo(battle, false, projectPath);
+                    build.buildAndTestRepo(battle, true, projectPath);
+                } else build.buildAndTestRepo(battle, false, projectPath);
 
-            //STATIC ANALYSIS
-            if (repoPath != null) {
+                try {
+                    if(language.equals("Java"))
+                        team.setTestScore(build.getTestPassedJava(projectPath));
+                    else if (language.equals("JavaScript")) {
+
+                            team.setTestScore(build.getTestPassedJavaScript(projectPath));
+
+                    } else {
+                        team.setTestScore(build.getTestPassedPython(projectPath));
+                    }
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    throw new RuntimeException(e);
+                }
+                teamRepository.save(team);
+            }).start();
+
+            //TODO: check path STATIC ANALYSIS
+            if (projectPath != null) {
                 Analyzer analyzer = new Analyzer("CKBplatform-" + team.getId(), "CKBplatform-" + team.getId(), "admin", "admin01");
 
                 int projectExists = analyzer.projectExists();
@@ -596,8 +634,6 @@ public class BattleController {
                 analyzer.runAnalysisSonarQube(battle.getLanguage(), repoPath);
             }
 
-            //TODO : TIMELINESS
-            //TODO : automatic scripts
             //TODO: update score
         } else
             System.out.println("ERROR");

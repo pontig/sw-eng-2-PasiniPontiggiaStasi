@@ -5,9 +5,23 @@
   "main": "src/main/js/main.js",
   "scripts": {
     "start": "node src/main/js/main.js",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "devDependencies": {
-    "jest": "^27.2.4"
+    "jest": "^27.5.1",
+    "jest-junit": "^16.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "./test-results",
+          "outputName": "jest-results.xml"
+        }
+      ]
+    ]
   }
 }

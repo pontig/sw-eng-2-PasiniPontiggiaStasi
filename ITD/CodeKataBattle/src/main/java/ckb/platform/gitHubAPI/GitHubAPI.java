@@ -53,6 +53,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -107,7 +108,7 @@ public class GitHubAPI {
                     path = absolutePath + "/" + folder + fileName;
                     folder = "";
                 }
-                case "main" -> {
+                case "main", "i_m" -> {
                     if(battle.getLanguage().equals("Java")){
                         folder = "JavaProject/src/main/java/org/problem";
                         fileName = "/Main.java";
@@ -117,28 +118,52 @@ public class GitHubAPI {
                         fileName = "/main.js";
                         path = absolutePath + "/ProjectOrganization/JavaScriptProject/src/main/js/main.js";
                     } else {
+                        if(folder.equals("i_m"))
+                            fileName = "/__init__.py";
+                        else
+                            fileName = "/main.py";
                         folder = "PythonProject/src/main/python";
-                        fileName = "/main.py";
-                        path = absolutePath + "/ProjectOrganization/PythonProject/src/main/python/main.py";
+                        path = absolutePath + "/ProjectOrganization/PythonProject/src/main/python" + fileName;
                     }
                 }
-                case "test" -> {
+                case "Test" -> {
+                    // TODO: change to right folder
                     if(battle.getLanguage().equals("Java")){
-                        folder = "JavaProject/src/test/java/org/problem";
                         fileName = "/MainTest.java";
-                        path = absolutePath + "/ProjectOrganization/JavaProject/src/test/java/org/problem/MainTest.java";
+                        path = absolutePath + "/" + folder + "/" + battle.getId() + fileName;
+                        folder = "JavaProject/src/test/java/org/problem";
                     } else if(battle.getLanguage().equals("JavaScript")){
-                        folder = "JavaScriptProject/src/test/js";
                         fileName = "/main.test.js";
-                        path = absolutePath + "/ProjectOrganization/JavaScriptProject/src/test/js/main.test.js";
+                        path = absolutePath + "/" + folder + "/" + battle.getId() + fileName;
+                        folder = "JavaScriptProject/src/test/js";
                     } else {
-                        folder = "PythonProject/tests";
                         fileName = "/main_test.py";
-                        path = absolutePath + "/ProjectOrganization/PythonProject/tests/main_test.py";
+                        path = absolutePath + "/" + folder + "/" + battle.getId() + fileName;
+                        folder = "PythonProject/tests";
                     }
+                }
+                case "i_t" -> {
+                    if(battle.getLanguage().equals("Python")) {
+                        fileName = "/__init__.py";
+                        folder = "PythonProject/tests";
+                        path = absolutePath + "/ProjectOrganization/PythonProject/tests" + fileName;
+                    }
+                }
+                case "BuildScript" -> {
+                    if(battle.getLanguage().equals("Java"))
+                        fileName = "/pom.xml";
+                    else if(battle.getLanguage().equals("JavaScript"))
+                        fileName = "/package.json";
+                    else
+                        fileName = "/setup.py";
+
+                    path = absolutePath + "/" + folder + "/" + battle.getId() + fileName;
+
+                    folder = battle.getLanguage() + "Project";
                 }
             }
-            
+
+
             // Create a PUT object to make the submission
             httpPut = new HttpPut("https://api.github.com/repos/" + username + "/" + repoName + "/contents/" + folder + fileName);
             System.out.println(httpPut);
@@ -185,6 +210,15 @@ public class GitHubAPI {
                 pullsPath = absolutePath + "/PullFiles" +
                         "/" + battle.getId() +
                         "/" + team.getId() + "/";
+
+                // If folder exist
+                if (Files.exists(Path.of(pullsPath))) {
+                    // Directory already exists, delete it
+                    Files.walk(Path.of(pullsPath))
+                            .sorted(Comparator.reverseOrder())
+                            .map(Path::toFile)
+                            .forEach(File::delete);
+                }
 
                 Files.createDirectories(Path.of(pullsPath));
 

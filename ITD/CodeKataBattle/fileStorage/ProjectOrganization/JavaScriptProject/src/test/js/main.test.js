@@ -1,5 +1,4 @@
-// src/test/javascript/main.test.js
-const { logHelloWorld } = require('../../main/js/main');
+const { logHelloWorld} = require('../../main/js/main');
 test('should log "Hello, World in JS!"', () => {
     const consoleLogSpy = jest.spyOn(console, 'log');
     logHelloWorld();

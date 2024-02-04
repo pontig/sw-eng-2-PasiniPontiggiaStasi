@@ -28,7 +28,7 @@ public class RegistrationThread extends Thread {
 
         // TODO: Remember to remove the following, which is for testing purpose only
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.FEBRUARY, 3, 19, 20, 0);
+        calendar.set(2024, Calendar.FEBRUARY, 4, 17, 17, 0);
         this.targetDate = calendar.getTime();
     }
 
@@ -99,36 +99,22 @@ public class RegistrationThread extends Thread {
                 System.out.println("Error in creating repo");
 
             try {
-                response = gitHubAPI.createFolder(battle, "CKBProblem");
+                gitHubAPI.createFolder(battle, "CKBProblem");                   // CKB Problem PDF description
+                gitHubAPI.createFolder(battle, "Rules");                        // README.md
+                gitHubAPI.createFolder(battle, "main");                         // Main folder of project
+                if(battle.getLanguage().equals("Python"))
+                    gitHubAPI.createFolder(battle, "i_m");
+                gitHubAPI.createFolder(battle, "Test");                         // Test folder of project
+                if(battle.getLanguage().equals("Python"))
+                    gitHubAPI.createFolder(battle, "i_t");
+                response = gitHubAPI.createFolder(battle, "BuildScript");             // Build script
             } catch (IOException e) {
+                System.out.println(e);
                 throw new RuntimeException(e);
             }
             if(response != 201)
-                System.out.println("Error in creating folder CKB Problem");
+                System.out.println("An error occurred in folder creation");
 
-            try {
-                response = gitHubAPI.createFolder(battle, "Rules");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if(response != 201)
-                System.out.println("Error in creating README");
-
-            try {
-                response = gitHubAPI.createFolder(battle, "main");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if(response != 201)
-                System.out.println("Error in creating main");
-
-            try {
-                response = gitHubAPI.createFolder(battle, "test");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if(response != 201)
-                System.out.println("Error in creating test");
         }).start();
 
         new Thread(() -> {

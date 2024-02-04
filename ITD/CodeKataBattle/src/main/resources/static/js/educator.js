@@ -102,9 +102,13 @@ window.onload = () => {
         const maxSize = document.getElementById('maxSize').value;
         const fileCKBProblem = document.getElementById('ckbProblem');
         const fileBuildAutomationScript = document.getElementById('buildScript');
+        const fileTest = document.getElementById('test');
         const manualEvaluation = document.getElementById('manualEvaluation').checked;
+        const reliability = document.getElementById('reliability').checked;
+        const maintainability = document.getElementById('maintainability').checked;
+        const security = document.getElementById('security').checked;
 
-        console.log('Form data: ', { tournamentId, battleName, registerDeadline, submissionDeadline, language, minSize, maxSize, manualEvaluation });
+        console.log('Form data: ', { tournamentId, battleName, registerDeadline, submissionDeadline, language, minSize, maxSize, manualEvaluation, reliability, maintainability, security });
 
         // Define url and data
         const url = '/ckb_platform/battle/create';
@@ -119,9 +123,13 @@ window.onload = () => {
         formData.append('language', language);
         formData.append('minSize', minSize);
         formData.append('maxSize', maxSize);
-        formData.append('manualEvaluation', manualEvaluation);
         formData.append('ckbProblem', fileCKBProblem.files[0]);
         formData.append('buildScript', fileBuildAutomationScript.files[0]);
+        formData.append('test', fileTest.files[0]);
+        formData.append('manualEvaluation', manualEvaluation);
+        formData.append('reliability', reliability);
+        formData.append('maintainability', maintainability);
+        formData.append('security', security);
 
         // Prepare data to send to the Server
         const options = {

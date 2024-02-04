@@ -18,6 +18,7 @@ public class CreateBattleRequest {
     private boolean manualEvaluation;
     private MultipartFile ckbProblem;
     private MultipartFile buildScript;
+    private MultipartFile test;
     private String description;
     private boolean reliability, maintainability, security;
 
@@ -113,5 +114,32 @@ public class CreateBattleRequest {
     }
     public void setBuildScript(MultipartFile buildScript) {
         this.buildScript = buildScript;
+    }
+
+    public MultipartFile getTest() {
+        return test;
+    }
+    public void setTest(MultipartFile test) {
+        this.test = test;
+    }
+
+    public boolean getReliability() {
+        return reliability;
+    }
+
+    public boolean getMaintainability() {
+        return maintainability;
+    }
+
+    public void setMaintainability(boolean maintainability) {
+        this.maintainability = maintainability;
+    }
+
+    public boolean getSecurity() {
+        return security;
+    }
+
+    public void setSecurity(boolean security) {
+        this.security = security;
     }
 }
