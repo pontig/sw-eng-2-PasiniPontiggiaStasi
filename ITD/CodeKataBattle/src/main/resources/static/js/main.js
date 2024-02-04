@@ -847,7 +847,7 @@ async function changePage(page, id) {
                                     // Define url and data
                                     let mail = document.getElementsByName("emailToInvite")[0].value
                                     const url = '/ckb_platform/battles/invite';
-                                    const data = { mail };
+                                    const dataTosend = { mail, team_id: data.team_id };
 
                                     // Prepare data to send to the Server
                                     const options = {
@@ -855,7 +855,7 @@ async function changePage(page, id) {
                                         headers: {
                                             'Content-Type': 'application/json'
                                         },
-                                        body: JSON.stringify(data)
+                                        body: JSON.stringify(dataTosend)
                                     };
 
                                     // Fetch data to url
@@ -864,8 +864,7 @@ async function changePage(page, id) {
                                             // Analise server response code
                                             switch (response.status) {
                                                 case 200:
-                                                case 401:
-                                                case 404:
+                                                case 201:
                                                     response.text().then(result => {
                                                         Swal.fire({
                                                             title: "Invitation sent!",
@@ -875,7 +874,7 @@ async function changePage(page, id) {
                                                         })
                                                     })
                                                     break;
-
+                                                    
                                                 default:
                                                     alert("Error during invitation sending!")
                                                     break;

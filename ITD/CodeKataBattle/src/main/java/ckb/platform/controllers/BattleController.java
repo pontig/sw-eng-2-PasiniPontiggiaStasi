@@ -148,8 +148,9 @@ public class BattleController {
         battleMap.put("phase", battle.getPhase());
         boolean after = battle.getRegistrationDeadline().after(new Date());
         boolean alreadyIn = battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())));
+        if (alreadyIn)
+            battleMap.put("team_id", battle.getTeams().stream().filter(team -> team.getStudents().contains(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId())))).findFirst().orElseThrow(() -> new TeamNotFoundException(-1L)).getId());
         battleMap.put("canSubscribe", after && !alreadyIn);
-        //battleMap.put("canInviteOthers", battle.getRegistrationDeadline().compareTo(new Date())> 0 && battle.isSubscribed(studentRepository.findById(stu_id).orElseThrow(() -> new StudentNotFoundException(stu_id))));
         battleMap.put("canInviteOthers",
                 battle.getRegistrationDeadline().after(new Date()) &&
                         battle.isSubscribed(studentRepository.findById(user.getId()).orElseThrow(() -> new StudentNotFoundException(user.getId()))) &&
@@ -302,15 +303,15 @@ public class BattleController {
     }
 
     @PostMapping("/battles/invite")
-    ResponseEntity<?> inviteStudent(@ModelAttribute InviteSinglePersonRequest request , HttpSession session) {
+    ResponseEntity<?> inviteStudent(@RequestBody InviteSinglePersonRequest request, HttpSession session) {
         final User user = (User) session.getAttribute("user");
         //final User user = studentRepository.findById(1L).orElseThrow(() -> new StudentNotFoundException(1L));
         if (user == null || user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
 
-        String email = request.getEmail();
-        Long team_id = request.getTeamId();
+        String email = request.getMail();
+        Long team_id = request.getTeam_id();
 
         Team team = teamRepository.findById(team_id)
                 .orElseThrow(() -> new TeamNotFoundException(team_id));
@@ -325,7 +326,7 @@ public class BattleController {
                 filter(s -> s.getEmail().equals(email))
                 .findFirst()
                 .orElseThrow(() -> new StudentNotFoundException(-1L));
-        
+
         team.addStudent(studentToInvite);
         teamRepository.save(team);
 
@@ -344,12 +345,12 @@ public class BattleController {
             String subject = "JOIN TEAM " + team.getName() + " for battle " + battle.getName();
 
             String body = "Hi " + studentToInvite.getFirstName() + ",\n\n" +
-                           user.getFirstName() + " invited you to join its team " + team.getName() + "\n" +
-                           "You can compete in battle " + battle.getName() + " together with the team members!\n\n" +
-                           "To join your mates in this adventure click the link below before it is too late: " +
-                           "https://localhost:8080/ckb_platform/team/" + team.getId() + "/join/" + studentToInvite.getId() + "\n" +
-                           "The battle registration window will close on: " + battle.getRegistrationDeadline() + "\n\n" +
-                           "Best regards,\n CKB Team";
+                    user.getFirstName() + " invited you to join its team " + team.getName() + "\n" +
+                    "You can compete in battle " + battle.getName() + " together with the team members!\n\n" +
+                    "To join your mates in this adventure click the link below before it is too late: " +
+                    "https://localhost:8080/ckb_platform/team/" + team.getId() + "/join/" + studentToInvite.getId() + "\n" +
+                    "The battle registration window will close on: " + battle.getRegistrationDeadline() + "\n\n" +
+                    "Best regards,\n CKB Team";
 
             try {
                 gmailSender.sendEmail(subject, body, studentToInvite.getEmail());
@@ -394,47 +395,47 @@ public class BattleController {
             // Check if user is an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
 
-        if(battleName.isEmpty() || battleName.isBlank() || language.isEmpty() || language.isBlank() /*|| description.isBlank() || description.isEmpty()*/)
+        if (battleName.isEmpty() || battleName.isBlank() || language.isEmpty() || language.isBlank() /*|| description.isBlank() || description.isEmpty()*/)
             // Check if any string field is empty or blank
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Empty or Blank parameters");
 
-        if(battleName.contains("-"))
+        if (battleName.contains("-"))
             // Check if '-' char is used
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Character '-' is not allowed");
 
-        for(Battle b : battleRepository.findAll()) {
+        for (Battle b : battleRepository.findAll()) {
             // Check if there is another battle with same name
-            if(b.getName().equals(battleName))
+            if (b.getName().equals(battleName))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - A battle with this name already exists");
         }
 
         Tournament tournamentForBattle = tournamentRepository.getTournamentById(tournamentId);
 
-        if(tournamentForBattle == null)
+        if (tournamentForBattle == null)
             // Check if tournament exists
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found - A tournament with id: " + tournamentId + " can not found");
 
-        if(registerDeadline.before(new Date()) && submissionDeadline.before(new Date()))
+        if (registerDeadline.before(new Date()) && submissionDeadline.before(new Date()))
             // Check if the deadlines are not in future
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Deadlines are not in future");
 
-        if(registerDeadline.after(submissionDeadline))
+        if (registerDeadline.after(submissionDeadline))
             // Check if submission is not after registration
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Submission deadline is before registration deadline");
 
-        if(!language.equals("Java") && !language.equals("Cpp") && !language.equals("Python") && !language.equals("C") && !language.equals("JavaScript"))
+        if (!language.equals("Java") && !language.equals("Cpp") && !language.equals("Python") && !language.equals("C") && !language.equals("JavaScript"))
             // Check if language is not in the list of accepted one
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Language defined not supported");
 
-        if(language.equals("C") || language.equals("Cpp"))
+        if (language.equals("C") || language.equals("Cpp"))
             // TODO: remove if we can build it in future
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - We are sorry but it is not possible to build it now");
 
-        if(minSize <= 0 || maxSize <= 0)
+        if (minSize <= 0 || maxSize <= 0)
             // Check if boundaries defined are allowed
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - Boundaries not defined");
 
-        if(maxSize < minSize)
+        if (maxSize < minSize)
             // Check if max is lower than min
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request - MaxSize can not be lower than MinSize");
 
@@ -442,10 +443,10 @@ public class BattleController {
             // Check if the file is a PDF
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + ckbProblem.getOriginalFilename() + " is not a PDF");
 
-        if(language.equals("Java")){
-            if (!buildScript.getContentType().equalsIgnoreCase("text/xml") )
+        if (language.equals("Java")) {
+            if (!buildScript.getContentType().equalsIgnoreCase("text/xml"))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a XML file");
-        } else if(language.equals("Python")) {
+        } else if (language.equals("Python")) {
             if (!buildScript.getContentType().equalsIgnoreCase("text/x-python"))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - " + buildScript.getOriginalFilename() + " is not a PY file");
         } else {
@@ -524,11 +525,11 @@ public class BattleController {
                 // Send Email to each first student in battle
                 for (Student s : newBattle.getTournament().getSubscribedStudents()) {
                     String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
-                                     "as " + newBattle.getTournament().getName() + " member I want to inform you about an upcoming battle\n" +
-                                     "Educator " + user.getFirstName() + " has created the battle " + battleName + " and is waiting for you\n" +
-                                     "The registration deadline is on " + registerDeadline + ", subscribe before it expires\n" +
-                                     "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
-                                     "Best regards,\n CKB Team";
+                            "as " + newBattle.getTournament().getName() + " member I want to inform you about an upcoming battle\n" +
+                            "Educator " + user.getFirstName() + " has created the battle " + battleName + " and is waiting for you\n" +
+                            "The registration deadline is on " + registerDeadline + ", subscribe before it expires\n" +
+                            "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                            "Best regards,\n CKB Team";
 
                     try {
                         gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
@@ -561,7 +562,7 @@ public class BattleController {
 
         if (battle != null && team != null) {
             // If the battle is closed no more pull are performed for it
-            if(battle.getFinalSubmissionDeadline().before(new Date()))
+            if (battle.getFinalSubmissionDeadline().before(new Date()))
                 return;
 
             // Add score for last commit
@@ -569,7 +570,7 @@ public class BattleController {
             long score = ((battle.getFinalSubmissionDeadline().getTime() - new Date().getTime()) * 100) / (battle.getFinalSubmissionDeadline().getTime() - battle.getRegistrationDeadline().getTime());
             System.out.println(" = " + score);
             team.setTimelinessScore((int) score);
-            if(team.getRepo() == null)
+            if (team.getRepo() == null)
                 team.setRepo(repository);
             teamRepository.save(team);
             String repoPath = new GitHubAPI().pullRepository(battle, team, repoName, pusher);
@@ -588,12 +589,12 @@ public class BattleController {
                     analyzer.createProjectSonarQube();
                     //create the webhook on our static analysis tool
                     analyzer.createWebHook();
-                }else if (projectExists == -1) {
+                } else if (projectExists == -1) {
                     System.out.println("Error in the connection with the SonarQube server");
                     return;
                 }
                 //run the analysis from the command line using repoPath as source directory
-                analyzer.runAnalysisSonarQube( battle.getLanguage() ,repoPath);
+                analyzer.runAnalysisSonarQube(battle.getLanguage(), repoPath);
             }
 
             //TODO : TIMELINESS
@@ -651,13 +652,13 @@ public class BattleController {
             // Send Email to each student in battle
             for (Student s : studentsToNotify) {
                 String bodyMsg = "Hi " + s.getFirstName() + ",\n\n" +
-                                 "Battle " + battle.getName() + " has been closed\n" +
-                                 "You can now find the final ranking\n" +
-                                 "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
-                                 "Best regards,\n CKB Team";
+                        "Battle " + battle.getName() + " has been closed\n" +
+                        "You can now find the final ranking\n" +
+                        "You can find CKB Platform at the following link: http://localhost:8080/ckb_platform\n\n" +
+                        "Best regards,\n CKB Team";
 
                 try {
-                    gmailSender.sendEmail(subject,bodyMsg, s.getEmail());
+                    gmailSender.sendEmail(subject, bodyMsg, s.getEmail());
                 } catch (IOException | MessagingException e) {
                     throw new RuntimeException(e);
                 }
@@ -682,12 +683,12 @@ public class BattleController {
             // Check if user is an Educator
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights");
 
-        if(teamName.trim().isBlank() || teamName.isEmpty())
+        if (teamName.trim().isBlank() || teamName.isEmpty())
             // Check if team name is defined
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - Team name is empty or blank");
 
-        for(Team team : teamRepository.findAll()){
-            if(team.getName().equals(teamName)){
+        for (Team team : teamRepository.findAll()) {
+            if (team.getName().equals(teamName)) {
                 // Check if team name already in use
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request - Team name is already used");
             }
@@ -696,9 +697,9 @@ public class BattleController {
         Student stu = (Student) user;
         Battle battleToJoin = battleRepository.getReferenceById(battleId);
 
-        if(!battleToJoin.getTournament().getSubscribedStudents().contains(stu)){
+        if (!battleToJoin.getTournament().getSubscribedStudents().contains(stu)) {
             // Check if the student is not subscribed to the tournament
-            if(battleToJoin.getTournament().getEndDate() != null) {
+            if (battleToJoin.getTournament().getEndDate() != null) {
                 // Check if tournament is closed
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You can not join the battle because you are not in tournament");
             } else {
@@ -711,34 +712,34 @@ public class BattleController {
             }
         }
 
-        if(battleToJoin.getRegistrationDeadline().before(new Date()))
+        if (battleToJoin.getRegistrationDeadline().before(new Date()))
             // Check if the battle is not in registration period
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Battle registration deadline is closed");
 
         List<Student> students = new ArrayList<>();
         for (String email : studentEmails) {
             Student stuInvited = studentRepository.getStudentByEmail(email);
-            if(stuInvited == null)
+            if (stuInvited == null)
                 // Check if student invited is in the db
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found - Student " + email + " not in the database");
 
-            if(stuInvited.isEdu())
+            if (stuInvited.isEdu())
                 // Check if student invited is in the db
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - " + email + " is an educator");
 
-            if(stuInvited == stu)
+            if (stuInvited == stu)
                 // Check if student is not inviting itself
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You can not invite yourself");
 
-            if(!students.contains(stuInvited))
+            if (!students.contains(stuInvited))
                 students.add(stuInvited);
         }
 
-        if(students.size()+1 > battleToJoin.getMaxStudents())
+        if (students.size() + 1 > battleToJoin.getMaxStudents())
             // Check if the student boundaries are respected
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Too many students in the team");
 
-        if(students.size()+1 < battleToJoin.getMinStudents())
+        if (students.size() + 1 < battleToJoin.getMinStudents())
             // Check if the student boundaries are respected
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - Too less students in the team");
 
@@ -765,12 +766,12 @@ public class BattleController {
             if (!students.isEmpty()) {
                 for (Student s : students) {
                     String body = "Hi " + s.getFirstName() + ",\n\n" +
-                                  teamOwner.getFirstName() + " invited you to join its team " + newTeam.getName() + "\n" +
-                                  "You can compete in battle " + battle.getName() + " together with the team members!\n\n" +
-                                  "To join your mates in this adventure click the link below before it is too late: " +
-                                  "https://localhost:8080/ckb_platform/team/" + newTeam.getId() + "/join/" + s.getId() + "\n" +
-                                  "The battle registration window will close on: " + battle.getRegistrationDeadline() + "\n\n" +
-                                  "Best regards,\n CKB Team";
+                            teamOwner.getFirstName() + " invited you to join its team " + newTeam.getName() + "\n" +
+                            "You can compete in battle " + battle.getName() + " together with the team members!\n\n" +
+                            "To join your mates in this adventure click the link below before it is too late: " +
+                            "https://localhost:8080/ckb_platform/team/" + newTeam.getId() + "/join/" + s.getId() + "\n" +
+                            "The battle registration window will close on: " + battle.getRegistrationDeadline() + "\n\n" +
+                            "Best regards,\n CKB Team";
 
                     try {
                         gmailSender.sendEmail(subject, body, s.getEmail());
