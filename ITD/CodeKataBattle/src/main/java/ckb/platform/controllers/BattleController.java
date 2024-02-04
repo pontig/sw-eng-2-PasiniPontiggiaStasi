@@ -28,7 +28,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.GeneralSecurityException;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,8 +44,6 @@ public class BattleController {
     private final EducatorRepository educatorRepository;
     @Autowired
     private final TeamRepository teamRepository;
-
-    private static final Logger log = Logger.getLogger(BattleController.class.getName());
 
     BattleController(BattleRepository battleRepository, TournamentRepository tournamentRepository, StudentRepository studentRepository, EducatorRepository educatorRepository, TeamRepository teamRepository) {
         this.battleRepository = battleRepository;
