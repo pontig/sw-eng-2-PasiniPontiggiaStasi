@@ -243,4 +243,8 @@ public class Battle {
     public boolean isSecurity() {
         return security;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -5,6 +5,7 @@ import ckb.platform.entities.Student;
 import ckb.platform.entities.Team;
 import ckb.platform.gitHubAPI.GitHubAPI;
 import ckb.platform.gmailAPI.GmailAPI;
+import ckb.platform.repositories.BattleRepository;
 import ckb.platform.repositories.TeamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +25,11 @@ public class RegistrationThread extends Thread {
     private final TeamRepository teamRepository;
     private final Date targetDate;
     private final Battle battle;
+    private final BattleRepository battleRepository;
 
-    public RegistrationThread(TeamRepository teamRepository, Battle battle) {
+    public RegistrationThread(BattleRepository battleRepository, TeamRepository teamRepository, Battle battle) {
         this.teamRepository = teamRepository;
+        this.battleRepository = battleRepository;
         this.targetDate = battle.getRegistrationDeadline();
         this.battle = battle;
 
@@ -119,6 +122,9 @@ public class RegistrationThread extends Thread {
             if(response != 201)
                 log.error("An error occurred in folder creation - response: " + response);
 
+            battle.setDescription("https://github.com/CodeKataBattlePlatform/" + battle.getName().replace(" ", "-"));
+
+            battleRepository.save(battle);
         }).start();
 
         new Thread(() -> {
