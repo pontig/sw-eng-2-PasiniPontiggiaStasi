@@ -15,7 +15,6 @@ public class CodeKataBattleApplication {
 		SpringApplication.run(CodeKataBattleApplication.class, args);
 	}
 	public static void insertDir(){
-		int choice;
 		System.out.println("Insert the location of the StartSonar.bat file (e.g. C:\\sonarqube\\bin\\windows-x86-64, this is the default location) : ");
 		System.out.print("If you want to use the default location, press enter :  ");
 		Scanner read = new Scanner(System.in);

@@ -130,7 +130,7 @@ public class Analyzer {
             language = language.toLowerCase();
             if(language.equals("java")){
                 //todo change the path to the path of the project
-                command += " -D sonar.java.binaries=./ing-sw-2023/target/classes";
+                command += " -D sonar.java.binaries=./target/classes";
             }
             // Create ProcessBuilder with the command and set the working directory
             ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c",command);

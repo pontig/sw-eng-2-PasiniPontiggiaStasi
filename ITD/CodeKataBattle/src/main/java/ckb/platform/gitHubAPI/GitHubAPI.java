@@ -196,7 +196,7 @@ public class GitHubAPI {
                     while ((bytesRead = inputStream.read(buffer)) != -1) {
                         outputStream.write(buffer, 0, bytesRead);
                     }
-                    unzip(pullsPath + "repo.zip", pullsPath);
+                    pullsPath = unzip(pullsPath + "repo.zip", pullsPath);
                     System.out.println("Repository downloaded successfully.");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -212,14 +212,20 @@ public class GitHubAPI {
         return Path.of(pullsPath).toString();
     }
 
-    public void unzip(String zipFilePath, String destDir) {
-        try{
+    public String unzip(String zipFilePath, String destDir) {
+        try {
             byte[] buffer = new byte[1024];
             ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath));
             ZipEntry zipEntry = zis.getNextEntry();
+            int i = 0;
+            String dirName = null;
             while (zipEntry != null) {
                 File newFile = newFile(new File(destDir), zipEntry);
                 if (zipEntry.isDirectory()) {
+                    if (i == 0) {
+                        i++;
+                        dirName = newFile.getName();
+                    }
                     if (!newFile.isDirectory() && !newFile.mkdirs()) {
                         throw new IOException("Failed to create directory " + newFile);
                     }
@@ -243,10 +249,11 @@ public class GitHubAPI {
 
             zis.closeEntry();
             zis.close();
+            return destDir.concat(dirName);
         }catch (IOException e){
             e.printStackTrace();
         }
-
+        return null;
     }
 
     private File newFile(File destinationDir, ZipEntry zipEntry) throws IOException{

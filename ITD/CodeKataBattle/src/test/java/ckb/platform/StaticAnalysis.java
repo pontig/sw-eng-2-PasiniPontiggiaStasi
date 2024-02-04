@@ -19,6 +19,9 @@ public class StaticAnalysis {
                 "/" + 1 +
                 "/" + 1 + "/";
 
+        GitHubAPI gitHubAPI = new GitHubAPI();
+        pullsPath = gitHubAPI.unzip(pullsPath+ "repo.zip", pullsPath);
+
         Analyzer analyzer = new Analyzer("CKBplatform-" + 1, "CKBplatform-" + 1, "admin", "admin01");
 
         int projectExists = analyzer.projectExists();
@@ -26,8 +29,6 @@ public class StaticAnalysis {
         if (projectExists == 0) {
             //create the project on our static analysis tool
             analyzer.createProjectSonarQube();
-            //create the token for this project on our static analysis tool
-            //analyzer.createToken();
             //create the webhook on our static analysis tool
             analyzer.createWebHook();
         }else if (projectExists == -1) {
@@ -40,9 +41,9 @@ public class StaticAnalysis {
 
     @Test
     void unzip(){
-        String zipFilePath = "fileStorage/PullFiles/1/1/Progetto.zip";
+        String zipFilePath = "fileStorage/PullFiles/1/1/repo.zip";
         String destDir = "fileStorage/PullFiles/1/1/";
         GitHubAPI gitHubAPI = new GitHubAPI();
-        gitHubAPI.unzip(zipFilePath, destDir);
+       System.out.println(gitHubAPI.unzip(zipFilePath, destDir));
     }
 }
