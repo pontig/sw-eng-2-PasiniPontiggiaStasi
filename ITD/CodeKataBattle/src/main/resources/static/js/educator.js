@@ -1,11 +1,25 @@
 var newTourForm, newBattleForm
 var closeTour, shareTour
 
-window.onload = () => {
+window.onload = async () => {
     newTourForm = document.getElementById("newTournament")
     closeTour = document.getElementById("importantButton")
     shareTour = document.getElementById("queryResult")
     newBattleForm = document.getElementById("newBattle")
+
+    let noticed = document.querySelector("#noticed ul")
+    noticed.innerHTML = ""
+
+    let n1 = await fetch("/ckb_platform/edu/noticed")
+    let n2 = await n1.json()
+    n2.forEach(n => {
+        let li = document.createElement("li")
+        let a = document.createElement("a")
+        a.onclick = () => changePage("battle", n.battle_id)
+        a.textContent = n.battle_name
+        li.appendChild(a)
+        noticed.appendChild(li)
+    })
 
 
     const errorBox = document.getElementById('errorNewTournament');
@@ -151,7 +165,7 @@ window.onload = () => {
                                 confirmButtonColor: '#CC208E'
                             }).then(() => {
                                 setTimeout(() => {
-                                    location.reload(); // TODO: reload ma nella schemata delle battle
+                                    changePage("battle", result)
                                 }, 500);
                             });
                         })
@@ -260,11 +274,7 @@ function closeTournament(garbage) {
                     break;
 
                 default:
-                    // TODO: Cambiare errorNewTorunement
-                    const errorBox = document.getElementById('errorNewTournament');
-                    if (errorBox)
-                        errorBox.textContent = "Internal error";
-                    errorBox.style.display = 'flex';
+                    alert("Internal error")
                     break;
             }
         })
@@ -343,11 +353,7 @@ function sendScore() {
                         break;
 
                     default:
-                        // TODO: Cambiare errorNewTorunement
-                        const errorBox = document.getElementById('errorNewTournament');
-                        if (errorBox)
-                            errorBox.textContent = "Internal error";
-                        errorBox.style.display = 'flex';
+                        alert("Internal error")
                         break;
                 }
             })
@@ -419,11 +425,7 @@ function sendScoreSecond(team_id, score) {
                     break;
 
                 default:
-                    // TODO: Cambiare errorNewTorunement
-                    const errorBox = document.getElementById('errorNewTournament');
-                    if (errorBox)
-                        errorBox.textContent = "Internal error";
-                    errorBox.style.display = 'flex';
+                    alert("Internal error")
                     break;
             }
         })
@@ -496,11 +498,7 @@ function confirmManual() {
                         break;
 
                     default:
-                        // TODO: Cambiare errorNewTorunement
-                        const errorBox = document.getElementById('errorNewTournament');
-                        if (errorBox)
-                            errorBox.textContent = "Internal error";
-                        errorBox.style.display = 'flex';
+                        alert("Internal error")
                         break;
                 }
             })

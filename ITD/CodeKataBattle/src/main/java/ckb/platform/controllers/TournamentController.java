@@ -208,7 +208,6 @@ public class TournamentController {
         return response;
     }
 
-
     //mapped to "Get tournament details"
     @GetMapping("/tournaments/edu/{t_id}")
     Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, HttpSession session) {

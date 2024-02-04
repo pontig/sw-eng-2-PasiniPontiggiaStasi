@@ -111,11 +111,7 @@ window.addEventListener('load', () => {
                         break;
 
                     default:
-                        // TODO: Cambiare errorJoinBattle
-                        const errorBox = document.getElementById('errorNewTournament');
-                        if (errorBox)
-                            errorBox.textContent = "Internal error";
-                        errorBox.style.display = 'flex';
+                        alert("Internal error")
                         break;
                 }
             })
@@ -139,5 +135,3 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 });
-
-// TODO: la funzione per iscriversi al torneo si chiama subscribeTournament
