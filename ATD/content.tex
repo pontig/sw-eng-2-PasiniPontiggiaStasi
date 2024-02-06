@@ -1,0 +1,101 @@
+\chapter{introduction}
+
+\chapter{Installation and setup}
+
+\chapter{Acceptance test cases}
+
+\section{Test cases}
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name      & Registration on CKB platform                                           \\ \hline
+        Input     & The user inserts its credentials and clicks on the registration button \\ \hline
+        Expected  & The user is registered on the platform and can access the main page    \\ \hline
+        Pass/Fail & Pass                                                                   \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name      & Discovering and Participating in Tournaments                                                                                                                                                                                                                                                                                                            \\ \hline
+        Input     & The STU navigates on the plaform and selects and joins a tournament                                                                                                                                                                                                                                                                                     \\ \hline
+        Expected  & The STU is now part of the tournament                                                                                                                                                                                                                                                                                                                   \\ \hline
+        Pass/Fail & Incomplete                                                                                                                                                                                                                                                                                                                                              \\ \hline
+        Notes     & Once the student selects the tournament on the main page, the system will automatically add the student to the tournament; it would be better to add a confirmation message to the user (as it is expected to happen according to what is written on the RASD use case). Furthermore, nowhere it is specified the submission deadline to the tournament \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Creating a Tournament                                                                           \\ \hline
+        Input       & The EDU creates a tournament and fills in the required fields, then clicks on the create button \\ \hline
+        Expected    & The tournament is created                                                                       \\ \hline
+        Pass / Fail & Pass with bug regarding the logout / login for new accounts (see later)                         \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Granting permissions                                                                                                    \\ \hline
+        Input       & In a tournament, created by edu A, A can search for another EDU B and grant him the permission to manage the tournament \\ \hline
+        Expected    & EDU B is now a manager of the tournament                                                                                \\ \hline
+        Pass / Fail & Fail                                                                                                                    \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Joining a battle                                          \\ \hline
+        Input       & The STU selects a tournament and joins a battle within It \\ \hline
+        Expected    & The STU is now part of the battle                         \\ \hline
+        Pass / Fail & Pass                                                      \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Viewing tournament rankings
+        \\ \hline
+        Input       & The User selects a tournament and selects the rankings button
+        \\ \hline
+        Expected    & The User can see the rankings of the tournament
+        \\ \hline
+        Pass / Fail & Pass
+        \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Closing a tournament
+        \\ \hline
+        Input       & The EDU selects a tournament and closes it
+        \\ \hline
+        Expected    & The tournament is closed
+        \\ \hline
+        Pass / Fail & Pass
+        \\ \hline
+    \end{tabular}
+\end{center}
+
+
+
+
+\section{Bug reports}
+- dire che non fa mai vedere il confirmation prompt
+- problema coi nuovi accounts
+- gli errori sono dumped
+- problema con github
