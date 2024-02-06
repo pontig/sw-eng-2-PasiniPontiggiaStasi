@@ -56,7 +56,7 @@ The test cases are taken entirely from the use cases reported in the RASD docume
         Name        & Creating a Tournament                                                                           \\ \hline
         Input       & The EDU creates a tournament and fills in the required fields, then clicks on the create button \\ \hline
         Expected    & The tournament is created                                                                       \\ \hline
-        Pass / Fail & Pass with bug regarding the logout / login for new accounts (see later)                         \\ \hline
+        Pass / Fail & Pass                                                                                            \\ \hline
     \end{tabular}
 \end{center}
 
@@ -64,10 +64,10 @@ The test cases are taken entirely from the use cases reported in the RASD docume
     \def\arraystretch{1.5}
     \begin{tabular}{|m{2cm} |m {10cm}|}
         \hline
-        Name        & Granting permissions                                                                                                    \\ \hline
-        Input       & In a tournament, created by edu A, A can search for another EDU B and grant him the permission to manage the tournament \\ \hline
-        Expected    & EDU B is now a manager of the tournament                                                                                \\ \hline
-        Pass / Fail & Fail                                                                                                                    \\ \hline
+        Name        & Granting permissions                                                                                                                                                    \\ \hline
+        Input       & In a tournament, created by edu A, A can search for another EDU B and grant him the permission to manage the tournament                                                 \\ \hline
+        Expected    & EDU B is now a manager of the tournament                                                                                                                                \\ \hline
+        Pass / Fail & Fail: it is not clear what to insert in the text box (email, just name, name and surname, github username...), and by trying to put any ot these it doesn't work anyway \\ \hline
     \end{tabular}
 \end{center}
 
@@ -112,7 +112,13 @@ The test cases are taken entirely from the use cases reported in the RASD docume
 There are quite a few recurring bugs in the system, which are listed below:
 \begin{itemize}
     \item The system does not show the message to confirm that a general action (e.g. subscription to a tournament, creation / closure of a tournament, etc.) has been completed: this is as simple as important to the user experience, as it is expected to happen according to what is written on the RASD use case.
-    \item Whenever an error occurs, the system does not show any message to the user, but it simply dumps the error on the screen: this is not only bad for the user experience, but it is also a security issue, as it could reveal sensitive information to the user \\ The stack dump is very useful for the developers, but it should be removed after the development phase.
+    \item Whenever an error occurs, the system does not show any message to the user, but it simply dumps the python error page on the screen: this is not only bad for the user experience, but it is also a security issue, as it could reveal sensitive information to the user \\ The stack dump is very useful for the developers, but it should be removed after the development phase.
     \item The students aren't always notified relevant events occur (the \textit{Notification} section doesn't show the new entries)
     \item {\color{red} Qualcuno riesce a connetersi a fucking github?!}
 \end{itemize}
+
+\section{Final Comments}
+
+In general, we found the application usable and quite user friendly, with a well-structured code and sufficiently commented in large files \\
+
+We think that the only problems we found out are due to the short time the project was developed and we are quite sure that, in a real world scenario, after out revision the developers would immediatly fix the bugs we found out; we are not so familiar with python but we still think that it is just a matter of a bunch of lines of code
