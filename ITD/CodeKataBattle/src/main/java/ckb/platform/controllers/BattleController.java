@@ -56,6 +56,7 @@ public class BattleController {
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/battles")
+    @Deprecated
     List<Map<String, Object>> all() {
         List<Battle> battles = battleRepository.findAll();
         List<Map<String, Object>> response = new ArrayList<>();
@@ -81,8 +82,7 @@ public class BattleController {
         return response;
     }
 
-    // end::get-aggregate-root[]
-
+    @Deprecated
     @GetMapping("/battles/{id}")
     Map<String, Object> one(@PathVariable Long id) {
         Battle battle = battleRepository.findById(id)
@@ -117,6 +117,7 @@ public class BattleController {
     }
 
     //mapped to "Get Battle Details"
+    // CHECKED BY @PONTIG
     @GetMapping("/battles/stu/{id}")
     Map<String, Object> getBattleDetailsSTU(@PathVariable Long id, HttpSession session) {
         Battle battle = battleRepository.findById(id)
@@ -166,9 +167,8 @@ public class BattleController {
         return battleMap;
     }
 
-
-    // Single item
     //mapped to "Get Battle Details"
+    // CHECKED BY @PONTIG
     @GetMapping("/battles/edu/{id}")
     Map<String, Object> getBattleDetailsEDU(@PathVariable Long id, HttpSession session) {
         Battle battle = battleRepository.findById(id)
@@ -212,7 +212,8 @@ public class BattleController {
     }
 
     //mapped to "Get the list of groups for the manual evaluation"
-    @GetMapping("/battles/{b_id}/manualevalution")
+    // CHECKED BY @PONTIG
+    @GetMapping("/battles/{b_id}/manualEvaluation")
     List<Map<String, Object>> manualEvalGroups(@PathVariable Long b_id) {
         Battle battle = battleRepository.findById(b_id)
                 .orElseThrow(() -> new BattleNotFoundException(b_id));
@@ -232,6 +233,7 @@ public class BattleController {
     }
 
     //mapped to "Evaluate code"
+    @Deprecated // In the end, we decided to use a different approach
     @GetMapping("/battles/{b_id}/teams/{t_id}")
     Map<String, Object> getCode(@PathVariable Long b_id, @PathVariable Long t_id, HttpSession session) {
         Battle battle = battleRepository.findById(b_id)
@@ -255,6 +257,7 @@ public class BattleController {
     }
 
     @GetMapping("/battles/{id}/students")
+    @Deprecated
     List<Map<String, Object>> getStudents(@PathVariable Long id) {
         Battle battle = battleRepository.findById(id)
                 .orElseThrow(() -> new BattleNotFoundException(id));
@@ -281,6 +284,8 @@ public class BattleController {
         return response;
     }
 
+    // mapped to "Invite single student to team"
+    // CHECKED BY @PONTIG
     @PostMapping("/battles/invite")
     ResponseEntity<?> inviteStudent(@RequestBody InviteSinglePersonRequest request, HttpSession session) {
         final User user = (User) session.getAttribute("user");
@@ -340,6 +345,8 @@ public class BattleController {
         return ResponseEntity.ok().body("Student added to the team " + team.getName());
     }
 
+    // mapped to "Create a new battle"
+    // CHECKED BY @PONTIG
     @PostMapping("/battle/create")
     public ResponseEntity<String> createBattle(@ModelAttribute CreateBattleRequest createBattleRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -545,6 +552,7 @@ public class BattleController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not have the necessary rights NOOWNER");
     }
 
+    // TODO: va specificata nel DD?
     @PostMapping("/battle/pulls")
     public void pullRequest(@RequestBody RepoPullRequest repoPullRequest) throws IOException, ParserConfigurationException, SAXException {
         String repository = repoPullRequest.getRepository();
@@ -626,6 +634,8 @@ public class BattleController {
             log.error("Battle or team not found");
     }
 
+    // mapped to "Manual evaluation partial"
+    // CHECKED BY @PONTIG
     @PostMapping("/battle/manualEvaluation/partial")
     public void evaluateSingleCode(@RequestBody ListGroupsForManualRequest data, HttpSession session) {
 
@@ -640,6 +650,8 @@ public class BattleController {
 
     }
 
+    // mapped to "Manual evaluation completed"
+    // CHECKED BY @PONTIG
     @PostMapping("/battle/manualEvaluation/final")
     public void endManualEvaluation(@RequestBody Long battle_id, HttpSession session) throws CannotCloseBattleException {
         User user = (User) session.getAttribute("user");
@@ -691,6 +703,8 @@ public class BattleController {
         }).start();
     }
 
+    // mapped to "Join a battle"
+    // CHECKED BY @PONTIG
     @PostMapping("/battle/join")
     public ResponseEntity<String> joinBattle(@RequestBody JoinBattleRequest joinBattleRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -808,6 +822,8 @@ public class BattleController {
         return ResponseEntity.status(HttpStatus.OK).body("Team " + newTeam.getName() + " has been created");
     }
 
+    // nice to have
+    // CHECKED BY @PONTIG
     @GetMapping("/edu/noticed")
     List<Map<String, Object>> getNoticedBattlesEducator(HttpSession session) {
         //check if user passed is edu

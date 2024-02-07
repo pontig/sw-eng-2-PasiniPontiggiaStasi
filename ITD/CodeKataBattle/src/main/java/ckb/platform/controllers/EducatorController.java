@@ -18,6 +18,7 @@ public class EducatorController {
     }
 
     //mapped to "Search for an EDU"
+    // CHECKED BY @PONTIG
     @GetMapping("/educators/{query}")
     List<Map<String, Object>> search(@PathVariable String query) {
         List<Educator> educators = repository.findByQuery(query);

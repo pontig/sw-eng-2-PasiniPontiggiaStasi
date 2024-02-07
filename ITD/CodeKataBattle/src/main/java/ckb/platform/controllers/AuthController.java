@@ -30,6 +30,7 @@ public class AuthController {
     @Autowired
     private EducatorRepository educatorRepository;
 
+    // CHECKED BY @PONTIG
     @PostMapping("/register")
     public ResponseEntity<String> processRegistration(@RequestBody RegisterRequest registerRequest, HttpSession session) {
         if (registerRequest.getName().isEmpty() || registerRequest.getSurname().isEmpty() || registerRequest.getEmail().isEmpty() || registerRequest.getUni().isEmpty() || registerRequest.getRole().isEmpty() || registerRequest.getPassword().isEmpty() || registerRequest.getPassword2().isEmpty() || !registerRequest.isTerms() ||
@@ -68,6 +69,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("login");
     }
 
+    // CHECKED BY @PONTIG
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
         String email = loginRequest.getEmail();
@@ -103,6 +105,7 @@ public class AuthController {
 
     }
 
+    // CHECKED BY @PONTIG
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session){
         User user = (User) session.getAttribute("user");
@@ -129,6 +132,7 @@ public class AuthController {
     }
 
     // If a user try to make a get to the /login endpoint, it is redirected
+    // CHECKED BY @PONTIG
     @GetMapping("/login")
     public RedirectView getLogin(HttpSession session){
         User user = (User) session.getAttribute("user");
@@ -143,6 +147,7 @@ public class AuthController {
     }
 
     // If a user try to make a get to the /register endpoint, it is redirected
+    // CHECKED BY @PONTIG
     @GetMapping("/register")
     public RedirectView getRegister(HttpSession session){
         User user = (User) session.getAttribute("user");
@@ -157,6 +162,7 @@ public class AuthController {
     }
 
     // If a user try to make a get to the /logout endpoint, it is redirected
+    // CHECKED BY @PONTIG
     @GetMapping("/logout")
     public RedirectView getLogout(HttpSession session){
         User user = (User) session.getAttribute("user");

@@ -24,6 +24,7 @@ public class StaticToolController {
     private static final Logger log = LoggerFactory.getLogger(StaticToolController.class);
     //this endpoint is activated when the user clicks on the "Get Static Analysis Results" button and the analysis is finished
     //in fact, the webhook of sonarqube will call this endpoint
+    // TODO: va specificato sul DD?
     @PostMapping("/static_analysis/results")
     public ResponseEntity<String> getStaticAnalysisResults(@RequestBody Map<String, Object> payload) {
         String projectKey = (String) ((Map<String,Object>) payload.get("project")).get("key");

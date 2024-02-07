@@ -40,6 +40,7 @@ public class TournamentController {
         this.studentRepository = studentRepository;
     }
 
+    @Deprecated
     @GetMapping("/tournaments/{id}")
     Map<String, Object> one(@PathVariable Long id) {
         Tournament tournament = tournamentRepository.findById(id)
@@ -88,6 +89,7 @@ public class TournamentController {
     }
 
     //mapped to "Get all Tournaments"
+    // CHECKED BY @PONTIG
     @GetMapping("/tournaments")
     List<Map<String, Object>> all() {
         List<Tournament> tournaments = tournamentRepository.findAll();
@@ -108,6 +110,7 @@ public class TournamentController {
     }
 
     //mapped to "Get owned Tournaments"
+    // CHECKED BY @PONTIG
     @GetMapping("/tournaments/owned/")
     List<Map<String, Object>> getOwnedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -131,6 +134,7 @@ public class TournamentController {
     }
 
     //mapped to "Get tournament details " for a stu
+    // CHECKED BY @PONTIG
     @GetMapping("/tournaments/stu/{t_id}")
     Map<String, Object> tournamentDetailsSTU(@PathVariable Long t_id, HttpSession session) {
         Tournament tournament = tournamentRepository.findById(t_id)
@@ -189,6 +193,7 @@ public class TournamentController {
     }
 
     //mapped to "Get tournament details"
+    // CHECKED BY @PONTIG
     @GetMapping("/tournaments/edu/{t_id}")
     Map<String, Object> tournamentDetailsEDU(@PathVariable Long t_id, HttpSession session) {
         Tournament tournament = tournamentRepository.findById(t_id)
@@ -243,6 +248,7 @@ public class TournamentController {
     }
 
     //mapped to "Get subscribed tournaments"
+    // CHECKED BY @PONTIG
     @GetMapping("/tournaments/subscribed/")
     List<Map<String, Object>> getSubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -268,6 +274,7 @@ public class TournamentController {
     }
 
     //mapped to "Get unsubscribed tournaments"
+    // CHECKED BY @PONTIG
     @GetMapping("/tournaments/unsubscribed/")
     List<Map<String, Object>> getUnsubscribedTournaments(HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -300,6 +307,8 @@ public class TournamentController {
         return response;
     }
 
+    //mapped to "Create a tournament"
+    // CHECKED BY @PONTIG
     @PostMapping("/tournament/create")
     public ResponseEntity<String> createTournament(@RequestBody CreateTournamentRequest createTournament, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -365,6 +374,8 @@ public class TournamentController {
         return ResponseEntity.status(HttpStatus.OK).body(tournamentIdString);
     }
 
+    //mapped to "Close a tournament"
+    // CHECKED BY @PONTIG
     @PostMapping("/tournament/close")
     public ResponseEntity<String> closeTournament(@RequestBody CloseTournamentRequest closeTournamentRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -452,6 +463,8 @@ public class TournamentController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not own this tournament");
     }
 
+    // mapped to "Share a tournament"
+    // CHECKED BY @PONTIG
     @PostMapping("/tournament/share")
     public ResponseEntity<String> shareTournament(@RequestBody ShareTournamentRequest shareTournamentRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -548,6 +561,8 @@ public class TournamentController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden - You do not own this tournament");
     }
 
+    //mapped to "Join a tournament"
+    // CHECKED BY @PONTIG
     @PostMapping("/tournament/join")
     public ResponseEntity<String> joinTournament(@RequestBody JoinTournamentRequest joinTournamentRequest, HttpSession session) {
         User user = (User) session.getAttribute("user");

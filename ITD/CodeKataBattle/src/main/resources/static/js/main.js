@@ -451,7 +451,7 @@ async function changePage(page, id) {
                         .sort((a, b) => b.points - a.points)
                         .forEach((e, i) => {
                             let li = document.createElement("li")
-                            li.innerHTML = e.name + " - " + e.score + "pts" 
+                            li.innerHTML = e.name + " - " + e.score + "pts"
                             if (i > 9) li.style.display = "none"
 
                             container.appendChild(li)
@@ -472,18 +472,16 @@ async function changePage(page, id) {
                 case "manualEvaluation":
                     document.getElementById("toBeReviewed").style.display = "block"
 
-                    res = await fetch("battles/" + sessionStorage.getItem("battle") + "/manualevalution")
-                    // res = await fetch("https://pontiggiaelia.altervista.org/ckb/manualEval.php");
+                    res = await fetch("battles/" + sessionStorage.getItem("battle") + "/manualEvaluation")
                     data = await res.json()
                     console.log(data)
 
                     container = document.querySelector("#toBeReviewed > table")
-                    // container.innerHTML = "<tr><th>#</th><th>Team name</th><th>Score</th><th>Action</th></tr>"
                     container.innerHTML = "<tr><th>#</th><th>Team name</th><th>Score</th><th>Link to the repo</th></tr>"
                     let CanConfirm = true
 
                     data.forEach((e, i) => {
-                    
+
                         let tr = document.createElement("tr")
                         let td1 = document.createElement("td")
                         td1.innerHTML = i + 1

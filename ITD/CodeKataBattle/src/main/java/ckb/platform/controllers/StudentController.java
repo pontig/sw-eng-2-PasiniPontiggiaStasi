@@ -18,11 +18,9 @@ public class StudentController {
         this.repository = repository;
     }
 
-    // Aggregate root
-    // tag::get-aggregate-root[]
-
     //CollectionModel is another Spring HATEOAS container aimed at encapsulating collections of resources, instead of a single resource entity.
 
+    @Deprecated
     @GetMapping("/students")
     List<Map<String, Object>> all() {
         List<Student> students = repository.findAll();
@@ -39,8 +37,8 @@ public class StudentController {
         return response;
     }
 
-
     //mapped to "Search for a student"
+    // CHECKED BY @PONTIG
     @GetMapping("/students/{query}")
     List<Map<String, Object>> search(@PathVariable String query) {
         List<Student> students = repository.findByQuery(query);
@@ -57,10 +55,9 @@ public class StudentController {
         return response;
     }
 
-    // end::get-aggregate-root[]
-
     // Single item
     //mapped to "Inspect a STU's profile"
+    // CHECKED BY @PONTIG
     @GetMapping("/students/{id}/profile")
     Map<String, Object> one(@PathVariable Long id) {
         Student student = repository.findById(id)

@@ -24,8 +24,7 @@ public class TeamController {
         this.studentRepository = studentRepository;
     }
 
-    // Aggregate root
-    // tag::get-aggregate-root[]
+    @Deprecated
     @GetMapping("/teams/{t_id}")
     public Map<String, Object> one(@PathVariable Long t_id) {
         Team t = repository.findById(t_id)
@@ -46,6 +45,7 @@ public class TeamController {
         return team;
     }
 
+    @Deprecated
     @GetMapping("/teams")
     public List<Map<String, Object>> all() {
         List<Team> teams = repository.findAll();
@@ -69,6 +69,7 @@ public class TeamController {
         return response;
     }
 
+    // TODO: va specificato sul DD?
     @PostMapping("/teams/score/staticAnalysis/{t_id}")
     public ResponseEntity<?> updateStaticAnalysisScore(@PathVariable Long t_id, @RequestBody Map<String, Object> payload) {
         Team t = repository.findById(t_id)
@@ -80,6 +81,8 @@ public class TeamController {
         return ResponseEntity.ok().build();
     }
 
+    // Mapping to "Join a team via an invite"
+    // CHECKED BY @PONTIG
     @GetMapping("/team/{t_id}/join/{s_id}")
     public ModelAndView joinTeam(@PathVariable Long t_id, @PathVariable Long s_id, HttpSession session) {
         Optional<Team> teamOpt = repository.findById(t_id);
