@@ -132,6 +132,39 @@ Notice that if you are installing it in a different location, you have to insert
 \textbf{Java 17 is required to start the local instance of SonarQube}.\\
 Last thing, install the SonarScanner for CLI and we can find the download \href[]{https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/}{here}.
 
+\section{GitHub API}
+
+As our system runs on  \url{https://localhost:8080} and GitHub need to reach a public address, we will use "ngrok". Ngrok generates a tunnel address that need to be used in the WorkFlow Action to reach the End-Point \texttt{/ckb{\_}platform/battle/pulls}
+
+In order to make ngrok work properly, follow these instructions:
+\begin{itemize}
+    \item Log In with CKB GitHub credentials (mail: \textbf{codekatabattle.platform@gmail.com} passeord: \textbf{CKB202430l!}) on Ngrok \url{https://dashboard.ngrok.com/login}
+    \item Go in section Your Authtoken and copy the command: \texttt{ngrok config add-authtoken 2bTBjPXyFBY3dy8NlZSJ5LzrC9x{\_}7FRwMrsggt8f68KFpvJfW}
+    \item Ngrok can be downloaded from \url{https://ngrok.com/download}, unzip it, and open it (CMD will pop up)
+    \item Paste the command you copied before
+\end{itemize}
+From now, every time you need to use ngrok, open it and type the command: \texttt{ngrok http https://localhost:8080}
+
+A public address will be prompted, this will be used in GitHub Action\\
+
+In conclusion, whenever a GitHub repo is created and forked, in the readme you will find a template for the action workflow, you simply have to put the tunnel link where you find \texttt{<<NGROK>>}
+
+\section{pytest}
+
+In order to comput the test score in a python battle, the platform uses \texttt{pytest}.\\
+
+The installation is quite straight-forward if you have already python on your machine: it is sufficient to run the command \texttt{pip install --upgrade --force-reinstall pytest}\\
+If a warning appears showing a path quute long, it means that that path isn't among the environment variables: it is recommended to add it.
+
 \section{Running the application}
 Once all the previous steps are completed, it is possible to run the application.\\
 To run the application, just run the jar file that can be found in the link above and follow the instructions given by the application.
+
+\subsection{Some notes about the Gmail API}
+
+To send mails using gmail to other addresses, Google requires an OAuth authentication system since 2019.\\
+The application from Google is seen as if it were in the testing phase, so we have a token that expires every 7/10 days and must be renewed. We have not made it public because Google requires a series of checks regarding privacy/security etc.\\
+
+The first time the application is run, it will open a link to which you must access with the credentials provided in the email.\\
+After that, the token will be generated and the application will be able to send emails.\\
+After 7/10 days, the token will expire and the application will show again the link to access to generate a new token.\\

@@ -10,10 +10,13 @@ This repository houses the CodeKataBattle (CKB) platform, a tool designed to hel
 
 ## Repository Structure
 
-- `Assignment/`: this folder contains the assignments of the project, both the RDD and the IT
+- `Assignment/`: this folder contains the assignments of the project, both the RDD and the IT.
+- `ATD/`: this folder contains all the latex files for the Acceptance Test Deliverable of the project developed by another group
 - `DD/`: this folder contains all the latex files for the Design Document of the CKB platform.
 - `DeliveryFolder/`: this folder contains the various versions of the pdf files of the documents that are going to be delivered plus eventual additional files.
-- `ITD/`: this folder contains the code of the implementation of the CKB platform and the relative documentation.
+- `ITD/`: this folder contains the Implementation and Test Deliverable of the CKB platform:
+  - `CodeKataBeattle/`: all the code, that follows the usual repository structure of any maven java project
+  - `Documentation/`: all the latex files for the Implementation and Test Deliverable document
 - `RASD/`: this folder contains all the latex files for the Requirement Analysis and Specification Document of the CKB platform.
 
 ## Contributors
