@@ -20,6 +20,12 @@ Although the installation instruction reported on the ITD document are complete 
 
 All the installation went smoothly, and the system was up and running in a few minutes.\\The only thing that should be added is a default location for the application, because if the user directly connects to \texttt{localhost:8000} as suggested by the server log, no page is shown, and the user has to manually navigate to \texttt{localhost:8000/login} to access the login page.
 
+\chapter{RASD document}
+\section{Alloy}
+This part is well reported, all the facts are described accurately with the comments and the result of the predicate \textbf{show} is explained in all its details.\\
+However, in the facts is missing the unicity of a player; we would suggest to add some properties to signatures like \textbf{User}, such as the \textbf{email, username and password}.\\
+Another thing that is not specified, is the feature about the boundaries of the teams subscribed to a certain battle : in fact, these properties are missing in the \textbf{Battle} signature, therefore we can not say nothing about the teams' size and we can not
+manage the number of students in a team with respect to the battle boundaries.\\ 
 
 \chapter{Acceptance test cases}
 
