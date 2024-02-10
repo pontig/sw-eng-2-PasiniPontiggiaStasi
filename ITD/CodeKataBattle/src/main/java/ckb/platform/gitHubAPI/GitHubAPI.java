@@ -6,7 +6,8 @@ package ckb.platform.gitHubAPI;
  * password: CKB202430l!
  *
  * GITHUB API TOKEN:
- * Auth token:
+ * Auth token Used: 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
+ * Auth token 2nd: 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
  * Expiration: Sat, Jan 18 2025
  *
  * FILES ORGANIZATION:
@@ -66,7 +67,9 @@ public class GitHubAPI {
 
     Properties properties = new Properties();
     // Define Access Token for GitHub authentication
-    private final String accessToken = properties.getProperty("github.auth.token");
+    private final String accessToken = "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";
+    //properties.getProperty("github.auth.token");
+
 
     // Define username
     private final String username = "CodeKataBattlePlatform";
