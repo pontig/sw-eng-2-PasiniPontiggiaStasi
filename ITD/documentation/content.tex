@@ -18,7 +18,7 @@ In the following list are provided the links to all the documents that are part 
 
 \section{Adopted development framework}
 
-For a thorough exposition of the pros and cons associated with the languages in question, it is recommendend to search directly on the official websites of said languages, where such aspects are explicated in detail
+For a thorough exposition of the pros and cons associated with the languages in question, it is recommended to search directly on the official websites of said languages, where such aspects are explicated in detail
 
 \subsubsection{Backend}
 The system has been developed using the \textbf{Spring Boot} framework, which is a framework that allows to create web applications in Java.\\
@@ -38,16 +38,17 @@ The main reason for this choice is that it is the most used database in the worl
 The source code of the system can be found in the \href{https://github.com/pontig/sw-eng-2-PasiniPontiggiaStasi/tree/main/ITD/CodeKataBattle}{ITD folder} of the repository.\\
 Its structure is the classical one of a Spring Boot application, which is the following:
 \begin{itemize}
-    \item {\ttfamily{src/main/java/ckb/platform/}}: contains the source code of the spring application, divided in the following subfolders:
+    \item {\ttfamily{src/main/java/ckb/platform/}}: contains the source code of the spring application, divided in the following sub-folders:
           \begin{itemize}
               \item {\ttfamily{advices/}}: contains the classes that are used to insert into the response the error messages in case of exceptions
               \item {\ttfamily{controllers/}}: contains the classes that are used to handle the requests and are the responsible of the communication between the APIs and the database
               \item {\ttfamily{entities/}}: contains the JPA classes that represent the entities of the database
               \item {\ttfamily{exceptions/}}: contains the classes that are used to handle the exceptions
               \item {\ttfamily{formParser/}}: contains the java beans that are used to parse the forms of the POST requests
-              \item {\ttfamily{githubAPI/}}: contains the class that is used to communicate with the GitHub API
+              \item {\ttfamily{gmailAPI/}}: contains the class that is used to communicate with the Google Cloud API
+              \item {\ttfamily{gitHubAPI/}}: contains the class that is used to communicate with the GitHub API
               \item {\ttfamily{repositories/}}: contains the interfaces that are used to communicate with the database
-              \item {\ttfamily{scheduler/}}: contains the classes that handle the additional threads that keeps the time updated and, whenever a deadline is reached, that send the emails to the interested users
+              \item {\ttfamily{scheduler/}}: contains the classes that handle the additional threads that keeps the time updated and, whenever a deadline is reached, sends the emails to the interested users
               \item {\ttfamily{testRepo/}} contains the class that is the responsible of the building of the code and the execution of the tests
           \end{itemize}
     \item {\ttfamily{src/main/resources/static/}}: contains the files of the frontend application, i.e. the HTML, SCSS and JavaScript files
@@ -134,7 +135,7 @@ Last thing, install the SonarScanner for CLI and we can find the download \href[
 
 \section{GitHub API}
 
-As our system runs on  \url{https://localhost:8080} and GitHub need to reach a public address, we will use "ngrok". Ngrok generates a tunnel address that need to be used in the WorkFlow Action to reach the End-Point \texttt{/ckb{\_}platform/battle/pulls}
+As our system runs on  \url{http://localhost:8080} and GitHub need to reach a public address, we will use "ngrok". Ngrok generates a tunnel address that need to be used in the WorkFlow Action to reach the End-Point \texttt{/ckb{\_}platform/battle/pulls}
 
 In order to make ngrok work properly, follow these instructions:
 \begin{itemize}
@@ -143,7 +144,7 @@ In order to make ngrok work properly, follow these instructions:
     \item Ngrok can be downloaded from \url{https://ngrok.com/download}, unzip it, and open it (CMD will pop up)
     \item Paste the command you copied before
 \end{itemize}
-From now, every time you need to use ngrok, open it and type the command: \texttt{ngrok http https://localhost:8080}
+From now, every time you need to use ngrok, open it and type the command: \texttt{ngrok http http://localhost:8080}
 
 A public address will be prompted, this will be used in GitHub Action\\
 
@@ -151,10 +152,10 @@ In conclusion, whenever a GitHub repo is created and forked, in the readme you w
 
 \section{pytest}
 
-In order to comput the test score in a python battle, the platform uses \texttt{pytest}.\\
+In order to compute the test score in a python battle, the platform uses \texttt{pytest}.\\
 
 The installation is quite straight-forward if you have already python on your machine: it is sufficient to run the command \texttt{pip install --upgrade --force-reinstall pytest}\\
-If a warning appears showing a path quute long, it means that that path isn't among the environment variables: it is recommended to add it.
+If a warning appears showing a path quite long, it means that that path isn't among the environment variables: it must be added.
 
 \section{Running the application}
 Once all the previous steps are completed, it is possible to run the application.\\
@@ -163,8 +164,8 @@ To run the application, just run the jar file that can be found in the link abov
 \subsection{Some notes about the Gmail API}
 
 To send mails using gmail to other addresses, Google requires an OAuth authentication system since 2019.\\
-The application from Google is seen as if it were in the testing phase, so we have a token that expires every 7/10 days and must be renewed. We have not made it public because Google requires a series of checks regarding privacy/security etc.\\
+The application from Google is seen as if it were in the testing phase, so it has a token that expires every 7/10 days and must be renewed. We have not made it public because Google requires a series of checks regarding privacy/security etc.\\
 
-The first time the application is run, it will open a link to which you must access with the credentials provided in the email.\\
+The first time the application runs without a valid token, it will open a link to which you must access with the credentials (mail: \textbf{codekatabattle.platform@gmail.com} passeord: \textbf{CKB202430L!})\\
 After that, the token will be generated and the application will be able to send emails.\\
 After 7/10 days, the token will expire and the application will show again the link to access to generate a new token.\\

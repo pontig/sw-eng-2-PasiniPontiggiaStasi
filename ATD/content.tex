@@ -29,7 +29,7 @@ manage the number of students in a team with respect to the battle boundaries.\\
 
 \chapter{Acceptance test cases}
 
-The test cases are taken entirely from the use cases reported in the RASD document. The test cases are reported in the following tables: \\{\color{red} GITHUB}
+The test cases are taken entirely from the use cases reported in the RASD document. The test cases are reported in the following tables:
 
 \section{Test cases}
 \begin{center}
@@ -48,7 +48,7 @@ The test cases are taken entirely from the use cases reported in the RASD docume
     \begin{tabular}{|m{2cm} |m {10cm}|}
         \hline
         Name      & Discovering and Participating in Tournaments                                                                                                                                                                                                                                                                                                            \\ \hline
-        Input     & The STU navigates on the plaform and selects and joins a tournament                                                                                                                                                                                                                                                                                     \\ \hline
+        Input     & The STU navigates on the platform and selects and joins a tournament                                                                                                                                                                                                                                                                                     \\ \hline
         Expected  & The STU is now part of the tournament                                                                                                                                                                                                                                                                                                                   \\ \hline
         Pass/Fail & Incomplete                                                                                                                                                                                                                                                                                                                                              \\ \hline
         Notes     & Once the student selects the tournament on the main page, the system will automatically add the student to the tournament; it would be better to add a confirmation message to the user (as it is expected to happen according to what is written on the RASD use case). Furthermore, nowhere it is specified the submission deadline to the tournament \\ \hline
@@ -63,6 +63,7 @@ The test cases are taken entirely from the use cases reported in the RASD docume
         Input       & The EDU creates a tournament and fills in the required fields, then clicks on the create button \\ \hline
         Expected    & The tournament is created                                                                       \\ \hline
         Pass / Fail & Pass                                                                                            \\ \hline
+        Notes       & A tournament can be created selecting dates in the past, moreover it is not required to define an end deadline because the educator manually close the tournament. \\ \hline
     \end{tabular}
 \end{center}
 
@@ -73,7 +74,20 @@ The test cases are taken entirely from the use cases reported in the RASD docume
         Name        & Granting permissions                                                                                                                                                    \\ \hline
         Input       & In a tournament, created by edu A, A can search for another EDU B and grant him the permission to manage the tournament                                                 \\ \hline
         Expected    & EDU B is now a manager of the tournament                                                                                                                                \\ \hline
-        Pass / Fail & Fail: it is not clear what to insert in the text box (email, just name, name and surname, github username...), and by trying to put any ot these it doesn't work anyway \\ \hline
+        Pass / Fail & Pass \\ \hline
+        Notes       & When the educator sign up could omit to complete the email input field because there are no controls if the field is completed or not \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Create a Battle                                               \\ \hline
+        Input       & The EDU compile the for to create a battle and then submit it \\ \hline
+        Expected    & The battle is created and shown inside the tournament         \\ \hline
+        Pass / Fail & Pass                                                          \\ \hline
+        Notes       & The educator, in the upload file input field, can put any type of file because there are no controls. This is a problem because when creating the repository the code expect a zip folder \\ \hline
     \end{tabular}
 \end{center}
 
@@ -103,6 +117,30 @@ The test cases are taken entirely from the use cases reported in the RASD docume
     \def\arraystretch{1.5}
     \begin{tabular}{|m{2cm} |m {10cm}|}
         \hline
+        Name        & Pushing a commit                       \\ \hline
+        Input       & The STU push a commit to the github forked repository \\ \hline
+        Expected    & The platform  runs tests, analyzes the code for quality, timeliness, and other functional aspects and then update the score \\ \hline
+        Pass / Fail & We could not figured out how to set up properly the workflow action in the forked repository so we could not test it by doing the push,
+                      besides that we looked at the code and it seems that it should get the data from the workflow action                                                    \\ \hline
+        Notes       & The number of test passed are checked by the workflow action, but we did not find where the other analysis are done such as the timeliness or the static analysis \\ \hline 
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
+        Name        & Manually evaluating                       \\ \hline
+        Input       & The EDU clicks on evaluate button to go through the sources produced by STUs \\ \hline
+        Expected    & The team code is evaluated and the additional score is assigned                   \\ \hline
+        Pass / Fail & We can not express because we did not manage to reach the evaluation scenario                                       \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \def\arraystretch{1.5}
+    \begin{tabular}{|m{2cm} |m {10cm}|}
+        \hline
         Name        & Closing a tournament                       \\ \hline
         Input       & The EDU selects a tournament and closes it \\ \hline
         Expected    & The tournament is closed                   \\ \hline
@@ -110,8 +148,19 @@ The test cases are taken entirely from the use cases reported in the RASD docume
     \end{tabular}
 \end{center}
 
+\newpage
 
+\section*{More about the use cases}
 
+\textbf{GitHub Repository}\\
+The creation of a GitHub repository through its APIs is functioning correctly and thus this request has been implemented. However, we have a note regarding compliance with the specification. \\
+It is required that the repository be created immediately after the deadline for registration ends and that all students registered on the platform be notified. In the case of the reviewed project, the repository is generated only when a Student or an Educator decides to view the details of the battle (after checking the deadlines). 
+This also implies that the first user who performs this action may wait indefinitely before seeing the details of the battle because they have to wait for the repository to be generated.
+Our recommendation is, in the short term, to execute the creation of the repository in a separate thread from the main one, while in the long term, to adapt the code to be more consistent with the client's request.\\
+Despite what was said, the repository is correctly generated and available to proceed with the battle.\\ \\
+\textbf{View Student Profile}\\
+We have observed that when entering Name, First Name and Last Name, Email, or GitHub Account Name, the student search function appears not to be working.
+We suspect that a decision was made not to make this functionality available because, primarily in the user profile, it is used to view the badges earned. However, since badge implementation was not required, it may have been decided not to proceed with the implementation.
 
 \section{Bug reports}
 
@@ -119,12 +168,13 @@ There are quite a few recurring bugs in the system, which are listed below:
 \begin{itemize}
     \item The system does not show the message to confirm that a general action (e.g. subscription to a tournament, creation / closure of a tournament, etc.) has been completed: this is as simple as important to the user experience, as it is expected to happen according to what is written on the RASD use case.
     \item Whenever an error occurs, the system does not show any message to the user, but it simply dumps the python error page on the screen: this is not only bad for the user experience, but it is also a security issue, as it could reveal sensitive information to the user \\ The stack dump is very useful for the developers, but it should be removed after the development phase.
-    \item The students aren't always notified relevant events occur (the \textit{Notification} section doesn't show the new entries)
-    \item {\color{red} Qualcuno riesce a connetersi a fucking github?!}
+    \item The students are not always notified about relevant events occur (the \textit{Notification} section doesn't show the new entries)
+    \item Some form fields do not have controls in the frontend and even in the backend, this brings the platform to unexpected error that are not handled and therefore they show the python stack trace
 \end{itemize}
 
 \section{Final Comments}
 
 In general, we found the application usable and quite user friendly, with a well-structured code and sufficiently commented in large files \\
 
-We think that the only problems we found out are due to the short time the project was developed in and we are quite sure that, in a real world scenario, after our revision the developers would immediatly fix the bugs we found out; we are not so familiar with python but we still think that it is just a matter of a bunch of lines of code
+We think that the only problems we found out are due to the short time the project was developed in and we are quite sure that, in a real world scenario, after our revision the developers would immediately fix the bugs and the inconsistencies we found out.
+Even if we are not familiar with python, we still think that it is just a matter of a bunch of lines of code. The main functionalities are done and the app works fine.
