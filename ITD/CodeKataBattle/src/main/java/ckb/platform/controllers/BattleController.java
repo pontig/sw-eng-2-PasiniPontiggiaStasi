@@ -289,7 +289,7 @@ public class BattleController {
     @PostMapping("/battles/invite")
     ResponseEntity<?> inviteStudent(@RequestBody InviteSinglePersonRequest request, HttpSession session) {
         final User user = (User) session.getAttribute("user");
-        if ( user.isEdu()) {
+        if (user.isEdu()) {
             throw new StudentNotFoundException(user.getId());
         }
 
@@ -566,7 +566,7 @@ public class BattleController {
         Battle battle = battleRepository.getBattleByName(repoName);
         Team team = teamRepository.getTeamByName(teamName);
 
-        if(team.getBattle().getId() != battle.getId()){
+        if (team.getBattle().getId() != battle.getId()) {
             return;
         }
 
@@ -628,7 +628,7 @@ public class BattleController {
                     return;
                 }
                 //run the analysis from the command line using repoPath as source directory
-                 analyzer.runAnalysisSonarQube(battle.getLanguage(), repoPath);
+                analyzer.runAnalysisSonarQube(battle.getLanguage(), repoPath);
             }
         } else
             log.error("Battle or team not found");
@@ -640,7 +640,7 @@ public class BattleController {
     public void evaluateSingleCode(@RequestBody ListGroupsForManualRequest data, HttpSession session) {
 
         User user = (User) session.getAttribute("user");
-        if(!user.isEdu()){
+        if (!user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
         Team team = teamRepository.findById(data.getTeam_id())
@@ -655,7 +655,7 @@ public class BattleController {
     @PostMapping("/battle/manualEvaluation/final")
     public void endManualEvaluation(@RequestBody Long battle_id, HttpSession session) throws CannotCloseBattleException {
         User user = (User) session.getAttribute("user");
-        if(!user.isEdu()){
+        if (!user.isEdu()) {
             throw new EducatorNotFoundException(user.getId());
         }
         Battle battle = battleRepository.findById(battle_id)
@@ -734,7 +734,7 @@ public class BattleController {
         Student stu = studentRepository.getReferenceById(user.getId());
         Battle battleToJoin = battleRepository.getReferenceById(battleId);
 
-        if (!battleToJoin.getTournament().getSubscribedStudents().contains(stu)) {
+        if (!stu.getTournaments().contains(battleToJoin.getTournament())) {
             // Check if the student is not subscribed to the tournament
             if (battleToJoin.getTournament().getEndDate() != null) {
                 // Check if tournament is closed
@@ -837,7 +837,7 @@ public class BattleController {
         List<Map<String, Object>> response = battleRepository
                 .findAll()
                 .stream()
-                .filter(b-> b.getCreator().getId() == educator.getId() && b.getPhase() == 3)
+                .filter(b -> b.getCreator().getId() == educator.getId() && b.getPhase() == 3)
                 .map(b -> {
                     log.info("Battle: " + b.getPhase());
                     Map<String, Object> battleMap = new LinkedHashMap<>();
